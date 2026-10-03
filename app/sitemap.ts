@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 import { getPosts } from '../lib/blogger';
 
 // ============================================================================
@@ -12,7 +12,11 @@ const BASE_URL = 'https://www.senyum.or.id';
 // ============================================================================
 
 function safeDate(value?: string | Date | null): Date {
-  const date = value ? new Date(value) : new Date();
+  if (!value) {
+    return new Date();
+  }
+
+  const date = new Date(value);
 
   return Number.isNaN(date.getTime())
     ? new Date()
@@ -37,53 +41,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ? result
       : [];
   } catch (error) {
-    console.error('Gagal mengambil data Blogger untuk sitemap:', error);
+    console.error(
+      'Gagal mengambil data Blogger untuk sitemap:',
+      error
+    );
 
     posts = [];
   }
 
   // ==========================================================================
-  // ARTIKEL
-  // ==========================================================================
-
-  const postEntries: MetadataRoute.Sitemap = posts
-    .map((post: any) => {
-      try {
-        if (!post?.url) {
-          return null;
-        }
-
-        const postUrl = new URL(post.url);
-        const pathname = postUrl.pathname;
-
-        return {
-          url: `${BASE_URL}${pathname}`,
-          lastModified: safeDate(
-            post.updated ||
-            post.published
-          ),
-          changeFrequency: 'weekly' as const,
-          priority: 0.7,
-        };
-      } catch (error) {
-        console.error(
-          'Gagal membuat URL sitemap artikel:',
-          post?.url,
-          error
-        );
-
-        return null;
-      }
-    })
-    .filter(
-      (
-        entry
-      ): entry is MetadataRoute.Sitemap[number] =>
-        entry !== null
-    );
-
-  // ==========================================================================
-  // HALAMAN UTAMA / STATIS
+  // HALAMAN STATIS
   // ==========================================================================
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -131,22 +98,65 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // ==========================================================================
-  // GABUNGKAN & HAPUS DUPLIKAT URL
+  // ARTIKEL
   // ==========================================================================
 
-  const combinedEntries = [
+  const postEntries: MetadataRoute.Sitemap = [];
+
+  for (const post of posts) {
+    try {
+      if (!post?.url) {
+        continue;
+      }
+
+      const originalUrl = new URL(post.url);
+
+      const pathname = originalUrl.pathname;
+
+      postEntries.push({
+        url: `${BASE_URL}${pathname}`,
+        lastModified: safeDate(
+          post.updated ||
+          post.published
+        ),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      });
+    } catch (error) {
+      console.error(
+        'Gagal membuat sitemap untuk artikel:',
+        post?.url,
+        error
+      );
+    }
+  }
+
+  // ==========================================================================
+  // GABUNGKAN SEMUA URL
+  // ==========================================================================
+
+  const allEntries: MetadataRoute.Sitemap = [
     ...staticRoutes,
     ...postEntries,
   ];
 
-  const uniqueEntries = Array.from(
-    new Map(
-      combinedEntries.map((entry) => [
-        entry.url,
-        entry,
-      ])
-    ).values()
-  );
+  // ==========================================================================
+  // HAPUS DUPLIKAT
+  // ==========================================================================
 
-  return uniqueEntries;
+  const uniqueEntriesMap = new Map<
+    string,
+    MetadataRoute.Sitemap[number]
+  >();
+
+  for (const entry of allEntries) {
+    uniqueEntriesMap.set(
+      entry.url,
+      entry
+    );
+  }
+
+  return Array.from(
+    uniqueEntriesMap.values()
+  );
 }
