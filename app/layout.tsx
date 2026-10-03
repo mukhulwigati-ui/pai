@@ -1,83 +1,232 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
+// ============================================================================
+// FONT
+// ============================================================================
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
-// Racikan SEO Tak Tertandingi untuk Guru Online
+// ============================================================================
+// SITE CONFIG
+// ============================================================================
+
+const SITE_NAME = "Senyum";
+const SITE_DOMAIN = "senyum.or.id";
+const SITE_URL = "https://www.senyum.or.id";
+const SITE_TAGLINE = "Senyum Guru, Pendidikan Maju";
+
+const SITE_DESCRIPTION =
+  "Senyum.or.id adalah media pendidikan Indonesia yang menyajikan informasi guru, berita pendidikan, perangkat ajar, materi pembelajaran, kurikulum, inspirasi mengajar, serta berbagai referensi untuk mendukung kemajuan pendidikan Indonesia.";
+
+// ============================================================================
+// SEO METADATA
+// ============================================================================
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.guruonline.web.id"),
+  metadataBase: new URL(SITE_URL),
+
+  applicationName: SITE_NAME,
+
   title: {
-    default: "Guru Online - Platform Edukasi, Materi & Perangkat Ajar Guru Indonesia",
-    template: "%s | Guru Online"
+    default: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+    template: `%s | ${SITE_NAME}`,
   },
-  description: "GuruOnline.web.id adalah platform edukasi yang menyediakan informasi, materi pembelajaran, perangkat ajar, serta tips dan strategi mengajar bagi guru dan pelajar di Indonesia. Temukan berbagai referensi pendidikan terbaru untuk meningkatkan kualitas belajar dan mengajar secara efektif.",
+
+  description: SITE_DESCRIPTION,
+
   keywords: [
-    "Guru Online", 
-    "perangkat ajar", 
-    "materi pembelajaran", 
-    "strategi mengajar", 
-    "edukasi Indonesia", 
-    "referensi pendidikan", 
-    "kurikulum merdeka", 
+    "Senyum",
+    "Senyum Guru",
+    "Senyum Guru Pendidikan Maju",
+    "senyum.or.id",
+    "guru Indonesia",
+    "pendidikan Indonesia",
+    "berita pendidikan",
+    "berita guru",
+    "informasi guru",
+    "media guru",
+    "media pendidikan",
+    "perangkat ajar",
+    "materi pembelajaran",
+    "materi guru",
+    "modul ajar",
+    "kurikulum",
+    "kurikulum merdeka",
+    "pembelajaran",
+    "strategi pembelajaran",
+    "strategi mengajar",
     "tips guru",
-    "guruonline.web.id"
+    "inspirasi guru",
+    "referensi guru",
+    "dunia pendidikan",
+    "sekolah Indonesia",
+    "pendidik Indonesia",
   ],
-  authors: [{ name: "Guru Online Team" }],
-  creator: "Guru Online",
-  publisher: "Guru Online",
+
+  authors: [
+    {
+      name: "Senyum.or.id",
+      url: SITE_URL,
+    },
+  ],
+
+  creator: "Senyum.or.id",
+  publisher: "Senyum.or.id",
+
+  category: "education",
+
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  icons: {
-    icon: "/favicon.ico", // Pastikan file ini ada di folder public
-    shortcut: "/favicon.ico",
-    apple: "/apple-icon.png", // Pastikan file ini ada di folder public
+
+  // ==========================================================================
+  // CANONICAL
+  // ==========================================================================
+
+  alternates: {
+    canonical: "/",
+    languages: {
+      "id-ID": "/",
+    },
   },
-  openGraph: {
-    title: "Guru Online - Platform Edukasi & Perangkat Ajar Indonesia",
-    description: "Temukan berbagai referensi pendidikan, materi pembelajaran, dan strategi mengajar terbaru secara efektif di GuruOnline.web.id.",
-    url: "https://www.guruonline.web.id",
-    siteName: "Guru Online",
-    locale: "id_ID",
-    type: "website",
-    images: [
+
+  // ==========================================================================
+  // ICON
+  // ==========================================================================
+
+  icons: {
+    icon: [
       {
-        url: "/og-image.png", // Sediakan foto banner ukuran 1200x630 di folder public
-        width: 1200,
-        height: 630,
-        alt: "Guru Online Platform Banner",
+        url: "/favicon.ico",
+      },
+      {
+        url: "/icon.png",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      {
+        url: "/apple-icon.png",
+        sizes: "180x180",
+        type: "image/png",
       },
     ],
   },
+
+  // ==========================================================================
+  // OPEN GRAPH / WHATSAPP / FACEBOOK
+  // ==========================================================================
+
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+
+    url: SITE_URL,
+
+    siteName: "Senyum.or.id",
+
+    title: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+
+    description:
+      "Media guru dan pendidikan Indonesia. Temukan berita pendidikan, informasi guru, perangkat ajar, materi pembelajaran, kurikulum, dan inspirasi mengajar di Senyum.or.id.",
+
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+        type: "image/png",
+      },
+    ],
+  },
+
+  // ==========================================================================
+  // X / TWITTER
+  // ==========================================================================
+
   twitter: {
     card: "summary_large_image",
-    title: "Guru Online - Platform Edukasi & Perangkat Ajar Indonesia",
-    description: "Temukan berbagai referensi pendidikan, materi pembelajaran, dan strategi mengajar terbaru secara efektif.",
+
+    title: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+
+    description:
+      "Media guru dan pendidikan Indonesia yang menghadirkan informasi, perangkat ajar, materi pembelajaran, dan inspirasi pendidikan.",
+
     images: ["/og-image.png"],
   },
+
+  // ==========================================================================
+  // ROBOTS / GOOGLE
+  // ==========================================================================
+
   robots: {
     index: true,
     follow: true,
+
+    nocache: false,
+
     googleBot: {
       index: true,
       follow: true,
+
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
+
+  // ==========================================================================
+  // OTHER META
+  // ==========================================================================
+
+  other: {
+    "theme-color": "#087F8C",
+    "apple-mobile-web-app-title": "Senyum",
+    "mobile-web-app-capable": "yes",
+  },
 };
+
+// ============================================================================
+// VIEWPORT
+// ============================================================================
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+
+  themeColor: [
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "#ffffff",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "#087F8C",
+    },
+  ],
+};
+
+// ============================================================================
+// ROOT LAYOUT
+// ============================================================================
 
 export default function RootLayout({
   children,
@@ -86,10 +235,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="id" // Diubah ke "id" agar mesin pencari tahu target utamanya adalah audiens Indonesia
+      lang="id"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-gray-50 text-[#373d45]">
+      <body className="min-h-screen flex flex-col bg-gray-50 text-[#373d45]">
         {children}
       </body>
     </html>

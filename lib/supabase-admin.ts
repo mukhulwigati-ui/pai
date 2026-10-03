@@ -1,25 +1,25 @@
+import 'server-only';
 import { createClient } from '@supabase/supabase-js';
 
 // ============================================================================
-// SUPABASE PUBLIC CLIENT
+// SUPABASE ADMIN CLIENT
 // ============================================================================
 //
-// Digunakan untuk:
-// - Login Google
-// - Logout
-// - Mendapatkan session user
-// - Membaca data yang memang diizinkan oleh RLS
+// KHUSUS SERVER.
 //
-// JANGAN gunakan client ini untuk operasi admin/server yang membutuhkan
-// SUPABASE_SERVICE_ROLE_KEY.
+// Digunakan untuk:
+// - Menyimpan komentar
+// - Moderasi komentar
+// - Update status komentar
+// - Hapus komentar
+// - Operasi server lainnya yang membutuhkan Service Role
+//
+// JANGAN import file ini ke Client Component.
 //
 // ============================================================================
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // ============================================================================
 // VALIDASI ENV
@@ -31,24 +31,23 @@ if (!supabaseUrl) {
   );
 }
 
-if (!supabaseKey) {
+if (!supabaseServiceRoleKey) {
   throw new Error(
-    'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY atau NEXT_PUBLIC_SUPABASE_ANON_KEY belum tersedia.'
+    'SUPABASE_SERVICE_ROLE_KEY belum tersedia. Periksa file .env.local.'
   );
 }
 
 // ============================================================================
-// CREATE CLIENT
+// CREATE ADMIN CLIENT
 // ============================================================================
 
-export const supabase = createClient(
+export const supabaseAdmin = createClient(
   supabaseUrl,
-  supabaseKey,
+  supabaseServiceRoleKey,
   {
     auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
+      persistSession: false,
+      autoRefreshToken: false,
     },
   }
 );
