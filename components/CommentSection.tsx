@@ -1,201 +1,896 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-import { User } from '@supabase/supabase-js';
+
+// ============================================================================
+// CONFIG
+// ============================================================================
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  'https://www.senyum.or.id';
+
+// ============================================================================
+// TYPES
+// ============================================================================
 
 interface CommentSectionProps {
   slug: string;
-  initialComments: any[];
+  initialComments?: any[];
 }
 
-export default function CommentSection({ slug, initialComments }: CommentSectionProps) {
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [komentar, setKomentar] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [authLoading, setAuthLoading] = useState(true);
-  const [msg, setMsg] = useState('');
+interface CommentItem {
+  id: string;
 
-  // 1. Cek status login pengguna saat komponen dimuat
+  post_id?: string | null;
+  post_slug?: string | null;
+  post_title?: string | null;
+
+  name: string;
+  message: string;
+
+  status?: string;
+
+  parent_id?: string | null;
+
+  created_at: string;
+  updated_at?: string | null;
+}
+
+// ============================================================================
+// HELPER
+// ============================================================================
+
+function normalizeComment(comment: any): CommentItem {
+  return {
+    id:
+      comment?.id ||
+      `${Date.now()}-${Math.random()}`,
+
+    post_id:
+      comment?.post_id ??
+      null,
+
+    post_slug:
+      comment?.post_slug ??
+      comment?.slug ??
+      null,
+
+    post_title:
+      comment?.post_title ??
+      null,
+
+    // Mendukung database lama + database baru
+    name:
+      comment?.name ||
+      comment?.nama ||
+      'Pengguna Google',
+
+    message:
+      comment?.message ||
+      comment?.komentar ||
+      '',
+
+    status:
+      comment?.status ||
+      'approved',
+
+    parent_id:
+      comment?.parent_id ??
+      null,
+
+    created_at:
+      comment?.created_at ||
+      new Date().toISOString(),
+
+    updated_at:
+      comment?.updated_at ??
+      null,
+  };
+}
+
+function formatDate(dateString: string) {
+  try {
+    return new Intl.DateTimeFormat('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(new Date(dateString));
+  } catch {
+    return '';
+  }
+}
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
+export default function CommentSection({
+  slug,
+  initialComments = [],
+}: CommentSectionProps) {
+  const router = useRouter();
+
+  // ==========================================================================
+  // STATE
+  // ==========================================================================
+
+  const [user, setUser] =
+    useState<User | null>(null);
+
+  const [comments, setComments] =
+    useState<CommentItem[]>(() =>
+      initialComments.map(normalizeComment)
+    );
+
+  const [komentar, setKomentar] =
+    useState('');
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [authLoading, setAuthLoading] =
+    useState(true);
+
+  const [commentsLoading, setCommentsLoading] =
+    useState(false);
+
+  const [msg, setMsg] =
+    useState('');
+
+  const [msgType, setMsgType] =
+    useState<'success' | 'error' | 'info' | ''>('');
+
+  // ==========================================================================
+  // NORMALISASI initialComments
+  // ==========================================================================
+
   useEffect(() => {
+    setComments(
+      initialComments.map(normalizeComment)
+    );
+  }, [initialComments]);
+
+  // ==========================================================================
+  // AUTH
+  // ==========================================================================
+
+  useEffect(() => {
+    let mounted = true;
+
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-      setAuthLoading(false);
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!mounted) return;
+
+        setUser(
+          session?.user ??
+          null
+        );
+      } catch (error) {
+        console.error(
+          'Gagal membaca session Supabase:',
+          error
+        );
+      } finally {
+        if (mounted) {
+          setAuthLoading(false);
+        }
+      }
     };
 
     checkUser();
 
-    // Dengarkan perubahan status auth (login/logout) secara real-time
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+    const {
+      data: { subscription },
+    } =
+      supabase.auth.onAuthStateChange(
+        (_event, session) => {
+          if (!mounted) return;
 
-    return () => subscription.unsubscribe();
+          setUser(
+            session?.user ??
+            null
+          );
+
+          setAuthLoading(false);
+        }
+      );
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
-  // 2. Fungsi Pemicu Login Google OAuth Supabase (Perbaikan Redirect URL Dinamis)
-  const handleGoogleLogin = async () => {
-    try {
-      // Menangkap URL lengkap artikel saat ini secara real-time di browser pembaca
-      const currentFullURL = window.location.href;
+  // ==========================================================================
+  // AMBIL KOMENTAR TERBARU
+  // ==========================================================================
 
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          // Memaksa Supabase melempar balik ke URL detail artikel asal di domain www.guruonline.web.id
-          redirectTo: currentFullURL,
-        },
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      setMsg(`❌ Gagal terhubung ke Google: ${err.message}`);
-    }
-  };
-
-  // 3. Fungsi Logout
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
-
-  // 4. Submit Komentar Aman menggunakan Data Auth Google
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-
-    setLoading(true);
-    setMsg('');
-
-    // Ambil metadata nama dan email resmi dari akun Google mereka
-    const userNama = user.user_metadata.full_name || user.user_metadata.name || 'Pengguna Google';
-    const userEmail = user.email || '';
+  const loadComments = async () => {
+    if (!slug) return;
 
     try {
-      const res = await fetch('/api/comment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          slug, 
-          nama: userNama, 
-          email: userEmail, 
-          komentar 
-        }),
-      });
+      setCommentsLoading(true);
 
-      const responseData = await res.json();
+      const response = await fetch(
+        `/api/comment?slug=${encodeURIComponent(slug)}`,
+        {
+          method: 'GET',
+          cache: 'no-store',
+        }
+      );
 
-      if (responseData.success) {
-        setKomentar('');
-        setMsg('✅ Komentar Anda berhasil diterbitkan!');
-        router.refresh();
-      } else {
-        setMsg(`❌ ${responseData.error}`);
+      const data =
+        await response.json();
+
+      if (
+        response.ok &&
+        data.success &&
+        Array.isArray(data.comments)
+      ) {
+        setComments(
+          data.comments.map(
+            normalizeComment
+          )
+        );
       }
-    } catch (err) {
-      setMsg('❌ Terjadi kesalahan jaringan.');
+    } catch (error) {
+      console.error(
+        'Gagal mengambil komentar:',
+        error
+      );
     } finally {
-      setLoading(false);
+      setCommentsLoading(false);
     }
   };
+
+  // ==========================================================================
+  // LOGIN GOOGLE
+  // ==========================================================================
+
+  const handleGoogleLogin =
+    async () => {
+      try {
+        setMsg('');
+        setMsgType('');
+
+        // Ambil path artikel tanpa hash/token OAuth
+        const pathname =
+          window.location.pathname;
+
+        const search =
+          window.location.search;
+
+        // Production selalu kembali ke senyum.or.id
+        // tetapi tetap kembali ke artikel yang sedang dibaca
+        const redirectTo =
+          `${SITE_URL}${pathname}${search}`;
+
+        const { error } =
+          await supabase.auth.signInWithOAuth({
+            provider: 'google',
+
+            options: {
+              redirectTo,
+
+              queryParams: {
+                access_type: 'offline',
+                prompt: 'consent',
+              },
+            },
+          });
+
+        if (error) {
+          throw error;
+        }
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Tidak diketahui';
+
+        setMsg(
+          `Gagal masuk dengan Google: ${message}`
+        );
+
+        setMsgType('error');
+      }
+    };
+
+  // ==========================================================================
+  // LOGOUT
+  // ==========================================================================
+
+  const handleLogout =
+    async () => {
+      try {
+        setMsg('');
+        setMsgType('');
+
+        const { error } =
+          await supabase.auth.signOut();
+
+        if (error) {
+          throw error;
+        }
+
+        setUser(null);
+
+        router.refresh();
+      } catch (error) {
+        console.error(
+          'Logout error:',
+          error
+        );
+
+        setMsg(
+          'Gagal keluar dari akun.'
+        );
+
+        setMsgType('error');
+      }
+    };
+
+  // ==========================================================================
+  // SUBMIT COMMENT
+  // ==========================================================================
+
+  const handleSubmit =
+    async (
+      event: React.FormEvent<HTMLFormElement>
+    ) => {
+      event.preventDefault();
+
+      if (!user) {
+        setMsg(
+          'Silakan masuk dengan Google terlebih dahulu.'
+        );
+
+        setMsgType('error');
+
+        return;
+      }
+
+      const cleanedComment =
+        komentar.trim();
+
+      if (!cleanedComment) {
+        setMsg(
+          'Komentar tidak boleh kosong.'
+        );
+
+        setMsgType('error');
+
+        return;
+      }
+
+      if (
+        cleanedComment.length >
+        3000
+      ) {
+        setMsg(
+          'Komentar maksimal 3000 karakter.'
+        );
+
+        setMsgType('error');
+
+        return;
+      }
+
+      setLoading(true);
+      setMsg('');
+      setMsgType('');
+
+      try {
+        // ================================================================
+        // Ambil session terbaru
+        // ================================================================
+
+        const {
+          data: { session },
+        } =
+          await supabase.auth.getSession();
+
+        if (!session) {
+          setUser(null);
+
+          setMsg(
+            'Sesi login Anda telah berakhir. Silakan masuk kembali.'
+          );
+
+          setMsgType('error');
+
+          return;
+        }
+
+        // ================================================================
+        // Data Google
+        // ================================================================
+
+        const userNama =
+          user.user_metadata?.full_name ||
+          user.user_metadata?.name ||
+          user.email?.split('@')[0] ||
+          'Pengguna Google';
+
+        const userEmail =
+          user.email ||
+          '';
+
+        // ================================================================
+        // POST COMMENT
+        // ================================================================
+
+        const response =
+          await fetch('/api/comment', {
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json',
+
+              // Access token dikirim agar API nantinya
+              // dapat memverifikasi pengguna Google
+              Authorization:
+                `Bearer ${session.access_token}`,
+            },
+
+            body: JSON.stringify({
+              slug,
+
+              postId: slug,
+
+              nama: userNama,
+
+              email: userEmail,
+
+              komentar:
+                cleanedComment,
+            }),
+          });
+
+        const responseData =
+          await response.json();
+
+        if (
+          !response.ok ||
+          !responseData.success
+        ) {
+          throw new Error(
+            responseData.error ||
+            'Komentar gagal dikirim.'
+          );
+        }
+
+        // ================================================================
+        // RESET TEXTAREA
+        // ================================================================
+
+        setKomentar('');
+
+        // ================================================================
+        // JIKA LANGSUNG APPROVED
+        // ================================================================
+
+        if (
+          responseData.comment &&
+          responseData.comment.status ===
+            'approved'
+        ) {
+          const newComment =
+            normalizeComment(
+              responseData.comment
+            );
+
+          // Langsung tampil tanpa reload halaman
+          setComments(
+            (previousComments) => {
+              const alreadyExists =
+                previousComments.some(
+                  (item) =>
+                    item.id ===
+                    newComment.id
+                );
+
+              if (alreadyExists) {
+                return previousComments;
+              }
+
+              return [
+                ...previousComments,
+                newComment,
+              ];
+            }
+          );
+
+          setMsg(
+            'Komentar Anda berhasil diterbitkan.'
+          );
+
+          setMsgType('success');
+        } else {
+          // ==============================================================
+          // JIKA MASIH PENDING
+          // ==============================================================
+
+          setMsg(
+            responseData.message ||
+            'Komentar berhasil dikirim dan menunggu persetujuan.'
+          );
+
+          setMsgType('info');
+        }
+
+        // ================================================================
+        // Sinkronisasi dengan database
+        // ================================================================
+
+        await loadComments();
+
+        router.refresh();
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Terjadi kesalahan jaringan.';
+
+        setMsg(message);
+
+        setMsgType('error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  // ==========================================================================
+  // USER INFO
+  // ==========================================================================
+
+  const userName =
+    useMemo(() => {
+      if (!user) return '';
+
+      return (
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.email?.split('@')[0] ||
+        'Pengguna Google'
+      );
+    }, [user]);
+
+  const avatarUrl =
+    useMemo(() => {
+      if (!user) return '';
+
+      return (
+        user.user_metadata?.avatar_url ||
+        user.user_metadata?.picture ||
+        ''
+      );
+    }, [user]);
+
+  // ==========================================================================
+  // RENDER
+  // ==========================================================================
 
   return (
-    <div className="mt-12 border-t border-gray-200 pt-8">
-      <h3 className="text-xl font-bold text-gray-950 mb-6 uppercase tracking-tight flex items-center">
-        💬 Komentar ({initialComments.length})
-      </h3>
+    <section className="mt-12 border-t border-gray-200 pt-8">
 
-      {/* Bagian Info Pengguna di Atas Form */}
+      {/* ================================================================ */}
+      {/* TITLE */}
+      {/* ================================================================ */}
+
+      <div className="mb-6 flex items-center justify-between">
+        <h3 className="flex items-center gap-2 text-xl font-bold tracking-tight text-gray-950 uppercase">
+          <span>💬</span>
+
+          <span>
+            Komentar ({comments.length})
+          </span>
+        </h3>
+
+        {commentsLoading && (
+          <span className="text-xs text-gray-400">
+            Memperbarui...
+          </span>
+        )}
+      </div>
+
+      {/* ================================================================ */}
+      {/* LOGIN INFO */}
+      {/* ================================================================ */}
+
       {!authLoading && user && (
-        <div className="flex items-center justify-between bg-orange-50 border border-orange-100 rounded-xl p-3 mb-4 text-xs font-medium text-gray-700">
-          <div className="flex items-center space-x-2">
-            {user.user_metadata.avatar_url && (
-              <img 
-                src={user.user_metadata.avatar_url} 
-                alt="Avatar" 
-                className="w-5 h-5 rounded-full border border-orange-200"
+        <div className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-[#087F8C]/15 bg-[#087F8C]/5 px-4 py-3">
+
+          <div className="flex min-w-0 items-center gap-3">
+
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt={userName}
+                referrerPolicy="no-referrer"
+                className="h-8 w-8 shrink-0 rounded-full border border-[#087F8C]/20 object-cover"
               />
+            ) : (
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#087F8C] text-xs font-bold text-white">
+                {userName
+                  .charAt(0)
+                  .toUpperCase()}
+              </div>
             )}
-            <span>Masuk sebagai: <strong className="text-orange-700">{user.user_metadata.full_name}</strong> ({user.email})</span>
+
+            <div className="min-w-0">
+              <p className="text-xs text-gray-500">
+                Masuk sebagai
+              </p>
+
+              <p className="truncate text-sm font-semibold text-gray-800">
+                <span className="text-[#087F8C]">
+                  {userName}
+                </span>
+
+                {user.email && (
+                  <span className="font-normal text-gray-500">
+                    {' '}
+                    ({user.email})
+                  </span>
+                )}
+              </p>
+            </div>
           </div>
-          <button 
-            onClick={handleLogout} 
-            className="text-gray-400 hover:text-red-600 transition font-bold cursor-pointer"
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="shrink-0 text-xs font-bold text-gray-400 transition hover:text-red-600"
           >
             Keluar
           </button>
         </div>
       )}
 
-      {/* LIST BACA KOMENTAR */}
-      <div className="space-y-4 mb-8">
-        {initialComments.length === 0 ? (
-          <p className="text-sm text-gray-400 italic">Belum ada komentar. Jadilah yang pertama!</p>
+      {/* ================================================================ */}
+      {/* COMMENT LIST */}
+      {/* ================================================================ */}
+
+      <div className="mb-8 space-y-4">
+
+        {comments.length === 0 ? (
+          <div className="py-2">
+            <p className="text-sm italic text-gray-400">
+              Belum ada komentar. Jadilah yang pertama!
+            </p>
+          </div>
         ) : (
-          initialComments.map((comment) => (
-            <div key={comment.id} className="bg-gray-50 border border-gray-200/60 p-4 rounded-xl shadow-xs">
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="font-extrabold text-sm text-orange-600 flex items-center gap-1.5">
-                  Google User • {comment.nama}
-                </span>
-                <span className="text-[11px] text-gray-400">
-                  {new Date(comment.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                </span>
-              </div>
-              <p className="text-[14.5px] text-gray-800 leading-relaxed whitespace-pre-line">{comment.komentar}</p>
-            </div>
-          ))
+          comments.map(
+            (comment) => (
+              <article
+                key={comment.id}
+                className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+              >
+                <div className="mb-2 flex items-start justify-between gap-4">
+
+                  <div className="flex items-center gap-2">
+
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#087F8C]/10 text-xs font-bold text-[#087F8C]">
+                      {comment.name
+                        .charAt(0)
+                        .toUpperCase()}
+                    </div>
+
+                    <div>
+                      <p className="text-sm font-bold text-[#087F8C]">
+                        {comment.name}
+                      </p>
+
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-gray-400">
+                        Pengguna Google
+                      </p>
+                    </div>
+                  </div>
+
+                  <time className="shrink-0 text-[11px] text-gray-400">
+                    {formatDate(
+                      comment.created_at
+                    )}
+                  </time>
+                </div>
+
+                <p className="whitespace-pre-line break-words text-[14.5px] leading-relaxed text-gray-700">
+                  {comment.message}
+                </p>
+              </article>
+            )
+          )
         )}
+
       </div>
 
-      {/* KONDISI INTERAKSI FORM BERDASARKAN AUTH */}
+      {/* ================================================================ */}
+      {/* AUTH LOADING */}
+      {/* ================================================================ */}
+
       {authLoading ? (
-        <div className="text-center py-6 text-xs text-gray-400">Memeriksa enkripsi sesi masuk...</div>
+        <div className="rounded-xl border border-gray-200 bg-white py-8 text-center text-xs text-gray-400">
+          Memeriksa sesi pengguna...
+        </div>
       ) : !user ? (
-        /* KONDISI A: JIKA BELUM LOGIN GOOGLE */
-        <div className="bg-white border border-gray-200 p-8 rounded-2xl shadow-xs text-center space-y-4">
-          <h4 className="font-bold text-sm text-gray-900 uppercase tracking-wider">Tinggalkan Tanggapan</h4>
-          <p className="text-xs text-gray-500 max-w-sm mx-auto">
-            Untuk mencegah manipulasi identitas dan penyebaran spam, silakan masuk menggunakan akun Google resmi Anda untuk mengirim komentar.
+
+        // ====================================================================
+        // BELUM LOGIN
+        // ====================================================================
+
+        <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+
+          <h4 className="text-sm font-bold uppercase tracking-wider text-gray-900">
+            Tinggalkan Tanggapan
+          </h4>
+
+          <p className="mx-auto max-w-md text-xs leading-relaxed text-gray-500">
+            Silakan masuk menggunakan akun Google untuk
+            memberikan komentar pada artikel ini.
           </p>
+
+          {msg && (
+            <p
+              className={`text-xs font-semibold ${
+                msgType === 'error'
+                  ? 'text-red-600'
+                  : 'text-[#087F8C]'
+              }`}
+            >
+              {msg}
+            </p>
+          )}
+
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="inline-flex items-center space-x-2 bg-white hover:bg-gray-50 text-gray-700 font-bold text-xs uppercase px-5 py-3 border border-gray-300 rounded-xl transition duration-200 shadow-xs tracking-wider cursor-pointer mx-auto"
+            className="mx-auto inline-flex items-center gap-3 rounded-xl border border-gray-300 bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider text-gray-700 shadow-sm transition hover:bg-gray-50"
           >
-            <svg className="w-4 h-4" viewBox="0 0 24 24">
-              <path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.227-3.11C18.436 2.114 15.58 1 12.24 1C6.033 1 1 6.033 1 12.24s5.033 11.24 11.24 11.24c6.478 0 10.793-4.537 10.793-10.972 0-.737-.08-1.3-.178-1.853H12.24z"/>
+            <svg
+              className="h-5 w-5"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                fill="#4285F4"
+                d="M21.35 12.19c0-.74-.07-1.45-.19-2.14H12v4.05h5.24a4.48 4.48 0 0 1-1.94 2.94v2.62h3.14c1.84-1.69 2.91-4.18 2.91-7.47Z"
+              />
+
+              <path
+                fill="#34A853"
+                d="M12 21.7c2.62 0 4.82-.87 6.43-2.04l-3.14-2.62c-.87.58-1.98.92-3.29.92-2.53 0-4.67-1.71-5.44-4.01H3.31v2.7A9.7 9.7 0 0 0 12 21.7Z"
+              />
+
+              <path
+                fill="#FBBC05"
+                d="M6.56 13.95A5.82 5.82 0 0 1 6.26 12c0-.68.12-1.34.3-1.95v-2.7H3.31A9.7 9.7 0 0 0 2.3 12c0 1.56.37 3.04 1.01 4.65l3.25-2.7Z"
+              />
+
+              <path
+                fill="#EA4335"
+                d="M12 6.04c1.43 0 2.7.49 3.71 1.45l2.78-2.78A9.33 9.33 0 0 0 12 2.3a9.7 9.7 0 0 0-8.69 5.05l3.25 2.7C7.33 7.75 9.47 6.04 12 6.04Z"
+              />
             </svg>
-            <span>Masuk Dengan Akun Google</span>
+
+            <span>
+              Masuk dengan Google
+            </span>
           </button>
         </div>
       ) : (
-        /* KONDISI B: JIKA SUDAH LOGIN (SIAP KIRIM KOMENTAR) */
-        <form onSubmit={handleSubmit} className="bg-white border border-gray-200 p-5 rounded-2xl shadow-xs space-y-4">
-          <h4 className="font-bold text-sm text-gray-900 uppercase tracking-wider">Tinggalkan Tanggapan</h4>
-          
-          {msg && <p className="text-xs font-semibold text-orange-600">{msg}</p>}
 
-          <textarea
-            placeholder="Tulis opini, apresiasi, atau pertanyaan Anda mengenai materi ajar di sini..."
-            rows={4}
-            value={komentar}
-            onChange={(e) => setKomentar(e.target.value)}
-            className="w-full text-sm p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-500 font-medium leading-relaxed"
-            required
-          />
+        // ====================================================================
+        // SUDAH LOGIN
+        // ====================================================================
+
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+        >
+          <h4 className="text-sm font-bold uppercase tracking-wider text-gray-900">
+            Tinggalkan Tanggapan
+          </h4>
+
+          {msg && (
+            <div
+              className={`rounded-lg px-4 py-3 text-xs font-semibold ${
+                msgType === 'success'
+                  ? 'border border-green-200 bg-green-50 text-green-700'
+                  : msgType === 'error'
+                  ? 'border border-red-200 bg-red-50 text-red-700'
+                  : 'border border-[#087F8C]/20 bg-[#087F8C]/5 text-[#087F8C]'
+              }`}
+            >
+              {msg}
+            </div>
+          )}
+
+          <div>
+            <textarea
+              placeholder="Tulis opini, apresiasi, atau pertanyaan Anda mengenai artikel ini..."
+              rows={5}
+              maxLength={3000}
+              value={komentar}
+              onChange={(event) =>
+                setKomentar(
+                  event.target.value
+                )
+              }
+              disabled={loading}
+              required
+              className="
+                w-full
+                resize-y
+                rounded-xl
+                border
+                border-gray-200
+                bg-gray-50
+                p-4
+                text-sm
+                font-medium
+                leading-relaxed
+                text-gray-800
+                outline-none
+                transition
+
+                placeholder:text-gray-400
+
+                focus:border-[#087F8C]
+                focus:ring-2
+                focus:ring-[#087F8C]/10
+
+                disabled:cursor-not-allowed
+                disabled:opacity-60
+              "
+            />
+
+            <div className="mt-1 text-right text-[11px] text-gray-400">
+              {komentar.length}/3000
+            </div>
+          </div>
 
           <button
             type="submit"
-            disabled={loading}
-            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs uppercase px-5 py-3 rounded-xl transition duration-200 disabled:opacity-50 tracking-wider cursor-pointer"
+            disabled={
+              loading ||
+              komentar.trim().length < 2
+            }
+            className="
+              rounded-xl
+              bg-[#F15A24]
+              px-6
+              py-3
+              text-xs
+              font-bold
+              uppercase
+              tracking-wider
+              text-white
+              transition
+
+              hover:bg-[#d94b18]
+
+              disabled:cursor-not-allowed
+              disabled:opacity-50
+            "
           >
-            {loading ? 'Mengirim...' : 'Kirim Komentar'}
+            {loading
+              ? 'Mengirim...'
+              : 'Kirim Komentar'}
           </button>
         </form>
       )}
-    </div>
+    </section>
   );
 }
