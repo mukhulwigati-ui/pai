@@ -1,218 +1,233 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import jwt from 'jsonwebtoken';
+import { requireAdmin } from '@/lib/auth';
 
-// ============================================================
-// JWT SECRET
-// ============================================================
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
-const JWT_SECRET = process.env.JWT_SECRET;
+/* ============================================================
+   KONFIGURASI
+============================================================ */
 
-// ============================================================
-// DEFAULT SETTINGS
-// ============================================================
+const SCHOOL_NAME =
+  'Sekolah Dasar Islam Terpadu Khoiro Ummah';
+
+const DEFAULT_ACADEMIC_YEAR =
+  '2026/2027';
+
+const DEFAULT_SEMESTER =
+  'Ganjil';
+
+const DEFAULT_PRINCIPAL_NAME =
+  'Kepala Sekolah';
+
+const MAX_SCHOOL_NAME_LENGTH =
+  200;
+
+const MAX_PRINCIPAL_NAME_LENGTH =
+  150;
+
+/* ============================================================
+   DEFAULT SETTINGS
+============================================================ */
 
 const DEFAULT_SETTINGS = {
-  schoolName: 'Pondok Pesantren Terpadu Ulul Albab',
-  academicYear: '2026/2027',
-  semester: 'Ganjil',
-  principalName: 'Pimpinan Pesantren',
+  schoolName:
+    SCHOOL_NAME,
+
+  academicYear:
+    DEFAULT_ACADEMIC_YEAR,
+
+  semester:
+    DEFAULT_SEMESTER,
+
+  principalName:
+    DEFAULT_PRINCIPAL_NAME,
 };
 
-// ============================================================
-// TYPE JWT PAYLOAD
-// ============================================================
+/* ============================================================
+   HELPERS
+============================================================ */
 
-type JwtPayload = {
-  id: number;
-  identity_number: string;
-  fullname: string;
-  role: string;
-};
-
-// ============================================================
-// HELPER: CLEAN STRING
-// ============================================================
-
-function cleanString(value: unknown): string {
-  return typeof value === 'string' ? value.trim() : '';
+function normalizeText(
+  value: unknown
+): string {
+  return String(
+    value ?? ''
+  )
+    .trim()
+    .replace(/\s+/g, ' ');
 }
 
-// ============================================================
-// HELPER: CEK ADMIN
-// ============================================================
+function normalizeAcademicYear(
+  value: unknown
+): string {
+  return String(
+    value ?? ''
+  )
+    .trim()
+    .replace(/\s+/g, '');
+}
 
-function verifyAdmin(request: NextRequest) {
-  // ----------------------------------------------------------
-  // Pastikan JWT_SECRET tersedia
-  // ----------------------------------------------------------
+/* ============================================================
+   VALIDASI TAHUN AJARAN
+============================================================ */
 
-  if (!JWT_SECRET) {
-    console.error(
-      '[SETTINGS_AUTH] JWT_SECRET belum tersedia.'
+/**
+ * Format valid:
+ *
+ * 2026/2027
+ * 2027/2028
+ *
+ * Tidak valid:
+ *
+ * 2026
+ * 2026-2027
+ * 2026/2028
+ */
+function isValidAcademicYear(
+  value: string
+): boolean {
+  const match =
+    value.match(
+      /^(\d{4})\/(\d{4})$/
     );
 
-    return {
-      authorized: false,
-      response: NextResponse.json(
-        {
-          success: false,
-          message:
-            'Konfigurasi server belum lengkap.',
-        },
-        { status: 500 }
-      ),
-    };
+  if (!match) {
+    return false;
   }
 
-  // ----------------------------------------------------------
-  // Ambil token dari cookie
-  // ----------------------------------------------------------
+  const firstYear =
+    Number(
+      match[1]
+    );
 
-  const token = request.cookies.get('token')?.value;
+  const secondYear =
+    Number(
+      match[2]
+    );
 
-  if (!token) {
-    return {
-      authorized: false,
-      response: NextResponse.json(
-        {
-          success: false,
-          message:
-            'Anda harus login terlebih dahulu.',
-        },
-        { status: 401 }
-      ),
-    };
+  if (
+    !Number.isInteger(
+      firstYear
+    ) ||
+    !Number.isInteger(
+      secondYear
+    )
+  ) {
+    return false;
   }
 
-  // ----------------------------------------------------------
-  // Verifikasi JWT
-  // ----------------------------------------------------------
+  return (
+    secondYear ===
+    firstYear + 1
+  );
+}
 
+/* ============================================================
+   ERROR RESPONSE
+============================================================ */
+
+function errorResponse(
+  message: string,
+  status = 400
+) {
+  return NextResponse.json(
+    {
+      success: false,
+      message,
+    },
+    {
+      status,
+    }
+  );
+}
+
+/* ============================================================
+   GET /api/settings
+   AMBIL PENGATURAN SISTEM
+   HANYA ADMIN
+============================================================ */
+
+export async function GET() {
   try {
-    const decoded = jwt.verify(
-      token,
-      JWT_SECRET
-    ) as JwtPayload;
+    /* --------------------------------------------------------
+       AUTH
+    -------------------------------------------------------- */
 
-    // --------------------------------------------------------
-    // Pastikan role ADMIN
-    // --------------------------------------------------------
+    const auth =
+      await requireAdmin();
 
-    if (decoded.role !== 'ADMIN') {
-      console.warn(
-        `[SETTINGS_AUTH] Akses ditolak. User ${
-          decoded.identity_number || decoded.id
-        } memiliki role ${decoded.role}.`
+    if (!auth.authorized) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            auth.message,
+        },
+        {
+          status:
+            auth.status,
+        }
       );
-
-      return {
-        authorized: false,
-        response: NextResponse.json(
-          {
-            success: false,
-            message:
-              'Akses ditolak. Halaman pengaturan hanya dapat diakses oleh Administrator.',
-          },
-          { status: 403 }
-        ),
-      };
     }
 
-    // --------------------------------------------------------
-    // ADMIN VALID
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       AMBIL SETTING
+    -------------------------------------------------------- */
 
-    return {
-      authorized: true,
-      user: decoded,
-    };
-
-  } catch (error) {
-    console.error(
-      '[SETTINGS_AUTH] JWT verification error:',
-      error
-    );
-
-    return {
-      authorized: false,
-      response: NextResponse.json(
-        {
-          success: false,
-          message:
-            'Sesi login tidak valid atau telah kedaluwarsa. Silakan login kembali.',
-        },
-        { status: 401 }
-      ),
-    };
-  }
-}
-
-// ============================================================
-// GET: AMBIL PENGATURAN SISTEM
-// ============================================================
-
-export async function GET(
-  request: NextRequest
-) {
-  // ==========================================================
-  // AUTHORIZATION
-  // ==========================================================
-
-  const auth = verifyAdmin(request);
-
-  if (!auth.authorized) {
-    return auth.response;
-  }
-
-  // ==========================================================
-  // AMBIL DATA
-  // ==========================================================
-
-  try {
     let setting =
       await prisma.systemSetting.findFirst({
         orderBy: {
-          id: 'asc',
+          id:
+            'asc',
         },
       });
 
-    // --------------------------------------------------------
-    // Jika belum ada setting, buat default
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       BELUM ADA SETTING
+       BUAT DEFAULT SDIT KHOIRO UMMAH
+    -------------------------------------------------------- */
 
     if (!setting) {
       setting =
         await prisma.systemSetting.create({
-          data: DEFAULT_SETTINGS,
+          data: {
+            ...DEFAULT_SETTINGS,
+          },
         });
     }
 
-    // ========================================================
-    // RESPONSE
-    // ========================================================
+    /* --------------------------------------------------------
+       RESPONSE
+    -------------------------------------------------------- */
 
     return NextResponse.json(
       {
         success: true,
+
         message:
-          'Pengaturan berhasil dimuat.',
-        data: setting,
+          'Pengaturan sistem berhasil dimuat.',
+
+        data:
+          setting,
       },
       {
         status: 200,
       }
     );
-
-  } catch (error) {
+  } catch (
+    error: unknown
+  ) {
     console.error(
-      '[SETTINGS_GET_ERROR]',
+      'GET /api/settings ERROR:',
       error
     );
 
     return NextResponse.json(
       {
         success: false,
+
         message:
           'Gagal memuat pengaturan sistem.',
       },
@@ -223,164 +238,292 @@ export async function GET(
   }
 }
 
-// ============================================================
-// POST: SIMPAN / PERBARUI PENGATURAN
-// ============================================================
+/* ============================================================
+   POST /api/settings
+   SIMPAN / PERBARUI PENGATURAN SISTEM
+   HANYA ADMIN
+============================================================ */
 
 export async function POST(
-  request: NextRequest
+  request: Request
 ) {
-  // ==========================================================
-  // AUTHORIZATION
-  // ==========================================================
-
-  const auth = verifyAdmin(request);
-
-  if (!auth.authorized) {
-    return auth.response;
-  }
-
-  // ==========================================================
-  // PROSES DATA
-  // ==========================================================
-
   try {
-    const body = await request.json();
+    /* --------------------------------------------------------
+       AUTH
+    -------------------------------------------------------- */
 
-    // --------------------------------------------------------
-    // Bersihkan data
-    // --------------------------------------------------------
+    const auth =
+      await requireAdmin();
 
-    const schoolName = cleanString(
-      body.schoolName
-    );
-
-    const academicYear = cleanString(
-      body.academicYear
-    );
-
-    const semester = cleanString(
-      body.semester
-    );
-
-    const principalName = cleanString(
-      body.principalName
-    );
-
-    // ========================================================
-    // VALIDASI
-    // ========================================================
-
-    if (
-      !schoolName ||
-      !academicYear ||
-      !principalName
-    ) {
+    if (!auth.authorized) {
       return NextResponse.json(
         {
           success: false,
           message:
-            'Nama lembaga, tahun ajaran, dan nama pimpinan wajib diisi.',
+            auth.message,
         },
         {
-          status: 400,
+          status:
+            auth.status,
         }
       );
     }
 
-    // --------------------------------------------------------
-    // Validasi semester
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       BODY
+    -------------------------------------------------------- */
+
+    const body =
+      await request.json();
+
+    /* --------------------------------------------------------
+       NORMALISASI
+    -------------------------------------------------------- */
+
+    const schoolName =
+      normalizeText(
+        body?.schoolName
+      );
+
+    const academicYear =
+      normalizeAcademicYear(
+        body?.academicYear
+      );
+
+    const semester =
+      normalizeText(
+        body?.semester
+      );
+
+    const principalName =
+      normalizeText(
+        body?.principalName
+      );
+
+    /* ========================================================
+       VALIDASI NAMA SEKOLAH
+    ======================================================== */
+
+    if (!schoolName) {
+      return errorResponse(
+        'Nama sekolah wajib diisi.'
+      );
+    }
 
     if (
-      !['Ganjil', 'Genap'].includes(
+      schoolName.length >
+      MAX_SCHOOL_NAME_LENGTH
+    ) {
+      return errorResponse(
+        `Nama sekolah maksimal ${MAX_SCHOOL_NAME_LENGTH} karakter.`
+      );
+    }
+
+    /* ========================================================
+       VALIDASI TAHUN AJARAN
+    ======================================================== */
+
+    if (!academicYear) {
+      return errorResponse(
+        'Tahun ajaran wajib diisi.'
+      );
+    }
+
+    if (
+      !isValidAcademicYear(
+        academicYear
+      )
+    ) {
+      return errorResponse(
+        'Format tahun ajaran tidak valid. Gunakan format seperti 2026/2027.'
+      );
+    }
+
+    /* ========================================================
+       VALIDASI SEMESTER
+    ======================================================== */
+
+    if (
+      ![
+        'Ganjil',
+        'Genap',
+      ].includes(
         semester
       )
     ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Semester harus Ganjil atau Genap.',
-        },
-        {
-          status: 400,
-        }
+      return errorResponse(
+        'Semester harus Ganjil atau Genap.'
       );
     }
 
-    // ========================================================
-    // CARI SETTING LAMA
-    // ========================================================
+    /* ========================================================
+       VALIDASI KEPALA SEKOLAH
+    ======================================================== */
+
+    if (!principalName) {
+      return errorResponse(
+        'Nama kepala sekolah wajib diisi.'
+      );
+    }
+
+    if (
+      principalName.length >
+      MAX_PRINCIPAL_NAME_LENGTH
+    ) {
+      return errorResponse(
+        `Nama kepala sekolah maksimal ${MAX_PRINCIPAL_NAME_LENGTH} karakter.`
+      );
+    }
+
+    /* ========================================================
+       CARI SETTING YANG SUDAH ADA
+    ======================================================== */
 
     const existing =
       await prisma.systemSetting.findFirst({
         orderBy: {
-          id: 'asc',
+          id:
+            'asc',
         },
       });
 
-    let setting;
+    /* ========================================================
+       UPDATE / CREATE
+    ======================================================== */
 
-    // ========================================================
-    // UPDATE
-    // ========================================================
+    let setting;
 
     if (existing) {
       setting =
         await prisma.systemSetting.update({
           where: {
-            id: existing.id,
+            id:
+              existing.id,
           },
+
           data: {
             schoolName,
+
             academicYear,
+
             semester,
+
             principalName,
           },
         });
-
-    // ========================================================
-    // CREATE
-    // ========================================================
-
     } else {
       setting =
         await prisma.systemSetting.create({
           data: {
             schoolName,
+
             academicYear,
+
             semester,
+
             principalName,
           },
         });
     }
 
-    // ========================================================
-    // RESPONSE
-    // ========================================================
+    /* ========================================================
+       RESPONSE
+    ======================================================== */
 
     return NextResponse.json(
       {
         success: true,
+
         message:
-          'Pengaturan sistem berhasil diperbarui.',
-        data: setting,
+          'Pengaturan sistem berhasil disimpan.',
+
+        data:
+          setting,
       },
       {
         status: 200,
       }
     );
-
-  } catch (error) {
+  } catch (
+    error: unknown
+  ) {
     console.error(
-      '[SETTINGS_POST_ERROR]',
+      'POST /api/settings ERROR:',
       error
     );
+
+    const prismaError =
+      error as {
+        code?: string;
+      };
+
+    /* --------------------------------------------------------
+       UNIQUE CONSTRAINT
+    -------------------------------------------------------- */
+
+    if (
+      prismaError?.code ===
+      'P2002'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+
+          message:
+            'Pengaturan sistem tersebut sudah terdaftar.',
+        },
+        {
+          status: 409,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       FOREIGN KEY
+    -------------------------------------------------------- */
+
+    if (
+      prismaError?.code ===
+      'P2003'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+
+          message:
+            'Data pengaturan memiliki relasi yang tidak valid.',
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       NOT FOUND
+    -------------------------------------------------------- */
+
+    if (
+      prismaError?.code ===
+      'P2025'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+
+          message:
+            'Data pengaturan sistem tidak ditemukan.',
+        },
+        {
+          status: 404,
+        }
+      );
+    }
 
     return NextResponse.json(
       {
         success: false,
+
         message:
           'Gagal menyimpan pengaturan sistem.',
       },

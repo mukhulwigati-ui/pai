@@ -1,53 +1,231 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
-/* =========================================================
+/* ============================================================
+   KONFIGURASI
+============================================================ */
+
+const SCHOOL_LEVEL = 'SD';
+
+const VALID_GRADES = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+];
+
+const VALID_SEMESTERS = [
+  1,
+  2,
+];
+
+/* ============================================================
    DEFAULT SETTINGS
-========================================================= */
+============================================================ */
 
 const DEFAULT_SETTINGS = {
-  schoolName: 'Pondok Pesantren Terpadu Ulul Albab',
-  academicYear: '2026/2027',
-  semester: 'Ganjil',
-  principalName: 'Pimpinan Pesantren',
+  schoolName:
+    'Sekolah Dasar Islam Terpadu Khoiro Ummah',
+
+  academicYear:
+    '2026/2027',
+
+  semester:
+    'Ganjil',
+
+  principalName:
+    'Kepala Sekolah',
 };
 
-/* =========================================================
-   TYPE NILAI
-========================================================= */
+/* ============================================================
+   TYPES
+============================================================ */
 
 type CategoryScore = {
   tpScores: number[];
+
   sts: number;
+
   sas: number;
+
   hasSts: boolean;
+
   hasSas: boolean;
 };
 
 type SubjectScore = {
   ORAL: CategoryScore;
+
   WRITTEN: CategoryScore;
 };
 
-/* =========================================================
-   HELPER
-========================================================= */
+type PersonalityShape = {
+  suluk?: string | null;
 
-function createEmptyCategory(): CategoryScore {
+  muwadhotah?: string | null;
+
+  nadzofah?: string | null;
+
+  indhiplat?: string | null;
+};
+
+type HomeroomNoteShape = {
+  note?: string | null;
+};
+
+type AttendanceShape = {
+  status?: string | null;
+};
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function errorResponse(
+  message: string,
+  status = 400
+) {
+  return NextResponse.json(
+    {
+      success: false,
+      message,
+    },
+    {
+      status,
+    }
+  );
+}
+
+function toPositiveInteger(
+  value: unknown
+): number | null {
+  const numberValue =
+    Number(value);
+
+  if (
+    !Number.isInteger(
+      numberValue
+    ) ||
+    numberValue <= 0
+  ) {
+    return null;
+  }
+
+  return numberValue;
+}
+
+function normalizeText(
+  value: unknown
+): string {
+  return String(
+    value ?? ''
+  )
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+function normalizeUpper(
+  value: unknown
+): string {
+  return normalizeText(
+    value
+  ).toUpperCase();
+}
+
+function normalizeScore(
+  value: unknown
+): number | null {
+  const score =
+    Number(value);
+
+  if (
+    !Number.isFinite(
+      score
+    )
+  ) {
+    return null;
+  }
+
+  if (
+    score < 0 ||
+    score > 100
+  ) {
+    return null;
+  }
+
+  return score;
+}
+
+function getSemesterNumber(
+  semester: unknown
+): number {
+  const normalized =
+    normalizeText(
+      semester
+    ).toLowerCase();
+
+  if (
+    normalized === 'genap' ||
+    normalized === '2' ||
+    normalized.includes(
+      'semester 2'
+    )
+  ) {
+    return 2;
+  }
+
+  return 1;
+}
+
+/* ============================================================
+   CATEGORY
+============================================================ */
+
+function createEmptyCategory():
+  CategoryScore {
   return {
     tpScores: [],
+
     sts: 0,
+
     sas: 0,
+
     hasSts: false,
+
     hasSas: false,
   };
 }
 
-function calculateFinalScore(data: CategoryScore) {
-  const tpScores = data.tpScores;
+/* ============================================================
+   HITUNG NILAI AKHIR
+============================================================ */
+
+/**
+ * Rumus dipertahankan dari sistem sebelumnya:
+ *
+ * TP  = bobot 2
+ * STS = bobot 1
+ * SAS = bobot 1
+ *
+ * Jika STS / SAS belum ada,
+ * rata-rata TP digunakan sebagai pengganti.
+ *
+ * CATATAN:
+ * Selama Assessment belum memiliki subjectId untuk STS/SAS,
+ * STS/SAS tanpa TP tidak dapat dipetakan secara aman ke mapel.
+ */
+function calculateFinalScore(
+  data: CategoryScore
+) {
+  const tpScores =
+    data.tpScores;
 
   if (
     tpScores.length === 0 &&
@@ -57,473 +235,799 @@ function calculateFinalScore(data: CategoryScore) {
     return null;
   }
 
-  const totalTP = tpScores.reduce(
-    (total, score) => total + score,
-    0
-  );
+  const totalTP =
+    tpScores.reduce(
+      (
+        total,
+        score
+      ) =>
+        total +
+        score,
+      0
+    );
 
   const averageTP =
     tpScores.length > 0
-      ? totalTP / tpScores.length
+      ? totalTP /
+        tpScores.length
       : 0;
 
-  /*
-   * Bila STS / SAS belum ada,
-   * gunakan rata-rata TP agar nilai tidak langsung menjadi 0.
-   */
-  const sts = data.hasSts
-    ? data.sts
-    : averageTP;
+  const sts =
+    data.hasSts
+      ? data.sts
+      : averageTP;
 
-  const sas = data.hasSas
-    ? data.sas
-    : averageTP;
+  const sas =
+    data.hasSas
+      ? data.sas
+      : averageTP;
 
-  /*
-   * Bobot (Kurikulum Merdeka / Kemenag):
-   * TP  = 2
-   * STS = 1
-   * SAS = 1
-   */
   const finalScore =
-    (2 * averageTP + sts + sas) / 4;
+    (
+      2 *
+        averageTP +
+      sts +
+      sas
+    ) /
+    4;
 
-  return Math.round(finalScore);
+  return Math.round(
+    finalScore
+  );
 }
 
-/* =========================================================
-   GET REPORT
-========================================================= */
+/* ============================================================
+   GET /api/report
+============================================================ */
 
 export async function GET(
   request: Request
 ) {
   try {
-    /* =====================================================
-       AMBIL PARAMETER STUDENT ID
-    ===================================================== */
+    /* --------------------------------------------------------
+       AUTH
+    -------------------------------------------------------- */
 
-    const { searchParams } =
-      new URL(request.url);
+    const auth =
+      await requireAdmin();
 
-    const studentIdParam =
-      searchParams.get('studentId');
-
-    if (!studentIdParam) {
+    if (!auth.authorized) {
       return NextResponse.json(
         {
           success: false,
+
           message:
-            'ID Santri wajib disertakan.',
+            auth.message,
         },
         {
-          status: 400,
+          status:
+            auth.status,
         }
       );
     }
+
+    /* --------------------------------------------------------
+       STUDENT ID
+    -------------------------------------------------------- */
+
+    const {
+      searchParams,
+    } =
+      new URL(
+        request.url
+      );
 
     const studentId =
-      Number(studentIdParam);
+      toPositiveInteger(
+        searchParams.get(
+          'studentId'
+        )
+      );
 
-    if (
-      !Number.isInteger(studentId) ||
-      studentId <= 0
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'ID Santri tidak valid.',
-        },
-        {
-          status: 400,
-        }
+    if (!studentId) {
+      return errorResponse(
+        'ID siswa tidak valid.'
       );
     }
 
-    /* =====================================================
-       AMBIL DATA SANTRI + PENGATURAN SISTEM
-    ===================================================== */
+    /* --------------------------------------------------------
+       SETTINGS
+    -------------------------------------------------------- */
 
-    const [student, systemSetting] =
-      await Promise.all([
-        prisma.student.findUnique({
-          where: {
-            id: studentId,
-          },
+    const systemSetting =
+      await prisma.systemSetting.findFirst({
+        orderBy: {
+          id:
+            'asc',
+        },
+      });
 
-          include: {
-            assessments: {
-              include: {
-                tp: {
-                  include: {
-                    cp: {
-                      include: {
-                        subject: true,
-                      },
+    const settings = {
+      schoolName:
+        systemSetting
+          ?.schoolName ||
+        DEFAULT_SETTINGS.schoolName,
+
+      academicYear:
+        systemSetting
+          ?.academicYear ||
+        DEFAULT_SETTINGS.academicYear,
+
+      semester:
+        systemSetting
+          ?.semester ||
+        DEFAULT_SETTINGS.semester,
+
+      principalName:
+        systemSetting
+          ?.principalName ||
+        DEFAULT_SETTINGS.principalName,
+    };
+
+    const activeSemester =
+      getSemesterNumber(
+        settings.semester
+      );
+
+    /* --------------------------------------------------------
+       STUDENT
+    -------------------------------------------------------- */
+
+    const student =
+      await prisma.student.findUnique({
+        where: {
+          id:
+            studentId,
+        },
+
+        include: {
+          assessments: {
+            include: {
+              tp: {
+                include: {
+                  cp: {
+                    include: {
+                      subject:
+                        true,
                     },
                   },
                 },
               },
             },
 
-            personality: true,
-
-            homeroomNote: true,
-
-            attendances: true,
+            orderBy: {
+              id:
+                'asc',
+            },
           },
-        }),
 
-        prisma.systemSetting.findFirst({
-          orderBy: {
-            id: 'asc',
-          },
-        }),
-      ]);
+          personality:
+            true,
+
+          homeroomNote:
+            true,
+
+          attendances:
+            true,
+        },
+      });
 
     if (!student) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Santri tidak ditemukan.',
-        },
-        {
-          status: 404,
-        }
+      return errorResponse(
+        'Siswa tidak ditemukan.',
+        404
       );
     }
 
-    /* =====================================================
-       SETTINGS AKTIF
-    ===================================================== */
+    /* ========================================================
+       VALIDASI KELAS SD
+    ======================================================== */
 
-    const settings = {
-      schoolName:
-        systemSetting?.schoolName ||
-        DEFAULT_SETTINGS.schoolName,
+    const classRoom =
+      await prisma.classRoom.findFirst({
+        where: {
+          name:
+            student.class_name,
 
-      academicYear:
-        systemSetting?.academicYear ||
-        DEFAULT_SETTINGS.academicYear,
+          level:
+            SCHOOL_LEVEL,
 
-      semester:
-        systemSetting?.semester ||
-        DEFAULT_SETTINGS.semester,
+          grade: {
+            in:
+              VALID_GRADES,
+          },
+        },
 
-      principalName:
-        systemSetting?.principalName ||
-        DEFAULT_SETTINGS.principalName,
-    };
+        select: {
+          id: true,
 
-    /* =====================================================
-       1. REKAP KEHADIRAN
-    ===================================================== */
+          name: true,
+
+          level: true,
+
+          grade: true,
+
+          status: true,
+        },
+      });
+
+    if (!classRoom) {
+      return errorResponse(
+        'Siswa tersebut tidak terdaftar pada kelas SD yang valid.',
+        400
+      );
+    }
+
+    const classStatus =
+      normalizeText(
+        classRoom.status
+      ).toLowerCase();
+
+    if (
+      classStatus ===
+        'nonaktif' ||
+      classStatus ===
+        'tidak aktif'
+    ) {
+      return errorResponse(
+        `Kelas ${classRoom.name} sedang tidak aktif.`,
+        400
+      );
+    }
+
+    /* ========================================================
+       1. KEHADIRAN
+    ======================================================== */
 
     let sakit = 0;
     let izin = 0;
     let alpa = 0;
 
-    if (
-      Array.isArray(student.attendances)
+    const attendances =
+      Array.isArray(
+        student.attendances
+      )
+        ? student.attendances
+        : [];
+
+    for (
+      const rawAttendance of attendances
     ) {
-      student.attendances.forEach(
-        (attendance: any) => {
-          const status = String(
-            attendance.status || ''
-          )
-            .trim()
-            .toUpperCase();
+      const attendance =
+        rawAttendance as AttendanceShape;
 
-          switch (status) {
-            case 'SAKIT':
-              sakit++;
-              break;
+      const status =
+        normalizeUpper(
+          attendance.status
+        );
 
-            case 'IZIN':
-              izin++;
-              break;
+      switch (status) {
+        case 'SAKIT':
+          sakit++;
+          break;
 
-            case 'ALPA':
-              alpa++;
-              break;
+        case 'IZIN':
+          izin++;
+          break;
 
-            default:
-              break;
-          }
-        }
-      );
+        case 'ALPA':
+          alpa++;
+          break;
+
+        default:
+          break;
+      }
     }
 
-    /* =====================================================
-       2. KELOMPOKKAN NILAI
-    ===================================================== */
+    /* ========================================================
+       2. KELOMPOKKAN NILAI PER MAPEL
+    ======================================================== */
 
     const subjectMap:
-      Record<string, SubjectScore> = {};
+      Record<
+        string,
+        SubjectScore
+      > = {};
 
-    if (
-      Array.isArray(student.assessments)
+    const assessments =
+      Array.isArray(
+        student.assessments
+      )
+        ? student.assessments
+        : [];
+
+    for (
+      const assessment of assessments
     ) {
-      student.assessments.forEach(
-        (assessment: any) => {
-          const subjectName =
-            assessment.tp?.cp?.subject
-              ?.name ||
-            assessment.subject?.name ||
-            'Mata Pelajaran Umum';
+      /* ------------------------------------------------------
+         RECORD WAJIB MEMILIKI TP
+         UNTUK DAPAT DIHUBUNGKAN KE MAPEL
+      ------------------------------------------------------ */
 
-          const type = String(
-            assessment.type || ''
-          )
-            .trim()
-            .toUpperCase();
+      if (
+        !assessment.tp ||
+        !assessment.tp.cp ||
+        !assessment.tp.cp
+          .subject
+      ) {
+        /*
+         * STS/SAS dengan tpId = null saat ini
+         * sengaja dilewati.
+         *
+         * Tanpa subjectId, backend tidak bisa
+         * mengetahui ini STS/SAS mapel apa.
+         */
+        continue;
+      }
 
-          const rawScore =
-            Number(assessment.score);
+      const cp =
+        assessment.tp.cp;
 
-          const score =
-            Number.isFinite(rawScore)
-              ? rawScore
-              : 0;
+      const subject =
+        cp.subject;
 
-          if (!subjectMap[subjectName]) {
-            subjectMap[subjectName] = {
-              ORAL:
-                createEmptyCategory(),
+      /* ------------------------------------------------------
+         HANYA SUBJECT SD
+      ------------------------------------------------------ */
 
-              WRITTEN:
-                createEmptyCategory(),
-            };
-          }
+      if (
+        normalizeUpper(
+          subject.level
+        ) !==
+        SCHOOL_LEVEL
+      ) {
+        continue;
+      }
 
-          const subject =
-            subjectMap[subjectName];
+      /* ------------------------------------------------------
+         HARUS GRADE YANG SAMA DENGAN SISWA
+      ------------------------------------------------------ */
 
-          // NILAI TP LISAN
-          if (
-            type === 'ORAL' ||
-            type === 'TP_ORAL'
-          ) {
-            if (assessment.tpId) {
-              subject.ORAL.tpScores.push(
-                score
-              );
-            }
-          }
+      if (
+        Number(
+          cp.grade
+        ) !==
+        Number(
+          classRoom.grade
+        )
+      ) {
+        continue;
+      }
 
-          // NILAI TP TERTULIS
-          if (
-            type === 'WRITTEN' ||
-            type === 'TP_WRITTEN'
-          ) {
-            if (assessment.tpId) {
-              subject.WRITTEN.tpScores.push(
-                score
-              );
-            }
-          }
+      /* ------------------------------------------------------
+         HARUS SEMESTER AKTIF
+      ------------------------------------------------------ */
 
-          // STS LISAN
-          if (type === 'STS_ORAL') {
-            subject.ORAL.sts = score;
-            subject.ORAL.hasSts = true;
-          }
+      const cpSemester =
+        Number(
+          cp.semester
+        );
 
-          // STS TERTULIS
-          if (
-            type === 'STS_WRITTEN'
-          ) {
-            subject.WRITTEN.sts =
-              score;
+      if (
+        !VALID_SEMESTERS.includes(
+          cpSemester
+        ) ||
+        cpSemester !==
+          activeSemester
+      ) {
+        continue;
+      }
 
-            subject.WRITTEN.hasSts =
-              true;
-          }
+      /* ------------------------------------------------------
+         SUBJECT NAME
+      ------------------------------------------------------ */
 
-          // STS UMUM
-          if (type === 'STS') {
-            subject.ORAL.sts = score;
-            subject.ORAL.hasSts = true;
+      const subjectName =
+        normalizeText(
+          subject.name
+        );
 
-            subject.WRITTEN.sts =
-              score;
+      if (!subjectName) {
+        continue;
+      }
 
-            subject.WRITTEN.hasSts =
-              true;
-          }
+      /* ------------------------------------------------------
+         SCORE
+      ------------------------------------------------------ */
 
-          // SAS LISAN
-          if (type === 'SAS_ORAL') {
-            subject.ORAL.sas = score;
-            subject.ORAL.hasSas = true;
-          }
+      const score =
+        normalizeScore(
+          assessment.score
+        );
 
-          // SAS TERTULIS
-          if (
-            type === 'SAS_WRITTEN'
-          ) {
-            subject.WRITTEN.sas =
-              score;
+      if (
+        score === null
+      ) {
+        continue;
+      }
 
-            subject.WRITTEN.hasSas =
-              true;
-          }
+      /* ------------------------------------------------------
+         TYPE
+      ------------------------------------------------------ */
 
-          // SAS UMUM
-          if (type === 'SAS') {
-            subject.ORAL.sas = score;
-            subject.ORAL.hasSas = true;
+      const type =
+        normalizeUpper(
+          assessment.type
+        );
 
-            subject.WRITTEN.sas =
-              score;
+      if (
+        !subjectMap[
+          subjectName
+        ]
+      ) {
+        subjectMap[
+          subjectName
+        ] = {
+          ORAL:
+            createEmptyCategory(),
 
-            subject.WRITTEN.hasSas =
-              true;
-          }
-        }
-      );
+          WRITTEN:
+            createEmptyCategory(),
+        };
+      }
+
+      const subjectScore =
+        subjectMap[
+          subjectName
+        ];
+
+      /* ------------------------------------------------------
+         TP LISAN
+      ------------------------------------------------------ */
+
+      if (
+        type ===
+          'ORAL' ||
+        type ===
+          'TP_ORAL'
+      ) {
+        subjectScore.ORAL
+          .tpScores.push(
+            score
+          );
+
+        continue;
+      }
+
+      /* ------------------------------------------------------
+         TP TERTULIS
+      ------------------------------------------------------ */
+
+      if (
+        type ===
+          'WRITTEN' ||
+        type ===
+          'TP_WRITTEN'
+      ) {
+        subjectScore.WRITTEN
+          .tpScores.push(
+            score
+          );
+
+        continue;
+      }
+
+      /*
+       * Bila suatu saat STS/SAS disimpan
+       * dengan TP atau subject relation yang jelas,
+       * logic ini tetap mendukungnya.
+       */
+
+      if (
+        type ===
+        'STS_ORAL'
+      ) {
+        subjectScore.ORAL
+          .sts =
+          score;
+
+        subjectScore.ORAL
+          .hasSts =
+          true;
+
+        continue;
+      }
+
+      if (
+        type ===
+        'STS_WRITTEN'
+      ) {
+        subjectScore.WRITTEN
+          .sts =
+          score;
+
+        subjectScore.WRITTEN
+          .hasSts =
+          true;
+
+        continue;
+      }
+
+      if (
+        type ===
+        'SAS_ORAL'
+      ) {
+        subjectScore.ORAL
+          .sas =
+          score;
+
+        subjectScore.ORAL
+          .hasSas =
+          true;
+
+        continue;
+      }
+
+      if (
+        type ===
+        'SAS_WRITTEN'
+      ) {
+        subjectScore.WRITTEN
+          .sas =
+          score;
+
+        subjectScore.WRITTEN
+          .hasSas =
+          true;
+      }
     }
 
-    /* =====================================================
-       3. HITUNG NILAI RAPOR
-    ===================================================== */
+    /* ========================================================
+       3. NILAI RAPOR
+    ======================================================== */
 
-    const scoreRecords: Array<{
-      subjectName: string;
-      type: 'ORAL' | 'WRITTEN';
-      score: number;
-    }> = [];
+    const scoreRecords:
+      Array<{
+        id: number;
 
-    Object.entries(
-      subjectMap
-    ).forEach(
-      ([subjectName, categories]) => {
-        const oralScore =
-          calculateFinalScore(
-            categories.ORAL
-          );
+        subjectName:
+          string;
 
-        const writtenScore =
-          calculateFinalScore(
-            categories.WRITTEN
-          );
+        type:
+          | 'ORAL'
+          | 'WRITTEN';
 
-        if (oralScore !== null) {
-          scoreRecords.push({
-            subjectName,
-            type: 'ORAL',
-            score: oralScore,
-          });
-        }
+        score:
+          number;
 
-        if (
-          writtenScore !== null
-        ) {
-          scoreRecords.push({
-            subjectName,
-            type: 'WRITTEN',
-            score: writtenScore,
-          });
-        }
+        tpCode:
+          null;
+
+        tpDescription:
+          null;
+      }> = [];
+
+    let scoreRecordId =
+      1;
+
+    const sortedSubjects =
+      Object.entries(
+        subjectMap
+      ).sort(
+        (
+          [subjectA],
+          [subjectB]
+        ) =>
+          subjectA.localeCompare(
+            subjectB,
+            'id'
+          )
+      );
+
+    for (
+      const [
+        subjectName,
+        categories,
+      ] of sortedSubjects
+    ) {
+      const oralScore =
+        calculateFinalScore(
+          categories.ORAL
+        );
+
+      const writtenScore =
+        calculateFinalScore(
+          categories.WRITTEN
+        );
+
+      if (
+        oralScore !==
+        null
+      ) {
+        scoreRecords.push({
+          id:
+            scoreRecordId++,
+
+          subjectName,
+
+          type:
+            'ORAL',
+
+          score:
+            oralScore,
+
+          tpCode:
+            null,
+
+          tpDescription:
+            null,
+        });
       }
-    );
 
-    /* =====================================================
-       4. RATA-RATA KESELURUHAN
-    ===================================================== */
+      if (
+        writtenScore !==
+        null
+      ) {
+        scoreRecords.push({
+          id:
+            scoreRecordId++,
+
+          subjectName,
+
+          type:
+            'WRITTEN',
+
+          score:
+            writtenScore,
+
+          tpCode:
+            null,
+
+          tpDescription:
+            null,
+        });
+      }
+    }
+
+    /* ========================================================
+       4. RATA-RATA
+    ======================================================== */
 
     const totalScore =
       scoreRecords.reduce(
-        (total, record) =>
-          total + record.score,
+        (
+          total,
+          record
+        ) =>
+          total +
+          record.score,
         0
       );
 
     const averageScore =
-      scoreRecords.length > 0
+      scoreRecords.length >
+      0
         ? Number(
             (
               totalScore /
               scoreRecords.length
-            ).toFixed(1)
+            ).toFixed(
+              1
+            )
           )
         : 0;
 
-    /* =====================================================
-       5. JUMLAH SANTRI DALAM KELAS
-    ===================================================== */
+    /* ========================================================
+       5. JUMLAH SISWA KELAS
+    ======================================================== */
 
-    let totalStudents = 1;
+    const totalStudents =
+      await prisma.student.count({
+        where: {
+          class_name:
+            classRoom.name,
+        },
+      });
 
-    try {
-      totalStudents =
-        await prisma.student.count({
-          where: {
-            class_name:
-              student.class_name,
-          },
-        });
-    } catch (error) {
-      console.warn(
-        '[REPORT_TOTAL_STUDENTS]',
-        error
-      );
-
-      totalStudents = 1;
-    }
-
-    /* =====================================================
+    /* ========================================================
        6. KEPRIBADIAN
-    ===================================================== */
+    ======================================================== */
+
+    const rawPersonality =
+      student.personality as
+        | PersonalityShape
+        | null;
 
     const personality =
-      student.personality
+      rawPersonality
         ? [
             {
-              arabic: 'السلوك',
+              arabic:
+                'السلوك',
+
               name:
-                'Kelakuan / Perilaku',
+                'Perilaku & Akhlak',
+
               value:
-                (
-                  student.personality as any
-                ).suluk ?? '-',
+                rawPersonality
+                  .suluk ??
+                '-',
             },
+
             {
-              arabic: 'المواظبة',
+              arabic:
+                'المواظبة',
+
               name:
-                'Kerajinan / Kehadiran',
+                'Konsistensi & Ketekunan',
+
               value:
-                (
-                  student.personality as any
-                ).muwadhotah ?? '-',
+                rawPersonality
+                  .muwadhotah ??
+                '-',
             },
+
             {
-              arabic: 'النظافة',
-              name: 'Kebersihan',
+              arabic:
+                'النظافة',
+
+              name:
+                'Kebersihan & Kerapian',
+
               value:
-                (
-                  student.personality as any
-                ).nadzofah ?? '-',
+                rawPersonality
+                  .nadzofah ??
+                '-',
             },
+
             {
-              arabic: 'الانضباط',
-              name: 'Disiplin',
+              arabic:
+                'الانضباط',
+
+              name:
+                'Disiplin & Tanggung Jawab',
+
               value:
-                (
-                  student.personality as any
-                ).indhiplat ?? '-',
+                rawPersonality
+                  .indhiplat ??
+                '-',
             },
           ]
         : [];
 
-    /* =====================================================
-       7. DATA RAPOR FINAL
-    ===================================================== */
+    /* ========================================================
+       7. CATATAN WALI KELAS
+    ======================================================== */
+
+    const rawHomeroomNote =
+      student.homeroomNote as
+        | HomeroomNoteShape
+        | null;
+
+    const homeroomNote =
+      normalizeText(
+        rawHomeroomNote
+          ?.note
+      );
+
+    /* ========================================================
+       8. DATA SISWA AMAN
+       Jangan kirim relation mentah yang tidak perlu
+    ======================================================== */
+
+    const studentData = {
+      id:
+        student.id,
+
+      nisn:
+        student.nisn,
+
+      fullname:
+        student.fullname,
+
+      gender:
+        student.gender,
+
+      class_name:
+        student.class_name,
+    };
+
+    /* ========================================================
+       9. REPORT FINAL
+    ======================================================== */
 
     const reportData = {
-      ...student,
+      ...studentData,
 
       schoolName:
         settings.schoolName,
@@ -539,18 +1043,31 @@ export async function GET(
 
       settings,
 
+      class: {
+        id:
+          classRoom.id,
+
+        name:
+          classRoom.name,
+
+        level:
+          classRoom.level,
+
+        grade:
+          classRoom.grade,
+      },
+
       scoreRecords,
 
       personality,
 
-      homeroomNote:
-        (
-          student.homeroomNote as any
-        )?.note || '',
+      homeroomNote,
 
       attendance: {
         sakit,
+
         izin,
+
         alpa,
       },
 
@@ -558,17 +1075,37 @@ export async function GET(
 
       totalStudents,
 
-      rank: null,
+      /*
+       * Belum dihitung otomatis.
+       * Lebih aman null daripada
+       * memberi ranking yang salah.
+       */
+      rank:
+        null,
     };
 
-    /* =====================================================
+    /* ========================================================
        RESPONSE
-    ===================================================== */
+    ======================================================== */
 
     return NextResponse.json(
       {
         success: true,
-        report: reportData,
+
+        message:
+          'Data rapor siswa berhasil dimuat.',
+
+        /*
+         * Untuk frontend rapor yang sudah ada.
+         */
+        report:
+          reportData,
+
+        /*
+         * Format response baru/konsisten.
+         */
+        data:
+          reportData,
       },
       {
         status: 200,
@@ -577,21 +1114,65 @@ export async function GET(
           'Cache-Control':
             'no-store, no-cache, must-revalidate, proxy-revalidate',
 
-          Pragma: 'no-cache',
+          Pragma:
+            'no-cache',
 
-          Expires: '0',
+          Expires:
+            '0',
         },
       }
     );
-  } catch (error) {
+  } catch (
+    error: unknown
+  ) {
     console.error(
-      '🔥 Error fetching report:',
+      'GET /api/report ERROR:',
       error
     );
+
+    const prismaError =
+      error as {
+        code?: string;
+      };
+
+    if (
+      prismaError?.code ===
+      'P2025'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+
+          message:
+            'Data siswa atau rapor tidak ditemukan.',
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    if (
+      prismaError?.code ===
+      'P2003'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+
+          message:
+            'Terdapat relasi data rapor yang tidak valid.',
+        },
+        {
+          status: 400,
+        }
+      );
+    }
 
     return NextResponse.json(
       {
         success: false,
+
         message:
           'Gagal memuat data rapor dari server.',
       },
