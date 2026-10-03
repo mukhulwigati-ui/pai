@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+
 import {
+  AlertTriangle,
   BookOpen,
   CheckCircle2,
   ChevronDown,
   Edit3,
-  GraduationCap,
   Layers3,
   Plus,
   Save,
@@ -14,8 +15,11 @@ import {
   Trash2,
   Users,
   X,
-  AlertTriangle,
 } from 'lucide-react';
+
+// ============================================================================
+// TYPES
+// ============================================================================
 
 type ClassRoom = {
   id: number;
@@ -25,42 +29,92 @@ type ClassRoom = {
   status?: string;
 };
 
-type MessageType = 'success' | 'error' | '';
+type MessageType =
+  | 'success'
+  | 'error'
+  | '';
+
+// ============================================================================
+// CONFIG
+// ============================================================================
+
+const SCHOOL_NAME =
+  'SDIT Khoiro Ummah';
+
+const LEVEL = 'SD';
+
+const GRADES = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+];
+
+// ============================================================================
+// PAGE
+// ============================================================================
 
 export default function ClassesPage() {
-  const [classes, setClasses] = useState<ClassRoom[]>([]);
+  // ==========================================================================
+  // STATE
+  // ==========================================================================
 
-  const [name, setName] = useState('');
-  const [level, setLevel] = useState('SMP');
-  const [grade, setGrade] = useState('7');
+  const [classes, setClasses] =
+    useState<ClassRoom[]>([]);
 
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [name, setName] =
+    useState('');
 
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] =
+  const [grade, setGrade] =
+    useState('1');
+
+  const [editingId, setEditingId] =
+    useState<number | null>(
+      null
+    );
+
+  const [message, setMessage] =
+    useState('');
+
+  const [
+    messageType,
+    setMessageType,
+  ] =
     useState<MessageType>('');
 
-  const [loading, setLoading] = useState(false);
-  const [deletingId, setDeletingId] =
-    useState<number | null>(null);
-  const [deletingAll, setDeletingAll] =
+  const [loading, setLoading] =
     useState(false);
 
-  /* ============================================================
-     JENJANG
-  ============================================================ */
+  const [
+    loadingClasses,
+    setLoadingClasses,
+  ] =
+    useState(true);
 
-  const getLevelByGrade = (gradeValue: number) => {
-    return gradeValue >= 10 ? 'SMA' : 'SMP';
-  };
+  const [
+    deletingId,
+    setDeletingId,
+  ] =
+    useState<number | null>(
+      null
+    );
 
-  /* ============================================================
-     MESSAGE
-  ============================================================ */
+  const [
+    deletingAll,
+    setDeletingAll,
+  ] =
+    useState(false);
+
+  // ==========================================================================
+  // MESSAGE
+  // ==========================================================================
 
   const showMessage = (
     text: string,
-    type: MessageType = 'success'
+    type: MessageType =
+      'success'
   ) => {
     setMessage(text);
     setMessageType(type);
@@ -71,81 +125,108 @@ export default function ClassesPage() {
     }, 4000);
   };
 
-  /* ============================================================
-     FETCH
-  ============================================================ */
+  // ==========================================================================
+  // FETCH
+  // ==========================================================================
 
-  const fetchClasses = async () => {
-    try {
-      const res = await fetch('/api/classes', {
-        cache: 'no-store',
-      });
+  const fetchClasses =
+    async () => {
+      try {
+        setLoadingClasses(true);
 
-      const data = await res.json();
+        const res =
+          await fetch(
+            '/api/classes',
+            {
+              cache: 'no-store',
+            }
+          );
 
-      if (!res.ok) {
-        throw new Error(
-          data.message || 'Gagal memuat kelas'
+        const data =
+          await res.json();
+
+        if (!res.ok) {
+          throw new Error(
+            data?.message ||
+              'Gagal memuat data kelas.'
+          );
+        }
+
+        const result =
+          Array.isArray(data)
+            ? data
+            : Array.isArray(
+                  data?.data
+                )
+              ? data.data
+              : [];
+
+        setClasses(result);
+      } catch (
+        error: unknown
+      ) {
+        console.error(
+          'FETCH CLASSES ERROR:',
+          error
+        );
+
+        showMessage(
+          error instanceof Error
+            ? error.message
+            : 'Gagal memuat daftar kelas.',
+          'error'
+        );
+      } finally {
+        setLoadingClasses(
+          false
         );
       }
+    };
 
-      if (Array.isArray(data)) {
-        setClasses(data);
-      }
-    } catch (error) {
-      console.error(
-        'FETCH CLASSES ERROR:',
-        error
-      );
-
-      showMessage(
-        'Gagal memuat daftar kelas.',
-        'error'
-      );
-    }
-  };
+  // ==========================================================================
+  // INITIAL LOAD
+  // ==========================================================================
 
   useEffect(() => {
     fetchClasses();
   }, []);
 
-  /* ============================================================
-     GRADE CHANGE
-  ============================================================ */
-
-  const handleGradeChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedGrade = Number(e.target.value);
-
-    setGrade(e.target.value);
-    setLevel(
-      getLevelByGrade(selectedGrade)
-    );
-  };
-
-  /* ============================================================
-     RESET
-  ============================================================ */
+  // ==========================================================================
+  // RESET FORM
+  // ==========================================================================
 
   const resetForm = () => {
     setName('');
-    setLevel('SMP');
-    setGrade('7');
+    setGrade('1');
     setEditingId(null);
   };
 
-  /* ============================================================
-     EDIT
-  ============================================================ */
+  // ==========================================================================
+  // EDIT
+  // ==========================================================================
 
-  const handleEdit = (item: ClassRoom) => {
+  const handleEdit = (
+    item: ClassRoom
+  ) => {
     setEditingId(item.id);
-    setName(item.name);
-    setGrade(String(item.grade));
-    setLevel(
-      getLevelByGrade(item.grade)
+
+    setName(
+      item.name || ''
     );
+
+    const currentGrade =
+      Number(item.grade);
+
+    if (
+      currentGrade >= 1 &&
+      currentGrade <= 6
+    ) {
+      setGrade(
+        String(currentGrade)
+      );
+    } else {
+      setGrade('1');
+    }
 
     setMessage('');
     setMessageType('');
@@ -156,42 +237,46 @@ export default function ClassesPage() {
     });
   };
 
-  /* ============================================================
-     SUBMIT CREATE / UPDATE
-  ============================================================ */
+  // ==========================================================================
+  // SUBMIT CREATE / UPDATE
+  // ==========================================================================
 
   const handleSubmit = async (
-    e: React.FormEvent
+    e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
 
     const trimmedName =
-      name.trim().toUpperCase();
+      name
+        .trim()
+        .toUpperCase();
 
-    const numericGrade = Number(grade);
+    const numericGrade =
+      Number(grade);
 
     if (!trimmedName) {
       showMessage(
         'Nama kelas wajib diisi.',
         'error'
       );
+
       return;
     }
 
     if (
-      !Number.isInteger(numericGrade) ||
-      numericGrade < 7 ||
-      numericGrade > 12
+      !Number.isInteger(
+        numericGrade
+      ) ||
+      numericGrade < 1 ||
+      numericGrade > 6
     ) {
       showMessage(
-        'Tingkat kelas harus antara 7 sampai 12.',
+        'Tingkat kelas harus antara 1 sampai 6.',
         'error'
       );
+
       return;
     }
-
-    const correctLevel =
-      getLevelByGrade(numericGrade);
 
     setLoading(true);
 
@@ -200,30 +285,42 @@ export default function ClassesPage() {
         ? `/api/classes/${editingId}`
         : '/api/classes';
 
-      const method = editingId
-        ? 'PUT'
-        : 'POST';
+      const method =
+        editingId
+          ? 'PUT'
+          : 'POST';
 
-      const res = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: trimmedName,
-          level: correctLevel,
-          grade: numericGrade,
-        }),
-      });
+      const res =
+        await fetch(url, {
+          method,
 
-      const data = await res.json();
+          headers: {
+            'Content-Type':
+              'application/json',
+          },
+
+          body:
+            JSON.stringify({
+              name:
+                trimmedName,
+
+              level:
+                LEVEL,
+
+              grade:
+                numericGrade,
+            }),
+        });
+
+      const data =
+        await res.json();
 
       if (!res.ok) {
         throw new Error(
-          data.message ||
+          data?.message ||
             (editingId
-              ? 'Gagal memperbarui kelas'
-              : 'Gagal menyimpan kelas')
+              ? 'Gagal memperbarui kelas.'
+              : 'Gagal menyimpan kelas.')
         );
       }
 
@@ -237,15 +334,18 @@ export default function ClassesPage() {
       resetForm();
 
       await fetchClasses();
-    } catch (error: any) {
+    } catch (
+      error: unknown
+    ) {
       console.error(
         'SAVE CLASS ERROR:',
         error
       );
 
       showMessage(
-        error.message ||
-          'Terjadi kesalahan.',
+        error instanceof Error
+          ? error.message
+          : 'Terjadi kesalahan saat menyimpan kelas.',
         'error'
       );
     } finally {
@@ -253,196 +353,230 @@ export default function ClassesPage() {
     }
   };
 
-  /* ============================================================
-     DELETE ONE
-  ============================================================ */
+  // ==========================================================================
+  // DELETE ONE
+  // ==========================================================================
 
-  const handleDelete = async (
-    item: ClassRoom
-  ) => {
-    const confirmed =
-      window.confirm(
-        `Hapus kelas "${item.name}"?\n\nData kelas akan dihapus dari sistem.`
+  const handleDelete =
+    async (
+      item: ClassRoom
+    ) => {
+      const confirmed =
+        window.confirm(
+          `Hapus kelas "${item.name}"?\n\nData kelas akan dihapus dari sistem.`
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      setDeletingId(
+        item.id
       );
 
-    if (!confirmed) return;
+      try {
+        const res =
+          await fetch(
+            `/api/classes/${item.id}`,
+            {
+              method:
+                'DELETE',
+            }
+          );
 
-    setDeletingId(item.id);
+        const data =
+          await res.json();
 
-    try {
-      const res = await fetch(
-        `/api/classes/${item.id}`,
-        {
-          method: 'DELETE',
+        if (!res.ok) {
+          throw new Error(
+            data?.message ||
+              'Gagal menghapus kelas.'
+          );
         }
-      );
 
-      const data = await res.json();
+        if (
+          editingId ===
+          item.id
+        ) {
+          resetForm();
+        }
 
-      if (!res.ok) {
-        throw new Error(
-          data.message ||
-            'Gagal menghapus kelas'
+        showMessage(
+          `Kelas ${item.name} berhasil dihapus.`,
+          'success'
+        );
+
+        await fetchClasses();
+      } catch (
+        error: unknown
+      ) {
+        console.error(
+          'DELETE CLASS ERROR:',
+          error
+        );
+
+        showMessage(
+          error instanceof Error
+            ? error.message
+            : 'Gagal menghapus kelas.',
+          'error'
+        );
+      } finally {
+        setDeletingId(
+          null
         );
       }
-
-      if (editingId === item.id) {
-        resetForm();
-      }
-
-      showMessage(
-        `Kelas ${item.name} berhasil dihapus.`,
-        'success'
-      );
-
-      await fetchClasses();
-    } catch (error: any) {
-      console.error(
-        'DELETE CLASS ERROR:',
-        error
-      );
-
-      showMessage(
-        error.message ||
-          'Gagal menghapus kelas.',
-        'error'
-      );
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
-  /* ============================================================
-     DELETE ALL
-  ============================================================ */
-
-  const handleDeleteAll = async () => {
-    if (classes.length === 0) {
-      showMessage(
-        'Tidak ada kelas yang dapat dihapus.',
-        'error'
-      );
-      return;
-    }
-
-    const confirmed =
-      window.confirm(
-        `PERINGATAN!\n\nAnda akan menghapus SEMUA ${classes.length} kelas.\n\nTindakan ini tidak dapat dibatalkan.\n\nLanjutkan?`
-      );
-
-    if (!confirmed) return;
-
-    const confirmedAgain =
-      window.confirm(
-        'Konfirmasi terakhir:\n\nHapus seluruh data kelas?'
-      );
-
-    if (!confirmedAgain) return;
-
-    setDeletingAll(true);
-
-    try {
-      const res = await fetch(
-        '/api/classes',
-        {
-          method: 'DELETE',
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(
-          data.message ||
-            'Gagal menghapus seluruh kelas'
-        );
-      }
-
-      resetForm();
-
-      showMessage(
-        'Seluruh data kelas berhasil dihapus.',
-        'success'
-      );
-
-      await fetchClasses();
-    } catch (error: any) {
-      console.error(
-        'DELETE ALL CLASSES ERROR:',
-        error
-      );
-
-      showMessage(
-        error.message ||
-          'Gagal menghapus seluruh kelas.',
-        'error'
-      );
-    } finally {
-      setDeletingAll(false);
-    }
-  };
-
-  /* ============================================================
-     GROUP
-     
-     PENTING:
-     Jangan menggunakan item.level untuk menentukan
-     kelompok karena data lama bisa salah.
-
-     Grade adalah sumber kebenaran:
-     7-9  = SMP
-     10-12 = SMA
-  ============================================================ */
-
-  const groupedClasses = useMemo(() => {
-    const sorted = [...classes].sort(
-      (a, b) =>
-        Number(a.grade) -
-          Number(b.grade) ||
-        a.name.localeCompare(b.name)
-    );
-
-    return {
-      SMP: sorted.filter(
-        (item) =>
-          Number(item.grade) >= 7 &&
-          Number(item.grade) <= 9
-      ),
-
-      SMA: sorted.filter(
-        (item) =>
-          Number(item.grade) >= 10 &&
-          Number(item.grade) <= 12
-      ),
     };
-  }, [classes]);
 
-  /* ============================================================
-     SUMMARY
-  ============================================================ */
+  // ==========================================================================
+  // DELETE ALL
+  // ==========================================================================
+
+  const handleDeleteAll =
+    async () => {
+      if (
+        classes.length ===
+        0
+      ) {
+        showMessage(
+          'Tidak ada kelas yang dapat dihapus.',
+          'error'
+        );
+
+        return;
+      }
+
+      const confirmed =
+        window.confirm(
+          `PERINGATAN!\n\nAnda akan menghapus SEMUA ${classes.length} kelas.\n\nTindakan ini tidak dapat dibatalkan.\n\nLanjutkan?`
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const confirmedAgain =
+        window.confirm(
+          'Konfirmasi terakhir:\n\nHapus seluruh data kelas?'
+        );
+
+      if (
+        !confirmedAgain
+      ) {
+        return;
+      }
+
+      setDeletingAll(
+        true
+      );
+
+      try {
+        const res =
+          await fetch(
+            '/api/classes',
+            {
+              method:
+                'DELETE',
+            }
+          );
+
+        const data =
+          await res.json();
+
+        if (!res.ok) {
+          throw new Error(
+            data?.message ||
+              'Gagal menghapus seluruh kelas.'
+          );
+        }
+
+        resetForm();
+
+        showMessage(
+          'Seluruh data kelas berhasil dihapus.',
+          'success'
+        );
+
+        await fetchClasses();
+      } catch (
+        error: unknown
+      ) {
+        console.error(
+          'DELETE ALL CLASSES ERROR:',
+          error
+        );
+
+        showMessage(
+          error instanceof Error
+            ? error.message
+            : 'Gagal menghapus seluruh kelas.',
+          'error'
+        );
+      } finally {
+        setDeletingAll(
+          false
+        );
+      }
+    };
+
+  // ==========================================================================
+  // SORT CLASSES
+  // ==========================================================================
+
+  const sortedClasses =
+    useMemo(() => {
+      return [
+        ...classes,
+      ].sort(
+        (a, b) =>
+          Number(
+            a.grade
+          ) -
+            Number(
+              b.grade
+            ) ||
+          a.name.localeCompare(
+            b.name
+          )
+      );
+    }, [classes]);
+
+  // ==========================================================================
+  // SUMMARY
+  // ==========================================================================
 
   const activeClasses =
     classes.filter(
       (item) =>
-        item.status !== 'Tidak Aktif'
+        item.status !==
+        'Tidak Aktif'
     ).length;
 
-  const totalSMP =
-    groupedClasses.SMP.length;
+  const totalGrades =
+    new Set(
+      classes
+        .map((item) =>
+          Number(
+            item.grade
+          )
+        )
+        .filter(
+          (item) =>
+            item >= 1 &&
+            item <= 6
+        )
+    ).size;
 
-  const totalSMA =
-    groupedClasses.SMA.length;
-
-  /* ============================================================
-     RENDER
-  ============================================================ */
+  // ==========================================================================
+  // RENDER
+  // ==========================================================================
 
   return (
     <div className="min-h-screen bg-[#f7f9f8] text-slate-800">
 
-      {/* ======================================================
-          HEADER
-      ====================================================== */}
+      {/* ================================================================== */}
+      {/* HEADER */}
+      {/* ================================================================== */}
 
       <header className="border-b border-slate-200/80 bg-white">
 
@@ -457,10 +591,12 @@ export default function ClassesPage() {
               <div className="mb-2.5 flex items-center gap-2">
 
                 <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+
                   <School
                     size={13}
                     strokeWidth={1.8}
                   />
+
                 </span>
 
                 <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-emerald-700">
@@ -477,22 +613,13 @@ export default function ClassesPage() {
 
               </div>
 
-              <div className="flex items-center gap-3">
+              <h1 className="text-[23px] font-semibold tracking-tight text-slate-900 sm:text-[27px]">
+                Manajemen Kelas
+              </h1>
 
-                <div>
-
-                  <h1 className="text-[23px] font-semibold tracking-tight text-slate-900 sm:text-[27px]">
-                    Manajemen Kelas
-                  </h1>
-
-                  <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500 sm:text-sm">
-                    Kelola struktur kelas santri berdasarkan
-                    jenjang dan tingkat pendidikan.
-                  </p>
-
-                </div>
-
-              </div>
+              <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500 sm:text-sm">
+                Kelola struktur kelas siswa {SCHOOL_NAME} untuk tingkat 1 sampai 6.
+              </p>
 
             </div>
 
@@ -500,18 +627,20 @@ export default function ClassesPage() {
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-slate-100 pt-4 lg:border-0 lg:pt-0">
 
-              {/* TOTAL */}
-
               <div className="flex items-center gap-2.5">
 
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                  <Layers3 size={15} />
+                  <Layers3
+                    size={15}
+                  />
                 </div>
 
                 <div>
 
                   <div className="text-base font-semibold text-slate-800">
-                    {classes.length}
+                    {
+                      classes.length
+                    }
                   </div>
 
                   <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
@@ -524,22 +653,24 @@ export default function ClassesPage() {
 
               <div className="hidden h-8 w-px bg-slate-200 sm:block" />
 
-              {/* SMP */}
-
               <div className="flex items-center gap-2.5">
 
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
-                  <School size={15} />
+                  <School
+                    size={15}
+                  />
                 </div>
 
                 <div>
 
                   <div className="text-base font-semibold text-slate-800">
-                    {totalSMP}
+                    {
+                      totalGrades
+                    }
                   </div>
 
                   <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
-                    SMP
+                    Tingkat
                   </div>
 
                 </div>
@@ -547,47 +678,49 @@ export default function ClassesPage() {
               </div>
 
               <div className="hidden h-8 w-px bg-slate-200 sm:block" />
-
-              {/* SMA */}
-
-              <div className="flex items-center gap-2.5">
-
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
-                  <GraduationCap size={15} />
-                </div>
-
-                <div>
-
-                  <div className="text-base font-semibold text-slate-800">
-                    {totalSMA}
-                  </div>
-
-                  <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
-                    SMA
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div className="hidden h-8 w-px bg-slate-200 sm:block" />
-
-              {/* ACTIVE */}
 
               <div className="flex items-center gap-2.5">
 
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                  <CheckCircle2 size={15} />
+                  <CheckCircle2
+                    size={15}
+                  />
                 </div>
 
                 <div>
 
                   <div className="text-base font-semibold text-slate-800">
-                    {activeClasses}
+                    {
+                      activeClasses
+                    }
                   </div>
 
                   <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
                     Aktif
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div className="hidden h-8 w-px bg-slate-200 sm:block" />
+
+              <div className="flex items-center gap-2.5">
+
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+                  <BookOpen
+                    size={15}
+                  />
+                </div>
+
+                <div>
+
+                  <div className="text-base font-semibold text-slate-800">
+                    SD
+                  </div>
+
+                  <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                    Jenjang
                   </div>
 
                 </div>
@@ -602,48 +735,48 @@ export default function ClassesPage() {
 
       </header>
 
-      {/* ======================================================
-          MAIN
-      ====================================================== */}
+      {/* ================================================================== */}
+      {/* MAIN */}
+      {/* ================================================================== */}
 
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
 
         {/* MESSAGE */}
 
         {message && (
-
           <div
             className={[
               'mb-5 flex items-center gap-2 border-b px-1 pb-3 text-xs',
-              messageType === 'success'
+              messageType ===
+              'success'
                 ? 'border-emerald-200 text-emerald-700'
                 : 'border-red-200 text-red-600',
             ].join(' ')}
           >
-
-            {messageType === 'success' ? (
-              <CheckCircle2 size={15} />
+            {messageType ===
+            'success' ? (
+              <CheckCircle2
+                size={15}
+              />
             ) : (
-              <AlertTriangle size={15} />
+              <AlertTriangle
+                size={15}
+              />
             )}
 
             <span>
               {message}
             </span>
-
           </div>
-
         )}
 
-        {/* ====================================================
-            CONTENT
-        ===================================================== */}
+        {/* CONTENT */}
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[270px_minmax(0,1fr)]">
 
-          {/* ==================================================
-              FORM
-          =================================================== */}
+          {/* ============================================================= */}
+          {/* FORM */}
+          {/* ============================================================= */}
 
           <section className="lg:border-r lg:border-slate-200 lg:pr-7">
 
@@ -676,17 +809,19 @@ export default function ClassesPage() {
               <p className="mt-1 text-[11px] leading-5 text-slate-400">
                 {editingId
                   ? 'Perbarui informasi kelas yang dipilih.'
-                  : 'Tambahkan struktur kelas baru ke sistem.'}
+                  : 'Tambahkan kelas baru jenjang SD.'}
               </p>
 
             </div>
 
             <form
-              onSubmit={handleSubmit}
+              onSubmit={
+                handleSubmit
+              }
               className="space-y-4"
             >
 
-              {/* NAMA */}
+              {/* NAME */}
 
               <div>
 
@@ -699,17 +834,18 @@ export default function ClassesPage() {
                   value={name}
                   onChange={(e) =>
                     setName(
-                      e.target.value
+                      e.target
+                        .value
                     )
                   }
                   required
-                  placeholder="Contoh: 7A"
+                  placeholder="Contoh: 1A"
                   className="h-10 w-full border-b border-slate-200 bg-transparent px-0 text-sm font-medium text-slate-800 outline-none transition placeholder:text-slate-300 focus:border-emerald-600"
                 />
 
               </div>
 
-              {/* TINGKAT */}
+              {/* GRADE */}
 
               <div>
 
@@ -721,30 +857,31 @@ export default function ClassesPage() {
 
                   <select
                     value={grade}
-                    onChange={
-                      handleGradeChange
+                    onChange={(e) =>
+                      setGrade(
+                        e.target
+                          .value
+                      )
                     }
                     className="h-10 w-full appearance-none border-b border-slate-200 bg-transparent px-0 text-sm font-medium text-slate-800 outline-none transition focus:border-emerald-600"
                   >
-
-                    {[
-                      '7',
-                      '8',
-                      '9',
-                      '10',
-                      '11',
-                      '12',
-                    ].map((item) => (
-
-                      <option
-                        key={item}
-                        value={item}
-                      >
-                        Tingkat {item}
-                      </option>
-
-                    ))}
-
+                    {GRADES.map(
+                      (item) => (
+                        <option
+                          key={
+                            item
+                          }
+                          value={
+                            item
+                          }
+                        >
+                          Kelas{' '}
+                          {
+                            item
+                          }
+                        </option>
+                      )
+                    )}
                   </select>
 
                   <ChevronDown
@@ -756,7 +893,7 @@ export default function ClassesPage() {
 
               </div>
 
-              {/* JENJANG */}
+              {/* LEVEL */}
 
               <div>
 
@@ -766,19 +903,12 @@ export default function ClassesPage() {
 
                 <div className="flex h-10 items-center justify-between border-b border-slate-200">
 
-                  <span
-                    className={[
-                      'text-sm font-semibold',
-                      level === 'SMA'
-                        ? 'text-amber-700'
-                        : 'text-emerald-700',
-                    ].join(' ')}
-                  >
-                    {level}
+                  <span className="text-sm font-semibold text-emerald-700">
+                    SD
                   </span>
 
                   <span className="text-[9px] text-slate-400">
-                    Otomatis
+                    Tetap
                   </span>
 
                 </div>
@@ -822,16 +952,18 @@ export default function ClassesPage() {
                 </button>
 
                 {editingId && (
-
                   <button
                     type="button"
-                    onClick={resetForm}
+                    onClick={
+                      resetForm
+                    }
                     className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50"
                     title="Batal edit"
                   >
-                    <X size={16} />
+                    <X
+                      size={16}
+                    />
                   </button>
-
                 )}
 
               </div>
@@ -850,13 +982,13 @@ export default function ClassesPage() {
                 />
 
                 <p className="text-[10px] leading-5 text-slate-400">
-                  Sistem menentukan jenjang secara otomatis:
+                  {SCHOOL_NAME} menggunakan jenjang{' '}
                   <strong className="text-slate-500">
-                    {' '}7–9 SMP
+                    SD
                   </strong>{' '}
-                  dan
+                  dengan tingkat kelas{' '}
                   <strong className="text-slate-500">
-                    {' '}10–12 SMA
+                    1 sampai 6
                   </strong>.
                 </p>
 
@@ -866,13 +998,11 @@ export default function ClassesPage() {
 
           </section>
 
-          {/* ==================================================
-              LIST
-          =================================================== */}
+          {/* ============================================================= */}
+          {/* LIST */}
+          {/* ============================================================= */}
 
           <section className="min-w-0">
-
-            {/* LIST HEADER */}
 
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
@@ -880,51 +1010,66 @@ export default function ClassesPage() {
 
                 <div className="flex items-center gap-2">
 
-                  <GraduationCap
+                  <School
                     size={17}
                     strokeWidth={1.8}
                     className="text-emerald-700"
                   />
 
                   <h2 className="text-sm font-semibold text-slate-900">
-                    Daftar Kelas
+                    Daftar Kelas SD
                   </h2>
 
                 </div>
 
                 <p className="mt-1 text-[11px] text-slate-400">
-                  {classes.length} kelas terdaftar
-                  dalam sistem
+                  {
+                    classes.length
+                  }{' '}
+                  kelas terdaftar dalam sistem
                 </p>
 
               </div>
 
-              {classes.length > 0 && (
-
+              {classes.length >
+                0 && (
                 <button
                   type="button"
                   onClick={
                     handleDeleteAll
                   }
-                  disabled={deletingAll}
+                  disabled={
+                    deletingAll
+                  }
                   className="inline-flex h-8 items-center justify-center gap-1.5 self-start border-b border-red-200 px-1 text-[10px] font-semibold text-red-500 transition hover:border-red-400 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 sm:self-auto"
                 >
-
-                  <Trash2 size={13} />
+                  <Trash2
+                    size={13}
+                  />
 
                   {deletingAll
                     ? 'Menghapus...'
                     : 'Hapus Semua'}
-
                 </button>
-
               )}
 
             </div>
 
-            {/* EMPTY */}
+            {/* LOADING */}
 
-            {classes.length === 0 ? (
+            {loadingClasses ? (
+              <div className="border-y border-slate-200 py-14 text-center">
+
+                <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-emerald-200 border-t-emerald-600" />
+
+                <p className="mt-3 text-[11px] text-slate-400">
+                  Memuat data kelas...
+                </p>
+
+              </div>
+            ) : classes.length ===
+              0 ? (
+              /* EMPTY */
 
               <div className="border-y border-dashed border-slate-200 py-14 text-center">
 
@@ -939,306 +1084,246 @@ export default function ClassesPage() {
                 </p>
 
                 <p className="mt-1 text-[11px] text-slate-400">
-                  Tambahkan kelas menggunakan formulir
-                  di sebelah kiri.
+                  Tambahkan kelas menggunakan formulir di sebelah kiri.
                 </p>
 
               </div>
-
             ) : (
+              /* TABLE */
 
-              <div className="space-y-8">
+              <div>
 
-                {(
-                  ['SMP', 'SMA'] as const
-                ).map((levelName) => {
+                <div className="mb-2 flex items-center gap-3">
 
-                  const levelClasses =
-                    groupedClasses[
-                      levelName
-                    ];
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-700">
+                    <School
+                      size={13}
+                    />
+                  </div>
 
-                  if (
-                    levelClasses.length === 0
-                  ) {
-                    return null;
-                  }
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">
+                    SD
+                  </span>
 
-                  return (
+                  <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent" />
 
-                    <section
-                      key={levelName}
-                    >
+                  <span className="text-[10px] text-slate-400">
+                    {
+                      sortedClasses.length
+                    }{' '}
+                    kelas
+                  </span>
 
-                      {/* LEVEL HEADER */}
+                </div>
 
-                      <div className="mb-2 flex items-center gap-3">
+                {/* TABLE HEADER */}
 
+                <div className="hidden grid-cols-[70px_1fr_110px_140px_76px] gap-4 border-b border-slate-200 px-3 py-2.5 text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:grid">
+
+                  <span>
+                    Tingkat
+                  </span>
+
+                  <span>
+                    Nama Kelas
+                  </span>
+
+                  <span>
+                    Status
+                  </span>
+
+                  <span>
+                    Siswa
+                  </span>
+
+                  <span className="text-right">
+                    Aksi
+                  </span>
+
+                </div>
+
+                {/* ROWS */}
+
+                <div>
+
+                  {sortedClasses.map(
+                    (cls) => {
+                      const active =
+                        cls.status !==
+                        'Tidak Aktif';
+
+                      const deleting =
+                        deletingId ===
+                        cls.id;
+
+                      return (
                         <div
-                          className={[
-                            'flex h-6 w-6 items-center justify-center rounded-md',
-                            levelName === 'SMA'
-                              ? 'bg-amber-50 text-amber-700'
-                              : 'bg-emerald-50 text-emerald-700',
-                          ].join(' ')}
+                          key={
+                            cls.id
+                          }
+                          className="group border-b border-slate-100 px-3 py-3 transition hover:bg-emerald-50/30"
                         >
 
-                          {levelName ===
-                          'SMA' ? (
-                            <GraduationCap
-                              size={13}
-                            />
-                          ) : (
-                            <School
-                              size={13}
-                            />
-                          )}
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[70px_1fr_110px_140px_76px] sm:items-center sm:gap-4">
 
-                        </div>
+                            {/* GRADE */}
 
-                        <span
-                          className={[
-                            'text-[10px] font-bold uppercase tracking-[0.18em]',
-                            levelName === 'SMA'
-                              ? 'text-amber-700'
-                              : 'text-emerald-700',
-                          ].join(' ')}
-                        >
-                          {levelName}
-                        </span>
+                            <div className="flex items-center gap-2 sm:block">
 
-                        <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent" />
+                              <span className="text-[9px] text-slate-400 sm:hidden">
+                                Tingkat
+                              </span>
 
-                        <span className="text-[10px] text-slate-400">
-                          {levelClasses.length}{' '}
-                          kelas
-                        </span>
+                              <span className="text-xs font-semibold text-slate-600">
+                                Kelas{' '}
+                                {
+                                  cls.grade
+                                }
+                              </span>
 
-                      </div>
+                            </div>
 
-                      {/* TABLE HEADER */}
+                            {/* NAME */}
 
-                      <div className="hidden grid-cols-[60px_1fr_110px_120px_76px] gap-4 border-b border-slate-200 px-3 py-2.5 text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:grid">
+                            <div className="flex min-w-0 items-center gap-3">
 
-                        <span>
-                          Tingkat
-                        </span>
+                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-100">
 
-                        <span>
-                          Nama Kelas
-                        </span>
+                                <School
+                                  size={14}
+                                />
 
-                        <span>
-                          Status
-                        </span>
+                              </div>
 
-                        <span>
-                          Santri
-                        </span>
+                              <div className="min-w-0">
 
-                        <span className="text-right">
-                          Aksi
-                        </span>
+                                <div className="truncate text-sm font-semibold text-slate-800">
+                                  {
+                                    cls.name
+                                  }
+                                </div>
 
-                      </div>
-
-                      {/* ROWS */}
-
-                      <div>
-
-                        {levelClasses.map(
-                          (cls) => {
-
-                            const active =
-                              cls.status !==
-                              'Tidak Aktif';
-
-                            const deleting =
-                              deletingId ===
-                              cls.id;
-
-                            return (
-
-                              <div
-                                key={cls.id}
-                                className="group border-b border-slate-100 px-3 py-3 transition hover:bg-emerald-50/30"
-                              >
-
-                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-[60px_1fr_110px_120px_76px] sm:items-center sm:gap-4">
-
-                                  {/* GRADE */}
-
-                                  <div className="flex items-center gap-2 sm:block">
-
-                                    <span className="text-[9px] text-slate-400 sm:hidden">
-                                      Tingkat
-                                    </span>
-
-                                    <span className="text-xs font-semibold text-slate-600">
-                                      {cls.grade}
-                                    </span>
-
-                                  </div>
-
-                                  {/* NAME */}
-
-                                  <div className="flex min-w-0 items-center gap-3">
-
-                                    <div
-                                      className={[
-                                        'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition',
-                                        levelName ===
-                                        'SMA'
-                                          ? 'bg-amber-50 text-amber-700 group-hover:bg-amber-100'
-                                          : 'bg-emerald-50 text-emerald-700 group-hover:bg-emerald-100',
-                                      ].join(' ')}
-                                    >
-
-                                      {levelName ===
-                                      'SMA' ? (
-                                        <GraduationCap
-                                          size={14}
-                                        />
-                                      ) : (
-                                        <School
-                                          size={14}
-                                        />
-                                      )}
-
-                                    </div>
-
-                                    <div className="min-w-0">
-
-                                      <div className="truncate text-sm font-semibold text-slate-800">
-                                        {cls.name}
-                                      </div>
-
-                                      <div className="mt-0.5 text-[9px] text-slate-400">
-                                        {levelName}
-                                        {' · '}
-                                        Tingkat{' '}
-                                        {cls.grade}
-                                      </div>
-
-                                    </div>
-
-                                  </div>
-
-                                  {/* STATUS */}
-
-                                  <div className="flex items-center gap-2">
-
-                                    <span
-                                      className={[
-                                        'h-1.5 w-1.5 rounded-full',
-                                        active
-                                          ? 'bg-emerald-500'
-                                          : 'bg-slate-300',
-                                      ].join(' ')}
-                                    />
-
-                                    <span
-                                      className={[
-                                        'text-[10px] font-medium',
-                                        active
-                                          ? 'text-emerald-700'
-                                          : 'text-slate-400',
-                                      ].join(' ')}
-                                    >
-                                      {active
-                                        ? 'Aktif'
-                                        : 'Tidak Aktif'}
-                                    </span>
-
-                                  </div>
-
-                                  {/* STUDENT */}
-
-                                  <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
-
-                                    <Users
-                                      size={13}
-                                    />
-
-                                    <span>
-                                      Belum ditentukan
-                                    </span>
-
-                                  </div>
-
-                                  {/* ACTIONS */}
-
-                                  <div className="flex items-center justify-start gap-1 sm:justify-end">
-
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        handleEdit(
-                                          cls
-                                        )
-                                      }
-                                      disabled={
-                                        deleting ||
-                                        deletingAll
-                                      }
-                                      title="Edit kelas"
-                                      className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-amber-50 hover:text-amber-600 disabled:cursor-not-allowed disabled:opacity-40"
-                                    >
-
-                                      <Edit3
-                                        size={13}
-                                      />
-
-                                    </button>
-
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        handleDelete(
-                                          cls
-                                        )
-                                      }
-                                      disabled={
-                                        deleting ||
-                                        deletingAll
-                                      }
-                                      title="Hapus kelas"
-                                      className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
-                                    >
-
-                                      {deleting ? (
-
-                                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-slate-300 border-t-red-500" />
-
-                                      ) : (
-
-                                        <Trash2
-                                          size={13}
-                                        />
-
-                                      )}
-
-                                    </button>
-
-                                  </div>
-
+                                <div className="mt-0.5 text-[9px] text-slate-400">
+                                  SD
+                                  {' · '}
+                                  Kelas{' '}
+                                  {
+                                    cls.grade
+                                  }
                                 </div>
 
                               </div>
 
-                            );
-                          }
-                        )}
+                            </div>
 
-                      </div>
+                            {/* STATUS */}
 
-                    </section>
+                            <div className="flex items-center gap-2">
 
-                  );
-                })}
+                              <span
+                                className={[
+                                  'h-1.5 w-1.5 rounded-full',
+                                  active
+                                    ? 'bg-emerald-500'
+                                    : 'bg-slate-300',
+                                ].join(
+                                  ' '
+                                )}
+                              />
+
+                              <span
+                                className={[
+                                  'text-[10px] font-medium',
+                                  active
+                                    ? 'text-emerald-700'
+                                    : 'text-slate-400',
+                                ].join(
+                                  ' '
+                                )}
+                              >
+                                {active
+                                  ? 'Aktif'
+                                  : 'Tidak Aktif'}
+                              </span>
+
+                            </div>
+
+                            {/* STUDENT */}
+
+                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+
+                              <Users
+                                size={13}
+                              />
+
+                              <span>
+                                Belum ditentukan
+                              </span>
+
+                            </div>
+
+                            {/* ACTION */}
+
+                            <div className="flex items-center justify-start gap-1 sm:justify-end">
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleEdit(
+                                    cls
+                                  )
+                                }
+                                disabled={
+                                  deleting ||
+                                  deletingAll
+                                }
+                                title="Edit kelas"
+                                className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-amber-50 hover:text-amber-600 disabled:cursor-not-allowed disabled:opacity-40"
+                              >
+
+                                <Edit3
+                                  size={13}
+                                />
+
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleDelete(
+                                    cls
+                                  )
+                                }
+                                disabled={
+                                  deleting ||
+                                  deletingAll
+                                }
+                                title="Hapus kelas"
+                                className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+                              >
+
+                                {deleting ? (
+                                  <span className="h-3 w-3 animate-spin rounded-full border-2 border-slate-300 border-t-red-500" />
+                                ) : (
+                                  <Trash2
+                                    size={13}
+                                  />
+                                )}
+
+                              </button>
+
+                            </div>
+
+                          </div>
+
+                        </div>
+                      );
+                    }
+                  )}
+
+                </div>
 
               </div>
-
             )}
 
           </section>
@@ -1247,9 +1332,7 @@ export default function ClassesPage() {
 
       </main>
 
-      {/* ======================================================
-          ISLAMIC / FUTURISTIC ACCENT
-      ====================================================== */}
+      {/* ACCENT */}
 
       <div className="pointer-events-none fixed bottom-0 right-0 -z-0 hidden h-72 w-72 overflow-hidden opacity-[0.025] lg:block">
 
