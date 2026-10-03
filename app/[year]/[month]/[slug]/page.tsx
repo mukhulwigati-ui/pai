@@ -463,7 +463,7 @@ export default async function BlogDetail({
               <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-300">
 
                 <img
-                  src="/icon.png"
+                  src="/emoji.png"
                   alt="Senyum.or.id"
                   className="h-full w-full object-cover"
                 />
