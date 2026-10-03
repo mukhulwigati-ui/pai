@@ -1,6 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
 import {
   AlertCircle,
   BookOpen,
@@ -26,17 +31,29 @@ type Teacher = {
   fullname: string;
   identity_number?: string | null;
   status?: string | null;
+  role?: string | null;
 };
 
 type Subject = {
   id: number;
   name: string;
+  level?: string | null;
+};
+
+type ClassRoom = {
+  id: number;
+  name: string;
+  level?: string | null;
+  grade?: number | null;
+  status?: string | null;
 };
 
 type Assignment = {
   id: number;
+
   teacherId?: number;
   subjectId?: number;
+
   className?: string | null;
 
   teacher?: {
@@ -51,42 +68,15 @@ type Assignment = {
 };
 
 /* ============================================================
+   CONFIG
+============================================================ */
+
+const SCHOOL_LEVEL = 'SD';
+
+/* ============================================================
    HELPERS
 ============================================================ */
 
-/**
- * Memastikan response API selalu menjadi array.
- *
- * Bisa menangani:
- *
- * [
- *   {...}
- * ]
- *
- * atau:
- *
- * {
- *   data: [...]
- * }
- *
- * atau:
- *
- * {
- *   teachers: [...]
- * }
- *
- * atau:
- *
- * {
- *   subjects: [...]
- * }
- *
- * atau:
- *
- * {
- *   assignments: [...]
- * }
- */
 function normalizeArray<T>(
   data: unknown,
   possibleKeys: string[] = []
@@ -100,15 +90,22 @@ function normalizeArray<T>(
     typeof data === 'object'
   ) {
     const objectData =
-      data as Record<string, unknown>;
+      data as Record<
+        string,
+        unknown
+      >;
 
-    for (const key of possibleKeys) {
+    for (
+      const key of possibleKeys
+    ) {
       if (
         Array.isArray(
           objectData[key]
         )
       ) {
-        return objectData[key] as T[];
+        return objectData[
+          key
+        ] as T[];
       }
     }
 
@@ -117,22 +114,21 @@ function normalizeArray<T>(
         objectData.data
       )
     ) {
-      return objectData.data as T[];
+      return objectData
+        .data as T[];
     }
   }
 
   return [];
 }
 
-/**
- * Ambil pesan error dari response API.
- */
 async function getApiError(
   response: Response,
   fallback: string
 ) {
   try {
-    const data = await response.json();
+    const data =
+      await response.json();
 
     return (
       data?.message ||
@@ -153,203 +149,359 @@ export default function AssignmentsPage() {
      DATA STATE
   ========================================================== */
 
-  const [assignments, setAssignments] =
-    useState<Assignment[]>([]);
+  const [
+    assignments,
+    setAssignments,
+  ] = useState<Assignment[]>(
+    []
+  );
 
-  const [teachers, setTeachers] =
-    useState<Teacher[]>([]);
+  const [
+    teachers,
+    setTeachers,
+  ] = useState<Teacher[]>(
+    []
+  );
 
-  const [subjects, setSubjects] =
-    useState<Subject[]>([]);
+  const [
+    subjects,
+    setSubjects,
+  ] = useState<Subject[]>(
+    []
+  );
+
+  const [
+    classes,
+    setClasses,
+  ] = useState<ClassRoom[]>(
+    []
+  );
 
   /* ==========================================================
      FORM STATE
   ========================================================== */
 
-  const [teacherId, setTeacherId] =
-    useState('');
+  const [
+    teacherId,
+    setTeacherId,
+  ] = useState('');
 
-  const [subjectId, setSubjectId] =
-    useState('');
+  const [
+    subjectId,
+    setSubjectId,
+  ] = useState('');
 
-  const [className, setClassName] =
-    useState('7A');
+  const [
+    className,
+    setClassName,
+  ] = useState('');
 
   /* ==========================================================
      UI STATE
   ========================================================== */
 
-  const [message, setMessage] =
-    useState('');
+  const [
+    message,
+    setMessage,
+  ] = useState('');
 
-  const [messageType, setMessageType] =
-    useState<'success' | 'error'>(
-      'success'
-    );
+  const [
+    messageType,
+    setMessageType,
+  ] = useState<
+    'success' | 'error'
+  >('success');
 
-  const [loading, setLoading] =
-    useState(true);
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
 
-  const [submitting, setSubmitting] =
-    useState(false);
+  const [
+    submitting,
+    setSubmitting,
+  ] = useState(false);
 
-  const [search, setSearch] =
-    useState('');
+  const [
+    search,
+    setSearch,
+  ] = useState('');
 
   /* ==========================================================
      FETCH ALL DATA
   ========================================================== */
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      setMessage('');
+  const fetchData =
+    async () => {
+      try {
+        setLoading(true);
+        setMessage('');
 
-      const [
-        resAssig,
-        resTeach,
-        resSubj,
-      ] = await Promise.all([
-        fetch('/api/assignments', {
-          cache: 'no-store',
-        }),
+        const [
+          resAssig,
+          resTeach,
+          resSubj,
+          resClass,
+        ] =
+          await Promise.all([
+            fetch(
+              '/api/assignments',
+              {
+                cache:
+                  'no-store',
+              }
+            ),
 
-        fetch('/api/teachers', {
-          cache: 'no-store',
-        }),
+            fetch(
+              '/api/teachers',
+              {
+                cache:
+                  'no-store',
+              }
+            ),
 
-        fetch('/api/subjects', {
-          cache: 'no-store',
-        }),
-      ]);
+            fetch(
+              `/api/subjects?level=${SCHOOL_LEVEL}`,
+              {
+                cache:
+                  'no-store',
+              }
+            ),
 
-      /* ======================================================
-         ASSIGNMENTS
-      ====================================================== */
+            fetch(
+              '/api/classes',
+              {
+                cache:
+                  'no-store',
+              }
+            ),
+          ]);
 
-      if (!resAssig.ok) {
-        const error =
-          await getApiError(
-            resAssig,
-            'Gagal memuat data penugasan.'
+        /* ====================================================
+           ASSIGNMENTS
+        ==================================================== */
+
+        if (!resAssig.ok) {
+          const error =
+            await getApiError(
+              resAssig,
+              'Gagal memuat data penugasan.'
+            );
+
+          throw new Error(
+            error
           );
+        }
 
-        throw new Error(error);
-      }
+        const dataAssig =
+          await resAssig.json();
 
-      const dataAssig =
-        await resAssig.json();
-
-      const assignmentList =
-        normalizeArray<Assignment>(
-          dataAssig,
-          [
-            'assignments',
-          ]
-        );
-
-      setAssignments(
-        assignmentList
-      );
-
-      /* ======================================================
-         TEACHERS
-      ====================================================== */
-
-      if (resTeach.ok) {
-        const dataTeach =
-          await resTeach.json();
-
-        /**
-         * INI BAGIAN PENTING.
-         *
-         * teachers SELALU akan berupa array.
-         *
-         * Jadi:
-         *
-         * teachers.map(...)
-         *
-         * tidak akan lagi error.
-         */
-        const teacherList =
-          normalizeArray<Teacher>(
-            dataTeach,
+        const assignmentList =
+          normalizeArray<Assignment>(
+            dataAssig,
             [
-              'teachers',
-              'teacher',
+              'assignments',
             ]
           );
 
-        setTeachers(
-          teacherList
-        );
-      } else {
-        console.error(
-          'Gagal memuat guru:',
-          await getApiError(
-            resTeach,
-            'Gagal memuat data guru.'
-          )
+        setAssignments(
+          assignmentList
         );
 
+        /* ====================================================
+           USTADZ / USTADZAH
+        ==================================================== */
+
+        if (resTeach.ok) {
+          const dataTeach =
+            await resTeach.json();
+
+          const teacherList =
+            normalizeArray<Teacher>(
+              dataTeach,
+              [
+                'teachers',
+                'teacher',
+              ]
+            );
+
+          /*
+           * Jangan tampilkan akun ADMIN
+           * pada pilihan pengampu.
+           */
+          const filteredTeachers =
+            teacherList.filter(
+              (teacher) =>
+                String(
+                  teacher.role ||
+                    'TEACHER'
+                ).toUpperCase() !==
+                'ADMIN'
+            );
+
+          setTeachers(
+            filteredTeachers
+          );
+        } else {
+          console.error(
+            'Gagal memuat ustadz/ustadzah:',
+            await getApiError(
+              resTeach,
+              'Gagal memuat data ustadz dan ustadzah.'
+            )
+          );
+
+          setTeachers([]);
+        }
+
+        /* ====================================================
+           SUBJECTS
+        ==================================================== */
+
+        if (resSubj.ok) {
+          const dataSubj =
+            await resSubj.json();
+
+          const subjectList =
+            normalizeArray<Subject>(
+              dataSubj,
+              [
+                'subjects',
+                'subject',
+              ]
+            );
+
+          /*
+           * Tambahan proteksi:
+           * hanya mapel SD.
+           */
+          const sdSubjects =
+            subjectList.filter(
+              (subject) =>
+                !subject.level ||
+                String(
+                  subject.level
+                ).toUpperCase() ===
+                  SCHOOL_LEVEL
+            );
+
+          setSubjects(
+            sdSubjects
+          );
+        } else {
+          console.error(
+            'Gagal memuat mapel:',
+            await getApiError(
+              resSubj,
+              'Gagal memuat data mata pelajaran.'
+            )
+          );
+
+          setSubjects([]);
+        }
+
+        /* ====================================================
+           CLASSES
+        ==================================================== */
+
+        if (resClass.ok) {
+          const dataClass =
+            await resClass.json();
+
+          const classList =
+            normalizeArray<ClassRoom>(
+              dataClass,
+              [
+                'classes',
+                'classRooms',
+                'classrooms',
+              ]
+            );
+
+          /*
+           * API classes seharusnya
+           * sudah hanya mengirim SD.
+           *
+           * Tetap difilter lagi agar
+           * halaman ini aman dari
+           * data lama.
+           */
+          const sdClasses =
+            classList
+              .filter(
+                (item) =>
+                  !item.level ||
+                  String(
+                    item.level
+                  ).toUpperCase() ===
+                    SCHOOL_LEVEL
+              )
+              .filter(
+                (item) => {
+                  const grade =
+                    Number(
+                      item.grade
+                    );
+
+                  return (
+                    !item.grade ||
+                    (grade >= 1 &&
+                      grade <= 6)
+                  );
+                }
+              )
+              .sort(
+                (a, b) =>
+                  Number(
+                    a.grade || 0
+                  ) -
+                    Number(
+                      b.grade || 0
+                    ) ||
+                  a.name.localeCompare(
+                    b.name
+                  )
+              );
+
+          setClasses(
+            sdClasses
+          );
+        } else {
+          console.error(
+            'Gagal memuat kelas:',
+            await getApiError(
+              resClass,
+              'Gagal memuat data kelas.'
+            )
+          );
+
+          setClasses([]);
+        }
+      } catch (
+        error: any
+      ) {
+        console.error(
+          'Fetch assignments error:',
+          error
+        );
+
+        setMessageType(
+          'error'
+        );
+
+        setMessage(
+          error?.message ||
+            'Gagal memuat data.'
+        );
+
+        setAssignments([]);
         setTeachers([]);
-      }
-
-      /* ======================================================
-         SUBJECTS
-      ====================================================== */
-
-      if (resSubj.ok) {
-        const dataSubj =
-          await resSubj.json();
-
-        const subjectList =
-          normalizeArray<Subject>(
-            dataSubj,
-            [
-              'subjects',
-              'subject',
-            ]
-          );
-
-        setSubjects(
-          subjectList
-        );
-      } else {
-        console.error(
-          'Gagal memuat mapel:',
-          await getApiError(
-            resSubj,
-            'Gagal memuat data mata pelajaran.'
-          )
-        );
-
         setSubjects([]);
+        setClasses([]);
+      } finally {
+        setLoading(false);
       }
-    } catch (error: any) {
-      console.error(
-        'Fetch assignments error:',
-        error
-      );
-
-      setMessageType('error');
-
-      setMessage(
-        error?.message ||
-          'Gagal memuat data.'
-      );
-
-      /**
-       * Pastikan state tetap array
-       * walaupun terjadi error.
-       */
-      setAssignments([]);
-      setTeachers([]);
-      setSubjects([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
   /* ==========================================================
      INITIAL LOAD
@@ -363,105 +515,162 @@ export default function AssignmentsPage() {
      RESET FORM
   ========================================================== */
 
-  const resetForm = () => {
-    setTeacherId('');
-    setSubjectId('');
-    setClassName('7A');
-  };
+  const resetForm =
+    () => {
+      setTeacherId('');
+      setSubjectId('');
+      setClassName('');
+    };
 
   /* ==========================================================
      SUBMIT
   ========================================================== */
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+  const handleSubmit =
+    async (
+      e: React.FormEvent<HTMLFormElement>
+    ) => {
+      e.preventDefault();
 
-    setMessage('');
+      setMessage('');
 
-    if (!teacherId) {
-      setMessageType('error');
-      setMessage(
-        'Silakan pilih guru terlebih dahulu.'
-      );
-      return;
-    }
+      if (!teacherId) {
+        setMessageType(
+          'error'
+        );
 
-    if (!subjectId) {
-      setMessageType('error');
-      setMessage(
-        'Silakan pilih mata pelajaran terlebih dahulu.'
-      );
-      return;
-    }
+        setMessage(
+          'Silakan pilih ustadz/ustadzah terlebih dahulu.'
+        );
 
-    if (!className) {
-      setMessageType('error');
-      setMessage(
-        'Silakan pilih kelas terlebih dahulu.'
-      );
-      return;
-    }
-
-    setSubmitting(true);
-
-    try {
-      const res = await fetch(
-        '/api/assignments',
-        {
-          method: 'POST',
-
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-
-          body: JSON.stringify({
-            teacherId,
-            subjectId,
-            className,
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        const error =
-          await getApiError(
-            res,
-            'Gagal menyimpan penugasan.'
-          );
-
-        throw new Error(error);
+        return;
       }
 
-      await res.json();
+      if (!subjectId) {
+        setMessageType(
+          'error'
+        );
 
-      setMessageType('success');
+        setMessage(
+          'Silakan pilih mata pelajaran terlebih dahulu.'
+        );
 
-      setMessage(
-        'Penugasan guru berhasil ditambahkan.'
-      );
+        return;
+      }
 
-      resetForm();
+      if (!className) {
+        setMessageType(
+          'error'
+        );
 
-      await fetchData();
-    } catch (error: any) {
-      console.error(
-        'Submit assignment error:',
-        error
-      );
+        setMessage(
+          'Silakan pilih kelas terlebih dahulu.'
+        );
 
-      setMessageType('error');
+        return;
+      }
 
-      setMessage(
-        error?.message ||
-          'Terjadi kesalahan saat menyimpan penugasan.'
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  };
+      const selectedClass =
+        classes.find(
+          (item) =>
+            item.name ===
+            className
+        );
+
+      if (!selectedClass) {
+        setMessageType(
+          'error'
+        );
+
+        setMessage(
+          'Kelas yang dipilih tidak valid.'
+        );
+
+        return;
+      }
+
+      setSubmitting(true);
+
+      try {
+        const res =
+          await fetch(
+            '/api/assignments',
+            {
+              method:
+                'POST',
+
+              headers: {
+                'Content-Type':
+                  'application/json',
+              },
+
+              body:
+                JSON.stringify(
+                  {
+                    teacherId:
+                      Number(
+                        teacherId
+                      ),
+
+                    subjectId:
+                      Number(
+                        subjectId
+                      ),
+
+                    className:
+                      selectedClass.name,
+                  }
+                ),
+            }
+          );
+
+        if (!res.ok) {
+          const error =
+            await getApiError(
+              res,
+              'Gagal menyimpan penugasan.'
+            );
+
+          throw new Error(
+            error
+          );
+        }
+
+        await res.json();
+
+        setMessageType(
+          'success'
+        );
+
+        setMessage(
+          'Penugasan ustadz/ustadzah berhasil ditambahkan.'
+        );
+
+        resetForm();
+
+        await fetchData();
+      } catch (
+        error: any
+      ) {
+        console.error(
+          'Submit assignment error:',
+          error
+        );
+
+        setMessageType(
+          'error'
+        );
+
+        setMessage(
+          error?.message ||
+            'Terjadi kesalahan saat menyimpan penugasan.'
+        );
+      } finally {
+        setSubmitting(
+          false
+        );
+      }
+    };
 
   /* ==========================================================
      SEARCH FILTER
@@ -482,28 +691,32 @@ export default function AssignmentsPage() {
         (assignment) => {
           const teacherName =
             assignment.teacher
-              ?.fullname ||
-            '';
+              ?.fullname || '';
 
           const subjectName =
             assignment.subject
-              ?.name ||
-            '';
+              ?.name || '';
 
-          const classNameValue =
+          const classValue =
             assignment.className ||
             '';
 
           return (
             teacherName
               .toLowerCase()
-              .includes(keyword) ||
+              .includes(
+                keyword
+              ) ||
             subjectName
               .toLowerCase()
-              .includes(keyword) ||
-            classNameValue
+              .includes(
+                keyword
+              ) ||
+            classValue
               .toLowerCase()
-              .includes(keyword)
+              .includes(
+                keyword
+              )
           );
         }
       );
@@ -525,6 +738,9 @@ export default function AssignmentsPage() {
   const totalSubjects =
     subjects.length;
 
+  const totalClasses =
+    classes.length;
+
   /* ==========================================================
      RENDER
   ========================================================== */
@@ -537,8 +753,6 @@ export default function AssignmentsPage() {
       ===================================================== */}
 
       <section className="relative overflow-hidden border-b border-emerald-950/20 bg-[#062f28]">
-
-        {/* GRID BACKGROUND */}
 
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
@@ -559,19 +773,13 @@ export default function AssignmentsPage() {
           }}
         />
 
-        {/* GLOW */}
-
         <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl" />
 
         <div className="pointer-events-none absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-teal-300/10 blur-3xl" />
 
-        {/* HEADER CONTENT */}
-
         <div className="relative mx-auto max-w-[1500px] px-5 py-7 sm:px-7 lg:px-10">
 
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-
-            {/* TITLE */}
 
             <div>
 
@@ -586,7 +794,7 @@ export default function AssignmentsPage() {
                 </span>
 
                 <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-emerald-100/70">
-                  Academic Management
+                  Manajemen Akademik • SD
                 </span>
 
               </div>
@@ -597,7 +805,9 @@ export default function AssignmentsPage() {
 
                   <BookOpen
                     size={27}
-                    strokeWidth={1.5}
+                    strokeWidth={
+                      1.5
+                    }
                     className="text-emerald-200"
                   />
 
@@ -606,13 +816,13 @@ export default function AssignmentsPage() {
                 <div>
 
                   <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                    Penugasan Guru Pengampu
+                    Penugasan Ustadz &amp; Ustadzah
                   </h1>
 
                   <p className="mt-1 max-w-xl text-xs leading-5 text-emerald-100/55">
-                    Atur guru, mata pelajaran,
-                    dan kelas secara terpusat
-                    dalam sistem akademik.
+                    Atur ustadz atau ustadzah,
+                    mata pelajaran, dan kelas
+                    jenjang SD secara terpusat.
                   </p>
 
                 </div>
@@ -621,12 +831,14 @@ export default function AssignmentsPage() {
 
             </div>
 
-            {/* REFRESH */}
-
             <button
               type="button"
-              onClick={fetchData}
-              disabled={loading}
+              onClick={
+                fetchData
+              }
+              disabled={
+                loading
+              }
               className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-4 text-[10px] font-bold text-white transition hover:bg-white/[0.12] disabled:cursor-not-allowed disabled:opacity-50"
             >
 
@@ -659,34 +871,50 @@ export default function AssignmentsPage() {
             STATISTICS
         =================================================== */}
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
 
           <StatCard
-            icon={BookOpen}
+            icon={
+              BookOpen
+            }
             label="Total Penugasan"
             value={
               totalAssignments
             }
-            description="Guru & mapel yang ditugaskan"
+            description="Penugasan yang tersimpan"
           />
 
           <StatCard
             icon={Users}
-            label="Guru"
+            label="Ustadz/Ustadzah"
             value={
               totalTeachers
             }
-            description="Tenaga pengajar tersedia"
+            description="Pengajar tersedia"
             positive
           />
 
           <StatCard
-            icon={GraduationCap}
+            icon={
+              GraduationCap
+            }
             label="Mata Pelajaran"
             value={
               totalSubjects
             }
-            description="Mapel tersedia"
+            description="Mapel jenjang SD"
+          />
+
+          <StatCard
+            icon={
+              ShieldCheck
+            }
+            label="Kelas"
+            value={
+              totalClasses
+            }
+            description="Kelas SD tersedia"
+            positive
           />
 
         </div>
@@ -729,7 +957,9 @@ export default function AssignmentsPage() {
               }
               className="opacity-50 transition hover:opacity-100"
             >
-              <X size={15} />
+              <X
+                size={15}
+              />
             </button>
 
           </div>
@@ -747,8 +977,6 @@ export default function AssignmentsPage() {
 
           <section className="h-fit overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_10px_40px_rgba(15,23,42,0.05)]">
 
-            {/* FORM HEADER */}
-
             <div className="relative overflow-hidden border-b border-slate-100 bg-gradient-to-br from-[#f8fbfa] to-white px-5 py-5">
 
               <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-emerald-100/50 blur-2xl" />
@@ -757,7 +985,9 @@ export default function AssignmentsPage() {
 
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b5d4b] text-white shadow-lg shadow-emerald-900/10">
 
-                  <Plus size={19} />
+                  <Plus
+                    size={19}
+                  />
 
                 </div>
 
@@ -768,8 +998,8 @@ export default function AssignmentsPage() {
                   </h2>
 
                   <p className="mt-0.5 text-[9px] text-slate-400">
-                    Tentukan guru, mapel,
-                    dan kelas
+                    Tentukan ustadz/ustadzah,
+                    mapel, dan kelas SD
                   </p>
 
                 </div>
@@ -778,10 +1008,10 @@ export default function AssignmentsPage() {
 
             </div>
 
-            {/* FORM BODY */}
-
             <form
-              onSubmit={handleSubmit}
+              onSubmit={
+                handleSubmit
+              }
               className="space-y-5 p-5"
             >
 
@@ -798,7 +1028,7 @@ export default function AssignmentsPage() {
                     className="text-emerald-600"
                   />
 
-                  Ustadz / Guru
+                  Ustadz / Ustadzah
 
                   <span className="text-red-400">
                     *
@@ -816,7 +1046,8 @@ export default function AssignmentsPage() {
                       e
                     ) =>
                       setTeacherId(
-                        e.target.value
+                        e.target
+                          .value
                       )
                     }
                     required
@@ -830,11 +1061,11 @@ export default function AssignmentsPage() {
 
                     <option value="">
                       {loading
-                        ? 'Memuat guru...'
+                        ? 'Memuat ustadz/ustadzah...'
                         : teachers.length ===
                             0
-                          ? 'Belum ada guru'
-                          : '-- Pilih Guru --'}
+                          ? 'Belum ada ustadz/ustadzah'
+                          : '-- Pilih Ustadz / Ustadzah --'}
                     </option>
 
                     {teachers.map(
@@ -848,12 +1079,17 @@ export default function AssignmentsPage() {
                           value={
                             teacher.id
                           }
+                          disabled={
+                            teacher.status ===
+                            'Nonaktif'
+                          }
                         >
                           {
                             teacher.fullname
                           }
+
                           {teacher.status ===
-                            'Nonaktif'
+                          'Nonaktif'
                             ? ' — Nonaktif'
                             : ''}
                         </option>
@@ -873,8 +1109,7 @@ export default function AssignmentsPage() {
                   0 &&
                   !loading && (
                     <p className="mt-1.5 text-[9px] text-amber-600">
-                      Belum ada data guru
-                      yang tersedia.
+                      Belum ada data ustadz/ustadzah yang tersedia.
                     </p>
                   )}
 
@@ -911,7 +1146,8 @@ export default function AssignmentsPage() {
                       e
                     ) =>
                       setSubjectId(
-                        e.target.value
+                        e.target
+                          .value
                       )
                     }
                     required
@@ -925,11 +1161,11 @@ export default function AssignmentsPage() {
 
                     <option value="">
                       {loading
-                        ? 'Memuat mapel...'
+                        ? 'Memuat mata pelajaran...'
                         : subjects.length ===
                             0
-                          ? 'Belum ada mapel'
-                          : '-- Pilih Mapel --'}
+                          ? 'Belum ada mata pelajaran'
+                          : '-- Pilih Mata Pelajaran --'}
                     </option>
 
                     {subjects.map(
@@ -964,9 +1200,7 @@ export default function AssignmentsPage() {
                   0 &&
                   !loading && (
                     <p className="mt-1.5 text-[9px] text-amber-600">
-                      Belum ada mata
-                      pelajaran yang
-                      tersedia.
+                      Belum ada mata pelajaran jenjang SD yang tersedia.
                     </p>
                   )}
 
@@ -1003,59 +1237,51 @@ export default function AssignmentsPage() {
                       e
                     ) =>
                       setClassName(
-                        e.target.value
+                        e.target
+                          .value
                       )
                     }
-                    className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 pr-9 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5"
+                    required
+                    disabled={
+                      loading ||
+                      classes.length ===
+                        0
+                    }
+                    className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 pr-9 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5 disabled:cursor-not-allowed disabled:opacity-60"
                   >
 
-                    <option value="7A">
-                      Kelas 7A
+                    <option value="">
+                      {loading
+                        ? 'Memuat kelas...'
+                        : classes.length ===
+                            0
+                          ? 'Belum ada kelas SD'
+                          : '-- Pilih Kelas --'}
                     </option>
 
-                    <option value="7B">
-                      Kelas 7B
-                    </option>
+                    {classes.map(
+                      (
+                        item
+                      ) => (
+                        <option
+                          key={
+                            item.id
+                          }
+                          value={
+                            item.name
+                          }
+                        >
+                          Kelas{' '}
+                          {
+                            item.name
+                          }
 
-                    <option value="8A">
-                      Kelas 8A
-                    </option>
-
-                    <option value="8B">
-                      Kelas 8B
-                    </option>
-
-                    <option value="9A">
-                      Kelas 9A
-                    </option>
-
-                    <option value="9B">
-                      Kelas 9B
-                    </option>
-
-                    <option value="10A">
-                      Kelas 10A
-                    </option>
-
-                    <option value="10B">
-                      Kelas 10B
-                    </option>
-
-                    <option value="11A">
-                      Kelas 11A
-                    </option>
-
-                    <option value="11B">
-                      Kelas 11B
-                    </option>
-
-                    <option value="12A">
-                      Kelas 12A
-                    </option>
-
-                    <option value="12B">
-                      Kelas 12B
-                    </option>
+                          {item.grade
+                            ? ` — Tingkat ${item.grade}`
+                            : ''}
+                        </option>
+                      )
+                    )}
 
                   </select>
 
@@ -1065,6 +1291,14 @@ export default function AssignmentsPage() {
                   />
 
                 </div>
+
+                {classes.length ===
+                  0 &&
+                  !loading && (
+                    <p className="mt-1.5 text-[9px] text-amber-600">
+                      Belum ada kelas SD. Tambahkan kelas terlebih dahulu melalui menu Manajemen Kelas.
+                    </p>
+                  )}
 
               </div>
 
@@ -1082,10 +1316,7 @@ export default function AssignmentsPage() {
                   />
 
                   <p className="text-[9px] leading-4 text-emerald-700">
-                    Satu penugasan akan
-                    menghubungkan guru
-                    dengan mata pelajaran
-                    dan kelas yang dipilih.
+                    Satu penugasan menghubungkan ustadz/ustadzah dengan mata pelajaran dan kelas SD yang dipilih.
                   </p>
 
                 </div>
@@ -1104,6 +1335,8 @@ export default function AssignmentsPage() {
                   teachers.length ===
                     0 ||
                   subjects.length ===
+                    0 ||
+                  classes.length ===
                     0
                 }
                 className="group relative flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#0b5d4b] text-xs font-bold text-white shadow-lg shadow-emerald-900/10 transition hover:bg-[#084c3e] disabled:cursor-not-allowed disabled:opacity-50"
@@ -1142,8 +1375,6 @@ export default function AssignmentsPage() {
 
           <section className="min-w-0">
 
-            {/* LIST HEADER */}
-
             <div className="mb-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
 
               <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -1179,8 +1410,6 @@ export default function AssignmentsPage() {
 
                 </div>
 
-                {/* SEARCH */}
-
                 <div className="relative">
 
                   <Search
@@ -1197,11 +1426,12 @@ export default function AssignmentsPage() {
                       e
                     ) =>
                       setSearch(
-                        e.target.value
+                        e.target
+                          .value
                       )
                     }
-                    placeholder="Cari guru, mapel, kelas..."
-                    className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-xs outline-none transition placeholder:text-slate-300 focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5 sm:w-64"
+                    placeholder="Cari ustadz, ustadzah, mapel, kelas..."
+                    className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-xs outline-none transition placeholder:text-slate-300 focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5 sm:w-72"
                   />
 
                 </div>
@@ -1209,10 +1439,6 @@ export default function AssignmentsPage() {
               </div>
 
             </div>
-
-            {/* =================================================
-                TABLE / LIST
-            ================================================= */}
 
             <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
 
@@ -1234,7 +1460,7 @@ export default function AssignmentsPage() {
                       <tr className="border-b border-slate-200 bg-[#f8faf9]">
 
                         <th className="px-4 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
-                          Pengajar
+                          Ustadz / Ustadzah
                         </th>
 
                         <th className="px-4 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
@@ -1262,8 +1488,6 @@ export default function AssignmentsPage() {
                             className="group transition hover:bg-slate-50/70"
                           >
 
-                            {/* TEACHER */}
-
                             <td className="px-4 py-4">
 
                               <div className="flex items-center gap-3">
@@ -1284,16 +1508,14 @@ export default function AssignmentsPage() {
                                 <div className="min-w-0">
 
                                   <div className="font-bold text-slate-800">
-
                                     {assignment
                                       .teacher
                                       ?.fullname ||
-                                      'Guru tidak ditemukan'}
-
+                                      'Ustadz/ustadzah tidak ditemukan'}
                                   </div>
 
                                   <div className="mt-0.5 text-[9px] text-slate-400">
-                                    Pengajar
+                                    Pengampu
                                   </div>
 
                                 </div>
@@ -1301,8 +1523,6 @@ export default function AssignmentsPage() {
                               </div>
 
                             </td>
-
-                            {/* SUBJECT */}
 
                             <td className="px-4 py-4">
 
@@ -1315,19 +1535,15 @@ export default function AssignmentsPage() {
                                 />
 
                                 <span className="truncate">
-
                                   {assignment
                                     .subject
                                     ?.name ||
                                     'Mapel tidak ditemukan'}
-
                                 </span>
 
                               </div>
 
                             </td>
-
-                            {/* CLASS */}
 
                             <td className="px-4 py-4 text-center">
 
@@ -1428,7 +1644,9 @@ function StatCard({
 
           <Icon
             size={18}
-            strokeWidth={1.7}
+            strokeWidth={
+              1.7
+            }
           />
 
         </div>
@@ -1444,7 +1662,9 @@ function StatCard({
           </div>
 
           <div className="truncate text-[8px] text-slate-400">
-            {description}
+            {
+              description
+            }
           </div>
 
         </div>
@@ -1456,7 +1676,7 @@ function StatCard({
 }
 
 /* ============================================================
-   LOADING STATE
+   LOADING
 ============================================================ */
 
 function LoadingState() {
@@ -1477,8 +1697,7 @@ function LoadingState() {
       </p>
 
       <p className="mt-1 text-[9px] text-slate-300">
-        Menghubungkan ke database
-        akademik
+        Menghubungkan ke database akademik
       </p>
 
     </div>
@@ -1486,7 +1705,7 @@ function LoadingState() {
 }
 
 /* ============================================================
-   EMPTY STATE
+   EMPTY
 ============================================================ */
 
 function EmptyState() {
@@ -1497,7 +1716,9 @@ function EmptyState() {
 
         <BookOpen
           size={28}
-          strokeWidth={1.4}
+          strokeWidth={
+            1.4
+          }
         />
 
       </div>
@@ -1507,9 +1728,7 @@ function EmptyState() {
       </h3>
 
       <p className="mt-1 max-w-xs text-[10px] leading-5 text-slate-400">
-        Belum terdapat penugasan
-        guru dan mata pelajaran
-        dalam sistem.
+        Belum terdapat penugasan ustadz/ustadzah, mata pelajaran, dan kelas dalam sistem.
       </p>
 
     </div>
@@ -1517,7 +1736,7 @@ function EmptyState() {
 }
 
 /* ============================================================
-   SEARCH EMPTY STATE
+   SEARCH EMPTY
 ============================================================ */
 
 function SearchEmptyState() {
@@ -1528,7 +1747,9 @@ function SearchEmptyState() {
 
         <Search
           size={26}
-          strokeWidth={1.5}
+          strokeWidth={
+            1.5
+          }
         />
 
       </div>
@@ -1538,9 +1759,7 @@ function SearchEmptyState() {
       </h3>
 
       <p className="mt-1 text-[10px] text-slate-400">
-        Coba gunakan nama guru,
-        mata pelajaran, atau kelas
-        yang berbeda.
+        Coba gunakan nama ustadz/ustadzah, mata pelajaran, atau kelas yang berbeda.
       </p>
 
     </div>

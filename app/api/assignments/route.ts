@@ -2,34 +2,47 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAdmin } from '@/lib/auth';
 
-// ============================================================
-// GET
-// Ambil semua data penugasan
-// HANYA ADMIN
-// ============================================================
+/* ============================================================
+   KONFIGURASI
+============================================================ */
+
+const SCHOOL_LEVEL = 'SD';
+
+const MIN_GRADE = 1;
+const MAX_GRADE = 6;
+
+/* ============================================================
+   GET /api/assignments
+   AMBIL SEMUA DATA PENUGASAN
+   HANYA ADMIN
+============================================================ */
 
 export async function GET() {
   try {
-    // --------------------------------------------------------
-    // CEK AUTHORIZATION
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       CEK AUTHORIZATION
+    -------------------------------------------------------- */
 
-    const auth = await requireAdmin();
+    const auth =
+      await requireAdmin();
 
     if (!auth.authorized) {
       return NextResponse.json(
         {
-          message: auth.message,
+          success: false,
+          message:
+            auth.message,
         },
         {
-          status: auth.status,
+          status:
+            auth.status,
         }
       );
     }
 
-    // --------------------------------------------------------
-    // AMBIL DATA
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       AMBIL DATA PENUGASAN
+    -------------------------------------------------------- */
 
     const assignments =
       await prisma.assignment.findMany({
@@ -47,27 +60,60 @@ export async function GET() {
             },
           },
 
-          subject: true,
+          subject: {
+            select: {
+              id: true,
+              name: true,
+              level: true,
+            },
+          },
         },
 
-        orderBy: {
-          id: 'desc',
-        },
+        orderBy: [
+          {
+            className: 'asc',
+          },
+          {
+            id: 'desc',
+          },
+        ],
       });
 
-    // --------------------------------------------------------
-    // RESPONSE
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       FILTER TAMBAHAN
+
+       Hanya penugasan mapel jenjang SD yang
+       ditampilkan.
+    -------------------------------------------------------- */
+
+    const sdAssignments =
+      assignments.filter(
+        (assignment) =>
+          !assignment.subject?.level ||
+          String(
+            assignment.subject.level
+          ).toUpperCase() ===
+            SCHOOL_LEVEL
+      );
+
+    /* --------------------------------------------------------
+       RESPONSE
+    -------------------------------------------------------- */
 
     return NextResponse.json(
       {
-        data: assignments,
+        success: true,
+
+        total:
+          sdAssignments.length,
+
+        data:
+          sdAssignments,
       },
       {
         status: 200,
       }
     );
-
   } catch (error) {
     console.error(
       'GET ASSIGNMENTS ERROR:',
@@ -76,6 +122,7 @@ export async function GET() {
 
     return NextResponse.json(
       {
+        success: false,
         message:
           'Gagal memuat data penugasan.',
       },
@@ -86,55 +133,64 @@ export async function GET() {
   }
 }
 
-
-// ============================================================
-// POST
-// Tambah penugasan guru
-// HANYA ADMIN
-// ============================================================
+/* ============================================================
+   POST /api/assignments
+   TAMBAH PENUGASAN USTADZ / USTADZAH
+   HANYA ADMIN
+============================================================ */
 
 export async function POST(
   request: Request
 ) {
   try {
-    // --------------------------------------------------------
-    // CEK AUTHORIZATION
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       CEK AUTHORIZATION
+    -------------------------------------------------------- */
 
-    const auth = await requireAdmin();
+    const auth =
+      await requireAdmin();
 
     if (!auth.authorized) {
       return NextResponse.json(
         {
-          message: auth.message,
+          success: false,
+          message:
+            auth.message,
         },
         {
-          status: auth.status,
+          status:
+            auth.status,
         }
       );
     }
 
-    // --------------------------------------------------------
-    // AMBIL BODY
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       AMBIL BODY
+    -------------------------------------------------------- */
 
-    const body = await request.json();
+    const body =
+      await request.json();
 
-    const teacherId = Number(
-      body.teacherId
-    );
+    const teacherId =
+      Number(
+        body?.teacherId
+      );
 
-    const subjectId = Number(
-      body.subjectId
-    );
+    const subjectId =
+      Number(
+        body?.subjectId
+      );
 
-    const className = String(
-      body.className ?? ''
-    ).trim();
+    const className =
+      String(
+        body?.className ?? ''
+      )
+        .trim()
+        .toUpperCase();
 
-    // --------------------------------------------------------
-    // VALIDASI
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       VALIDASI FIELD WAJIB
+    -------------------------------------------------------- */
 
     if (
       !teacherId ||
@@ -143,8 +199,9 @@ export async function POST(
     ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Guru, Mata Pelajaran, dan Kelas wajib dipilih!',
+            'Ustadz/Ustadzah, Mata Pelajaran, dan Kelas wajib dipilih.',
         },
         {
           status: 400,
@@ -153,13 +210,16 @@ export async function POST(
     }
 
     if (
-      !Number.isInteger(teacherId) ||
-      !Number.isInteger(subjectId)
+      !Number.isInteger(
+        teacherId
+      ) ||
+      teacherId <= 0
     ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'ID Guru atau ID Mata Pelajaran tidak valid.',
+            'ID ustadz/ustadzah tidak valid.',
         },
         {
           status: 400,
@@ -167,14 +227,33 @@ export async function POST(
       );
     }
 
-    // --------------------------------------------------------
-    // CEK GURU
-    // --------------------------------------------------------
+    if (
+      !Number.isInteger(
+        subjectId
+      ) ||
+      subjectId <= 0
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'ID mata pelajaran tidak valid.',
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       CEK USTADZ / USTADZAH
+    -------------------------------------------------------- */
 
     const teacher =
       await prisma.teacher.findUnique({
         where: {
-          id: teacherId,
+          id:
+            teacherId,
         },
 
         select: {
@@ -188,8 +267,9 @@ export async function POST(
     if (!teacher) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Data guru tidak ditemukan.',
+            'Data ustadz/ustadzah tidak ditemukan.',
         },
         {
           status: 404,
@@ -197,18 +277,21 @@ export async function POST(
       );
     }
 
-    // --------------------------------------------------------
-    // PASTIKAN YANG DITUGASKAN MEMANG GURU
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       PASTIKAN ROLE TEACHER
+    -------------------------------------------------------- */
 
     if (
-      String(teacher.role).toUpperCase() !==
+      String(
+        teacher.role || ''
+      ).toUpperCase() !==
       'TEACHER'
     ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Akun yang dipilih bukan akun guru.',
+            'Akun yang dipilih bukan akun ustadz/ustadzah.',
         },
         {
           status: 400,
@@ -216,18 +299,21 @@ export async function POST(
       );
     }
 
-    // --------------------------------------------------------
-    // CEK STATUS GURU
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       CEK STATUS
+    -------------------------------------------------------- */
 
     if (
-      String(teacher.status).toLowerCase() ===
+      String(
+        teacher.status || ''
+      ).toLowerCase() ===
       'nonaktif'
     ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Guru tersebut sedang berstatus Nonaktif.',
+            'Ustadz/ustadzah tersebut sedang berstatus Nonaktif.',
         },
         {
           status: 400,
@@ -235,27 +321,34 @@ export async function POST(
       );
     }
 
-    // --------------------------------------------------------
-    // CEK MATA PELAJARAN
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       CEK MATA PELAJARAN
+       HARUS LEVEL SD
+    -------------------------------------------------------- */
 
     const subject =
-      await prisma.subject.findUnique({
+      await prisma.subject.findFirst({
         where: {
-          id: subjectId,
+          id:
+            subjectId,
+
+          level:
+            SCHOOL_LEVEL,
         },
 
         select: {
           id: true,
           name: true,
+          level: true,
         },
       });
 
     if (!subject) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Mata pelajaran tidak ditemukan.',
+            'Mata pelajaran jenjang SD tidak ditemukan.',
         },
         {
           status: 404,
@@ -263,23 +356,87 @@ export async function POST(
       );
     }
 
-    // --------------------------------------------------------
-    // CEK DUPLIKAT PENUGASAN
-    //
-    // Guru + Mapel + Kelas yang sama
-    // tidak boleh dibuat dua kali.
-    //
-    // Catatan:
-    // Pemeriksaan ini tetap aman meskipun
-    // database belum memiliki unique constraint.
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       CEK KELAS
+       HARUS KELAS SD 1-6
+    -------------------------------------------------------- */
+
+    const classRoom =
+      await prisma.classRoom.findFirst({
+        where: {
+          name:
+            className,
+
+          level:
+            SCHOOL_LEVEL,
+
+          grade: {
+            gte:
+              MIN_GRADE,
+
+            lte:
+              MAX_GRADE,
+          },
+        },
+
+        select: {
+          id: true,
+          name: true,
+          level: true,
+          grade: true,
+          status: true,
+        },
+      });
+
+    if (!classRoom) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Kelas SD yang dipilih tidak ditemukan.',
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       CEK STATUS KELAS
+    -------------------------------------------------------- */
+
+    if (
+      String(
+        classRoom.status || ''
+      ).toLowerCase() ===
+      'tidak aktif'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Kelas yang dipilih sedang berstatus Tidak Aktif.',
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       CEK DUPLIKAT PENUGASAN
+
+       Ustadz/Ustadzah + Mapel + Kelas yang sama
+       tidak boleh dibuat dua kali.
+    -------------------------------------------------------- */
 
     const existingAssignment =
       await prisma.assignment.findFirst({
         where: {
           teacherId,
           subjectId,
-          className,
+          className:
+            classRoom.name,
         },
 
         select: {
@@ -287,11 +444,14 @@ export async function POST(
         },
       });
 
-    if (existingAssignment) {
+    if (
+      existingAssignment
+    ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Penugasan guru untuk mata pelajaran dan kelas tersebut sudah ada.',
+            'Penugasan ustadz/ustadzah untuk mata pelajaran dan kelas tersebut sudah ada.',
         },
         {
           status: 409,
@@ -299,16 +459,17 @@ export async function POST(
       );
     }
 
-    // --------------------------------------------------------
-    // CREATE ASSIGNMENT
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       CREATE ASSIGNMENT
+    -------------------------------------------------------- */
 
     const newAssignment =
       await prisma.assignment.create({
         data: {
           teacherId,
           subjectId,
-          className,
+          className:
+            classRoom.name,
         },
 
         include: {
@@ -325,41 +486,58 @@ export async function POST(
             },
           },
 
-          subject: true,
+          subject: {
+            select: {
+              id: true,
+              name: true,
+              level: true,
+            },
+          },
         },
       });
 
-    // --------------------------------------------------------
-    // RESPONSE
-    // --------------------------------------------------------
+    /* --------------------------------------------------------
+       RESPONSE
+    -------------------------------------------------------- */
 
     return NextResponse.json(
       {
-        message:
-          'Penugasan berhasil disimpan.',
+        success: true,
 
-        data: newAssignment,
+        message:
+          'Penugasan ustadz/ustadzah berhasil disimpan.',
+
+        data:
+          newAssignment,
       },
       {
         status: 201,
       }
     );
-
-  } catch (error: any) {
+  } catch (
+    error: unknown
+  ) {
     console.error(
       'CREATE ASSIGNMENT ERROR:',
       error
     );
 
-    // --------------------------------------------------------
-    // PRISMA ERROR
-    // --------------------------------------------------------
+    const prismaError =
+      error as {
+        code?: string;
+      };
+
+    /* --------------------------------------------------------
+       DUPLICATE
+    -------------------------------------------------------- */
 
     if (
-      error?.code === 'P2002'
+      prismaError?.code ===
+      'P2002'
     ) {
       return NextResponse.json(
         {
+          success: false,
           message:
             'Penugasan tersebut sudah terdaftar.',
         },
@@ -369,13 +547,19 @@ export async function POST(
       );
     }
 
+    /* --------------------------------------------------------
+       FOREIGN KEY
+    -------------------------------------------------------- */
+
     if (
-      error?.code === 'P2003'
+      prismaError?.code ===
+      'P2003'
     ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Guru atau Mata Pelajaran yang dipilih tidak ditemukan.',
+            'Ustadz/ustadzah atau mata pelajaran yang dipilih tidak ditemukan.',
         },
         {
           status: 400,
@@ -385,8 +569,9 @@ export async function POST(
 
     return NextResponse.json(
       {
+        success: false,
         message:
-          'Gagal menyimpan penugasan guru.',
+          'Gagal menyimpan penugasan ustadz/ustadzah.',
       },
       {
         status: 500,
