@@ -1,8 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import {
+  usePathname,
+  useRouter,
+} from 'next/navigation';
+
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   LayoutDashboard,
@@ -28,6 +35,16 @@ import {
   ArrowUpCircle,
   History,
 } from 'lucide-react';
+
+/* ============================================================
+   KONFIGURASI SEKOLAH
+============================================================ */
+
+const SCHOOL_NAME =
+  'Sekolah Dasar Islam Terpadu Khoiro Ummah';
+
+const SCHOOL_SHORT_NAME =
+  'SDIT Khoiro Ummah';
 
 /* ============================================================
    TYPES
@@ -56,52 +73,115 @@ const menus: MenuItem[] = [
   ========================================================== */
 
   {
-    title: 'Guru & Ustadz',
-    href: '/dashboard/teachers',
-    icon: Users,
-    category: 'Data Master',
+    title:
+      'Ustadz & Ustadzah',
+
+    href:
+      '/dashboard/teachers',
+
+    icon:
+      Users,
+
+    category:
+      'Data Master',
   },
+
   {
-    title: 'Santri',
-    href: '/dashboard/students',
-    icon: GraduationCap,
-    category: 'Data Master',
+    title:
+      'Siswa',
+
+    href:
+      '/dashboard/students',
+
+    icon:
+      GraduationCap,
+
+    category:
+      'Data Master',
   },
+
   {
-    title: 'Kenaikan Kelas',
-    href: '/dashboard/promotions',
-    icon: ArrowUpCircle,
-    category: 'Data Master',
+    title:
+      'Kenaikan Kelas',
+
+    href:
+      '/dashboard/promotions',
+
+    icon:
+      ArrowUpCircle,
+
+    category:
+      'Data Master',
   },
+
   {
-    title: 'Riwayat Kenaikan',
-    href: '/dashboard/promotions/history',
-    icon: History,
-    category: 'Data Master',
+    title:
+      'Riwayat Kenaikan',
+
+    href:
+      '/dashboard/promotions/history',
+
+    icon:
+      History,
+
+    category:
+      'Data Master',
   },
+
   {
-    title: 'Kelas',
-    href: '/dashboard/classes',
-    icon: School,
-    category: 'Data Master',
+    title:
+      'Kelas',
+
+    href:
+      '/dashboard/classes',
+
+    icon:
+      School,
+
+    category:
+      'Data Master',
   },
+
   {
-    title: 'Mata Pelajaran',
-    href: '/dashboard/subjects',
-    icon: BookOpen,
-    category: 'Data Master',
+    title:
+      'Mata Pelajaran',
+
+    href:
+      '/dashboard/subjects',
+
+    icon:
+      BookOpen,
+
+    category:
+      'Data Master',
   },
+
   {
-    title: 'Penugasan Guru',
-    href: '/dashboard/assignments',
-    icon: UserCheck,
-    category: 'Data Master',
+    title:
+      'Penugasan Ustadz/Ustadzah',
+
+    href:
+      '/dashboard/assignments',
+
+    icon:
+      UserCheck,
+
+    category:
+      'Data Master',
   },
+
   {
-    title: 'Kurikulum (CP & TP)',
-    href: '/dashboard/curriculum',
-    icon: FileText,
-    category: 'Data Master',
+    title:
+      'Kurikulum (CP & TP)',
+
+    href:
+      '/dashboard/curriculum',
+
+    icon:
+      FileText,
+
+    category:
+      'Data Master',
   },
 
   /* ==========================================================
@@ -109,28 +189,59 @@ const menus: MenuItem[] = [
   ========================================================== */
 
   {
-    title: 'Kehadiran',
-    href: '/dashboard/attendance',
-    icon: CalendarCheck,
-    category: 'Akademik',
+    title:
+      'Kehadiran',
+
+    href:
+      '/dashboard/attendance',
+
+    icon:
+      CalendarCheck,
+
+    category:
+      'Akademik',
   },
+
   {
-    title: 'Input Asesmen',
-    href: '/dashboard/assessment',
-    icon: ClipboardCheck,
-    category: 'Akademik',
+    title:
+      'Input Asesmen',
+
+    href:
+      '/dashboard/assessment',
+
+    icon:
+      ClipboardCheck,
+
+    category:
+      'Akademik',
   },
+
   {
-    title: 'Kepribadian',
-    href: '/dashboard/personality',
-    icon: Heart,
-    category: 'Akademik',
+    title:
+      'Kepribadian',
+
+    href:
+      '/dashboard/personality',
+
+    icon:
+      Heart,
+
+    category:
+      'Akademik',
   },
+
   {
-    title: 'Catatan Wali Kelas',
-    href: '/dashboard/notes',
-    icon: MessageSquare,
-    category: 'Akademik',
+    title:
+      'Catatan Wali Kelas',
+
+    href:
+      '/dashboard/notes',
+
+    icon:
+      MessageSquare,
+
+    category:
+      'Akademik',
   },
 
   /* ==========================================================
@@ -138,10 +249,17 @@ const menus: MenuItem[] = [
   ========================================================== */
 
   {
-    title: 'Rapor Santri',
-    href: '/dashboard/report',
-    icon: BarChart3,
-    category: 'Rapor',
+    title:
+      'Rapor Siswa',
+
+    href:
+      '/dashboard/report',
+
+    icon:
+      BarChart3,
+
+    category:
+      'Rapor',
   },
 ];
 
@@ -151,19 +269,36 @@ const menus: MenuItem[] = [
 
 const categories: Category[] = [
   {
-    title: 'Data Master',
-    icon: School,
-    description: 'Kelola data utama',
+    title:
+      'Data Master',
+
+    icon:
+      School,
+
+    description:
+      'Kelola data utama',
   },
+
   {
-    title: 'Akademik',
-    icon: BookOpen,
-    description: 'Kegiatan pembelajaran',
+    title:
+      'Akademik',
+
+    icon:
+      BookOpen,
+
+    description:
+      'Kegiatan pembelajaran',
   },
+
   {
-    title: 'Rapor',
-    icon: BarChart3,
-    description: 'Penilaian & rapor',
+    title:
+      'Rapor',
+
+    icon:
+      BarChart3,
+
+    description:
+      'Penilaian & rapor siswa',
   },
 ];
 
@@ -174,54 +309,86 @@ const categories: Category[] = [
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children:
+    React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname =
+    usePathname();
 
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
+  const router =
+    useRouter();
+
+  const [
+    mobileOpen,
+    setMobileOpen,
+  ] = useState(false);
+
+  const [
+    loggingOut,
+    setLoggingOut,
+  ] = useState(false);
 
   /*
-   * State dropdown.
-   *
-   * Default semua tertutup.
-   * Grup yang sesuai halaman aktif
-   * akan otomatis terbuka.
+   * Default kategori tertutup.
+   * Kategori halaman aktif otomatis terbuka.
    */
-  const [openCategory, setOpenCategory] =
-    useState<string | null>(null);
+  const [
+    openCategory,
+    setOpenCategory,
+  ] =
+    useState<
+      string | null
+    >(null);
 
   /* ==========================================================
      ACTIVE MENU
   ========================================================== */
 
-  const isActive = (href: string) => {
+  const isActive = (
+    href: string
+  ) => {
     /*
-     * Dashboard harus benar-benar /dashboard.
+     * Dashboard hanya aktif
+     * pada /dashboard.
      */
-    if (href === '/dashboard') {
-      return pathname === '/dashboard';
+    if (
+      href ===
+      '/dashboard'
+    ) {
+      return (
+        pathname ===
+        '/dashboard'
+      );
     }
 
     /*
-     * Riwayat Kenaikan harus berdiri sendiri.
+     * Riwayat Kenaikan
+     * berdiri sendiri.
      */
-    if (href === '/dashboard/promotions/history') {
+    if (
+      href ===
+      '/dashboard/promotions/history'
+    ) {
       return pathname.startsWith(
         '/dashboard/promotions/history'
       );
     }
 
     /*
-     * Kenaikan Kelas jangan ikut aktif saat berada
-     * di halaman Riwayat Kenaikan.
+     * Kenaikan Kelas jangan ikut aktif
+     * saat berada di Riwayat Kenaikan.
      */
-    if (href === '/dashboard/promotions') {
+    if (
+      href ===
+      '/dashboard/promotions'
+    ) {
       return (
-        pathname === '/dashboard/promotions' ||
+        pathname ===
+          '/dashboard/promotions' ||
         (
-          pathname.startsWith('/dashboard/promotions/') &&
+          pathname.startsWith(
+            '/dashboard/promotions/'
+          ) &&
           !pathname.startsWith(
             '/dashboard/promotions/history'
           )
@@ -229,30 +396,45 @@ export default function DashboardLayout({
       );
     }
 
-    return pathname.startsWith(href);
+    return pathname.startsWith(
+      href
+    );
   };
 
   /* ==========================================================
      ACTIVE CATEGORY
   ========================================================== */
 
-  const getActiveCategory = () => {
-    const activeMenu = menus.find((menu) =>
-      isActive(menu.href)
-    );
+  const getActiveCategory =
+    () => {
+      const activeMenu =
+        menus.find(
+          (menu) =>
+            isActive(
+              menu.href
+            )
+        );
 
-    return activeMenu?.category || null;
-  };
+      return (
+        activeMenu?.category ||
+        null
+      );
+    };
 
   /* ==========================================================
      AUTO OPEN ACTIVE CATEGORY
   ========================================================== */
 
   useEffect(() => {
-    const activeCategory = getActiveCategory();
+    const activeCategory =
+      getActiveCategory();
 
-    if (activeCategory) {
-      setOpenCategory(activeCategory);
+    if (
+      activeCategory
+    ) {
+      setOpenCategory(
+        activeCategory
+      );
     }
   }, [pathname]);
 
@@ -261,57 +443,100 @@ export default function DashboardLayout({
   ========================================================== */
 
   const currentMenu =
-    menus.find((menu) => isActive(menu.href))?.title ||
-    (pathname.startsWith('/dashboard/settings')
-      ? 'Pengaturan'
-      : 'Dashboard');
+    menus.find(
+      (menu) =>
+        isActive(
+          menu.href
+        )
+    )?.title ||
+    (
+      pathname.startsWith(
+        '/dashboard/settings'
+      )
+        ? 'Pengaturan'
+        : 'Dashboard'
+    );
 
   /* ==========================================================
      TOGGLE CATEGORY
   ========================================================== */
 
-  const toggleCategory = (category: string) => {
-    setOpenCategory((current) =>
-      current === category ? null : category
-    );
-  };
+  const toggleCategory =
+    (
+      category: string
+    ) => {
+      setOpenCategory(
+        (current) =>
+          current ===
+          category
+            ? null
+            : category
+      );
+    };
 
   /* ==========================================================
      LOGOUT
   ========================================================== */
 
-  const handleLogout = async () => {
-    if (loggingOut) return;
-
-    setLoggingOut(true);
-
-    try {
-      const response = await fetch(
-        '/api/auth/logout',
-        {
-          method: 'POST',
-          credentials: 'include',
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          'Gagal keluar dari sistem'
-        );
+  const handleLogout =
+    async () => {
+      if (
+        loggingOut
+      ) {
+        return;
       }
 
-      router.replace('/login');
-      router.refresh();
-    } catch (error) {
-      console.error('Logout error:', error);
-
-      setLoggingOut(false);
-
-      alert(
-        'Gagal keluar dari sistem. Silakan coba lagi.'
+      setLoggingOut(
+        true
       );
-    }
-  };
+
+      try {
+        const response =
+          await fetch(
+            '/api/auth/logout',
+            {
+              method:
+                'POST',
+
+              credentials:
+                'include',
+            }
+          );
+
+        if (
+          !response.ok
+        ) {
+          throw new Error(
+            'Gagal keluar dari sistem'
+          );
+        }
+
+        router.replace(
+          '/login'
+        );
+
+        router.refresh();
+      } catch (
+        error
+      ) {
+        console.error(
+          'Logout error:',
+          error
+        );
+
+        setLoggingOut(
+          false
+        );
+
+        alert(
+          'Gagal keluar dari sistem. Silakan coba lagi.'
+        );
+      }
+    };
+
+  /* ==========================================================
+     RENDER
+  ========================================================== */
 
   return (
     <div className="min-h-screen bg-[#f7f9f7] text-slate-800">
@@ -330,7 +555,9 @@ export default function DashboardLayout({
 
             <GraduationCap
               size={20}
-              strokeWidth={1.7}
+              strokeWidth={
+                1.7
+              }
               className="relative"
             />
 
@@ -342,8 +569,8 @@ export default function DashboardLayout({
               E-Rapor
             </div>
 
-            <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-emerald-700/60">
-              Ulil Albab
+            <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-emerald-700/60">
+              {SCHOOL_SHORT_NAME}
             </div>
 
           </div>
@@ -353,7 +580,10 @@ export default function DashboardLayout({
         <button
           type="button"
           onClick={() =>
-            setMobileOpen((prev) => !prev)
+            setMobileOpen(
+              (prev) =>
+                !prev
+            )
           }
           aria-label={
             mobileOpen
@@ -362,17 +592,23 @@ export default function DashboardLayout({
           }
           className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
         >
+
           {mobileOpen ? (
             <X
               size={19}
-              strokeWidth={1.8}
+              strokeWidth={
+                1.8
+              }
             />
           ) : (
             <Menu
               size={19}
-              strokeWidth={1.8}
+              strokeWidth={
+                1.8
+              }
             />
           )}
+
         </button>
 
       </header>
@@ -386,7 +622,9 @@ export default function DashboardLayout({
           type="button"
           aria-label="Tutup menu"
           onClick={() =>
-            setMobileOpen(false)
+            setMobileOpen(
+              false
+            )
           }
           className="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-[2px] lg:hidden"
         />
@@ -440,7 +678,9 @@ export default function DashboardLayout({
 
               <GraduationCap
                 size={22}
-                strokeWidth={1.6}
+                strokeWidth={
+                  1.6
+                }
                 className="relative text-emerald-200"
               />
 
@@ -453,7 +693,7 @@ export default function DashboardLayout({
               </div>
 
               <div className="mt-1 text-[8px] font-semibold uppercase tracking-[0.22em] text-emerald-200/60">
-                Sistem Akademik
+                Sistem Akademik SD
               </div>
 
             </div>
@@ -479,15 +719,18 @@ export default function DashboardLayout({
 
           {/* SCHOOL */}
 
-          <div className="mt-3 flex items-center gap-2 text-[9px] text-emerald-100/50">
+          <div className="mt-3 flex items-start gap-2 text-[9px] leading-4 text-emerald-100/50">
 
             <Sparkles
               size={11}
-              strokeWidth={1.6}
+              strokeWidth={
+                1.6
+              }
+              className="mt-0.5 shrink-0"
             />
 
             <span>
-              Pondok Pesantren Terpadu Ulil Albab
+              {SCHOOL_NAME}
             </span>
 
           </div>
@@ -509,7 +752,9 @@ export default function DashboardLayout({
             <Link
               href="/dashboard"
               onClick={() =>
-                setMobileOpen(false)
+                setMobileOpen(
+                  false
+                )
               }
               className={[
                 'group relative flex min-h-[44px] items-center gap-3',
@@ -517,13 +762,17 @@ export default function DashboardLayout({
                 'text-[12.5px]',
                 'transition-all duration-200',
 
-                isActive('/dashboard')
+                isActive(
+                  '/dashboard'
+                )
                   ? 'bg-white/[0.09] text-white shadow-[0_4px_18px_rgba(0,0,0,0.08)]'
                   : 'text-white/70 hover:bg-white/[0.045] hover:text-white',
               ].join(' ')}
             >
 
-              {isActive('/dashboard') && (
+              {isActive(
+                '/dashboard'
+              ) && (
                 <span className="absolute bottom-2.5 left-0 top-2.5 w-[2px] rounded-full bg-gradient-to-b from-emerald-300 to-emerald-500" />
               )}
 
@@ -532,21 +781,30 @@ export default function DashboardLayout({
                   'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
                   'transition-all duration-200',
 
-                  isActive('/dashboard')
+                  isActive(
+                    '/dashboard'
+                  )
                     ? 'bg-emerald-400/10 text-emerald-300'
                     : 'bg-white/[0.035] text-emerald-200/65 group-hover:bg-emerald-400/[0.06] group-hover:text-emerald-200',
                 ].join(' ')}
               >
+
                 <LayoutDashboard
                   size={16}
-                  strokeWidth={1.7}
+                  strokeWidth={
+                    1.7
+                  }
                 />
+
               </span>
 
               <span
                 className={[
                   'flex-1',
-                  isActive('/dashboard')
+
+                  isActive(
+                    '/dashboard'
+                  )
                     ? 'font-semibold'
                     : 'font-medium',
                 ].join(' ')}
@@ -554,10 +812,14 @@ export default function DashboardLayout({
                 Dashboard
               </span>
 
-              {isActive('/dashboard') && (
+              {isActive(
+                '/dashboard'
+              ) && (
                 <ChevronRight
                   size={13}
-                  strokeWidth={1.5}
+                  strokeWidth={
+                    1.5
+                  }
                   className="mr-0.5 text-emerald-300/70"
                 />
               )}
@@ -572,253 +834,270 @@ export default function DashboardLayout({
 
           <div className="space-y-2">
 
-            {categories.map((category) => {
+            {categories.map(
+              (
+                category
+              ) => {
+                const categoryMenus =
+                  menus.filter(
+                    (
+                      menu
+                    ) =>
+                      menu.category ===
+                      category.title
+                  );
 
-              const categoryMenus =
-                menus.filter(
-                  (menu) =>
-                    menu.category ===
-                    category.title
-                );
+                if (
+                  !categoryMenus.length
+                ) {
+                  return null;
+                }
 
-              if (!categoryMenus.length) {
-                return null;
-              }
+                const categoryOpen =
+                  openCategory ===
+                  category.title;
 
-              const categoryOpen =
-                openCategory ===
-                category.title;
-
-              const categoryActive =
-                categoryMenus.some((menu) =>
-                  isActive(menu.href)
-                );
-
-              const CategoryIcon =
-                category.icon;
-
-              return (
-                <div
-                  key={category.title}
-                >
-
-                  {/* ========================================
-                      CATEGORY BUTTON
-                  ======================================== */}
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      toggleCategory(
-                        category.title
+                const categoryActive =
+                  categoryMenus.some(
+                    (
+                      menu
+                    ) =>
+                      isActive(
+                        menu.href
                       )
-                    }
-                    className={[
-                      'group relative flex w-full items-center gap-3',
-                      'rounded-xl px-2.5 py-2.5',
-                      'text-left',
-                      'transition-all duration-200',
+                  );
 
-                      categoryOpen ||
-                      categoryActive
-                        ? 'bg-white/[0.055]'
-                        : 'hover:bg-white/[0.035]',
-                    ].join(' ')}
+                const CategoryIcon =
+                  category.icon;
+
+                return (
+                  <div
+                    key={
+                      category.title
+                    }
                   >
 
-                    {/* ACTIVE LINE */}
-
-                    {categoryActive && (
-                      <span className="absolute bottom-2.5 left-0 top-2.5 w-[2px] rounded-full bg-emerald-400" />
-                    )}
-
-                    {/* ICON */}
-
-                    <span
+                    <button
+                      type="button"
+                      onClick={() =>
+                        toggleCategory(
+                          category.title
+                        )
+                      }
                       className={[
-                        'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
+                        'group relative flex w-full items-center gap-3',
+                        'rounded-xl px-2.5 py-2.5',
+                        'text-left',
                         'transition-all duration-200',
 
-                        categoryActive ||
-                        categoryOpen
-                          ? 'bg-emerald-400/10 text-emerald-300'
-                          : 'bg-white/[0.035] text-emerald-200/65 group-hover:bg-white/[0.05] group-hover:text-emerald-200',
+                        categoryOpen ||
+                        categoryActive
+                          ? 'bg-white/[0.055]'
+                          : 'hover:bg-white/[0.035]',
                       ].join(' ')}
                     >
-                      <CategoryIcon
-                        size={16}
-                        strokeWidth={1.7}
-                      />
-                    </span>
 
-                    {/* TEXT */}
-
-                    <span className="min-w-0 flex-1">
+                      {categoryActive && (
+                        <span className="absolute bottom-2.5 left-0 top-2.5 w-[2px] rounded-full bg-emerald-400" />
+                      )}
 
                       <span
                         className={[
-                          'block text-[12px]',
+                          'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
+                          'transition-all duration-200',
+
                           categoryActive ||
                           categoryOpen
-                            ? 'font-semibold text-white'
-                            : 'font-semibold text-white/75 group-hover:text-white',
+                            ? 'bg-emerald-400/10 text-emerald-300'
+                            : 'bg-white/[0.035] text-emerald-200/65 group-hover:bg-white/[0.05] group-hover:text-emerald-200',
                         ].join(' ')}
                       >
-                        {category.title}
+
+                        <CategoryIcon
+                          size={16}
+                          strokeWidth={
+                            1.7
+                          }
+                        />
+
                       </span>
 
-                      <span className="mt-0.5 block text-[8px] text-white/35">
-                        {category.description}
+                      <span className="min-w-0 flex-1">
+
+                        <span
+                          className={[
+                            'block text-[12px]',
+
+                            categoryActive ||
+                            categoryOpen
+                              ? 'font-semibold text-white'
+                              : 'font-semibold text-white/75 group-hover:text-white',
+                          ].join(' ')}
+                        >
+                          {
+                            category.title
+                          }
+                        </span>
+
+                        <span className="mt-0.5 block text-[8px] text-white/35">
+                          {
+                            category.description
+                          }
+                        </span>
+
                       </span>
 
-                    </span>
+                      <span
+                        className={[
+                          'mr-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1.5',
+                          'text-[8px] font-bold',
 
-                    {/* COUNT */}
+                          categoryActive ||
+                          categoryOpen
+                            ? 'bg-emerald-400/10 text-emerald-300/80'
+                            : 'bg-white/[0.045] text-white/35',
+                        ].join(' ')}
+                      >
+                        {
+                          categoryMenus.length
+                        }
+                      </span>
 
-                    <span
+                      <ChevronDown
+                        size={14}
+                        strokeWidth={
+                          1.7
+                        }
+                        className={[
+                          'shrink-0 transition-transform duration-300',
+
+                          categoryOpen
+                            ? 'rotate-180 text-emerald-300'
+                            : 'text-white/35 group-hover:text-white/60',
+                        ].join(' ')}
+                      />
+
+                    </button>
+
+                    <div
                       className={[
-                        'mr-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1.5',
-                        'text-[8px] font-bold',
-                        categoryActive ||
+                        'grid transition-all duration-300 ease-out',
+
                         categoryOpen
-                          ? 'bg-emerald-400/10 text-emerald-300/80'
-                          : 'bg-white/[0.045] text-white/35',
+                          ? 'grid-rows-[1fr] opacity-100'
+                          : 'grid-rows-[0fr] opacity-0',
                       ].join(' ')}
                     >
-                      {categoryMenus.length}
-                    </span>
 
-                    {/* CHEVRON */}
+                      <div className="overflow-hidden">
 
-                    <ChevronDown
-                      size={14}
-                      strokeWidth={1.7}
-                      className={[
-                        'shrink-0 transition-transform duration-300',
-                        categoryOpen
-                          ? 'rotate-180 text-emerald-300'
-                          : 'text-white/35 group-hover:text-white/60',
-                      ].join(' ')}
-                    />
+                        <div className="relative ml-[18px] border-l border-white/[0.07] py-1 pl-3">
 
-                  </button>
+                          {categoryMenus.map(
+                            (
+                              menu
+                            ) => {
+                              const Icon =
+                                menu.icon;
 
-                  {/* ========================================
-                      DROPDOWN CONTENT
-                  ======================================== */}
+                              const active =
+                                isActive(
+                                  menu.href
+                                );
 
-                  <div
-                    className={[
-                      'grid transition-all duration-300 ease-out',
-                      categoryOpen
-                        ? 'grid-rows-[1fr] opacity-100'
-                        : 'grid-rows-[0fr] opacity-0',
-                    ].join(' ')}
-                  >
+                              return (
+                                <Link
+                                  key={
+                                    menu.href
+                                  }
+                                  href={
+                                    menu.href
+                                  }
+                                  onClick={() =>
+                                    setMobileOpen(
+                                      false
+                                    )
+                                  }
+                                  className={[
+                                    'group relative flex min-h-[38px] items-center gap-2.5',
+                                    'rounded-lg px-2',
+                                    'text-[11.5px]',
+                                    'transition-all duration-200',
 
-                    <div className="overflow-hidden">
+                                    active
+                                      ? 'bg-emerald-400/[0.09] text-white'
+                                      : 'text-white/65 hover:bg-white/[0.035] hover:text-white/90',
+                                  ].join(' ')}
+                                >
 
-                      <div className="relative ml-[18px] border-l border-white/[0.07] py-1 pl-3">
+                                  {active && (
+                                    <span className="absolute -left-[17px] h-1.5 w-1.5 rounded-full bg-emerald-400 ring-4 ring-[#052f27]" />
+                                  )}
 
-                        {categoryMenus.map(
-                          (menu) => {
+                                  <span
+                                    className={[
+                                      'flex h-7 w-7 shrink-0 items-center justify-center rounded-md',
 
-                            const Icon =
-                              menu.icon;
+                                      active
+                                        ? 'text-emerald-300'
+                                        : 'text-emerald-200/55 group-hover:text-emerald-200',
+                                    ].join(' ')}
+                                  >
 
-                            const active =
-                              isActive(
-                                menu.href
+                                    <Icon
+                                      size={14}
+                                      strokeWidth={
+                                        1.7
+                                      }
+                                    />
+
+                                  </span>
+
+                                  <span
+                                    className={[
+                                      'min-w-0 flex-1 truncate',
+
+                                      active
+                                        ? 'font-semibold'
+                                        : 'font-medium',
+                                    ].join(' ')}
+                                  >
+                                    {
+                                      menu.title
+                                    }
+                                  </span>
+
+                                  {active && (
+                                    <ChevronRight
+                                      size={12}
+                                      strokeWidth={
+                                        1.5
+                                      }
+                                      className="text-emerald-300/60"
+                                    />
+                                  )}
+
+                                </Link>
                               );
+                            }
+                          )}
 
-                            return (
-                              <Link
-                                key={menu.href}
-                                href={menu.href}
-                                onClick={() =>
-                                  setMobileOpen(
-                                    false
-                                  )
-                                }
-                                className={[
-                                  'group relative flex min-h-[38px] items-center gap-2.5',
-                                  'rounded-lg px-2',
-                                  'text-[11.5px]',
-                                  'transition-all duration-200',
-
-                                  active
-                                    ? 'bg-emerald-400/[0.09] text-white'
-                                    : 'text-white/65 hover:bg-white/[0.035] hover:text-white/90',
-                                ].join(' ')}
-                              >
-
-                                {/* ACTIVE DOT */}
-
-                                {active && (
-                                  <span className="absolute -left-[17px] h-1.5 w-1.5 rounded-full bg-emerald-400 ring-4 ring-[#052f27]" />
-                                )}
-
-                                {/* ICON */}
-
-                                <span
-                                  className={[
-                                    'flex h-7 w-7 shrink-0 items-center justify-center rounded-md',
-                                    active
-                                      ? 'text-emerald-300'
-                                      : 'text-emerald-200/55 group-hover:text-emerald-200',
-                                  ].join(' ')}
-                                >
-                                  <Icon
-                                    size={14}
-                                    strokeWidth={
-                                      1.7
-                                    }
-                                  />
-                                </span>
-
-                                {/* TITLE */}
-
-                                <span
-                                  className={[
-                                    'min-w-0 flex-1 truncate',
-                                    active
-                                      ? 'font-semibold'
-                                      : 'font-medium',
-                                  ].join(' ')}
-                                >
-                                  {menu.title}
-                                </span>
-
-                                {active && (
-                                  <ChevronRight
-                                    size={12}
-                                    strokeWidth={
-                                      1.5
-                                    }
-                                    className="text-emerald-300/60"
-                                  />
-                                )}
-
-                              </Link>
-                            );
-                          }
-                        )}
+                        </div>
 
                       </div>
 
                     </div>
 
                   </div>
-
-                </div>
-              );
-            })}
+                );
+              }
+            )}
 
           </div>
 
           {/* ==================================================
               SYSTEM
-          =================================================== */}
+          ================================================== */}
 
           <div className="mt-4 border-t border-white/[0.055] pt-4">
 
@@ -833,7 +1112,9 @@ export default function DashboardLayout({
             <Link
               href="/dashboard/settings"
               onClick={() =>
-                setMobileOpen(false)
+                setMobileOpen(
+                  false
+                )
               }
               className={[
                 'group relative flex min-h-[42px] items-center gap-3',
@@ -866,10 +1147,14 @@ export default function DashboardLayout({
                     : 'bg-white/[0.035] text-emerald-200/60 group-hover:text-emerald-200',
                 ].join(' ')}
               >
+
                 <Settings
                   size={16}
-                  strokeWidth={1.7}
+                  strokeWidth={
+                    1.7
+                  }
                 />
+
               </span>
 
               <span
@@ -889,7 +1174,9 @@ export default function DashboardLayout({
               ) && (
                 <ChevronRight
                   size={13}
-                  strokeWidth={1.5}
+                  strokeWidth={
+                    1.5
+                  }
                   className="ml-auto text-emerald-300/60"
                 />
               )}
@@ -906,8 +1193,6 @@ export default function DashboardLayout({
 
         <div className="relative shrink-0 border-t border-white/[0.07] p-3">
 
-          {/* STATUS */}
-
           <div className="mb-2.5 rounded-xl border border-emerald-200/[0.07] bg-white/[0.04] p-3">
 
             <div className="flex items-center gap-2.5">
@@ -916,7 +1201,9 @@ export default function DashboardLayout({
 
                 <ShieldCheck
                   size={15}
-                  strokeWidth={1.6}
+                  strokeWidth={
+                    1.6
+                  }
                   className="text-emerald-300/80"
                 />
 
@@ -950,8 +1237,6 @@ export default function DashboardLayout({
 
           </div>
 
-          {/* USER */}
-
           <div className="flex items-center gap-2.5 rounded-xl px-1.5 py-2">
 
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-[10px] font-bold text-white shadow-sm ring-1 ring-white/10">
@@ -970,19 +1255,25 @@ export default function DashboardLayout({
 
             </div>
 
-            {/* LOGOUT */}
-
             <button
               type="button"
               title="Keluar"
-              onClick={handleLogout}
-              disabled={loggingOut}
+              onClick={
+                handleLogout
+              }
+              disabled={
+                loggingOut
+              }
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/45 transition-all duration-200 hover:bg-red-500/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-40"
             >
+
               <LogOut
                 size={16}
-                strokeWidth={1.65}
+                strokeWidth={
+                  1.65
+                }
               />
+
             </button>
 
           </div>
@@ -1016,14 +1307,16 @@ export default function DashboardLayout({
               </span>
 
               <span className="text-[11px] font-medium text-slate-400">
-                Sistem E-Rapor
+                E-Rapor {SCHOOL_SHORT_NAME}
               </span>
 
             </div>
 
             <ChevronRight
               size={13}
-              strokeWidth={1.5}
+              strokeWidth={
+                1.5
+              }
               className="text-slate-300"
             />
 
