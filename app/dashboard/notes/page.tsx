@@ -1,6 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
 import {
   BookOpenCheck,
   CheckCircle2,
@@ -14,226 +19,855 @@ import {
   Users,
 } from 'lucide-react';
 
+/* ============================================================
+   KONFIGURASI SEKOLAH
+============================================================ */
+
+const SCHOOL_NAME =
+  'Sekolah Dasar Islam Terpadu Khoiro Ummah';
+
+const SCHOOL_SHORT_NAME =
+  'SDIT Khoiro Ummah';
+
+const SCHOOL_LEVEL =
+  'SD';
+
+const MIN_GRADE = 1;
+const MAX_GRADE = 6;
+
+const MAX_NOTE_LENGTH =
+  2000;
+
+/* ============================================================
+   TYPES
+============================================================ */
+
 type ClassRoom = {
   id: number;
   name: string;
+  level?: string | null;
+  grade?: number | null;
+  status?: string | null;
 };
 
 type Student = {
   id: number;
   fullname: string;
-  nisn?: string;
+  nisn?: string | null;
   class_name: string;
 };
 
+type NoteRecord = {
+  id?: number;
+  studentId: number;
+  className?: string | null;
+  note?: string | null;
+};
+
+type MessageType =
+  | 'success'
+  | 'error'
+  | '';
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function normalizeArray<T>(
+  data: unknown,
+  possibleKeys: string[] = []
+): T[] {
+  if (
+    Array.isArray(
+      data
+    )
+  ) {
+    return data as T[];
+  }
+
+  if (
+    data &&
+    typeof data ===
+      'object'
+  ) {
+    const objectData =
+      data as Record<
+        string,
+        unknown
+      >;
+
+    for (
+      const key of possibleKeys
+    ) {
+      if (
+        Array.isArray(
+          objectData[key]
+        )
+      ) {
+        return objectData[
+          key
+        ] as T[];
+      }
+    }
+
+    if (
+      Array.isArray(
+        objectData.data
+      )
+    ) {
+      return objectData
+        .data as T[];
+    }
+  }
+
+  return [];
+}
+
+async function getApiError(
+  response: Response,
+  fallback: string
+) {
+  try {
+    const data =
+      await response.json();
+
+    return (
+      data?.message ||
+      data?.error ||
+      fallback
+    );
+  } catch {
+    return fallback;
+  }
+}
+
+/* ============================================================
+   PAGE
+============================================================ */
+
 export default function NotesPage() {
-  const [classes, setClasses] = useState<ClassRoom[]>([]);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [selectedClass, setSelectedClass] = useState('');
+  /* ==========================================================
+     DATA
+  ========================================================== */
 
-  const [notesData, setNotesData] = useState<Record<number, string>>({});
-  const [loading, setLoading] = useState(false);
-  const [loadingStudents, setLoadingStudents] = useState(false);
-  const [loadingClasses, setLoadingClasses] = useState(true);
-  const [message, setMessage] = useState('');
+  const [
+    classes,
+    setClasses,
+  ] =
+    useState<ClassRoom[]>(
+      []
+    );
 
-  /* ============================================================
-     AMBIL DAFTAR KELAS
-  ============================================================ */
+  const [
+    students,
+    setStudents,
+  ] =
+    useState<Student[]>(
+      []
+    );
+
+  const [
+    selectedClass,
+    setSelectedClass,
+  ] =
+    useState('');
+
+  const [
+    notesData,
+    setNotesData,
+  ] =
+    useState<
+      Record<
+        number,
+        string
+      >
+    >({});
+
+  /* ==========================================================
+     UI STATE
+  ========================================================== */
+
+  const [
+    loading,
+    setLoading,
+  ] =
+    useState(false);
+
+  const [
+    loadingStudents,
+    setLoadingStudents,
+  ] =
+    useState(false);
+
+  const [
+    loadingClasses,
+    setLoadingClasses,
+  ] =
+    useState(true);
+
+  const [
+    message,
+    setMessage,
+  ] =
+    useState('');
+
+  const [
+    messageType,
+    setMessageType,
+  ] =
+    useState<MessageType>(
+      ''
+    );
+
+  /* ==========================================================
+     LOAD CLASSES
+  ========================================================== */
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        setLoadingClasses(true);
+    const fetchClasses =
+      async () => {
+        try {
+          setLoadingClasses(
+            true
+          );
 
-        const res = await fetch('/api/classes');
+          const response =
+            await fetch(
+              '/api/classes',
+              {
+                cache:
+                  'no-store',
+              }
+            );
 
-        if (!res.ok) {
-          throw new Error('Gagal memuat daftar kelas.');
+          if (
+            !response.ok
+          ) {
+            throw new Error(
+              await getApiError(
+                response,
+                'Gagal memuat daftar kelas.'
+              )
+            );
+          }
+
+          const data =
+            await response.json();
+
+          const classList =
+            normalizeArray<ClassRoom>(
+              data,
+              [
+                'classes',
+                'classRooms',
+                'classrooms',
+              ]
+            );
+
+          /* ================================================
+             HANYA KELAS SD 1–6
+          ================================================ */
+
+          const sdClasses =
+            classList
+              .filter(
+                (
+                  item
+                ) =>
+                  !item.level ||
+                  String(
+                    item.level
+                  )
+                    .trim()
+                    .toUpperCase() ===
+                    SCHOOL_LEVEL
+              )
+              .filter(
+                (
+                  item
+                ) => {
+                  if (
+                    item.grade ===
+                      undefined ||
+                    item.grade ===
+                      null
+                  ) {
+                    return true;
+                  }
+
+                  const grade =
+                    Number(
+                      item.grade
+                    );
+
+                  return (
+                    Number.isInteger(
+                      grade
+                    ) &&
+                    grade >=
+                      MIN_GRADE &&
+                    grade <=
+                      MAX_GRADE
+                  );
+                }
+              )
+              .filter(
+                (
+                  item
+                ) =>
+                  String(
+                    item.status ||
+                      'Aktif'
+                  )
+                    .trim()
+                    .toLowerCase() !==
+                  'tidak aktif'
+              )
+              .sort(
+                (
+                  a,
+                  b
+                ) =>
+                  Number(
+                    a.grade ||
+                      0
+                  ) -
+                    Number(
+                      b.grade ||
+                        0
+                    ) ||
+                  a.name.localeCompare(
+                    b.name,
+                    'id',
+                    {
+                      numeric:
+                        true,
+                    }
+                  )
+              );
+
+          setClasses(
+            sdClasses
+          );
+
+          /*
+           * Jika kelas yang sedang dipilih
+           * sudah tidak tersedia, reset.
+           */
+          setSelectedClass(
+            (
+              current
+            ) => {
+              if (
+                current &&
+                sdClasses.some(
+                  (
+                    item
+                  ) =>
+                    item.name ===
+                    current
+                )
+              ) {
+                return current;
+              }
+
+              return '';
+            }
+          );
+        } catch (
+          error
+        ) {
+          console.error(
+            'FETCH CLASSES ERROR:',
+            error
+          );
+
+          setClasses(
+            []
+          );
+
+          setMessageType(
+            'error'
+          );
+
+          setMessage(
+            error instanceof
+              Error
+              ? error.message
+              : 'Gagal memuat daftar kelas.'
+          );
+        } finally {
+          setLoadingClasses(
+            false
+          );
         }
-
-        const data = await res.json();
-
-        if (Array.isArray(data)) {
-          setClasses(data);
-        }
-      } catch (error) {
-        console.error(error);
-        setMessage('Error: Gagal memuat daftar kelas.');
-      } finally {
-        setLoadingClasses(false);
-      }
-    };
+      };
 
     fetchClasses();
   }, []);
 
-  /* ============================================================
-     AMBIL SANTRI & CATATAN
-  ============================================================ */
+  /* ==========================================================
+     LOAD STUDENTS + NOTES
+  ========================================================== */
 
   useEffect(() => {
-    if (!selectedClass) {
-      setStudents([]);
-      setNotesData({});
+    if (
+      !selectedClass
+    ) {
+      setStudents(
+        []
+      );
+
+      setNotesData(
+        {}
+      );
+
       return;
     }
 
-    const fetchStudentsAndNotes = async () => {
-      try {
-        setLoadingStudents(true);
+    const fetchStudentsAndNotes =
+      async () => {
+        try {
+          setLoadingStudents(
+            true
+          );
+
+          setMessage('');
+          setMessageType('');
+
+          const [
+            studentsRes,
+            notesRes,
+          ] =
+            await Promise.all([
+              fetch(
+                '/api/students',
+                {
+                  cache:
+                    'no-store',
+                }
+              ),
+
+              fetch(
+                `/api/notes?className=${encodeURIComponent(
+                  selectedClass
+                )}`,
+                {
+                  cache:
+                    'no-store',
+                }
+              ),
+            ]);
+
+          /* ================================================
+             STUDENTS
+          ================================================ */
+
+          if (
+            !studentsRes.ok
+          ) {
+            throw new Error(
+              await getApiError(
+                studentsRes,
+                'Gagal memuat data siswa.'
+              )
+            );
+          }
+
+          const studentsResponse =
+            await studentsRes.json();
+
+          const allStudents =
+            normalizeArray<Student>(
+              studentsResponse,
+              [
+                'students',
+                'student',
+              ]
+            );
+
+          const filteredStudents =
+            allStudents
+              .filter(
+                (
+                  student
+                ) =>
+                  student.class_name ===
+                  selectedClass
+              )
+              .sort(
+                (
+                  a,
+                  b
+                ) =>
+                  a.fullname.localeCompare(
+                    b.fullname,
+                    'id'
+                  )
+              );
+
+          setStudents(
+            filteredStudents
+          );
+
+          /* ================================================
+             NOTES
+          ================================================ */
+
+          if (
+            !notesRes.ok
+          ) {
+            throw new Error(
+              await getApiError(
+                notesRes,
+                'Gagal memuat catatan wali kelas.'
+              )
+            );
+          }
+
+          const notesResponse =
+            await notesRes.json();
+
+          const notesList =
+            normalizeArray<NoteRecord>(
+              notesResponse,
+              [
+                'notes',
+                'note',
+              ]
+            );
+
+          const map:
+            Record<
+              number,
+              string
+            > = {};
+
+          for (
+            const note of notesList
+          ) {
+            if (
+              !Number.isInteger(
+                Number(
+                  note.studentId
+                )
+              )
+            ) {
+              continue;
+            }
+
+            map[
+              Number(
+                note.studentId
+              )
+            ] =
+              String(
+                note.note ||
+                  ''
+              );
+          }
+
+          setNotesData(
+            map
+          );
+        } catch (
+          error
+        ) {
+          console.error(
+            'FETCH STUDENTS / NOTES ERROR:',
+            error
+          );
+
+          setStudents(
+            []
+          );
+
+          setNotesData(
+            {}
+          );
+
+          setMessageType(
+            'error'
+          );
+
+          setMessage(
+            error instanceof
+              Error
+              ? error.message
+              : 'Gagal memuat data.'
+          );
+        } finally {
+          setLoadingStudents(
+            false
+          );
+        }
+      };
+
+    fetchStudentsAndNotes();
+  }, [
+    selectedClass,
+  ]);
+
+  /* ==========================================================
+     UPDATE NOTE
+  ========================================================== */
+
+  const handleChange =
+    (
+      studentId: number,
+      value: string
+    ) => {
+      /*
+       * Batasi 2000 karakter.
+       */
+      const normalizedValue =
+        value.slice(
+          0,
+          MAX_NOTE_LENGTH
+        );
+
+      setNotesData(
+        (
+          previous
+        ) => ({
+          ...previous,
+
+          [studentId]:
+            normalizedValue,
+        })
+      );
+
+      if (message) {
         setMessage('');
-
-        const studentsRes = await fetch('/api/students');
-
-        if (!studentsRes.ok) {
-          throw new Error('Gagal memuat data santri.');
-        }
-
-        const allStudents = await studentsRes.json();
-
-        const filteredStudents = Array.isArray(allStudents)
-          ? allStudents.filter(
-              (student: Student) =>
-                student.class_name === selectedClass,
-            )
-          : [];
-
-        setStudents(filteredStudents);
-
-        /* Ambil catatan */
-
-        const notesRes = await fetch(
-          `/api/notes?className=${encodeURIComponent(selectedClass)}`,
-        );
-
-        if (!notesRes.ok) {
-          throw new Error('Gagal memuat catatan wali kelas.');
-        }
-
-        const notesList = await notesRes.json();
-
-        const map: Record<number, string> = {};
-
-        if (Array.isArray(notesList)) {
-          notesList.forEach((note: any) => {
-            map[note.studentId] = note.note || '';
-          });
-        }
-
-        setNotesData(map);
-      } catch (error: any) {
-        console.error(error);
-
-        setStudents([]);
-        setNotesData({});
-        setMessage(
-          `Error: ${error.message || 'Gagal memuat data.'}`,
-        );
-      } finally {
-        setLoadingStudents(false);
+        setMessageType('');
       }
     };
 
-    fetchStudentsAndNotes();
-  }, [selectedClass]);
+  /* ==========================================================
+     SAVE
+  ========================================================== */
 
-  /* ============================================================
-     UPDATE CATATAN
-  ============================================================ */
+  const handleSave =
+    async (
+      event: React.FormEvent<HTMLFormElement>
+    ) => {
+      event.preventDefault();
 
-  const handleChange = (
-    studentId: number,
-    value: string,
-  ) => {
-    setNotesData((prev) => ({
-      ...prev,
-      [studentId]: value,
-    }));
-  };
+      setMessage('');
 
-  /* ============================================================
-     SIMPAN CATATAN
-  ============================================================ */
+      /* ------------------------------------------------------
+         VALIDASI KELAS
+      ------------------------------------------------------ */
 
-  const handleSave = async (
-    e: React.FormEvent,
-  ) => {
-    e.preventDefault();
-
-    if (!selectedClass || students.length === 0) {
-      return;
-    }
-
-    setLoading(true);
-    setMessage('');
-
-    try {
-      const records = students.map((student) => ({
-        studentId: student.id,
-        note: notesData[student.id] || '',
-      }));
-
-      const res = await fetch('/api/notes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          className: selectedClass,
-          records,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(
-          data.message || 'Gagal menyimpan catatan.',
+      if (
+        !selectedClass
+      ) {
+        setMessageType(
+          'error'
         );
+
+        setMessage(
+          'Silakan pilih kelas terlebih dahulu.'
+        );
+
+        return;
       }
 
-      setMessage(
-        'Sukses! Catatan wali kelas berhasil disimpan.',
+      const classRoom =
+        classes.find(
+          (
+            item
+          ) =>
+            item.name ===
+            selectedClass
+        );
+
+      if (!classRoom) {
+        setMessageType(
+          'error'
+        );
+
+        setMessage(
+          'Kelas yang dipilih tidak valid atau sudah tidak tersedia.'
+        );
+
+        return;
+      }
+
+      if (
+        students.length ===
+        0
+      ) {
+        setMessageType(
+          'error'
+        );
+
+        setMessage(
+          'Tidak ada siswa pada kelas yang dipilih.'
+        );
+
+        return;
+      }
+
+      /* ------------------------------------------------------
+         RECORDS
+      ------------------------------------------------------ */
+
+      const records =
+        students.map(
+          (
+            student
+          ) => ({
+            studentId:
+              student.id,
+
+            note:
+              String(
+                notesData[
+                  student.id
+                ] ||
+                  ''
+              ).trim(),
+          })
+        );
+
+      setLoading(
+        true
       );
-    } catch (error: any) {
-      console.error(error);
 
-      setMessage(
-        `Error: ${
-          error.message || 'Gagal menyimpan catatan.'
-        }`,
+      setMessageType(
+        ''
       );
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  /* ============================================================
-     JUMLAH CATATAN
-  ============================================================ */
+      try {
+        const response =
+          await fetch(
+            '/api/notes',
+            {
+              method:
+                'POST',
 
-  const filledNotes = students.filter(
-    (student) =>
-      notesData[student.id]?.trim().length > 0,
-  ).length;
+              headers: {
+                'Content-Type':
+                  'application/json',
+              },
 
-  const selectedClassData = classes.find(
-    (item) => item.name === selectedClass,
-  );
+              body:
+                JSON.stringify(
+                  {
+                    className:
+                      classRoom.name,
+
+                    records,
+                  }
+                ),
+            }
+          );
+
+        if (
+          !response.ok
+        ) {
+          throw new Error(
+            await getApiError(
+              response,
+              'Gagal menyimpan catatan wali kelas.'
+            )
+          );
+        }
+
+        setMessageType(
+          'success'
+        );
+
+        setMessage(
+          `Catatan wali kelas untuk ${students.length} siswa kelas ${classRoom.name} berhasil disimpan.`
+        );
+      } catch (
+        error
+      ) {
+        console.error(
+          'SAVE NOTES ERROR:',
+          error
+        );
+
+        setMessageType(
+          'error'
+        );
+
+        setMessage(
+          error instanceof
+            Error
+              ? error.message
+              : 'Gagal menyimpan catatan wali kelas.'
+        );
+      } finally {
+        setLoading(
+          false
+        );
+      }
+    };
+
+  /* ==========================================================
+     STATISTICS
+  ========================================================== */
+
+  const filledNotes =
+    useMemo(
+      () =>
+        students.filter(
+          (
+            student
+          ) =>
+            (
+              notesData[
+                student.id
+              ] ||
+              ''
+            )
+              .trim()
+              .length >
+            0
+        ).length,
+      [
+        students,
+        notesData,
+      ]
+    );
+
+  /* ==========================================================
+     SELECTED CLASS
+  ========================================================== */
+
+  const selectedClassData =
+    useMemo(
+      () =>
+        classes.find(
+          (
+            item
+          ) =>
+            item.name ===
+            selectedClass
+        ),
+      [
+        classes,
+        selectedClass,
+      ]
+    );
+
+  /* ==========================================================
+     RENDER
+  ========================================================== */
 
   return (
     <div className="min-h-screen bg-[#f5f8f6] px-4 py-6 sm:px-6 lg:px-8">
 
       <div className="mx-auto max-w-6xl space-y-6">
 
-        {/* ======================================================
+        {/* ====================================================
             HEADER
-        ======================================================= */}
+        ===================================================== */}
 
         <section className="relative overflow-hidden rounded-2xl border border-emerald-900/10 bg-[#063d31] px-6 py-7 text-white shadow-[0_12px_35px_rgba(6,61,49,0.10)] sm:px-8">
-
-          {/* Dekorasi */}
 
           <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-emerald-300/[0.07] blur-3xl" />
 
@@ -243,23 +877,27 @@ export default function NotesPage() {
 
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 
-              {/* TITLE */}
-
               <div className="flex items-start gap-4">
 
                 <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200/10 bg-white/[0.07] shadow-inner">
 
                   <MessageSquareText
                     size={23}
-                    strokeWidth={1.6}
+                    strokeWidth={
+                      1.6
+                    }
                     className="text-emerald-200"
                   />
 
                   <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-300 text-[#063d31]">
+
                     <Sparkles
                       size={9}
-                      strokeWidth={2.5}
+                      strokeWidth={
+                        2.5
+                      }
                     />
+
                   </span>
 
                 </div>
@@ -280,14 +918,12 @@ export default function NotesPage() {
 
                   <p className="mt-1.5 max-w-xl text-xs leading-5 text-emerald-50/55 sm:text-sm">
                     Catatan perkembangan, apresiasi, dan nasihat
-                    untuk membangun karakter santri.
+                    sebagai bagian dari pembinaan karakter siswa.
                   </p>
 
                 </div>
 
               </div>
-
-              {/* BISMILLAH */}
 
               <div className="hidden rounded-xl border border-amber-200/10 bg-white/[0.035] px-4 py-3 text-right sm:block">
 
@@ -299,7 +935,7 @@ export default function NotesPage() {
                 </div>
 
                 <div className="mt-1 text-[8px] uppercase tracking-[0.16em] text-emerald-100/25">
-                  Mendidik dengan ilmu & akhlak
+                  {SCHOOL_SHORT_NAME}
                 </div>
 
               </div>
@@ -310,21 +946,26 @@ export default function NotesPage() {
 
         </section>
 
-        {/* ======================================================
+        {/* ====================================================
             MESSAGE
-        ======================================================= */}
+        ===================================================== */}
 
         {message && (
           <div
             className={[
               'flex items-start gap-3 rounded-xl border px-4 py-3.5 text-sm shadow-sm',
-              message.includes('Sukses')
+
+              messageType ===
+              'success'
                 ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
                 : 'border-red-200 bg-red-50 text-red-700',
-            ].join(' ')}
+            ].join(
+              ' '
+            )}
           >
 
-            {message.includes('Sukses') ? (
+            {messageType ===
+            'success' ? (
               <CheckCircle2
                 size={18}
                 className="mt-0.5 shrink-0"
@@ -336,14 +977,16 @@ export default function NotesPage() {
               />
             )}
 
-            <span>{message}</span>
+            <span>
+              {message}
+            </span>
 
           </div>
         )}
 
-        {/* ======================================================
+        {/* ====================================================
             FILTER & INFO
-        ======================================================= */}
+        ===================================================== */}
 
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_auto]">
 
@@ -358,10 +1001,14 @@ export default function NotesPage() {
                 <div className="mb-2 flex items-center gap-2">
 
                   <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+
                     <BookOpenCheck
                       size={15}
-                      strokeWidth={1.7}
+                      strokeWidth={
+                        1.7
+                      }
                     />
+
                   </div>
 
                   <label className="text-xs font-semibold text-slate-700">
@@ -373,30 +1020,57 @@ export default function NotesPage() {
                 <div className="relative">
 
                   <select
-                    value={selectedClass}
-                    onChange={(e) =>
+                    value={
+                      selectedClass
+                    }
+                    onChange={(
+                      event
+                    ) =>
                       setSelectedClass(
-                        e.target.value,
+                        event.target
+                          .value
                       )
                     }
-                    disabled={loadingClasses}
+                    disabled={
+                      loadingClasses ||
+                      classes.length ===
+                        0
+                    }
                     className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 pr-10 text-sm font-medium text-slate-700 outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 disabled:cursor-not-allowed disabled:opacity-60"
                   >
 
                     <option value="">
                       {loadingClasses
                         ? 'Memuat kelas...'
-                        : '-- Pilih Kelas --'}
+                        : classes.length ===
+                            0
+                          ? 'Belum ada kelas SD'
+                          : '-- Pilih Kelas --'}
                     </option>
 
-                    {classes.map((cls) => (
-                      <option
-                        key={cls.id}
-                        value={cls.name}
-                      >
-                        Kelas {cls.name}
-                      </option>
-                    ))}
+                    {classes.map(
+                      (
+                        classRoom
+                      ) => (
+                        <option
+                          key={
+                            classRoom.id
+                          }
+                          value={
+                            classRoom.name
+                          }
+                        >
+                          Kelas{' '}
+                          {
+                            classRoom.name
+                          }
+
+                          {classRoom.grade
+                            ? ` • Tingkat ${classRoom.grade}`
+                            : ''}
+                        </option>
+                      )
+                    )}
 
                   </select>
 
@@ -408,8 +1082,10 @@ export default function NotesPage() {
                 </div>
 
                 <p className="mt-2 text-[10px] text-slate-400">
-                  Pilih kelas untuk menampilkan daftar santri
-                  dan catatan perkembangan.
+                  {classes.length >
+                  0
+                    ? 'Pilih kelas untuk menampilkan daftar siswa dan catatan perkembangan.'
+                    : 'Tambahkan kelas SD terlebih dahulu melalui Manajemen Kelas.'}
                 </p>
 
               </div>
@@ -418,7 +1094,7 @@ export default function NotesPage() {
 
           </div>
 
-          {/* STAT */}
+          {/* STATISTICS */}
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:min-w-[270px]">
 
@@ -427,20 +1103,26 @@ export default function NotesPage() {
               <div className="flex items-center justify-between">
 
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+
                   <Users
                     size={16}
-                    strokeWidth={1.7}
+                    strokeWidth={
+                      1.7
+                    }
                   />
+
                 </div>
 
                 <span className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">
-                  Santri
+                  Siswa
                 </span>
 
               </div>
 
               <div className="mt-3 text-xl font-bold tracking-tight text-slate-800">
-                {students.length}
+                {
+                  students.length
+                }
               </div>
 
               <div className="mt-0.5 text-[10px] text-slate-400">
@@ -456,10 +1138,14 @@ export default function NotesPage() {
               <div className="flex items-center justify-between">
 
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+
                   <FileText
                     size={16}
-                    strokeWidth={1.7}
+                    strokeWidth={
+                      1.7
+                    }
                   />
+
                 </div>
 
                 <span className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">
@@ -469,11 +1155,17 @@ export default function NotesPage() {
               </div>
 
               <div className="mt-3 text-xl font-bold tracking-tight text-slate-800">
-                {filledNotes}
+                {
+                  filledNotes
+                }
               </div>
 
               <div className="mt-0.5 text-[10px] text-slate-400">
-                dari {students.length} santri
+                dari{' '}
+                {
+                  students.length
+                }{' '}
+                siswa
               </div>
 
             </div>
@@ -482,14 +1174,15 @@ export default function NotesPage() {
 
         </section>
 
-        {/* ======================================================
+        {/* ====================================================
             CONTENT
-        ======================================================= */}
+        ===================================================== */}
 
         {selectedClass ? (
-
           <form
-            onSubmit={handleSave}
+            onSubmit={
+              handleSave
+            }
             className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_6px_28px_rgba(15,23,42,0.045)]"
           >
 
@@ -505,7 +1198,9 @@ export default function NotesPage() {
 
                     <GraduationCap
                       size={19}
-                      strokeWidth={1.7}
+                      strokeWidth={
+                        1.7
+                      }
                     />
 
                   </div>
@@ -513,13 +1208,18 @@ export default function NotesPage() {
                   <div>
 
                     <h2 className="text-sm font-semibold text-slate-800 sm:text-base">
-                      Perkembangan Santri
+                      Perkembangan Siswa
                     </h2>
 
                     <p className="mt-0.5 text-[10px] text-slate-400 sm:text-xs">
-                      Kelas {selectedClass}
+                      Kelas{' '}
+                      {
+                        selectedClass
+                      }
+
                       {selectedClassData
-                        ? ` • ${selectedClassData.name}`
+                        ?.grade
+                        ? ` • Tingkat ${selectedClassData.grade}`
                         : ''}
                     </p>
 
@@ -532,7 +1232,8 @@ export default function NotesPage() {
                   disabled={
                     loading ||
                     loadingStudents ||
-                    students.length === 0
+                    students.length ===
+                      0
                   }
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#07543f] px-5 text-xs font-semibold text-white shadow-[0_5px_15px_rgba(7,84,63,0.18)] transition-all hover:bg-[#064735] hover:shadow-[0_7px_18px_rgba(7,84,63,0.22)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
@@ -543,14 +1244,18 @@ export default function NotesPage() {
                         size={15}
                         className="animate-spin"
                       />
+
                       Menyimpan...
                     </>
                   ) : (
                     <>
                       <Save
                         size={15}
-                        strokeWidth={1.8}
+                        strokeWidth={
+                          1.8
+                        }
                       />
+
                       Simpan Catatan
                     </>
                   )}
@@ -564,7 +1269,6 @@ export default function NotesPage() {
             {/* LOADING */}
 
             {loadingStudents ? (
-
               <div className="flex min-h-[300px] flex-col items-center justify-center px-6">
 
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
@@ -577,20 +1281,21 @@ export default function NotesPage() {
                 </div>
 
                 <p className="mt-4 text-sm font-medium text-slate-600">
-                  Memuat data santri...
+                  Memuat data siswa...
                 </p>
 
                 <p className="mt-1 text-[11px] text-slate-400">
-                  Mohon tunggu sebentar.
+                  Menyiapkan catatan kelas{' '}
+                  {
+                    selectedClass
+                  }.
                 </p>
 
               </div>
-
             ) : (
-
-              /* ==================================================
+              /* ================================================
                  TABLE
-              ================================================== */
+              ================================================= */
 
               <div className="px-3 pb-3 sm:px-5 sm:pb-5">
 
@@ -609,7 +1314,7 @@ export default function NotesPage() {
                           </th>
 
                           <th className="w-[30%] px-4 py-3.5 text-left text-[9px] font-bold uppercase tracking-[0.16em] text-slate-400">
-                            Santri
+                            Siswa
                           </th>
 
                           <th className="px-4 py-3.5 text-left text-[9px] font-bold uppercase tracking-[0.16em] text-slate-400">
@@ -622,12 +1327,14 @@ export default function NotesPage() {
 
                       <tbody className="divide-y divide-slate-100">
 
-                        {students.length === 0 ? (
-
+                        {students.length ===
+                        0 ? (
                           <tr>
 
                             <td
-                              colSpan={3}
+                              colSpan={
+                                3
+                              }
                               className="px-6 py-16 text-center"
                             >
 
@@ -635,41 +1342,47 @@ export default function NotesPage() {
 
                                 <Users
                                   size={21}
-                                  strokeWidth={1.6}
+                                  strokeWidth={
+                                    1.6
+                                  }
                                 />
 
                               </div>
 
                               <p className="mt-4 text-sm font-medium text-slate-600">
-                                Belum ada santri
+                                Belum ada siswa
                               </p>
 
                               <p className="mx-auto mt-1 max-w-sm text-xs leading-5 text-slate-400">
-                                Tidak ditemukan data santri
-                                pada kelas yang dipilih.
+                                Tidak ditemukan data siswa pada kelas yang dipilih.
                               </p>
 
                             </td>
 
                           </tr>
-
                         ) : (
-
                           students.map(
-                            (student, index) => {
-
+                            (
+                              student,
+                              index
+                            ) => {
                               const note =
                                 notesData[
                                   student.id
-                                ] || '';
+                                ] ||
+                                '';
 
                               const hasNote =
-                                note.trim()
-                                  .length > 0;
+                                note
+                                  .trim()
+                                  .length >
+                                0;
 
                               return (
                                 <tr
-                                  key={student.id}
+                                  key={
+                                    student.id
+                                  }
                                   className="group align-top transition-colors hover:bg-emerald-50/[0.25]"
                                 >
 
@@ -678,12 +1391,15 @@ export default function NotesPage() {
                                   <td className="px-4 py-4 text-center">
 
                                     <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-50 text-[10px] font-semibold text-slate-400 group-hover:bg-emerald-50 group-hover:text-emerald-600">
-                                      {index + 1}
+                                      {
+                                        index +
+                                        1
+                                      }
                                     </span>
 
                                   </td>
 
-                                  {/* SANTRI */}
+                                  {/* SISWA */}
 
                                   <td className="px-4 py-4">
 
@@ -693,7 +1409,7 @@ export default function NotesPage() {
 
                                         {student.fullname
                                           ?.charAt(
-                                            0,
+                                            0
                                           )
                                           ?.toUpperCase() ||
                                           'S'}
@@ -703,17 +1419,22 @@ export default function NotesPage() {
                                       <div className="min-w-0">
 
                                         <div className="truncate text-xs font-semibold text-slate-800">
-                                          {student.fullname}
+                                          {
+                                            student.fullname
+                                          }
                                         </div>
 
                                         {student.nisn && (
                                           <div className="mt-1 text-[9px] text-slate-400">
-                                            NISN {student.nisn}
+                                            NISN{' '}
+                                            {
+                                              student.nisn
+                                            }
                                           </div>
                                         )}
 
                                         <div className="mt-1 inline-flex items-center rounded-md bg-slate-50 px-1.5 py-0.5 text-[8px] font-medium text-slate-400">
-                                          Santri
+                                          Siswa
                                         </div>
 
                                       </div>
@@ -729,15 +1450,26 @@ export default function NotesPage() {
                                     <div className="relative">
 
                                       <textarea
-                                        rows={3}
-                                        value={note}
-                                        onChange={(e) =>
+                                        rows={
+                                          3
+                                        }
+                                        value={
+                                          note
+                                        }
+                                        maxLength={
+                                          MAX_NOTE_LENGTH
+                                        }
+                                        onChange={(
+                                          event
+                                        ) =>
                                           handleChange(
                                             student.id,
-                                            e.target.value,
+                                            event
+                                              .target
+                                              .value
                                           )
                                         }
-                                        placeholder="Tuliskan perkembangan, prestasi, sikap, atau nasihat untuk santri..."
+                                        placeholder="Tuliskan perkembangan, prestasi, sikap, apresiasi, atau nasihat untuk siswa..."
                                         className="min-h-[78px] w-full resize-y rounded-xl border border-slate-200 bg-slate-50/40 px-3 py-2.5 text-xs leading-5 text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
                                       />
 
@@ -746,11 +1478,12 @@ export default function NotesPage() {
                                         <span
                                           className={[
                                             'text-[9px]',
+
                                             hasNote
                                               ? 'text-emerald-500'
                                               : 'text-slate-300',
                                           ].join(
-                                            ' ',
+                                            ' '
                                           )}
                                         >
                                           {hasNote
@@ -758,8 +1491,21 @@ export default function NotesPage() {
                                             : 'Belum ada catatan'}
                                         </span>
 
-                                        <span className="text-[9px] text-slate-300">
-                                          {note.length}{' '}
+                                        <span
+                                          className={`text-[9px] ${
+                                            note.length >=
+                                            MAX_NOTE_LENGTH
+                                              ? 'font-semibold text-red-500'
+                                              : 'text-slate-300'
+                                          }`}
+                                        >
+                                          {
+                                            note.length
+                                          }
+                                          /
+                                          {
+                                            MAX_NOTE_LENGTH
+                                          }{' '}
                                           karakter
                                         </span>
 
@@ -771,9 +1517,8 @@ export default function NotesPage() {
 
                                 </tr>
                               );
-                            },
+                            }
                           )
-
                         )}
 
                       </tbody>
@@ -785,13 +1530,13 @@ export default function NotesPage() {
                 </div>
 
               </div>
-
             )}
 
             {/* FOOTER */}
 
             {!loadingStudents &&
-              students.length > 0 && (
+              students.length >
+                0 && (
                 <div className="border-t border-slate-100 bg-slate-50/40 px-5 py-3.5 sm:px-6">
 
                   <div className="flex flex-col gap-2 text-[10px] text-slate-400 sm:flex-row sm:items-center sm:justify-between">
@@ -804,16 +1549,20 @@ export default function NotesPage() {
                       />
 
                       <span>
-                        {filledNotes} dari{' '}
-                        {students.length} catatan
-                        telah diisi
+                        {
+                          filledNotes
+                        }{' '}
+                        dari{' '}
+                        {
+                          students.length
+                        }{' '}
+                        catatan telah diisi
                       </span>
 
                     </div>
 
                     <span className="text-slate-300">
-                      Catatan akan ditampilkan pada
-                      rapor santri
+                      Catatan akan ditampilkan pada rapor siswa
                     </span>
 
                   </div>
@@ -822,12 +1571,10 @@ export default function NotesPage() {
               )}
 
           </form>
-
         ) : (
-
-          /* ======================================================
+          /* ==================================================
              EMPTY STATE
-          ======================================================= */
+          ================================================== */
 
           <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_6px_28px_rgba(15,23,42,0.035)]">
 
@@ -841,7 +1588,9 @@ export default function NotesPage() {
 
                 <MessageSquareText
                   size={28}
-                  strokeWidth={1.5}
+                  strokeWidth={
+                    1.5
+                  }
                 />
 
               </div>
@@ -854,9 +1603,8 @@ export default function NotesPage() {
 
                 <p className="mx-auto mt-2 max-w-md text-xs leading-6 text-slate-400">
                   Pilih kelas dari menu di atas untuk
-                  melihat daftar santri dan mulai
-                  menuliskan catatan perkembangan
-                  mereka.
+                  melihat daftar siswa dan mulai
+                  menuliskan catatan perkembangan mereka.
                 </p>
 
               </div>
@@ -877,8 +1625,23 @@ export default function NotesPage() {
             </div>
 
           </section>
-
         )}
+
+        {/* ====================================================
+            FOOTER
+        ===================================================== */}
+
+        <footer className="flex flex-col items-center justify-between gap-1 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+
+          <span>
+            Sistem Akademik · {SCHOOL_NAME}
+          </span>
+
+          <span>
+            Jenjang Sekolah Dasar
+          </span>
+
+        </footer>
 
       </div>
 
