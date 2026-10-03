@@ -55,17 +55,19 @@ function isValidUuid(value: string): boolean {
 
 // ============================================================================
 // GET
-// Ambil komentar yang sudah APPROVED berdasarkan slug artikel
+// Ambil komentar APPROVED berdasarkan slug artikel
 // ============================================================================
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const slug = cleanString(searchParams.get('slug'));
+    const slug = cleanString(
+      searchParams.get('slug')
+    );
 
     // =========================================================================
-    // VALIDASI
+    // VALIDASI SLUG
     // =========================================================================
 
     if (!slug) {
@@ -96,7 +98,10 @@ export async function GET(request: NextRequest) {
     // AMBIL KOMENTAR
     // =========================================================================
 
-    const { data, error } = await supabaseAdmin
+    const {
+      data,
+      error,
+    } = await supabaseAdmin
       .from(TABLE_NAME)
       .select(`
         id,
@@ -117,7 +122,10 @@ export async function GET(request: NextRequest) {
       });
 
     if (error) {
-      console.error('GET comments Supabase error:', error);
+      console.error(
+        'GET comments Supabase error:',
+        error
+      );
 
       return NextResponse.json(
         {
@@ -140,7 +148,10 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('GET comment API error:', error);
+    console.error(
+      'GET comment API error:',
+      error
+    );
 
     return NextResponse.json(
       {
@@ -157,6 +168,7 @@ export async function GET(request: NextRequest) {
 // ============================================================================
 // POST
 // Kirim komentar baru
+// LANGSUNG APPROVED
 // ============================================================================
 
 export async function POST(request: NextRequest) {
@@ -168,7 +180,8 @@ export async function POST(request: NextRequest) {
     let body: CommentRequestBody;
 
     try {
-      body = (await request.json()) as CommentRequestBody;
+      body =
+        (await request.json()) as CommentRequestBody;
     } catch {
       return NextResponse.json(
         {
@@ -185,21 +198,28 @@ export async function POST(request: NextRequest) {
     // NORMALISASI DATA
     // =========================================================================
 
-    const slug = cleanString(body.slug);
+    const slug =
+      cleanString(body.slug);
 
     const postId =
       cleanString(body.postId) ||
       slug;
 
-    const postTitle = cleanString(body.postTitle);
+    const postTitle =
+      cleanString(body.postTitle);
 
-    const name = cleanString(body.nama);
+    const name =
+      cleanString(body.nama);
 
-    const email = cleanString(body.email).toLowerCase();
+    const email =
+      cleanString(body.email).toLowerCase();
 
-    const message = cleanString(body.komentar);
+    const message =
+      cleanString(body.komentar);
 
-    const parentId = cleanString(body.parentId) || null;
+    const parentId =
+      cleanString(body.parentId) ||
+      null;
 
     // =========================================================================
     // VALIDASI SLUG
@@ -233,7 +253,10 @@ export async function POST(request: NextRequest) {
     // VALIDASI POST TITLE
     // =========================================================================
 
-    if (postTitle.length > MAX_TITLE_LENGTH) {
+    if (
+      postTitle.length >
+      MAX_TITLE_LENGTH
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -273,7 +296,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (name.length > MAX_NAME_LENGTH) {
+    if (
+      name.length >
+      MAX_NAME_LENGTH
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -289,7 +315,10 @@ export async function POST(request: NextRequest) {
     // VALIDASI EMAIL
     // =========================================================================
 
-    if (email && !isValidEmail(email)) {
+    if (
+      email &&
+      !isValidEmail(email)
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -301,7 +330,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (email.length > MAX_EMAIL_LENGTH) {
+    if (
+      email.length >
+      MAX_EMAIL_LENGTH
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -341,7 +373,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (message.length > MAX_COMMENT_LENGTH) {
+    if (
+      message.length >
+      MAX_COMMENT_LENGTH
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -355,9 +390,12 @@ export async function POST(request: NextRequest) {
 
     // =========================================================================
     // VALIDASI PARENT ID
-    // ============================================================================
+    // =========================================================================
 
-    if (parentId && !isValidUuid(parentId)) {
+    if (
+      parentId &&
+      !isValidUuid(parentId)
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -397,7 +435,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Gagal memeriksa komentar yang dibalas.',
+            error:
+              'Gagal memeriksa komentar yang dibalas.',
           },
           {
             status: 500,
@@ -409,7 +448,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Komentar yang ingin dibalas tidak ditemukan.',
+            error:
+              'Komentar yang ingin dibalas tidak ditemukan.',
           },
           {
             status: 404,
@@ -417,11 +457,15 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (parentComment.status !== 'approved') {
+      if (
+        parentComment.status !==
+        'approved'
+      ) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Komentar tersebut belum dapat dibalas.',
+            error:
+              'Komentar tersebut belum dapat dibalas.',
           },
           {
             status: 400,
@@ -429,11 +473,15 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (parentComment.post_slug !== slug) {
+      if (
+        parentComment.post_slug !==
+        slug
+      ) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Komentar induk tidak sesuai dengan artikel.',
+            error:
+              'Komentar induk tidak sesuai dengan artikel.',
           },
           {
             status: 400,
@@ -441,13 +489,13 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Kita batasi hanya 1 tingkat balasan.
-      // Reply terhadap reply akan diarahkan ke komentar utama.
+      // Hanya 1 tingkat balasan
       if (parentComment.parent_id) {
         return NextResponse.json(
           {
             success: false,
-            error: 'Balasan hanya dapat diberikan pada komentar utama.',
+            error:
+              'Balasan hanya dapat diberikan pada komentar utama.',
           },
           {
             status: 400,
@@ -458,7 +506,8 @@ export async function POST(request: NextRequest) {
 
     // =========================================================================
     // INSERT KE SUPABASE
-    // ============================================================================
+    // LANGSUNG APPROVED
+    // =========================================================================
 
     const {
       data,
@@ -467,9 +516,11 @@ export async function POST(request: NextRequest) {
       .from(TABLE_NAME)
       .insert([
         {
-          post_id: postId,
+          post_id:
+            postId,
 
-          post_slug: slug,
+          post_slug:
+            slug,
 
           post_title:
             postTitle ||
@@ -483,7 +534,11 @@ export async function POST(request: NextRequest) {
 
           message,
 
-          status: 'pending',
+          // ================================================================
+          // LANGSUNG TAYANG
+          // ================================================================
+          status:
+            'approved',
 
           parent_id:
             parentId ||
@@ -499,7 +554,8 @@ export async function POST(request: NextRequest) {
         message,
         status,
         parent_id,
-        created_at
+        created_at,
+        updated_at
       `)
       .single();
 
@@ -516,7 +572,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Komentar gagal disimpan.',
+          error:
+            'Komentar gagal disimpan.',
         },
         {
           status: 500,
@@ -526,16 +583,17 @@ export async function POST(request: NextRequest) {
 
     // =========================================================================
     // SUCCESS
-    // ============================================================================
+    // =========================================================================
 
     return NextResponse.json(
       {
         success: true,
 
         message:
-          'Komentar berhasil dikirim dan akan tampil setelah disetujui admin.',
+          'Komentar berhasil diterbitkan.',
 
-        comment: data,
+        comment:
+          data,
       },
       {
         status: 201,
@@ -550,7 +608,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Terjadi kesalahan pada server.',
+        error:
+          'Terjadi kesalahan pada server.',
       },
       {
         status: 500,
