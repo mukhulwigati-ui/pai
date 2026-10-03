@@ -1,161 +1,82 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-  display: "swap",
 });
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://ulilalbab.my.id";
-
+// Racikan SEO Tak Tertandingi untuk Guru Online
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-
+  metadataBase: new URL("https://www.guruonline.web.id"),
   title: {
-    default: "E-Rapor Ulil Albab Al Islami",
-    template: "%s | E-Rapor Ulil Albab Al Islami",
+    default: "Guru Online - Platform Edukasi, Materi & Perangkat Ajar Guru Indonesia",
+    template: "%s | Guru Online"
   },
-
-  description:
-    "E-Rapor Ulil Albab Al Islami adalah sistem rapor digital terpadu untuk pengelolaan penilaian santri, asesmen pembelajaran, tahfidz Al-Qur'an, kehadiran, akhlak, kepribadian, dan administrasi akademik pesantren.",
-
-  applicationName: "E-Rapor Ulil Albab Al Islami",
-
-  generator: "Next.js",
-
+  description: "GuruOnline.web.id adalah platform edukasi yang menyediakan informasi, materi pembelajaran, perangkat ajar, serta tips dan strategi mengajar bagi guru dan pelajar di Indonesia. Temukan berbagai referensi pendidikan terbaru untuk meningkatkan kualitas belajar dan mengajar secara efektif.",
   keywords: [
-    "E-Rapor",
-    "E-Rapor Pesantren",
-    "Rapor Digital Pesantren",
-    "Rapor Digital Santri",
-    "Sistem Akademik Pesantren",
-    "Sistem Penilaian Santri",
-    "Aplikasi Rapor Santri",
-    "Aplikasi Pesantren",
-    "Sistem Informasi Pesantren",
-    "Penilaian Santri",
-    "Tahfidz Al-Qur'an",
-    "Akhlak Santri",
-    "Pondok Pesantren",
-    "Ulil Albab Al Islami",
+    "Guru Online", 
+    "perangkat ajar", 
+    "materi pembelajaran", 
+    "strategi mengajar", 
+    "edukasi Indonesia", 
+    "referensi pendidikan", 
+    "kurikulum merdeka", 
+    "tips guru",
+    "guruonline.web.id"
   ],
-
-  authors: [
-    {
-      name: "Pondok Pesantren Ulil Albab Al Islami",
-    },
-  ],
-
-  creator: "Pondok Pesantren Ulil Albab Al Islami",
-
-  publisher: "Pondok Pesantren Ulil Albab Al Islami",
-
-  category: "education",
-
-  classification: "Educational Technology",
-
-  referrer: "origin-when-cross-origin",
-
+  authors: [{ name: "Guru Online Team" }],
+  creator: "Guru Online",
+  publisher: "Guru Online",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  icons: {
+    icon: "/favicon.ico", // Pastikan file ini ada di folder public
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png", // Pastikan file ini ada di folder public
+  },
+  openGraph: {
+    title: "Guru Online - Platform Edukasi & Perangkat Ajar Indonesia",
+    description: "Temukan berbagai referensi pendidikan, materi pembelajaran, dan strategi mengajar terbaru secara efektif di GuruOnline.web.id.",
+    url: "https://www.guruonline.web.id",
+    siteName: "Guru Online",
+    locale: "id_ID",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png", // Sediakan foto banner ukuran 1200x630 di folder public
+        width: 1200,
+        height: 630,
+        alt: "Guru Online Platform Banner",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Guru Online - Platform Edukasi & Perangkat Ajar Indonesia",
+    description: "Temukan berbagai referensi pendidikan, materi pembelajaran, dan strategi mengajar terbaru secara efektif.",
+    images: ["/og-image.png"],
+  },
   robots: {
     index: true,
     follow: true,
-
     googleBot: {
       index: true,
       follow: true,
+      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
-      "max-video-preview": -1,
     },
   },
-
-  alternates: {
-    canonical: siteUrl,
-  },
-
-  icons: {
-    icon: [
-      {
-        url: "/logo.png",
-        type: "image/png",
-      },
-    ],
-
-    shortcut: "/logo.png",
-
-    apple: [
-      {
-        url: "/logo.png",
-        type: "image/png",
-      },
-    ],
-  },
-
-  manifest: "/manifest.json",
-
-  openGraph: {
-    type: "website",
-
-    locale: "id_ID",
-
-    url: siteUrl,
-
-    siteName: "E-Rapor Ulil Albab Al Islami",
-
-    title: "E-Rapor Ulil Albab Al Islami",
-
-    description:
-      "Sistem rapor digital terpadu untuk pengelolaan akademik, penilaian santri, tahfidz Al-Qur'an, kehadiran, akhlak, dan kepribadian di Pondok Pesantren Ulil Albab Al Islami.",
-
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "E-Rapor Ulil Albab Al Islami",
-      },
-    ],
-  },
-
-  twitter: {
-    card: "summary_large_image",
-
-    title: "E-Rapor Ulil Albab Al Islami",
-
-    description:
-      "Sistem rapor digital terpadu Pondok Pesantren Ulil Albab Al Islami.",
-
-    images: ["/opengraph-image"],
-  },
-
-  appleWebApp: {
-    capable: true,
-    title: "E-Rapor",
-    statusBarStyle: "default",
-  },
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-
-  initialScale: 1,
-
-  maximumScale: 1,
-
-  viewportFit: "cover",
-
-  themeColor: "#059669",
-
-  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -165,51 +86,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="id"
+      lang="id" // Diubah ke "id" agar mesin pencari tahu target utamanya adalah audiens Indonesia
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
-        {/* Preconnect */}
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-        />
-
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-
-        {/* Theme */}
-        <meta
-          name="theme-color"
-          content="#059669"
-        />
-
-        {/* Mobile */}
-        <meta
-          name="mobile-web-app-capable"
-          content="yes"
-        />
-
-        <meta
-          name="apple-mobile-web-app-capable"
-          content="yes"
-        />
-
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="default"
-        />
-
-        <meta
-          name="apple-mobile-web-app-title"
-          content="E-Rapor"
-        />
-      </head>
-
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
+      <body className="min-h-full flex flex-col bg-gray-50 text-[#373d45]">
         {children}
       </body>
     </html>
