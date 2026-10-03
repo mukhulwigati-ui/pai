@@ -1,69 +1,140 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-/* =========================================================
+/* ============================================================
    KONFIGURASI
-========================================================= */
+============================================================ */
 
-const VALID_GRADES = [7, 8, 9, 10, 11, 12];
-const VALID_SEMESTERS = [1, 2];
+const SCHOOL_LEVEL = 'SD';
 
-/* =========================================================
-   HELPER
-========================================================= */
+const VALID_GRADES = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+];
 
-function normalizeDescription(value: unknown): string {
-  if (typeof value !== 'string') return '';
-  return value.trim();
+const VALID_SEMESTERS = [
+  1,
+  2,
+];
+
+const MAX_CP_DESCRIPTION_LENGTH =
+  5000;
+
+const MAX_TP_DESCRIPTION_LENGTH =
+  2000;
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function normalizeDescription(
+  value: unknown
+): string {
+  if (
+    typeof value !==
+    'string'
+  ) {
+    return '';
+  }
+
+  return value
+    .trim()
+    .replace(/\s+/g, ' ');
 }
 
-function toNumber(value: unknown): number | null {
-  const num = Number(value);
+function toPositiveInteger(
+  value: unknown
+): number | null {
+  const numberValue =
+    Number(value);
 
-  if (!Number.isInteger(num)) {
+  if (
+    !Number.isInteger(
+      numberValue
+    ) ||
+    numberValue <= 0
+  ) {
     return null;
   }
 
-  return num;
+  return numberValue;
 }
 
-function errorResponse(message: string, status = 400) {
+function errorResponse(
+  message: string,
+  status = 400
+) {
   return NextResponse.json(
     {
       success: false,
       message,
     },
-    { status }
+    {
+      status,
+    }
   );
 }
 
-/**
- * Membuat kode singkatan mata pelajaran.
- *
- * Bahasa Arab -> BAH
- * Fiqih       -> FIQ
- * Tajwid      -> TAJ
- */
-function createSubjectCode(subjectName: string) {
-  const cleanName = subjectName
-    .replace(/[^a-zA-Z]/g, '')
-    .toUpperCase();
-
-  return cleanName.substring(0, 3) || 'MPL';
-}
+/* ============================================================
+   CREATE SUBJECT CODE
+============================================================ */
 
 /**
- * Mencari nomor urut CP berikutnya.
+ * Membuat singkatan kode mata pelajaran.
  *
  * Contoh:
- * CP-FIQ-K7-S1-01
- * CP-FIQ-K7-S1-02
  *
- * Tidak memakai count() agar kode tidak bentrok
- * ketika ada CP lama yang pernah dihapus.
+ * Bahasa Arab
+ * -> BAH
+ *
+ * Fikih
+ * -> FIK
+ *
+ * Tahfidz Al Qur'an
+ * -> TAH
+ */
+function createSubjectCode(
+  subjectName: string
+) {
+  const cleanName =
+    subjectName
+      .normalize('NFD')
+      .replace(
+        /[\u0300-\u036f]/g,
+        ''
+      )
+      .replace(
+        /[^a-zA-Z0-9]/g,
+        ''
+      )
+      .toUpperCase();
+
+  return (
+    cleanName.substring(
+      0,
+      3
+    ) ||
+    'MPL'
+  );
+}
+
+/* ============================================================
+   GENERATE CP CODE
+============================================================ */
+
+/**
+ * Contoh:
+ *
+ * CP-FIK-K1-S1-01
+ * CP-FIK-K1-S1-02
  */
 async function generateCPCode(
   subjectId: number,
@@ -71,136 +142,289 @@ async function generateCPCode(
   grade: number,
   semester: number
 ) {
-  const prefix = `CP-${subjectCode}-K${grade}-S${semester}-`;
+  const prefix =
+    `CP-${subjectCode}-K${grade}-S${semester}-`;
 
-  const existingCPs = await prisma.cP.findMany({
-    where: {
-      subjectId,
-      grade,
-      semester,
-      code: {
-        startsWith: prefix,
+  const existingCPs =
+    await prisma.cP.findMany({
+      where: {
+        subjectId,
+        grade,
+        semester,
+
+        code: {
+          startsWith:
+            prefix,
+        },
       },
-    },
-    select: {
-      code: true,
-    },
-  });
 
-  let highestSequence = 0;
+      select: {
+        code: true,
+      },
+    });
 
-  for (const cp of existingCPs) {
-    const sequenceString = cp.code.slice(prefix.length);
-    const sequence = Number(sequenceString);
+  let highestSequence =
+    0;
+
+  for (
+    const cp of existingCPs
+  ) {
+    const sequenceString =
+      cp.code.slice(
+        prefix.length
+      );
+
+    const sequence =
+      Number(
+        sequenceString
+      );
 
     if (
-      Number.isInteger(sequence) &&
-      sequence > highestSequence
+      Number.isInteger(
+        sequence
+      ) &&
+      sequence >
+        highestSequence
     ) {
-      highestSequence = sequence;
+      highestSequence =
+        sequence;
     }
   }
 
-  const nextSequence = highestSequence + 1;
+  const nextSequence =
+    highestSequence + 1;
 
-  return `${prefix}${String(nextSequence).padStart(2, '0')}`;
+  return `${prefix}${String(
+    nextSequence
+  ).padStart(
+    2,
+    '0'
+  )}`;
 }
 
+/* ============================================================
+   GENERATE TP CODE
+============================================================ */
+
 /**
- * Membuat kode TP berikutnya berdasarkan CP induknya.
- *
  * Contoh:
- * TP-CP-FIQ-K7-S1-01-01
- * TP-CP-FIQ-K7-S1-01-02
+ *
+ * TP-CP-FIK-K1-S1-01-01
+ * TP-CP-FIK-K1-S1-01-02
  */
 async function generateTPCode(
   cpId: number,
   parentCPCode: string
 ) {
-  const prefix = `TP-${parentCPCode}-`;
+  const prefix =
+    `TP-${parentCPCode}-`;
 
-  const existingTPs = await prisma.tP.findMany({
-    where: {
-      cpId,
-      code: {
-        startsWith: prefix,
+  const existingTPs =
+    await prisma.tP.findMany({
+      where: {
+        cpId,
+
+        code: {
+          startsWith:
+            prefix,
+        },
       },
-    },
-    select: {
-      code: true,
-    },
-  });
 
-  let highestSequence = 0;
+      select: {
+        code: true,
+      },
+    });
 
-  for (const tp of existingTPs) {
-    const sequenceString = tp.code.slice(prefix.length);
-    const sequence = Number(sequenceString);
+  let highestSequence =
+    0;
+
+  for (
+    const tp of existingTPs
+  ) {
+    const sequenceString =
+      tp.code.slice(
+        prefix.length
+      );
+
+    const sequence =
+      Number(
+        sequenceString
+      );
 
     if (
-      Number.isInteger(sequence) &&
-      sequence > highestSequence
+      Number.isInteger(
+        sequence
+      ) &&
+      sequence >
+        highestSequence
     ) {
-      highestSequence = sequence;
+      highestSequence =
+        sequence;
     }
   }
 
-  const nextSequence = highestSequence + 1;
+  const nextSequence =
+    highestSequence + 1;
 
-  return `${prefix}${String(nextSequence).padStart(2, '0')}`;
+  return `${prefix}${String(
+    nextSequence
+  ).padStart(
+    2,
+    '0'
+  )}`;
 }
 
-/* =========================================================
-   GET
-   Mengambil seluruh CP beserta:
-   - Mata pelajaran
-   - Tingkat kelas
-   - Semester
-   - TP
-========================================================= */
+/* ============================================================
+   HELPER: AMBIL CP SD
+============================================================ */
+
+async function findSdCP(
+  cpId: number
+) {
+  return prisma.cP.findFirst({
+    where: {
+      id:
+        cpId,
+
+      subject: {
+        level:
+          SCHOOL_LEVEL,
+      },
+
+      grade: {
+        in:
+          VALID_GRADES,
+      },
+
+      semester: {
+        in:
+          VALID_SEMESTERS,
+      },
+    },
+
+    include: {
+      subject: true,
+      tps: true,
+    },
+  });
+}
+
+/* ============================================================
+   GET /api/curriculum
+
+   AMBIL SELURUH CP + TP
+   KHUSUS JENJANG SD
+   HANYA ADMIN
+============================================================ */
 
 export async function GET() {
   try {
-    const cps = await prisma.cP.findMany({
-      include: {
-        subject: true,
+    /* --------------------------------------------------------
+       AUTH
+    -------------------------------------------------------- */
 
-        tps: {
-          orderBy: {
-            id: 'asc',
+    const auth =
+      await requireAdmin();
+
+    if (!auth.authorized) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            auth.message,
+        },
+        {
+          status:
+            auth.status,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       QUERY
+    -------------------------------------------------------- */
+
+    const cps =
+      await prisma.cP.findMany({
+        where: {
+          subject: {
+            level:
+              SCHOOL_LEVEL,
+          },
+
+          grade: {
+            in:
+              VALID_GRADES,
+          },
+
+          semester: {
+            in:
+              VALID_SEMESTERS,
           },
         },
-      },
 
-      orderBy: [
-        {
-          grade: 'asc',
+        include: {
+          subject: {
+            select: {
+              id: true,
+              name: true,
+              level: true,
+            },
+          },
+
+          tps: {
+            orderBy: {
+              id:
+                'asc',
+            },
+          },
         },
-        {
-          semester: 'asc',
-        },
-        {
-          id: 'desc',
-        },
-      ],
-    });
+
+        orderBy: [
+          {
+            grade:
+              'asc',
+          },
+          {
+            semester:
+              'asc',
+          },
+          {
+            subjectId:
+              'asc',
+          },
+          {
+            id:
+              'asc',
+          },
+        ],
+      });
 
     return NextResponse.json(
       {
         success: true,
-        data: cps,
+        total:
+          cps.length,
+        data:
+          cps,
       },
       {
         status: 200,
       }
     );
-  } catch (error) {
-    console.error('🔥 Curriculum GET Error:', error);
+  } catch (
+    error: unknown
+  ) {
+    console.error(
+      'GET /api/curriculum ERROR:',
+      error
+    );
 
     return NextResponse.json(
       {
         success: false,
-        message: 'Gagal memuat data kurikulum.',
+        message:
+          'Gagal memuat data kurikulum.',
       },
       {
         status: 500,
@@ -209,105 +433,186 @@ export async function GET() {
   }
 }
 
-/* =========================================================
-   POST
-   Menangani:
+/* ============================================================
+   POST /api/curriculum
+
+   ACTION:
    - CREATE_CP
    - CREATE_TP
    - UPDATE
    - DELETE
-========================================================= */
 
-export async function POST(request: Request) {
+   HANYA ADMIN
+============================================================ */
+
+export async function POST(
+  request: Request
+) {
   try {
-    const body = await request.json();
+    /* --------------------------------------------------------
+       AUTH
+    -------------------------------------------------------- */
 
-    const {
-      action,
-      id,
-      subjectId,
-      cpId,
-      description,
-      grade,
-      semester,
-      type,
-    } = body;
+    const auth =
+      await requireAdmin();
 
-    /* =====================================================
-       1. CREATE CP
-    ===================================================== */
+    if (!auth.authorized) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            auth.message,
+        },
+        {
+          status:
+            auth.status,
+        }
+      );
+    }
 
-    if (action === 'CREATE_CP') {
-      const numericSubjectId = toNumber(subjectId);
-      const numericGrade = toNumber(grade);
+    /* --------------------------------------------------------
+       BODY
+    -------------------------------------------------------- */
 
-      // Data lama/default menggunakan Semester 1
+    const body =
+      await request.json();
+
+    const action =
+      String(
+        body?.action ??
+          ''
+      )
+        .trim()
+        .toUpperCase();
+
+    const type =
+      String(
+        body?.type ??
+          ''
+      )
+        .trim()
+        .toUpperCase();
+
+    /* ========================================================
+       CREATE CP
+    ======================================================== */
+
+    if (
+      action ===
+      'CREATE_CP'
+    ) {
+      const numericSubjectId =
+        toPositiveInteger(
+          body?.subjectId
+        );
+
+      const numericGrade =
+        toPositiveInteger(
+          body?.grade
+        );
+
       const numericSemester =
-        semester === undefined || semester === null
+        body?.semester ===
+          undefined ||
+        body?.semester ===
+          null
           ? 1
-          : toNumber(semester);
+          : toPositiveInteger(
+              body.semester
+            );
 
       const cleanDescription =
-        normalizeDescription(description);
+        normalizeDescription(
+          body?.description
+        );
 
-      /* ---------------------------------------------------
+      /* ------------------------------------------------------
          VALIDASI
-      --------------------------------------------------- */
+      ------------------------------------------------------ */
 
-      if (!numericSubjectId) {
+      if (
+        !numericSubjectId
+      ) {
         return errorResponse(
           'Mata pelajaran wajib dipilih.'
         );
       }
 
-      if (!cleanDescription) {
-        return errorResponse(
-          'Deskripsi Capaian Pembelajaran wajib diisi.'
-        );
-      }
-
       if (
-        numericGrade === null ||
-        !VALID_GRADES.includes(numericGrade)
+        !numericGrade ||
+        !VALID_GRADES.includes(
+          numericGrade
+        )
       ) {
         return errorResponse(
-          'Tingkat kelas tidak valid. Pilih kelas 7 sampai 12.'
+          'Tingkat kelas tidak valid. Pilih kelas 1 sampai 6.'
         );
       }
 
       if (
-        numericSemester === null ||
-        !VALID_SEMESTERS.includes(numericSemester)
+        !numericSemester ||
+        !VALID_SEMESTERS.includes(
+          numericSemester
+        )
       ) {
         return errorResponse(
           'Semester tidak valid. Pilih Semester 1 atau Semester 2.'
         );
       }
 
-      /* ---------------------------------------------------
-         CEK MATA PELAJARAN
-      --------------------------------------------------- */
+      if (
+        !cleanDescription
+      ) {
+        return errorResponse(
+          'Deskripsi Capaian Pembelajaran wajib diisi.'
+        );
+      }
 
-      const subject = await prisma.subject.findUnique({
-        where: {
-          id: numericSubjectId,
-        },
-      });
+      if (
+        cleanDescription.length >
+        MAX_CP_DESCRIPTION_LENGTH
+      ) {
+        return errorResponse(
+          `Deskripsi Capaian Pembelajaran maksimal ${MAX_CP_DESCRIPTION_LENGTH} karakter.`
+        );
+      }
+
+      /* ------------------------------------------------------
+         CEK SUBJECT SD
+      ------------------------------------------------------ */
+
+      const subject =
+        await prisma.subject.findFirst({
+          where: {
+            id:
+              numericSubjectId,
+
+            level:
+              SCHOOL_LEVEL,
+          },
+
+          select: {
+            id: true,
+            name: true,
+            level: true,
+          },
+        });
 
       if (!subject) {
         return errorResponse(
-          'Mata pelajaran tidak ditemukan.',
+          'Mata pelajaran jenjang SD tidak ditemukan.',
           404
         );
       }
 
-      /* ---------------------------------------------------
-         GENERATE KODE CP
-      --------------------------------------------------- */
+      /* ------------------------------------------------------
+         GENERATE CODE
+      ------------------------------------------------------ */
 
-      const subjectCode = createSubjectCode(
-        subject.name
-      );
+      const subjectCode =
+        createSubjectCode(
+          subject.name
+        );
 
       const generatedCode =
         await generateCPCode(
@@ -317,38 +622,51 @@ export async function POST(request: Request) {
           numericSemester
         );
 
-      /* ---------------------------------------------------
-         SIMPAN CP
-      --------------------------------------------------- */
+      /* ------------------------------------------------------
+         CREATE CP
+      ------------------------------------------------------ */
 
-      const newCP = await prisma.cP.create({
-        data: {
-          code: generatedCode,
+      const newCP =
+        await prisma.cP.create({
+          data: {
+            code:
+              generatedCode,
 
-          description: cleanDescription,
+            description:
+              cleanDescription,
 
-          subjectId: numericSubjectId,
+            subjectId:
+              numericSubjectId,
 
-          grade: numericGrade,
+            grade:
+              numericGrade,
 
-          semester: numericSemester,
-        },
+            semester:
+              numericSemester,
+          },
 
-        include: {
-          subject: true,
+          include: {
+            subject: {
+              select: {
+                id: true,
+                name: true,
+                level: true,
+              },
+            },
 
-          tps: true,
-        },
-      });
+            tps: true,
+          },
+        });
 
       return NextResponse.json(
         {
           success: true,
 
           message:
-            `CP Kelas ${numericGrade} Semester ${numericSemester} berhasil ditambahkan.`,
+            `CP ${subject.name} Kelas ${numericGrade} Semester ${numericSemester} berhasil ditambahkan.`,
 
-          data: newCP,
+          data:
+            newCP,
         },
         {
           status: 201,
@@ -356,15 +674,23 @@ export async function POST(request: Request) {
       );
     }
 
-    /* =====================================================
-       2. CREATE TP
-    ===================================================== */
+    /* ========================================================
+       CREATE TP
+    ======================================================== */
 
-    if (action === 'CREATE_TP') {
-      const numericCPId = toNumber(cpId);
+    if (
+      action ===
+      'CREATE_TP'
+    ) {
+      const numericCPId =
+        toPositiveInteger(
+          body?.cpId
+        );
 
       const cleanDescription =
-        normalizeDescription(description);
+        normalizeDescription(
+          body?.description
+        );
 
       if (!numericCPId) {
         return errorResponse(
@@ -372,32 +698,42 @@ export async function POST(request: Request) {
         );
       }
 
-      if (!cleanDescription) {
+      if (
+        !cleanDescription
+      ) {
         return errorResponse(
           'Deskripsi Tujuan Pembelajaran wajib diisi.'
         );
       }
 
-      /* ---------------------------------------------------
-         CARI CP INDUK
-      --------------------------------------------------- */
+      if (
+        cleanDescription.length >
+        MAX_TP_DESCRIPTION_LENGTH
+      ) {
+        return errorResponse(
+          `Deskripsi Tujuan Pembelajaran maksimal ${MAX_TP_DESCRIPTION_LENGTH} karakter.`
+        );
+      }
 
-      const parentCP = await prisma.cP.findUnique({
-        where: {
-          id: numericCPId,
-        },
-      });
+      /* ------------------------------------------------------
+         CEK PARENT CP HARUS CP SD
+      ------------------------------------------------------ */
+
+      const parentCP =
+        await findSdCP(
+          numericCPId
+        );
 
       if (!parentCP) {
         return errorResponse(
-          'Capaian Pembelajaran induk tidak ditemukan.',
+          'Capaian Pembelajaran jenjang SD tidak ditemukan.',
           404
         );
       }
 
-      /* ---------------------------------------------------
-         GENERATE KODE TP
-      --------------------------------------------------- */
+      /* ------------------------------------------------------
+         GENERATE TP CODE
+      ------------------------------------------------------ */
 
       const generatedTPCode =
         await generateTPCode(
@@ -405,19 +741,23 @@ export async function POST(request: Request) {
           parentCP.code
         );
 
-      /* ---------------------------------------------------
-         SIMPAN TP
-      --------------------------------------------------- */
+      /* ------------------------------------------------------
+         CREATE TP
+      ------------------------------------------------------ */
 
-      const newTP = await prisma.tP.create({
-        data: {
-          code: generatedTPCode,
+      const newTP =
+        await prisma.tP.create({
+          data: {
+            code:
+              generatedTPCode,
 
-          description: cleanDescription,
+            description:
+              cleanDescription,
 
-          cpId: numericCPId,
-        },
-      });
+            cpId:
+              numericCPId,
+          },
+        });
 
       return NextResponse.json(
         {
@@ -426,7 +766,8 @@ export async function POST(request: Request) {
           message:
             'Tujuan Pembelajaran (TP) berhasil ditambahkan.',
 
-          data: newTP,
+          data:
+            newTP,
         },
         {
           status: 201,
@@ -434,15 +775,23 @@ export async function POST(request: Request) {
       );
     }
 
-    /* =====================================================
-       3. UPDATE CP / TP
-    ===================================================== */
+    /* ========================================================
+       UPDATE CP / TP
+    ======================================================== */
 
-    if (action === 'UPDATE') {
-      const numericId = toNumber(id);
+    if (
+      action ===
+      'UPDATE'
+    ) {
+      const numericId =
+        toPositiveInteger(
+          body?.id
+        );
 
       const cleanDescription =
-        normalizeDescription(description);
+        normalizeDescription(
+          body?.description
+        );
 
       if (!numericId) {
         return errorResponse(
@@ -450,27 +799,38 @@ export async function POST(request: Request) {
         );
       }
 
-      if (!cleanDescription) {
+      if (
+        !cleanDescription
+      ) {
         return errorResponse(
           'Deskripsi tidak boleh kosong.'
         );
       }
 
-      /* ---------------------------------------------------
+      /* ------------------------------------------------------
          UPDATE CP
-      --------------------------------------------------- */
+      ------------------------------------------------------ */
 
-      if (type === 'CP') {
+      if (
+        type === 'CP'
+      ) {
+        if (
+          cleanDescription.length >
+          MAX_CP_DESCRIPTION_LENGTH
+        ) {
+          return errorResponse(
+            `Deskripsi Capaian Pembelajaran maksimal ${MAX_CP_DESCRIPTION_LENGTH} karakter.`
+          );
+        }
+
         const existingCP =
-          await prisma.cP.findUnique({
-            where: {
-              id: numericId,
-            },
-          });
+          await findSdCP(
+            numericId
+          );
 
         if (!existingCP) {
           return errorResponse(
-            'Capaian Pembelajaran tidak ditemukan.',
+            'Capaian Pembelajaran jenjang SD tidak ditemukan.',
             404
           );
         }
@@ -478,7 +838,8 @@ export async function POST(request: Request) {
         const updated =
           await prisma.cP.update({
             where: {
-              id: numericId,
+              id:
+                numericId,
             },
 
             data: {
@@ -487,41 +848,87 @@ export async function POST(request: Request) {
             },
 
             include: {
-              subject: true,
+              subject: {
+                select: {
+                  id: true,
+                  name: true,
+                  level: true,
+                },
+              },
 
               tps: {
                 orderBy: {
-                  id: 'asc',
+                  id:
+                    'asc',
                 },
               },
             },
           });
 
-        return NextResponse.json({
-          success: true,
+        return NextResponse.json(
+          {
+            success: true,
 
-          message:
-            'Capaian Pembelajaran berhasil diperbarui.',
+            message:
+              'Capaian Pembelajaran berhasil diperbarui.',
 
-          data: updated,
-        });
+            data:
+              updated,
+          },
+          {
+            status: 200,
+          }
+        );
       }
 
-      /* ---------------------------------------------------
+      /* ------------------------------------------------------
          UPDATE TP
-      --------------------------------------------------- */
+      ------------------------------------------------------ */
 
-      if (type === 'TP') {
+      if (
+        type === 'TP'
+      ) {
+        if (
+          cleanDescription.length >
+          MAX_TP_DESCRIPTION_LENGTH
+        ) {
+          return errorResponse(
+            `Deskripsi Tujuan Pembelajaran maksimal ${MAX_TP_DESCRIPTION_LENGTH} karakter.`
+          );
+        }
+
         const existingTP =
-          await prisma.tP.findUnique({
+          await prisma.tP.findFirst({
             where: {
-              id: numericId,
+              id:
+                numericId,
+
+              cp: {
+                subject: {
+                  level:
+                    SCHOOL_LEVEL,
+                },
+
+                grade: {
+                  in:
+                    VALID_GRADES,
+                },
+
+                semester: {
+                  in:
+                    VALID_SEMESTERS,
+                },
+              },
+            },
+
+            select: {
+              id: true,
             },
           });
 
         if (!existingTP) {
           return errorResponse(
-            'Tujuan Pembelajaran tidak ditemukan.',
+            'Tujuan Pembelajaran jenjang SD tidak ditemukan.',
             404
           );
         }
@@ -529,7 +936,8 @@ export async function POST(request: Request) {
         const updated =
           await prisma.tP.update({
             where: {
-              id: numericId,
+              id:
+                numericId,
             },
 
             data: {
@@ -538,14 +946,20 @@ export async function POST(request: Request) {
             },
           });
 
-        return NextResponse.json({
-          success: true,
+        return NextResponse.json(
+          {
+            success: true,
 
-          message:
-            'Tujuan Pembelajaran berhasil diperbarui.',
+            message:
+              'Tujuan Pembelajaran berhasil diperbarui.',
 
-          data: updated,
-        });
+            data:
+              updated,
+          },
+          {
+            status: 200,
+          }
+        );
       }
 
       return errorResponse(
@@ -553,12 +967,18 @@ export async function POST(request: Request) {
       );
     }
 
-    /* =====================================================
-       4. DELETE CP / TP
-    ===================================================== */
+    /* ========================================================
+       DELETE CP / TP
+    ======================================================== */
 
-    if (action === 'DELETE') {
-      const numericId = toNumber(id);
+    if (
+      action ===
+      'DELETE'
+    ) {
+      const numericId =
+        toPositiveInteger(
+          body?.id
+        );
 
       if (!numericId) {
         return errorResponse(
@@ -566,83 +986,119 @@ export async function POST(request: Request) {
         );
       }
 
-      /* ---------------------------------------------------
-         HAPUS CP
-      --------------------------------------------------- */
+      /* ------------------------------------------------------
+         DELETE CP
+      ------------------------------------------------------ */
 
-      if (type === 'CP') {
+      if (
+        type === 'CP'
+      ) {
         const existingCP =
-          await prisma.cP.findUnique({
-            where: {
-              id: numericId,
-            },
-          });
+          await findSdCP(
+            numericId
+          );
 
         if (!existingCP) {
           return errorResponse(
-            'Capaian Pembelajaran tidak ditemukan.',
+            'Capaian Pembelajaran jenjang SD tidak ditemukan.',
             404
           );
         }
 
-        /**
-         * Transaction:
-         * 1. Hapus seluruh TP milik CP.
-         * 2. Hapus CP.
+        /*
+         * Hapus TP terlebih dahulu,
+         * lalu CP.
          */
         await prisma.$transaction([
           prisma.tP.deleteMany({
             where: {
-              cpId: numericId,
+              cpId:
+                numericId,
             },
           }),
 
           prisma.cP.delete({
             where: {
-              id: numericId,
+              id:
+                numericId,
             },
           }),
         ]);
 
-        return NextResponse.json({
-          success: true,
+        return NextResponse.json(
+          {
+            success: true,
 
-          message:
-            'Capaian Pembelajaran beserta seluruh TP berhasil dihapus.',
-        });
+            message:
+              'Capaian Pembelajaran beserta seluruh TP berhasil dihapus.',
+          },
+          {
+            status: 200,
+          }
+        );
       }
 
-      /* ---------------------------------------------------
-         HAPUS TP
-      --------------------------------------------------- */
+      /* ------------------------------------------------------
+         DELETE TP
+      ------------------------------------------------------ */
 
-      if (type === 'TP') {
+      if (
+        type === 'TP'
+      ) {
         const existingTP =
-          await prisma.tP.findUnique({
+          await prisma.tP.findFirst({
             where: {
-              id: numericId,
+              id:
+                numericId,
+
+              cp: {
+                subject: {
+                  level:
+                    SCHOOL_LEVEL,
+                },
+
+                grade: {
+                  in:
+                    VALID_GRADES,
+                },
+
+                semester: {
+                  in:
+                    VALID_SEMESTERS,
+                },
+              },
+            },
+
+            select: {
+              id: true,
             },
           });
 
         if (!existingTP) {
           return errorResponse(
-            'Tujuan Pembelajaran tidak ditemukan.',
+            'Tujuan Pembelajaran jenjang SD tidak ditemukan.',
             404
           );
         }
 
         await prisma.tP.delete({
           where: {
-            id: numericId,
+            id:
+              numericId,
           },
         });
 
-        return NextResponse.json({
-          success: true,
+        return NextResponse.json(
+          {
+            success: true,
 
-          message:
-            'Tujuan Pembelajaran berhasil dihapus.',
-        });
+            message:
+              'Tujuan Pembelajaran berhasil dihapus.',
+          },
+          {
+            status: 200,
+          }
+        );
       }
 
       return errorResponse(
@@ -650,18 +1106,85 @@ export async function POST(request: Request) {
       );
     }
 
-    /* =====================================================
+    /* ========================================================
        ACTION TIDAK DIKENAL
-    ===================================================== */
+    ======================================================== */
 
     return errorResponse(
       'Aksi tidak valid.'
     );
-  } catch (error) {
+  } catch (
+    error: unknown
+  ) {
     console.error(
-      '🔥 Curriculum API Error:',
+      'POST /api/curriculum ERROR:',
       error
     );
+
+    const prismaError =
+      error as {
+        code?: string;
+      };
+
+    /* --------------------------------------------------------
+       UNIQUE CONSTRAINT
+    -------------------------------------------------------- */
+
+    if (
+      prismaError?.code ===
+      'P2002'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Kode atau data kurikulum tersebut sudah terdaftar.',
+        },
+        {
+          status: 409,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       FOREIGN KEY
+    -------------------------------------------------------- */
+
+    if (
+      prismaError?.code ===
+      'P2003'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Mata pelajaran atau Capaian Pembelajaran yang digunakan tidak valid.',
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    /* --------------------------------------------------------
+       NOT FOUND
+    -------------------------------------------------------- */
+
+    if (
+      prismaError?.code ===
+      'P2025'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Data kurikulum tidak ditemukan.',
+        },
+        {
+          status: 404,
+        }
+      );
+    }
 
     return NextResponse.json(
       {
