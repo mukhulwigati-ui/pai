@@ -1,5 +1,28 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
+
+/* ============================================================
+   KONFIGURASI
+============================================================ */
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const SCHOOL_LEVEL = 'SD';
+
+const MIN_GRADE = 1;
+const MAX_GRADE = 6;
+
+/* ============================================================
+   TYPE JWT PAYLOAD
+============================================================ */
+
+type JwtPayload = {
+  id: number;
+  identity_number: string;
+  fullname: string;
+  role: string;
+};
 
 /* ============================================================
    TYPE PARAMS
@@ -12,15 +35,206 @@ type RouteContext = {
 };
 
 /* ============================================================
-   HELPER
+   HELPER: AMBIL TOKEN DARI COOKIE
 ============================================================ */
 
-async function getClassId(context: RouteContext) {
-  const { id } = await context.params;
+function getTokenFromRequest(
+  request: Request
+): string | null {
+  const cookieHeader =
+    request.headers.get('cookie') || '';
 
-  const classId = Number(id);
+  const tokenMatch =
+    cookieHeader.match(
+      /(?:^|;\s*)token=([^;]+)/
+    );
 
-  if (!Number.isInteger(classId) || classId <= 0) {
+  if (!tokenMatch) {
+    return null;
+  }
+
+  try {
+    return decodeURIComponent(
+      tokenMatch[1]
+    );
+  } catch {
+    return tokenMatch[1];
+  }
+}
+
+/* ============================================================
+   HELPER: VERIFIKASI LOGIN
+   ADMIN + TEACHER BOLEH MEMBACA
+============================================================ */
+
+function verifyUser(
+  request: Request
+) {
+  if (!JWT_SECRET) {
+    console.error(
+      'JWT_SECRET belum tersedia di environment.'
+    );
+
+    return {
+      success: false as const,
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Konfigurasi server belum lengkap.',
+          },
+          {
+            status: 500,
+          }
+        ),
+    };
+  }
+
+  const token =
+    getTokenFromRequest(request);
+
+  if (!token) {
+    return {
+      success: false as const,
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Anda belum login. Silakan login terlebih dahulu.',
+          },
+          {
+            status: 401,
+          }
+        ),
+    };
+  }
+
+  try {
+    const decoded =
+      jwt.verify(
+        token,
+        JWT_SECRET
+      ) as JwtPayload;
+
+    const role = String(
+      decoded?.role || ''
+    )
+      .trim()
+      .toUpperCase();
+
+    if (
+      role !== 'ADMIN' &&
+      role !== 'TEACHER'
+    ) {
+      return {
+        success: false as const,
+
+        response:
+          NextResponse.json(
+            {
+              success: false,
+              message:
+                'Akses ditolak. Anda tidak memiliki izin untuk mengakses data kelas.',
+            },
+            {
+              status: 403,
+            }
+          ),
+      };
+    }
+
+    return {
+      success: true as const,
+
+      user: {
+        ...decoded,
+        role,
+      },
+    };
+  } catch (error) {
+    console.error(
+      'JWT verification error:',
+      error
+    );
+
+    return {
+      success: false as const,
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Sesi login tidak valid atau sudah kedaluwarsa. Silakan login kembali.',
+          },
+          {
+            status: 401,
+          }
+        ),
+    };
+  }
+}
+
+/* ============================================================
+   HELPER: VERIFIKASI KHUSUS ADMIN
+============================================================ */
+
+function verifyAdmin(
+  request: Request
+) {
+  const auth =
+    verifyUser(request);
+
+  if (!auth.success) {
+    return auth;
+  }
+
+  if (
+    auth.user.role !== 'ADMIN'
+  ) {
+    return {
+      success: false as const,
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Akses ditolak. Fitur ini hanya dapat digunakan oleh Administrator.',
+          },
+          {
+            status: 403,
+          }
+        ),
+    };
+  }
+
+  return auth;
+}
+
+/* ============================================================
+   HELPER: AMBIL ID KELAS
+============================================================ */
+
+async function getClassId(
+  context: RouteContext
+) {
+  const { id } =
+    await context.params;
+
+  const classId =
+    Number(id);
+
+  if (
+    !Number.isInteger(
+      classId
+    ) ||
+    classId <= 0
+  ) {
     return null;
   }
 
@@ -28,21 +242,89 @@ async function getClassId(context: RouteContext) {
 }
 
 /* ============================================================
+   HELPER: NORMALISASI NAMA
+============================================================ */
+
+function normalizeClassName(
+  value: unknown
+) {
+  return String(
+    value ?? ''
+  )
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toUpperCase();
+}
+
+/* ============================================================
+   HELPER: VALIDASI GRADE SD
+============================================================ */
+
+function validateGrade(
+  value: unknown
+) {
+  const grade =
+    Number(value);
+
+  if (
+    !Number.isInteger(
+      grade
+    )
+  ) {
+    return {
+      valid: false as const,
+
+      message:
+        'Tingkat kelas tidak valid.',
+    };
+  }
+
+  if (
+    grade < MIN_GRADE ||
+    grade > MAX_GRADE
+  ) {
+    return {
+      valid: false as const,
+
+      message:
+        `Jenjang SD hanya dapat menggunakan tingkat ${MIN_GRADE} sampai ${MAX_GRADE}.`,
+    };
+  }
+
+  return {
+    valid: true as const,
+    grade,
+  };
+}
+
+/* ============================================================
    GET /api/classes/[id]
-   Ambil satu kelas
+   AMBIL SATU KELAS
 ============================================================ */
 
 export async function GET(
   request: Request,
   context: RouteContext
 ) {
+  const auth =
+    verifyUser(request);
+
+  if (!auth.success) {
+    return auth.response;
+  }
+
   try {
-    const classId = await getClassId(context);
+    const classId =
+      await getClassId(
+        context
+      );
 
     if (!classId) {
       return NextResponse.json(
         {
-          message: 'ID kelas tidak valid.',
+          success: false,
+          message:
+            'ID kelas tidak valid.',
         },
         {
           status: 400,
@@ -50,16 +332,26 @@ export async function GET(
       );
     }
 
-    const classRoom = await prisma.classRoom.findUnique({
-      where: {
-        id: classId,
-      },
-    });
+    /*
+     * Hanya mengambil kelas jenjang SD.
+     */
+    const classRoom =
+      await prisma.classRoom.findFirst(
+        {
+          where: {
+            id: classId,
+            level:
+              SCHOOL_LEVEL,
+          },
+        }
+      );
 
     if (!classRoom) {
       return NextResponse.json(
         {
-          message: 'Kelas tidak ditemukan.',
+          success: false,
+          message:
+            'Kelas SD tidak ditemukan.',
         },
         {
           status: 404,
@@ -67,15 +359,26 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(classRoom, {
-      status: 200,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        data: classRoom,
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
-    console.error('GET /api/classes/[id] ERROR:', error);
+    console.error(
+      'GET /api/classes/[id] ERROR:',
+      error
+    );
 
     return NextResponse.json(
       {
-        message: 'Gagal memuat data kelas.',
+        success: false,
+        message:
+          'Gagal memuat data kelas.',
       },
       {
         status: 500,
@@ -86,20 +389,33 @@ export async function GET(
 
 /* ============================================================
    PUT /api/classes/[id]
-   Edit kelas
+   EDIT KELAS
+   HANYA ADMIN
 ============================================================ */
 
 export async function PUT(
   request: Request,
   context: RouteContext
 ) {
+  const auth =
+    verifyAdmin(request);
+
+  if (!auth.success) {
+    return auth.response;
+  }
+
   try {
-    const classId = await getClassId(context);
+    const classId =
+      await getClassId(
+        context
+      );
 
     if (!classId) {
       return NextResponse.json(
         {
-          message: 'ID kelas tidak valid.',
+          success: false,
+          message:
+            'ID kelas tidak valid.',
         },
         {
           status: 400,
@@ -111,16 +427,23 @@ export async function PUT(
        CEK KELAS
     -------------------------------------------------------- */
 
-    const existingClass = await prisma.classRoom.findUnique({
-      where: {
-        id: classId,
-      },
-    });
+    const existingClass =
+      await prisma.classRoom.findFirst(
+        {
+          where: {
+            id: classId,
+            level:
+              SCHOOL_LEVEL,
+          },
+        }
+      );
 
     if (!existingClass) {
       return NextResponse.json(
         {
-          message: 'Kelas tidak ditemukan.',
+          success: false,
+          message:
+            'Kelas SD tidak ditemukan.',
         },
         {
           status: 404,
@@ -128,48 +451,42 @@ export async function PUT(
       );
     }
 
-    const body = await request.json();
+    /* --------------------------------------------------------
+       BODY
+    -------------------------------------------------------- */
 
-    const name = String(body.name ?? '')
-      .trim()
-      .toUpperCase();
+    const body =
+      await request.json();
 
-    const level = String(body.level ?? '')
-      .trim()
-      .toUpperCase();
+    const name =
+      normalizeClassName(
+        body?.name
+      );
 
-    const grade = Number(body.grade);
+    /*
+     * Level dipaksa SD.
+     *
+     * Jangan menggunakan body.level,
+     * karena SDIT Khoiro Ummah hanya jenjang SD.
+     */
+    const level =
+      SCHOOL_LEVEL;
+
+    const gradeResult =
+      validateGrade(
+        body?.grade
+      );
 
     /* --------------------------------------------------------
-       VALIDASI
+       VALIDASI NAMA
     -------------------------------------------------------- */
 
     if (!name) {
       return NextResponse.json(
         {
-          message: 'Nama kelas wajib diisi.',
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    if (!['SMP', 'SMA'].includes(level)) {
-      return NextResponse.json(
-        {
-          message: 'Jenjang hanya boleh SMP atau SMA.',
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    if (!Number.isInteger(grade)) {
-      return NextResponse.json(
-        {
-          message: 'Tingkat kelas tidak valid.',
+          success: false,
+          message:
+            'Nama kelas wajib diisi.',
         },
         {
           status: 400,
@@ -178,22 +495,17 @@ export async function PUT(
     }
 
     /* --------------------------------------------------------
-       VALIDASI JENJANG
-       
-       SMP = 7, 8, 9
-       SMA = 10, 11, 12
+       VALIDASI GRADE
     -------------------------------------------------------- */
 
     if (
-      (level === 'SMP' && ![7, 8, 9].includes(grade)) ||
-      (level === 'SMA' && ![10, 11, 12].includes(grade))
+      !gradeResult.valid
     ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            level === 'SMP'
-              ? 'Jenjang SMP hanya dapat menggunakan tingkat 7, 8, atau 9.'
-              : 'Jenjang SMA hanya dapat menggunakan tingkat 10, 11, atau 12.',
+            gradeResult.message,
         },
         {
           status: 400,
@@ -201,25 +513,35 @@ export async function PUT(
       );
     }
 
+    const grade =
+      gradeResult.grade;
+
     /* --------------------------------------------------------
-       CEK DUPLIKAT NAMA
+       CEK DUPLIKAT
 
        Abaikan kelas yang sedang diedit.
     -------------------------------------------------------- */
 
-    const duplicate = await prisma.classRoom.findFirst({
-      where: {
-        name,
-        NOT: {
-          id: classId,
-        },
-      },
-    });
+    const duplicate =
+      await prisma.classRoom.findFirst(
+        {
+          where: {
+            name,
+            level,
+
+            NOT: {
+              id: classId,
+            },
+          },
+        }
+      );
 
     if (duplicate) {
       return NextResponse.json(
         {
-          message: `Kelas ${name} sudah digunakan.`,
+          success: false,
+          message:
+            `Kelas ${name} sudah digunakan pada jenjang SD.`,
         },
         {
           status: 409,
@@ -231,32 +553,87 @@ export async function PUT(
        UPDATE
     -------------------------------------------------------- */
 
-    const updatedClass = await prisma.classRoom.update({
-      where: {
-        id: classId,
-      },
-      data: {
-        name,
-        level,
-        grade,
-      },
-    });
+    const updatedClass =
+      await prisma.classRoom.update(
+        {
+          where: {
+            id: classId,
+          },
+
+          data: {
+            name,
+            level,
+            grade,
+          },
+        }
+      );
 
     return NextResponse.json(
       {
-        message: 'Kelas berhasil diperbarui.',
-        data: updatedClass,
+        success: true,
+        message:
+          'Kelas berhasil diperbarui.',
+        data:
+          updatedClass,
       },
       {
         status: 200,
       }
     );
-  } catch (error) {
-    console.error('PUT /api/classes/[id] ERROR:', error);
+  } catch (error: unknown) {
+    console.error(
+      'PUT /api/classes/[id] ERROR:',
+      error
+    );
+
+    const prismaError =
+      error as {
+        code?: string;
+      };
+
+    /*
+     * Unique constraint.
+     */
+    if (
+      prismaError?.code ===
+      'P2002'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Kelas tersebut sudah terdaftar.',
+        },
+        {
+          status: 409,
+        }
+      );
+    }
+
+    /*
+     * Record tidak ditemukan ketika update.
+     */
+    if (
+      prismaError?.code ===
+      'P2025'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Kelas tidak ditemukan.',
+        },
+        {
+          status: 404,
+        }
+      );
+    }
 
     return NextResponse.json(
       {
-        message: 'Gagal memperbarui kelas.',
+        success: false,
+        message:
+          'Gagal memperbarui kelas.',
       },
       {
         status: 500,
@@ -267,20 +644,33 @@ export async function PUT(
 
 /* ============================================================
    DELETE /api/classes/[id]
-   Hapus satu kelas
+   HAPUS SATU KELAS
+   HANYA ADMIN
 ============================================================ */
 
 export async function DELETE(
   request: Request,
   context: RouteContext
 ) {
+  const auth =
+    verifyAdmin(request);
+
+  if (!auth.success) {
+    return auth.response;
+  }
+
   try {
-    const classId = await getClassId(context);
+    const classId =
+      await getClassId(
+        context
+      );
 
     if (!classId) {
       return NextResponse.json(
         {
-          message: 'ID kelas tidak valid.',
+          success: false,
+          message:
+            'ID kelas tidak valid.',
         },
         {
           status: 400,
@@ -292,16 +682,23 @@ export async function DELETE(
        CEK KELAS
     -------------------------------------------------------- */
 
-    const existingClass = await prisma.classRoom.findUnique({
-      where: {
-        id: classId,
-      },
-    });
+    const existingClass =
+      await prisma.classRoom.findFirst(
+        {
+          where: {
+            id: classId,
+            level:
+              SCHOOL_LEVEL,
+          },
+        }
+      );
 
     if (!existingClass) {
       return NextResponse.json(
         {
-          message: 'Kelas tidak ditemukan.',
+          success: false,
+          message:
+            'Kelas SD tidak ditemukan.',
         },
         {
           status: 404,
@@ -321,26 +718,45 @@ export async function DELETE(
 
     return NextResponse.json(
       {
-        message: `Kelas ${existingClass.name} berhasil dihapus.`,
-        deleted: existingClass,
+        success: true,
+
+        message:
+          `Kelas ${existingClass.name} berhasil dihapus.`,
+
+        deleted:
+          existingClass,
       },
       {
         status: 200,
       }
     );
-  } catch (error: any) {
-    console.error('DELETE /api/classes/[id] ERROR:', error);
+  } catch (error: unknown) {
+    console.error(
+      'DELETE /api/classes/[id] ERROR:',
+      error
+    );
+
+    const prismaError =
+      error as {
+        code?: string;
+      };
 
     /*
-      Jika kelas masih dipakai tabel lain dan FK tidak
-      menggunakan Cascade, jangan biarkan server crash.
-    */
-
-    if (error?.code === 'P2003') {
+     * Foreign key constraint.
+     *
+     * Contoh:
+     * kelas masih dipakai siswa,
+     * nilai, absensi, dll.
+     */
+    if (
+      prismaError?.code ===
+      'P2003'
+    ) {
       return NextResponse.json(
         {
+          success: false,
           message:
-            'Kelas tidak dapat dihapus karena masih digunakan oleh data lain.',
+            'Kelas tidak dapat dihapus karena masih digunakan oleh data siswa atau data akademik lainnya.',
         },
         {
           status: 409,
@@ -348,9 +764,30 @@ export async function DELETE(
       );
     }
 
+    /*
+     * Record sudah tidak ada.
+     */
+    if (
+      prismaError?.code ===
+      'P2025'
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Kelas tidak ditemukan.',
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
     return NextResponse.json(
       {
-        message: 'Gagal menghapus kelas.',
+        success: false,
+        message:
+          'Gagal menghapus kelas.',
       },
       {
         status: 500,

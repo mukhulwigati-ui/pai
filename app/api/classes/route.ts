@@ -3,10 +3,15 @@ import prisma from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 
 /* ============================================================
-   KONFIGURASI JWT
+   KONFIGURASI
 ============================================================ */
 
 const JWT_SECRET = process.env.JWT_SECRET;
+
+const SCHOOL_LEVEL = 'SD';
+
+const MIN_GRADE = 1;
+const MAX_GRADE = 6;
 
 /* ============================================================
    TYPE JWT PAYLOAD
@@ -23,26 +28,38 @@ type JwtPayload = {
    HELPER: AMBIL TOKEN DARI COOKIE
 ============================================================ */
 
-function getTokenFromRequest(request: Request): string | null {
-  const cookieHeader = request.headers.get('cookie') || '';
+function getTokenFromRequest(
+  request: Request
+): string | null {
+  const cookieHeader =
+    request.headers.get('cookie') || '';
 
-  const tokenMatch = cookieHeader.match(
-    /(?:^|;\s*)token=([^;]+)/
-  );
+  const tokenMatch =
+    cookieHeader.match(
+      /(?:^|;\s*)token=([^;]+)/
+    );
 
   if (!tokenMatch) {
     return null;
   }
 
-  return decodeURIComponent(tokenMatch[1]);
+  try {
+    return decodeURIComponent(
+      tokenMatch[1]
+    );
+  } catch {
+    return tokenMatch[1];
+  }
 }
 
 /* ============================================================
    HELPER: VERIFIKASI LOGIN
-   ADMIN + TEACHER BOLEH
+   ADMIN + TEACHER BOLEH MEMBACA DATA
 ============================================================ */
 
-function verifyUser(request: Request) {
+function verifyUser(
+  request: Request
+) {
   if (!JWT_SECRET) {
     console.error(
       'JWT_SECRET belum tersedia di environment.'
@@ -50,45 +67,54 @@ function verifyUser(request: Request) {
 
     return {
       success: false as const,
-      response: NextResponse.json(
-        {
-          success: false,
-          message: 'Konfigurasi server belum lengkap.',
-        },
-        {
-          status: 500,
-        }
-      ),
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Konfigurasi server belum lengkap.',
+          },
+          {
+            status: 500,
+          }
+        ),
     };
   }
 
-  const token = getTokenFromRequest(request);
+  const token =
+    getTokenFromRequest(request);
 
   if (!token) {
     return {
       success: false as const,
-      response: NextResponse.json(
-        {
-          success: false,
-          message:
-            'Anda belum login. Silakan login terlebih dahulu.',
-        },
-        {
-          status: 401,
-        }
-      ),
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Anda belum login. Silakan login terlebih dahulu.',
+          },
+          {
+            status: 401,
+          }
+        ),
     };
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      JWT_SECRET
-    ) as JwtPayload;
+    const decoded =
+      jwt.verify(
+        token,
+        JWT_SECRET
+      ) as JwtPayload;
 
     const role = String(
       decoded?.role || ''
-    ).toUpperCase();
+    )
+      .trim()
+      .toUpperCase();
 
     if (
       role !== 'ADMIN' &&
@@ -96,21 +122,24 @@ function verifyUser(request: Request) {
     ) {
       return {
         success: false as const,
-        response: NextResponse.json(
-          {
-            success: false,
-            message:
-              'Akses ditolak. Anda tidak memiliki izin untuk mengakses data kelas.',
-          },
-          {
-            status: 403,
-          }
-        ),
+
+        response:
+          NextResponse.json(
+            {
+              success: false,
+              message:
+                'Akses ditolak. Anda tidak memiliki izin untuk mengakses data kelas.',
+            },
+            {
+              status: 403,
+            }
+          ),
       };
     }
 
     return {
       success: true as const,
+
       user: {
         ...decoded,
         role,
@@ -124,16 +153,18 @@ function verifyUser(request: Request) {
 
     return {
       success: false as const,
-      response: NextResponse.json(
-        {
-          success: false,
-          message:
-            'Sesi login tidak valid atau sudah kedaluwarsa. Silakan login kembali.',
-        },
-        {
-          status: 401,
-        }
-      ),
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Sesi login tidak valid atau sudah kedaluwarsa. Silakan login kembali.',
+          },
+          {
+            status: 401,
+          }
+        ),
     };
   }
 }
@@ -142,30 +173,91 @@ function verifyUser(request: Request) {
    HELPER: VERIFIKASI KHUSUS ADMIN
 ============================================================ */
 
-function verifyAdmin(request: Request) {
-  const auth = verifyUser(request);
+function verifyAdmin(
+  request: Request
+) {
+  const auth =
+    verifyUser(request);
 
   if (!auth.success) {
     return auth;
   }
 
-  if (auth.user.role !== 'ADMIN') {
+  if (
+    auth.user.role !== 'ADMIN'
+  ) {
     return {
       success: false as const,
-      response: NextResponse.json(
-        {
-          success: false,
-          message:
-            'Akses ditolak. Fitur ini hanya dapat digunakan oleh Administrator.',
-        },
-        {
-          status: 403,
-        }
-      ),
+
+      response:
+        NextResponse.json(
+          {
+            success: false,
+            message:
+              'Akses ditolak. Fitur ini hanya dapat digunakan oleh Administrator.',
+          },
+          {
+            status: 403,
+          }
+        ),
     };
   }
 
   return auth;
+}
+
+/* ============================================================
+   HELPER: NORMALISASI NAMA KELAS
+============================================================ */
+
+function normalizeClassName(
+  value: unknown
+) {
+  return String(
+    value ?? ''
+  )
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toUpperCase();
+}
+
+/* ============================================================
+   HELPER: VALIDASI GRADE SD
+============================================================ */
+
+function validateGrade(
+  value: unknown
+) {
+  const grade =
+    Number(value);
+
+  if (
+    !Number.isInteger(grade)
+  ) {
+    return {
+      valid: false as const,
+
+      message:
+        'Tingkat kelas tidak valid.',
+    };
+  }
+
+  if (
+    grade < MIN_GRADE ||
+    grade > MAX_GRADE
+  ) {
+    return {
+      valid: false as const,
+
+      message:
+        `Jenjang SD hanya dapat menggunakan tingkat ${MIN_GRADE} sampai ${MAX_GRADE}.`,
+    };
+  }
+
+  return {
+    valid: true as const,
+    grade,
+  };
 }
 
 /* ============================================================
@@ -175,19 +267,26 @@ function verifyAdmin(request: Request) {
 export async function GET(
   request: Request
 ) {
-  const auth = verifyUser(request);
+  const auth =
+    verifyUser(request);
 
   if (!auth.success) {
     return auth.response;
   }
 
   try {
+    /*
+     * Karena SDIT Khoiro Ummah hanya jenjang SD,
+     * API hanya mengambil kelas dengan level SD.
+     */
     const classes =
       await prisma.classRoom.findMany({
+        where: {
+          level:
+            SCHOOL_LEVEL,
+        },
+
         orderBy: [
-          {
-            level: 'asc',
-          },
           {
             grade: 'asc',
           },
@@ -197,8 +296,6 @@ export async function GET(
         ],
       });
 
-    // Mengembalikan kedua format (array langsung & objek bersarang) 
-    // agar kompatibel dengan semua jenis pemanggilan frontend.
     return NextResponse.json(
       classes,
       {
@@ -231,7 +328,8 @@ export async function GET(
 export async function POST(
   request: Request
 ) {
-  const auth = verifyAdmin(request);
+  const auth =
+    verifyAdmin(request);
 
   if (!auth.success) {
     return auth.response;
@@ -241,21 +339,28 @@ export async function POST(
     const body =
       await request.json();
 
-    const name = String(
-      body.name ?? ''
-    )
-      .trim()
-      .toUpperCase();
+    const name =
+      normalizeClassName(
+        body?.name
+      );
 
-    const level = String(
-      body.level ?? ''
-    )
-      .trim()
-      .toUpperCase();
+    /*
+     * Level tidak lagi mengambil dari frontend.
+     *
+     * SDIT Khoiro Ummah adalah jenjang SD,
+     * sehingga backend memaksa level = SD.
+     */
+    const level =
+      SCHOOL_LEVEL;
 
-    const grade = Number(
-      body.grade
-    );
+    const gradeResult =
+      validateGrade(
+        body?.grade
+      );
+
+    /* ========================================================
+       VALIDASI NAMA
+    ======================================================== */
 
     if (!name) {
       return NextResponse.json(
@@ -270,14 +375,18 @@ export async function POST(
       );
     }
 
+    /* ========================================================
+       VALIDASI GRADE
+    ======================================================== */
+
     if (
-      !['SMP', 'SMA'].includes(level)
+      !gradeResult.valid
     ) {
       return NextResponse.json(
         {
           success: false,
           message:
-            'Jenjang hanya boleh SMP atau SMA.',
+            gradeResult.message,
         },
         {
           status: 400,
@@ -285,64 +394,29 @@ export async function POST(
       );
     }
 
-    if (!Number.isInteger(grade)) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Tingkat kelas tidak valid.',
-        },
-        {
-          status: 400,
-        }
-      );
-    }
+    const grade =
+      gradeResult.grade;
 
-    if (
-      level === 'SMP' &&
-      ![7, 8, 9].includes(grade)
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Jenjang SMP hanya dapat menggunakan tingkat 7, 8, atau 9.',
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    if (
-      level === 'SMA' &&
-      ![10, 11, 12].includes(grade)
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            'Jenjang SMA hanya dapat menggunakan tingkat 10, 11, atau 12.',
-        },
-        {
-          status: 400,
-        }
-      );
-    }
+    /* ========================================================
+       CEK DUPLIKAT
+    ======================================================== */
 
     const existingClass =
-      await prisma.classRoom.findFirst({
-        where: {
-          name,
-        },
-      });
+      await prisma.classRoom.findFirst(
+        {
+          where: {
+            name,
+            level,
+          },
+        }
+      );
 
     if (existingClass) {
       return NextResponse.json(
         {
           success: false,
           message:
-            `Kelas ${name} sudah terdaftar.`,
+            `Kelas ${name} sudah terdaftar pada jenjang SD.`,
         },
         {
           status: 409,
@@ -350,34 +424,47 @@ export async function POST(
       );
     }
 
+    /* ========================================================
+       SIMPAN
+    ======================================================== */
+
     const newClass =
-      await prisma.classRoom.create({
-        data: {
-          name,
-          level,
-          grade,
-        },
-      });
+      await prisma.classRoom.create(
+        {
+          data: {
+            name,
+            level,
+            grade,
+          },
+        }
+      );
 
     return NextResponse.json(
       {
         success: true,
         message:
           'Kelas berhasil ditambahkan.',
-        data: newClass,
+        data:
+          newClass,
       },
       {
         status: 201,
       }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(
       'POST /api/classes ERROR:',
       error
     );
 
+    const prismaError =
+      error as {
+        code?: string;
+      };
+
     if (
-      error?.code === 'P2002'
+      prismaError?.code ===
+      'P2002'
     ) {
       return NextResponse.json(
         {
@@ -406,12 +493,16 @@ export async function POST(
 
 /* ============================================================
    DELETE /api/classes
+
+   Menghapus SELURUH kelas jenjang SD.
+   Hanya ADMIN.
 ============================================================ */
 
 export async function DELETE(
   request: Request
 ) {
-  const auth = verifyAdmin(request);
+  const auth =
+    verifyAdmin(request);
 
   if (!auth.success) {
     return auth.response;
@@ -421,7 +512,9 @@ export async function DELETE(
     const body =
       await request
         .json()
-        .catch(() => null);
+        .catch(
+          () => null
+        );
 
     if (
       body?.confirm !==
@@ -439,15 +532,24 @@ export async function DELETE(
       );
     }
 
+    /*
+     * Karena project sekarang untuk SDIT Khoiro Ummah,
+     * hanya kelas SD yang dihitung dan dihapus.
+     */
     const total =
-      await prisma.classRoom.count();
+      await prisma.classRoom.count({
+        where: {
+          level:
+            SCHOOL_LEVEL,
+        },
+      });
 
     if (total === 0) {
       return NextResponse.json(
         {
           success: true,
           message:
-            'Tidak ada data kelas yang perlu dihapus.',
+            'Tidak ada data kelas SD yang perlu dihapus.',
           deleted: 0,
         },
         {
@@ -457,13 +559,22 @@ export async function DELETE(
     }
 
     const result =
-      await prisma.classRoom.deleteMany({});
+      await prisma.classRoom.deleteMany(
+        {
+          where: {
+            level:
+              SCHOOL_LEVEL,
+          },
+        }
+      );
 
     return NextResponse.json(
       {
         success: true,
+
         message:
-          `${result.count} kelas berhasil dihapus.`,
+          `${result.count} kelas SD berhasil dihapus.`,
+
         deleted:
           result.count,
       },
