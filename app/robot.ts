@@ -1,24 +1,42 @@
 import type { MetadataRoute } from "next";
 
-export default function robots(): MetadataRoute.Robots {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "http://localhost:3000";
+// ============================================================================
+// CONFIG
+// ============================================================================
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://www.senyum.or.id";
+
+// ============================================================================
+// ROBOTS.TXT
+// ============================================================================
+
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: "*",
+
+        // Semua halaman publik boleh dirayapi
         allow: "/",
+
+        // Halaman internal / sistem tidak perlu masuk Google
         disallow: [
           "/api/",
-          "/dashboard/",
           "/admin/",
+          "/dashboard/",
           "/login/",
+          "/auth/",
+          "/_next/",
         ],
       },
     ],
 
-    sitemap: `${baseUrl}/sitemap.xml`,
+    // Sitemap utama Senyum.or.id
+    sitemap: `${SITE_URL}/sitemap.xml`,
+
+    // Menegaskan host utama
+    host: SITE_URL,
   };
 }
