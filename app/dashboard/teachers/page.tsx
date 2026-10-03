@@ -40,15 +40,7 @@ export default function TeachersPage() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
 
-  // =========================================================
-  // MODAL
-  // =========================================================
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // =========================================================
-  // FORM STATE
-  // =========================================================
 
   const [identityNumber, setIdentityNumber] = useState('');
   const [fullname, setFullname] = useState('');
@@ -61,22 +53,10 @@ export default function TeachersPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // =========================================================
-  // BULK SELECTION
-  // =========================================================
-
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [deletingBulk, setDeletingBulk] = useState(false);
 
-  // =========================================================
-  // SEARCH
-  // =========================================================
-
   const [search, setSearch] = useState('');
-
-  // =========================================================
-  // FORMAT TANGGAL
-  // =========================================================
 
   const formatBirthDate = (
     value?: string | null
@@ -87,11 +67,6 @@ export default function TeachersPage() {
 
     if (!raw) return '';
 
-    /*
-     * Jika API sudah mengirim format:
-     * 15 Agustus 1990
-     * maka langsung tampilkan.
-     */
     if (
       /[a-zA-Z]/.test(raw) &&
       !/^\d{4}-\d{2}-\d{2}/.test(raw)
@@ -99,11 +74,6 @@ export default function TeachersPage() {
       return raw;
     }
 
-    /*
-     * Jika database mengirim:
-     * 1990-08-15
-     * atau ISO datetime.
-     */
     const date = new Date(raw);
 
     if (Number.isNaN(date.getTime())) {
@@ -120,10 +90,6 @@ export default function TeachersPage() {
     ).format(date);
   };
 
-  // =========================================================
-  // FETCH DATA
-  // =========================================================
-
   const fetchTeachers = async () => {
     try {
       setLoading(true);
@@ -138,7 +104,7 @@ export default function TeachersPage() {
       if (!res.ok) {
         throw new Error(
           data?.message ||
-            'Gagal memuat data guru.'
+            'Gagal memuat data ustadz dan ustadzah.'
         );
       }
 
@@ -157,7 +123,7 @@ export default function TeachersPage() {
 
       setMessage(
         err?.message ||
-          'Gagal memuat data guru.'
+          'Gagal memuat data ustadz dan ustadzah.'
       );
     } finally {
       setLoading(false);
@@ -168,10 +134,6 @@ export default function TeachersPage() {
   useEffect(() => {
     fetchTeachers();
   }, []);
-
-  // =========================================================
-  // RESET FORM
-  // =========================================================
 
   const resetForm = () => {
     setIdentityNumber('');
@@ -184,19 +146,11 @@ export default function TeachersPage() {
     setEditingId(null);
   };
 
-  // =========================================================
-  // OPEN ADD MODAL
-  // =========================================================
-
   const openAddModal = () => {
     resetForm();
     setMessage('');
     setIsModalOpen(true);
   };
-
-  // =========================================================
-  // CLOSE MODAL
-  // =========================================================
 
   const closeModal = () => {
     if (submitting) return;
@@ -204,10 +158,6 @@ export default function TeachersPage() {
     setIsModalOpen(false);
     resetForm();
   };
-
-  // =========================================================
-  // SUBMIT FORM
-  // =========================================================
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
@@ -253,10 +203,6 @@ export default function TeachersPage() {
         status,
       };
 
-      /*
-       * Password hanya dikirim ketika
-       * menambah guru baru.
-       */
       if (!editingId) {
         payload.password =
           password;
@@ -282,14 +228,14 @@ export default function TeachersPage() {
       if (!res.ok) {
         throw new Error(
           data?.message ||
-            'Gagal menyimpan data guru.'
+            'Gagal menyimpan data ustadz dan ustadzah.'
         );
       }
 
       setMessage(
         editingId
-          ? 'Sukses! Data guru berhasil diperbarui.'
-          : 'Sukses! Ustadz/Guru berhasil ditambahkan.'
+          ? 'Sukses! Data ustadz/ustadzah berhasil diperbarui.'
+          : 'Sukses! Ustadz/ustadzah berhasil ditambahkan.'
       );
 
       setIsModalOpen(false);
@@ -305,16 +251,12 @@ export default function TeachersPage() {
 
       setMessage(
         err?.message ||
-          'Terjadi kesalahan saat menyimpan data guru.'
+          'Terjadi kesalahan saat menyimpan data ustadz dan ustadzah.'
       );
     } finally {
       setSubmitting(false);
     }
   };
-
-  // =========================================================
-  // EDIT GURU
-  // =========================================================
 
   const handleEdit = (
     teacher: Teacher
@@ -333,12 +275,6 @@ export default function TeachersPage() {
         ''
     );
 
-    /*
-     * Penting:
-     * Untuk field tanggal input,
-     * kita normalisasi jika database
-     * mengirim ISO datetime.
-     */
     let normalizedBirthDate =
       teacher.birth_date || '';
 
@@ -380,10 +316,6 @@ export default function TeachersPage() {
 
     setIsModalOpen(true);
   };
-
-  // =========================================================
-  // TOGGLE STATUS
-  // =========================================================
 
   const handleToggleStatus =
     async (
@@ -437,7 +369,7 @@ export default function TeachersPage() {
         if (!res.ok) {
           throw new Error(
             data?.message ||
-              'Gagal mengubah status akun guru.'
+              'Gagal mengubah status akun ustadz/ustadzah.'
           );
         }
 
@@ -459,17 +391,13 @@ export default function TeachersPage() {
       }
     };
 
-  // =========================================================
-  // DELETE SATU
-  // =========================================================
-
   const handleDelete =
     async (
       id: number
     ) => {
       if (
         !confirm(
-          'Yakin ingin menghapus guru ini? Data yang sudah dihapus tidak dapat dikembalikan.'
+          'Yakin ingin menghapus data ustadz/ustadzah ini? Data yang sudah dihapus tidak dapat dikembalikan.'
         )
       ) {
         return;
@@ -492,12 +420,12 @@ export default function TeachersPage() {
         if (!res.ok) {
           throw new Error(
             data?.message ||
-              'Gagal menghapus data guru.'
+              'Gagal menghapus data ustadz/ustadzah.'
           );
         }
 
         setMessage(
-          'Sukses! Data guru berhasil dihapus.'
+          'Sukses! Data ustadz/ustadzah berhasil dihapus.'
         );
 
         await fetchTeachers();
@@ -509,14 +437,10 @@ export default function TeachersPage() {
 
         setMessage(
           err?.message ||
-            'Gagal menghapus data guru.'
+            'Gagal menghapus data ustadz/ustadzah.'
         );
       }
     };
-
-  // =========================================================
-  // SELECT ALL
-  // =========================================================
 
   const handleSelectAll =
     (
@@ -533,10 +457,6 @@ export default function TeachersPage() {
         setSelectedIds([]);
       }
     };
-
-  // =========================================================
-  // SELECT ONE
-  // =========================================================
 
   const handleSelectOne =
     (
@@ -556,10 +476,6 @@ export default function TeachersPage() {
       );
     };
 
-  // =========================================================
-  // BULK DELETE
-  // =========================================================
-
   const handleBulkDelete =
     async () => {
       if (
@@ -571,7 +487,7 @@ export default function TeachersPage() {
 
       if (
         !confirm(
-          `Hapus ${selectedIds.length} data guru terpilih? Data yang sudah dihapus tidak dapat dikembalikan.`
+          `Hapus ${selectedIds.length} data ustadz/ustadzah terpilih? Data yang sudah dihapus tidak dapat dikembalikan.`
         )
       ) {
         return;
@@ -605,12 +521,12 @@ export default function TeachersPage() {
         if (!res.ok) {
           throw new Error(
             data?.message ||
-              'Gagal menghapus data guru secara massal.'
+              'Gagal menghapus data ustadz/ustadzah secara massal.'
           );
         }
 
         setMessage(
-          `Sukses! ${selectedIds.length} data guru berhasil dihapus.`
+          `Sukses! ${selectedIds.length} data ustadz/ustadzah berhasil dihapus.`
         );
 
         await fetchTeachers();
@@ -622,16 +538,12 @@ export default function TeachersPage() {
 
         setMessage(
           err?.message ||
-            'Terjadi kesalahan saat menghapus data guru.'
+            'Terjadi kesalahan saat menghapus data ustadz/ustadzah.'
         );
       } finally {
         setDeletingBulk(false);
       }
     };
-
-  // =========================================================
-  // FILTER
-  // =========================================================
 
   const filteredTeachers =
     useMemo(() => {
@@ -677,10 +589,6 @@ export default function TeachersPage() {
       search,
     ]);
 
-  // =========================================================
-  // STATISTICS
-  // =========================================================
-
   const totalTeachers =
     teachers.length;
 
@@ -708,16 +616,8 @@ export default function TeachersPage() {
         )
     );
 
-  // =========================================================
-  // RENDER
-  // =========================================================
-
   return (
     <main className="min-h-screen bg-[#f4f7f6] text-slate-800">
-
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
 
       <section className="relative overflow-hidden border-b border-emerald-950/20 bg-[#062f28]">
 
@@ -771,14 +671,13 @@ export default function TeachersPage() {
                 <div>
 
                   <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                    Guru &amp; Ustadz
+                    Ustadz &amp; Ustadzah
                   </h1>
 
                   <p className="mt-1 max-w-xl text-xs leading-5 text-emerald-100/55">
-                    Kelola tenaga pengajar,
+                    Kelola data ustadz dan ustadzah,
                     informasi akademik,
-                    dan akses akun secara
-                    terpusat.
+                    serta akses akun secara terpusat.
                   </p>
 
                 </div>
@@ -805,7 +704,7 @@ export default function TeachersPage() {
                 </div>
 
                 <div className="mt-1 text-[10px] text-white/40">
-                  Teacher Management
+                  Pengelolaan Ustadz & Ustadzah
                 </div>
 
               </div>
@@ -838,15 +737,7 @@ export default function TeachersPage() {
 
       </section>
 
-      {/* =====================================================
-          CONTENT
-      ===================================================== */}
-
       <div className="mx-auto max-w-[1500px] space-y-5 px-4 py-6 sm:px-6 lg:px-8">
-
-        {/* ===================================================
-            STATISTICS
-        =================================================== */}
 
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
 
@@ -854,7 +745,7 @@ export default function TeachersPage() {
             icon={Users}
             label="Total Pengajar"
             value={totalTeachers}
-            description="Semua data guru"
+            description="Semua ustadz & ustadzah"
           />
 
           <StatCard
@@ -881,10 +772,6 @@ export default function TeachersPage() {
           />
 
         </div>
-
-        {/* ===================================================
-            MESSAGE
-        =================================================== */}
 
         {message && (
           <div
@@ -928,13 +815,7 @@ export default function TeachersPage() {
           </div>
         )}
 
-        {/* ===================================================
-            TEACHER LIST
-        =================================================== */}
-
         <section>
-
-          {/* LIST HEADER */}
 
           <div className="mb-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
 
@@ -951,7 +832,7 @@ export default function TeachersPage() {
                 <div>
 
                   <h2 className="text-sm font-bold text-slate-800">
-                    Daftar Pengajar
+                    Daftar Ustadz & Ustadzah
                   </h2>
 
                   <p className="text-[9px] text-slate-400">
@@ -966,8 +847,6 @@ export default function TeachersPage() {
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row">
-
-                {/* SEARCH */}
 
                 <div className="relative">
 
@@ -984,13 +863,11 @@ export default function TeachersPage() {
                         e.target.value
                       )
                     }
-                    placeholder="Cari guru..."
+                    placeholder="Cari ustadz/ustadzah..."
                     className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-xs outline-none transition placeholder:text-slate-300 focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5 sm:w-56"
                   />
 
                 </div>
-
-                {/* BULK DELETE */}
 
                 {selectedIds.length >
                   0 && (
@@ -1025,8 +902,6 @@ export default function TeachersPage() {
                   </button>
                 )}
 
-                {/* TAMBAH GURU */}
-
                 <button
                   type="button"
                   onClick={
@@ -1040,7 +915,7 @@ export default function TeachersPage() {
                     className="transition group-hover:rotate-90"
                   />
 
-                  Tambah Pengajar
+                  Tambah Ustadz/Ustadzah
 
                 </button>
 
@@ -1049,10 +924,6 @@ export default function TeachersPage() {
             </div>
 
           </div>
-
-          {/* =================================================
-              TABLE
-          ================================================= */}
 
           <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
 
@@ -1077,7 +948,6 @@ export default function TeachersPage() {
                     <tr className="border-b border-slate-200 bg-[#f8faf9]">
 
                       <th className="w-12 px-4 py-3 text-center">
-
                         <input
                           type="checkbox"
                           checked={
@@ -1088,7 +958,6 @@ export default function TeachersPage() {
                           }
                           className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                         />
-
                       </th>
 
                       <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
@@ -1096,7 +965,7 @@ export default function TeachersPage() {
                       </th>
 
                       <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
-                        Pengajar
+                        Ustadz / Ustadzah
                       </th>
 
                       <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
@@ -1123,7 +992,6 @@ export default function TeachersPage() {
 
                     {filteredTeachers.map(
                       (teacher) => {
-
                         const isChecked =
                           selectedIds.includes(
                             teacher.id
@@ -1145,8 +1013,6 @@ export default function TeachersPage() {
                             }`}
                           >
 
-                            {/* CHECK */}
-
                             <td className="px-4 py-4 text-center">
 
                               <input
@@ -1163,8 +1029,6 @@ export default function TeachersPage() {
                               />
 
                             </td>
-
-                            {/* IDENTITY */}
 
                             <td className="px-3 py-4">
 
@@ -1189,9 +1053,7 @@ export default function TeachersPage() {
                                   <div className="mt-0.5 flex items-center gap-1 text-[8px] text-slate-400">
 
                                     <IdCard
-                                      size={
-                                        9
-                                      }
+                                      size={9}
                                     />
 
                                     ID Identitas
@@ -1204,8 +1066,6 @@ export default function TeachersPage() {
 
                             </td>
 
-                            {/* NAME + BIRTH */}
-
                             <td className="px-3 py-4">
 
                               <div className="flex items-start gap-2.5">
@@ -1213,12 +1073,8 @@ export default function TeachersPage() {
                                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-teal-50 text-emerald-700">
 
                                   <CircleUserRound
-                                    size={
-                                      18
-                                    }
-                                    strokeWidth={
-                                      1.7
-                                    }
+                                    size={18}
+                                    strokeWidth={1.7}
                                   />
 
                                 </div>
@@ -1234,9 +1090,7 @@ export default function TeachersPage() {
                                   <div className="mt-1 flex items-center gap-1 text-[9px] text-slate-400">
 
                                     <CalendarDays
-                                      size={
-                                        10
-                                      }
+                                      size={10}
                                       className="shrink-0"
                                     />
 
@@ -1255,17 +1109,13 @@ export default function TeachersPage() {
 
                             </td>
 
-                            {/* EDUCATION */}
-
                             <td className="px-3 py-4">
 
                               {teacher.education ? (
                                 <span className="inline-flex max-w-[200px] items-center gap-1.5 rounded-lg border border-emerald-100 bg-emerald-50 px-2.5 py-1.5 text-[9px] font-semibold text-emerald-700">
 
                                   <GraduationCap
-                                    size={
-                                      11
-                                    }
+                                    size={11}
                                   />
 
                                   <span className="truncate">
@@ -1283,16 +1133,12 @@ export default function TeachersPage() {
 
                             </td>
 
-                            {/* ADDRESS */}
-
                             <td className="px-3 py-4">
 
                               <div className="flex max-w-[240px] items-start gap-1.5">
 
                                 <MapPin
-                                  size={
-                                    12
-                                  }
+                                  size={12}
                                   className="mt-0.5 shrink-0 text-emerald-500"
                                 />
 
@@ -1306,8 +1152,6 @@ export default function TeachersPage() {
                               </div>
 
                             </td>
-
-                            {/* STATUS */}
 
                             <td className="px-3 py-4">
 
@@ -1342,8 +1186,6 @@ export default function TeachersPage() {
 
                             </td>
 
-                            {/* ACTION */}
-
                             <td className="px-4 py-4 text-right">
 
                               <div className="flex justify-end gap-1.5">
@@ -1356,12 +1198,10 @@ export default function TeachersPage() {
                                     )
                                   }
                                   className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-100 bg-amber-50 text-amber-600 transition hover:bg-amber-100 hover:text-amber-700"
-                                  title="Edit guru"
+                                  title="Edit ustadz/ustadzah"
                                 >
                                   <Pencil
-                                    size={
-                                      13
-                                    }
+                                    size={13}
                                   />
                                 </button>
 
@@ -1373,12 +1213,10 @@ export default function TeachersPage() {
                                     )
                                   }
                                   className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-100 bg-red-50 text-red-500 transition hover:bg-red-100 hover:text-red-700"
-                                  title="Hapus guru"
+                                  title="Hapus ustadz/ustadzah"
                                 >
                                   <Trash2
-                                    size={
-                                      13
-                                    }
+                                    size={13}
                                   />
                                 </button>
 
@@ -1404,10 +1242,6 @@ export default function TeachersPage() {
 
       </div>
 
-      {/* =====================================================
-          MODAL FORM TAMBAH / EDIT
-      ===================================================== */}
-
       {isModalOpen && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
@@ -1415,8 +1249,6 @@ export default function TeachersPage() {
           aria-modal="true"
           aria-labelledby="teacher-modal-title"
         >
-
-          {/* BACKDROP */}
 
           <button
             type="button"
@@ -1426,15 +1258,9 @@ export default function TeachersPage() {
             className="absolute inset-0 cursor-default bg-slate-950/55 backdrop-blur-sm"
           />
 
-          {/* MODAL */}
-
           <div className="relative z-10 flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.30)]">
 
-            {/* MODAL HEADER */}
-
             <div className="relative overflow-hidden bg-[#062f28] px-5 py-5 text-white sm:px-6">
-
-              {/* GRID */}
 
               <div
                 className="pointer-events-none absolute inset-0 opacity-[0.08]"
@@ -1473,8 +1299,8 @@ export default function TeachersPage() {
                         className="text-base font-bold"
                       >
                         {editingId
-                          ? 'Edit Data Guru'
-                          : 'Tambah Pengajar'}
+                          ? 'Edit Data Ustadz/Ustadzah'
+                          : 'Tambah Ustadz/Ustadzah'}
                       </h2>
 
                       {editingId && (
@@ -1487,8 +1313,8 @@ export default function TeachersPage() {
 
                     <p className="mt-0.5 text-[9px] text-emerald-100/55">
                       {editingId
-                        ? 'Perbarui informasi tenaga pengajar.'
-                        : 'Masukkan data pengajar baru ke sistem.'}
+                        ? 'Perbarui informasi ustadz/ustadzah.'
+                        : 'Masukkan data ustadz/ustadzah baru ke sistem.'}
                     </p>
 
                   </div>
@@ -1508,16 +1334,12 @@ export default function TeachersPage() {
 
             </div>
 
-            {/* MODAL BODY */}
-
             <div className="overflow-y-auto">
 
               <form
                 onSubmit={handleSubmit}
                 className="p-5 sm:p-6"
               >
-
-                {/* INFO */}
 
                 <div className="mb-5 flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3">
 
@@ -1532,21 +1354,19 @@ export default function TeachersPage() {
                   <div>
 
                     <p className="text-[10px] font-bold text-emerald-800">
-                      Informasi Pengajar
+                      Informasi Ustadz & Ustadzah
                     </p>
 
                     <p className="mt-0.5 text-[9px] leading-4 text-emerald-700/70">
                       Data ini akan digunakan
                       untuk administrasi
                       akademik dan akses
-                      akun guru.
+                      akun ustadz/ustadzah.
                     </p>
 
                   </div>
 
                 </div>
-
-                {/* GRID FORM */}
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
@@ -1572,11 +1392,9 @@ export default function TeachersPage() {
                     onChange={
                       setFullname
                     }
-                    placeholder="Contoh: Ustadz Ahmad, S.Pd.I"
+                    placeholder="Contoh: Ustadz Ahmad, S.Pd.I / Ustadzah Aisyah, S.Pd."
                     required
                   />
-
-                  {/* TANGGAL */}
 
                   <div>
 
@@ -1623,8 +1441,6 @@ export default function TeachersPage() {
                     placeholder="Contoh: S1 Pendidikan Agama Islam"
                   />
 
-                  {/* ADDRESS */}
-
                   <div className="sm:col-span-2">
 
                     <label className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold text-slate-600">
@@ -1656,8 +1472,6 @@ export default function TeachersPage() {
                     />
 
                   </div>
-
-                  {/* STATUS */}
 
                   <div>
 
@@ -1708,8 +1522,6 @@ export default function TeachersPage() {
 
                   </div>
 
-                  {/* PASSWORD */}
-
                   {!editingId && (
                     <FormInput
                       icon={
@@ -1729,8 +1541,6 @@ export default function TeachersPage() {
                   )}
 
                 </div>
-
-                {/* FOOTER BUTTON */}
 
                 <div className="mt-6 flex flex-col-reverse gap-2 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
 
@@ -1777,7 +1587,7 @@ export default function TeachersPage() {
                         <Plus
                           size={15}
                         />
-                        Simpan Pengajar
+                        Simpan Ustadz/Ustadzah
                       </>
                     )}
 
@@ -1794,12 +1604,7 @@ export default function TeachersPage() {
         </div>
       )}
 
-      {/* =====================================================
-          GLOBAL STYLE
-      ===================================================== */}
-
       <style jsx global>{`
-
         * {
           box-sizing: border-box;
         }
@@ -1835,8 +1640,6 @@ export default function TeachersPage() {
           -webkit-tap-highlight-color: transparent;
         }
 
-        /* Scrollbar */
-
         ::-webkit-scrollbar {
           width: 7px;
           height: 7px;
@@ -1855,8 +1658,6 @@ export default function TeachersPage() {
           background: #94a3b8;
         }
 
-        /* Modal scrollbar */
-
         .overflow-y-auto::-webkit-scrollbar {
           width: 5px;
         }
@@ -1865,16 +1666,11 @@ export default function TeachersPage() {
           background: #d1d5db;
           border-radius: 999px;
         }
-
       `}</style>
 
     </main>
   );
 }
-
-/* ============================================================
-   STAT CARD
-============================================================ */
 
 function StatCard({
   icon: Icon,
@@ -1937,10 +1733,6 @@ function StatCard({
   );
 }
 
-/* ============================================================
-   FORM INPUT
-============================================================ */
-
 function FormInput({
   icon: Icon,
   label,
@@ -1999,10 +1791,6 @@ function FormInput({
   );
 }
 
-/* ============================================================
-   LOADING
-============================================================ */
-
 function LoadingState() {
   return (
     <div className="flex min-h-[420px] flex-col items-center justify-center">
@@ -2017,21 +1805,16 @@ function LoadingState() {
       </div>
 
       <p className="mt-4 text-xs font-semibold text-slate-500">
-        Memuat data pengajar...
+        Memuat data ustadz & ustadzah...
       </p>
 
       <p className="mt-1 text-[9px] text-slate-300">
-        Menghubungkan ke database
-        akademik
+        Menghubungkan ke database akademik
       </p>
 
     </div>
   );
 }
-
-/* ============================================================
-   EMPTY STATE
-============================================================ */
 
 function EmptyState({
   onAdd,
@@ -2051,12 +1834,12 @@ function EmptyState({
       </div>
 
       <h3 className="mt-4 text-sm font-bold text-slate-700">
-        Belum Ada Pengajar
+        Belum Ada Ustadz & Ustadzah
       </h3>
 
       <p className="mt-1 max-w-xs text-[10px] leading-5 text-slate-400">
-        Belum terdapat data guru
-        atau ustadz yang terdaftar
+        Belum terdapat data ustadz
+        atau ustadzah yang terdaftar
         dalam sistem.
       </p>
 
@@ -2068,17 +1851,13 @@ function EmptyState({
 
         <Plus size={14} />
 
-        Tambah Pengajar
+        Tambah Ustadz/Ustadzah
 
       </button>
 
     </div>
   );
 }
-
-/* ============================================================
-   SEARCH EMPTY
-============================================================ */
 
 function SearchEmptyState() {
   return (

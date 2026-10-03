@@ -39,18 +39,17 @@ export default function SubjectsPage() {
 
   const [subjects, setSubjects] = useState<Subject[]>([]);
 
-  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedSubjectOption, setSelectedSubjectOption] = useState('');
+  const [customSubjectName, setCustomSubjectName] = useState('');
+  const [isCustomMode, setIsCustomMode] = useState(false);
 
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const [message, setMessage] = useState('');
-
   const [loading, setLoading] = useState(false);
-
   const [loadingSubjects, setLoadingSubjects] = useState(true);
 
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
   const [deletingBulk, setDeletingBulk] = useState(false);
 
   // ==========================================================================
@@ -85,7 +84,6 @@ export default function SubjectsPage() {
         : [];
 
       setSubjects(result);
-
       setSelectedIds([]);
     } catch (err: unknown) {
       console.error(
@@ -114,6 +112,17 @@ export default function SubjectsPage() {
   }, []);
 
   // ==========================================================================
+  // RESET FORM
+  // ==========================================================================
+
+  const resetForm = () => {
+    setEditingId(null);
+    setSelectedSubjectOption('');
+    setCustomSubjectName('');
+    setIsCustomMode(false);
+  };
+
+  // ==========================================================================
   // SUBMIT
   // ==========================================================================
 
@@ -124,12 +133,13 @@ export default function SubjectsPage() {
 
     setMessage('');
 
-    const finalName =
-      selectedSubject.trim();
+    const finalName = isCustomMode
+      ? customSubjectName.trim()
+      : selectedSubjectOption.trim();
 
     if (!finalName) {
       setMessage(
-        'Silakan pilih mata pelajaran.'
+        'Nama mata pelajaran wajib diisi.'
       );
 
       return;
@@ -175,9 +185,7 @@ export default function SubjectsPage() {
           : 'Sukses! Mata pelajaran berhasil ditambahkan.'
       );
 
-      setSelectedSubject('');
-
-      setEditingId(null);
+      resetForm();
 
       await fetchSubjects();
     } catch (err: unknown) {
@@ -199,12 +207,28 @@ export default function SubjectsPage() {
     subject: Subject
   ) => {
     setEditingId(subject.id);
-
-    setSelectedSubject(
-      subject.name
-    );
-
     setMessage('');
+
+    if (
+      DEFAULT_SUBJECTS.includes(
+        subject.name
+      )
+    ) {
+      setSelectedSubjectOption(
+        subject.name
+      );
+
+      setCustomSubjectName('');
+      setIsCustomMode(false);
+    } else {
+      setSelectedSubjectOption('');
+
+      setCustomSubjectName(
+        subject.name
+      );
+
+      setIsCustomMode(true);
+    }
 
     window.scrollTo({
       top: 0,
@@ -217,10 +241,7 @@ export default function SubjectsPage() {
   // ==========================================================================
 
   const handleCancelEdit = () => {
-    setEditingId(null);
-
-    setSelectedSubject('');
-
+    resetForm();
     setMessage('');
   };
 
@@ -263,7 +284,7 @@ export default function SubjectsPage() {
       );
 
       if (editingId === id) {
-        handleCancelEdit();
+        resetForm();
       }
 
       await fetchSubjects();
@@ -333,7 +354,6 @@ export default function SubjectsPage() {
 
       try {
         setDeletingBulk(true);
-
         setMessage('');
 
         const res = await fetch(
@@ -368,9 +388,7 @@ export default function SubjectsPage() {
 
         setSelectedIds([]);
 
-        setEditingId(null);
-
-        setSelectedSubject('');
+        resetForm();
 
         await fetchSubjects();
       } catch (err: unknown) {
@@ -395,6 +413,11 @@ export default function SubjectsPage() {
     subjects.length > 0 &&
     selectedIds.length ===
       subjects.length;
+
+  const formHasValue =
+    isCustomMode
+      ? customSubjectName.trim().length > 0
+      : selectedSubjectOption.trim().length > 0;
 
   // ==========================================================================
   // RENDER
@@ -571,7 +594,7 @@ export default function SubjectsPage() {
                 <p className="mt-0.5 text-[10px] text-slate-400">
                   {editingId
                     ? 'Perbarui mata pelajaran yang dipilih.'
-                    : 'Pilih mata pelajaran yang akan ditambahkan.'}
+                    : 'Pilih dari daftar atau tambahkan mapel lain.'}
                 </p>
 
               </div>
@@ -601,51 +624,133 @@ export default function SubjectsPage() {
                   Nama Mata Pelajaran
                 </label>
 
-                <select
-                  value={
-                    selectedSubject
-                  }
-                  onChange={(e) =>
-                    setSelectedSubject(
-                      e.target.value
-                    )
-                  }
-                  required
-                  className="
-                    h-11
-                    w-full
-                    rounded-lg
-                    border
-                    border-slate-200
-                    bg-slate-50
-                    px-3
-                    text-xs
-                    text-slate-800
-                    outline-none
-                    transition
+                {!isCustomMode ? (
+                  <div className="space-y-2">
 
-                    focus:border-emerald-500
-                    focus:bg-white
-                    focus:ring-3
-                    focus:ring-emerald-500/10
-                  "
-                >
-                  <option value="">
-                    -- Pilih Mata Pelajaran --
-                  </option>
+                    <select
+                      value={
+                        selectedSubjectOption
+                      }
+                      onChange={(e) =>
+                        setSelectedSubjectOption(
+                          e.target.value
+                        )
+                      }
+                      required={!isCustomMode}
+                      className="
+                        h-11
+                        w-full
+                        rounded-lg
+                        border
+                        border-slate-200
+                        bg-slate-50
+                        px-3
+                        text-xs
+                        text-slate-800
+                        outline-none
+                        transition
 
-                  {DEFAULT_SUBJECTS.map(
-                    (subject) => (
-                      <option
-                        key={subject}
-                        value={subject}
-                      >
-                        {subject}
+                        focus:border-emerald-500
+                        focus:bg-white
+                        focus:ring-3
+                        focus:ring-emerald-500/10
+                      "
+                    >
+                      <option value="">
+                        -- Pilih Mata Pelajaran --
                       </option>
-                    )
-                  )}
 
-                </select>
+                      {DEFAULT_SUBJECTS.map(
+                        (subject) => (
+                          <option
+                            key={subject}
+                            value={subject}
+                          >
+                            {subject}
+                          </option>
+                        )
+                      )}
+
+                    </select>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCustomMode(
+                          true
+                        );
+
+                        setSelectedSubjectOption(
+                          ''
+                        );
+
+                        setMessage('');
+                      }}
+                      className="text-[11px] font-semibold text-emerald-700 hover:underline"
+                    >
+                      + Tambah Mapel Lain (Ketik Sendiri)
+                    </button>
+
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+
+                    <input
+                      type="text"
+                      value={
+                        customSubjectName
+                      }
+                      onChange={(e) =>
+                        setCustomSubjectName(
+                          e.target.value
+                        )
+                      }
+                      required={
+                        isCustomMode
+                      }
+                      placeholder="Ketik nama mata pelajaran baru..."
+                      className="
+                        h-11
+                        w-full
+                        rounded-lg
+                        border
+                        border-slate-200
+                        bg-slate-50
+                        px-3
+                        text-xs
+                        text-slate-800
+                        outline-none
+                        transition
+
+                        placeholder:text-slate-400
+
+                        focus:border-emerald-500
+                        focus:bg-white
+                        focus:ring-3
+                        focus:ring-emerald-500/10
+                      "
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCustomMode(
+                          false
+                        );
+
+                        setCustomSubjectName(
+                          ''
+                        );
+
+                        setMessage('');
+                      }}
+                      className="text-[11px] font-semibold text-slate-500 hover:text-emerald-700 hover:underline"
+                    >
+                      ← Kembali ke pilihan standar
+                    </button>
+
+                  </div>
+                )}
 
               </div>
 
@@ -653,7 +758,7 @@ export default function SubjectsPage() {
                 type="submit"
                 disabled={
                   loading ||
-                  !selectedSubject
+                  !formHasValue
                 }
                 className="
                   flex
