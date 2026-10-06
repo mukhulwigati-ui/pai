@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 import {
   Suspense,
@@ -22,7 +23,6 @@ import {
   LockKeyhole,
   School,
   ShieldCheck,
-  Sparkles,
   Users,
   X,
 } from 'lucide-react';
@@ -238,92 +238,26 @@ function DashboardContent() {
           HEADER / HERO
       ======================================================= */}
 
-      <section className="relative overflow-hidden bg-[#064e3b]">
-
-        {/* BACKGROUND DECORATION */}
-
-        <div className="pointer-events-none absolute inset-0 opacity-[0.07]">
-
-          <div className="absolute -right-20 -top-24 h-80 w-80 rounded-full border-[32px] border-white" />
-
-          <div className="absolute -right-8 top-8 h-64 w-64 rounded-full border-[18px] border-white" />
-
-          <div className="absolute -bottom-28 -left-24 h-80 w-80 rounded-full border-[30px] border-emerald-200" />
-
-        </div>
-
-        <div className="relative mx-auto max-w-6xl px-5 py-8 sm:px-8 lg:py-10">
-
-          <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-
-            {/* SCHOOL */}
-
-            <div className="flex items-start gap-4">
-
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 shadow-lg backdrop-blur">
-
-                <GraduationCap
-                  size={28}
-                  strokeWidth={
-                    1.8
-                  }
-                  className="text-emerald-100"
-                />
-
-              </div>
-
-              <div>
-
-                <div className="mb-1 flex items-center gap-2">
-
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
-                    Sistem Informasi Akademik
-                  </span>
-
-                  <Sparkles
-                    size={13}
-                    className="text-amber-300"
-                  />
-
-                </div>
-
-                <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                  E-Rapor
-                </h1>
-
-                <p className="mt-1 text-sm font-medium text-emerald-100/85">
-                  {SCHOOL_NAME}
-                </p>
-
-                <p className="mt-1 text-[10px] text-emerald-100/55">
-                  Jenjang Sekolah Dasar
-                </p>
-
-              </div>
-
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-4">
+            <Image
+              src="/sdit.png"
+              alt="Logo SDIT Khoiro Ummah"
+              width={64}
+              height={64}
+              priority
+              className="h-16 w-16 shrink-0 object-contain"
+            />
+            <div className="min-w-0">
+              <h1 className="text-3xl font-bold tracking-tight text-slate-900">E-Rapor</h1>
+              <p className="mt-2 text-base font-medium text-slate-600">{SCHOOL_SHORT_NAME}</p>
             </div>
-
-            {/* BASMALAH */}
-
-            <div className="hidden text-right lg:block">
-
-              <div
-                dir="rtl"
-                className="font-serif text-xl font-semibold text-amber-200"
-              >
-                بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-              </div>
-
-              <p className="mt-1 text-xs text-emerald-100/70">
-                Berilmu, Berakhlak, dan Berprestasi
-              </p>
-
-            </div>
-
           </div>
-
+          <div dir="rtl" className="font-serif text-2xl leading-relaxed text-emerald-700">
+            بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+          </div>
         </div>
-
       </section>
 
       {/* ======================================================
@@ -344,7 +278,7 @@ function DashboardContent() {
 
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
 
-              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
+              <span className="text-base font-semibold uppercase tracking-wider text-emerald-700">
                 Dashboard
               </span>
 
@@ -354,11 +288,8 @@ function DashboardContent() {
               Selamat Datang 👋
             </h2>
 
-            <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500">
-              Kelola data siswa, ustadz dan ustadzah,
-              kelas, kurikulum, asesmen, hingga rapor
-              siswa dalam satu sistem akademik yang
-              terintegrasi.
+            <p className="mt-1.5 max-w-2xl text-base leading-6 text-slate-600">
+              Kelola data akademik dan rapor siswa dengan mudah.
             </p>
 
           </div>
@@ -374,11 +305,11 @@ function DashboardContent() {
 
             <div>
 
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+              <p className="text-base font-semibold uppercase tracking-wide text-slate-600">
                 Status Sistem
               </p>
 
-              <p className="text-xs font-semibold text-emerald-700">
+              <p className="text-base font-semibold text-emerald-700">
                 Sistem Aktif
               </p>
 
@@ -402,8 +333,12 @@ function DashboardContent() {
 
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
 
-                <GraduationCap
-                  size={22}
+                <Image
+                  src="/sdit.png"
+                  alt="Logo SDIT Khoiro Ummah"
+                  width={36}
+                  height={36}
+                  className="h-9 w-9 object-contain"
                 />
 
               </div>
@@ -414,11 +349,8 @@ function DashboardContent() {
                   Pusat Pengelolaan Akademik
                 </h3>
 
-                <p className="mt-1 max-w-2xl text-xs leading-5 text-slate-500">
-                  Gunakan menu di bawah untuk mengelola
-                  data ustadz dan ustadzah, siswa, kelas,
-                  mata pelajaran, kurikulum, penilaian,
-                  dan kebutuhan akademik lainnya.
+                <p className="mt-1 max-w-2xl text-base leading-6 text-slate-600">
+                  Pilih menu untuk mulai mengelola data sekolah.
                 </p>
 
               </div>
@@ -444,11 +376,11 @@ function DashboardContent() {
 
         <div className="mb-4">
 
-          <h3 className="text-sm font-bold text-slate-800">
+          <h3 className="text-lg font-bold text-slate-800">
             Akses Cepat
           </h3>
 
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-base text-slate-600">
             Pilih modul yang ingin Anda kelola.
           </p>
 
@@ -502,19 +434,19 @@ function DashboardContent() {
 
                   </div>
 
-                  <h4 className="text-sm font-bold text-slate-800">
+                  <h4 className="text-lg font-bold text-slate-800">
                     {
                       menu.title
                     }
                   </h4>
 
-                  <p className="mt-1.5 min-h-[40px] text-xs leading-5 text-slate-500">
+                  <p className="mt-1.5 min-h-[48px] text-base leading-6 text-slate-600">
                     {
                       menu.description
                     }
                   </p>
 
-                  <div className="mt-4 flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700">
+                  <div className="mt-4 flex items-center gap-1.5 text-base font-semibold text-emerald-700">
 
                     Buka Modul
 
@@ -569,11 +501,11 @@ function DashboardContent() {
 
           <div>
 
-            <p className="text-xs font-semibold text-slate-600">
+            <p className="text-base font-semibold text-slate-600">
               {SCHOOL_NAME}
             </p>
 
-            <p className="mt-0.5 text-[11px] text-slate-400">
+            <p className="mt-0.5 text-base text-slate-600">
               Sistem E-Rapor &amp; Manajemen Akademik
             </p>
 
@@ -581,7 +513,7 @@ function DashboardContent() {
 
           <div
             dir="rtl"
-            className="font-serif text-sm text-slate-400"
+            className="font-serif text-base text-slate-600"
           >
             رَبِّ زِدْنِي عِلْمًا
           </div>
@@ -617,7 +549,7 @@ function DashboardContent() {
                 closeForbidden
               }
               aria-label="Tutup"
-              className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+              className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full text-slate-600 transition hover:bg-slate-100 hover:text-slate-700"
             >
 
               <X
@@ -650,7 +582,7 @@ function DashboardContent() {
 
             <div className="px-7 pb-8 pt-5 text-center">
 
-              <div className="mb-2 inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-red-600">
+              <div className="mb-2 inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-base font-bold uppercase tracking-wider text-red-600">
                 Akses Terbatas
               </div>
 
@@ -661,7 +593,7 @@ function DashboardContent() {
                 Akses Ditolak
               </h2>
 
-              <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">
+              <p className="mx-auto mt-2 max-w-sm text-base leading-6 text-slate-600">
                 Maaf, Anda tidak memiliki izin untuk mengakses halaman yang Anda buka.
               </p>
 
@@ -680,11 +612,11 @@ function DashboardContent() {
 
                   <div>
 
-                    <p className="text-sm font-semibold text-red-700">
+                    <p className="text-base font-semibold text-red-700">
                       Khusus Administrator
                     </p>
 
-                    <p className="mt-1 text-xs leading-5 text-red-600/80">
+                    <p className="mt-1 text-base leading-6 text-red-700">
                       Halaman ini hanya dapat diakses oleh pengguna dengan hak akses Administrator.
                     </p>
 
@@ -699,7 +631,7 @@ function DashboardContent() {
                 onClick={
                   closeForbidden
                 }
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#07543f] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#054131] hover:shadow-md active:scale-[0.98]"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#07543f] px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-[#054131] hover:shadow-md active:scale-[0.98]"
               >
 
                 <ArrowRight
@@ -746,11 +678,11 @@ function InfoItem({
       }`}
     >
 
-      <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-slate-400">
+      <p className="text-base font-bold uppercase tracking-[0.14em] text-slate-600">
         {label}
       </p>
 
-      <p className="mt-1 text-xs font-semibold text-slate-700">
+      <p className="mt-1 text-base font-semibold text-slate-700">
         {value}
       </p>
 

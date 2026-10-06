@@ -601,8 +601,8 @@ export default function DashboardLayout({
           'fixed left-0 top-0 z-50',
           'flex h-screen w-[258px] flex-col pt-16 lg:pt-0',
           'overflow-hidden',
-          'bg-[#052f27]',
-          'text-white',
+          'border-r border-slate-200 bg-white',
+          'text-slate-900',
           'shadow-[8px_0_30px_rgba(15,23,42,0.10)]',
           'transition-transform duration-300 ease-out',
           'lg:translate-x-0',
@@ -618,11 +618,11 @@ export default function DashboardLayout({
 
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
 
-          <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-emerald-400/[0.045] blur-3xl" />
+          <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-emerald-50 blur-3xl" />
 
           <div className="absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-amber-300/[0.03] blur-3xl" />
 
-          <div className="absolute left-1/2 top-[38%] h-48 w-48 -translate-x-1/2 rounded-full border border-white/[0.015]" />
+          <div className="absolute left-1/2 top-[38%] h-48 w-48 -translate-x-1/2 rounded-full border border-slate-200" />
 
         </div>
 
@@ -630,7 +630,7 @@ export default function DashboardLayout({
             BRAND
         ===================================================== */}
 
-        <div className="relative shrink-0 border-b border-white/[0.07] px-5 pb-5 pt-5">
+        <div className="relative shrink-0 border-b border-slate-200 px-5 pb-5 pt-5">
 
           <div className="flex items-center gap-3">
 
@@ -646,11 +646,11 @@ export default function DashboardLayout({
 
             <div className="min-w-0">
 
-              <div className="text-[15px] font-semibold tracking-tight text-white">
+              <div className="text-[15px] font-semibold tracking-tight text-slate-900">
                 E-Rapor
               </div>
 
-              <div className="mt-1 text-[8px] font-semibold uppercase tracking-[0.22em] text-emerald-200/60">
+              <div className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
                 Sistem Akademik SD
               </div>
 
@@ -666,7 +666,7 @@ export default function DashboardLayout({
 
             <div
               dir="rtl"
-              className="font-serif text-[11px] text-amber-200/75"
+              className="font-serif text-sm text-emerald-700"
             >
               بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
             </div>
@@ -677,7 +677,7 @@ export default function DashboardLayout({
 
           {/* SCHOOL */}
 
-          <div className="mt-3 flex items-start gap-2 text-[9px] leading-4 text-emerald-100/50">
+          <div className="mt-3 flex items-start gap-2 text-xs leading-4 text-emerald-700">
 
             <Sparkles
               size={11}
@@ -717,14 +717,14 @@ export default function DashboardLayout({
               className={[
                 'group relative flex min-h-[44px] items-center gap-3',
                 'rounded-xl px-2.5',
-                'text-[12.5px]',
+                'text-sm',
                 'transition-all duration-200',
 
                 isActive(
                   '/dashboard'
                 )
-                  ? 'bg-white/[0.09] text-white shadow-[0_4px_18px_rgba(0,0,0,0.08)]'
-                  : 'text-white/70 hover:bg-white/[0.045] hover:text-white',
+                  ? 'bg-emerald-50 text-emerald-800 shadow-[0_4px_18px_rgba(0,0,0,0.08)]'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
               ].join(' ')}
             >
 
@@ -742,8 +742,8 @@ export default function DashboardLayout({
                   isActive(
                     '/dashboard'
                   )
-                    ? 'bg-emerald-400/10 text-emerald-300'
-                    : 'bg-white/[0.035] text-emerald-200/65 group-hover:bg-emerald-400/[0.06] group-hover:text-emerald-200',
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : 'bg-slate-50 text-emerald-700 group-hover:bg-emerald-50 group-hover:text-emerald-700',
                 ].join(' ')}
               >
 
@@ -778,7 +778,7 @@ export default function DashboardLayout({
                   strokeWidth={
                     1.5
                   }
-                  className="mr-0.5 text-emerald-300/70"
+                  className="mr-0.5 text-emerald-700"
                 />
               )}
 
@@ -850,8 +850,8 @@ export default function DashboardLayout({
 
                         categoryOpen ||
                         categoryActive
-                          ? 'bg-white/[0.055]'
-                          : 'hover:bg-white/[0.035]',
+                          ? 'bg-slate-50'
+                          : 'hover:bg-slate-50',
                       ].join(' ')}
                     >
 
@@ -866,8 +866,8 @@ export default function DashboardLayout({
 
                           categoryActive ||
                           categoryOpen
-                            ? 'bg-emerald-400/10 text-emerald-300'
-                            : 'bg-white/[0.035] text-emerald-200/65 group-hover:bg-white/[0.05] group-hover:text-emerald-200',
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : 'bg-slate-50 text-emerald-700 group-hover:bg-slate-50 group-hover:text-emerald-700',
                         ].join(' ')}
                       >
 
@@ -884,12 +884,12 @@ export default function DashboardLayout({
 
                         <span
                           className={[
-                            'block text-[12px]',
+                            'block text-sm',
 
                             categoryActive ||
                             categoryOpen
-                              ? 'font-semibold text-white'
-                              : 'font-semibold text-white/75 group-hover:text-white',
+                              ? 'font-semibold text-slate-900'
+                              : 'font-semibold text-slate-600 group-hover:text-slate-900',
                           ].join(' ')}
                         >
                           {
@@ -897,7 +897,7 @@ export default function DashboardLayout({
                           }
                         </span>
 
-                        <span className="mt-0.5 block text-[8px] text-white/35">
+                        <span className="mt-0.5 block text-xs text-slate-600">
                           {
                             category.description
                           }
@@ -908,12 +908,12 @@ export default function DashboardLayout({
                       <span
                         className={[
                           'mr-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1.5',
-                          'text-[8px] font-bold',
+                          'text-xs font-bold',
 
                           categoryActive ||
                           categoryOpen
-                            ? 'bg-emerald-400/10 text-emerald-300/80'
-                            : 'bg-white/[0.045] text-white/35',
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : 'bg-slate-50 text-slate-600',
                         ].join(' ')}
                       >
                         {
@@ -930,8 +930,8 @@ export default function DashboardLayout({
                           'shrink-0 transition-transform duration-300',
 
                           categoryOpen
-                            ? 'rotate-180 text-emerald-300'
-                            : 'text-white/35 group-hover:text-white/60',
+                            ? 'rotate-180 text-emerald-700'
+                            : 'text-slate-600 group-hover:text-slate-600',
                         ].join(' ')}
                       />
 
@@ -949,7 +949,7 @@ export default function DashboardLayout({
 
                       <div className="overflow-hidden">
 
-                        <div className="relative ml-[18px] border-l border-white/[0.07] py-1 pl-3">
+                        <div className="relative ml-[18px] border-l border-slate-200 py-1 pl-3">
 
                           {categoryMenus.map(
                             (
@@ -979,17 +979,17 @@ export default function DashboardLayout({
                                   className={[
                                     'group relative flex min-h-[38px] items-center gap-2.5',
                                     'rounded-lg px-2',
-                                    'text-[11.5px]',
+                                    'text-sm',
                                     'transition-all duration-200',
 
                                     active
-                                      ? 'bg-emerald-400/[0.09] text-white'
-                                      : 'text-white/65 hover:bg-white/[0.035] hover:text-white/90',
+                                      ? 'bg-emerald-50 text-emerald-800'
+                                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-600',
                                   ].join(' ')}
                                 >
 
                                   {active && (
-                                    <span className="absolute -left-[17px] h-1.5 w-1.5 rounded-full bg-emerald-400 ring-4 ring-[#052f27]" />
+                                    <span className="absolute -left-[17px] h-1.5 w-1.5 rounded-full bg-emerald-400 ring-4 ring-white" />
                                   )}
 
                                   <span
@@ -997,8 +997,8 @@ export default function DashboardLayout({
                                       'flex h-7 w-7 shrink-0 items-center justify-center rounded-md',
 
                                       active
-                                        ? 'text-emerald-300'
-                                        : 'text-emerald-200/55 group-hover:text-emerald-200',
+                                        ? 'text-emerald-700'
+                                        : 'text-emerald-700 group-hover:text-emerald-700',
                                     ].join(' ')}
                                   >
 
@@ -1031,7 +1031,7 @@ export default function DashboardLayout({
                                       strokeWidth={
                                         1.5
                                       }
-                                      className="text-emerald-300/60"
+                                      className="text-emerald-700"
                                     />
                                   )}
 
@@ -1057,11 +1057,11 @@ export default function DashboardLayout({
               SYSTEM
           ================================================== */}
 
-          <div className="mt-4 border-t border-white/[0.055] pt-4">
+          <div className="mt-4 border-t border-slate-200 pt-4">
 
             <div className="mb-2 px-2">
 
-              <span className="text-[8px] font-bold uppercase tracking-[0.22em] text-emerald-200/40">
+              <span className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-700">
                 Sistem
               </span>
 
@@ -1077,14 +1077,14 @@ export default function DashboardLayout({
               className={[
                 'group relative flex min-h-[42px] items-center gap-3',
                 'rounded-xl px-2.5',
-                'text-[12px]',
+                'text-sm',
                 'transition-all duration-200',
 
                 isActive(
                   '/dashboard/settings'
                 )
-                  ? 'bg-white/[0.08] text-white'
-                  : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
+                  ? 'bg-emerald-50 text-emerald-800'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
               ].join(' ')}
             >
 
@@ -1101,8 +1101,8 @@ export default function DashboardLayout({
                   isActive(
                     '/dashboard/settings'
                   )
-                    ? 'bg-emerald-400/10 text-emerald-300'
-                    : 'bg-white/[0.035] text-emerald-200/60 group-hover:text-emerald-200',
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : 'bg-slate-50 text-emerald-700 group-hover:text-emerald-700',
                 ].join(' ')}
               >
 
@@ -1135,7 +1135,7 @@ export default function DashboardLayout({
                   strokeWidth={
                     1.5
                   }
-                  className="ml-auto text-emerald-300/60"
+                  className="ml-auto text-emerald-700"
                 />
               )}
 
@@ -1149,27 +1149,27 @@ export default function DashboardLayout({
             SIDEBAR FOOTER
         ===================================================== */}
 
-        <div className="relative shrink-0 border-t border-white/[0.07] p-3">
+        <div className="relative shrink-0 border-t border-slate-200 p-3">
 
-          <div className="mb-2.5 rounded-xl border border-emerald-200/[0.07] bg-white/[0.04] p-3">
+          <div className="mb-2.5 rounded-xl border border-emerald-100 bg-slate-50 p-3">
 
             <div className="flex items-center gap-2.5">
 
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-400/[0.08]">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
 
                 <ShieldCheck
                   size={15}
                   strokeWidth={
                     1.6
                   }
-                  className="text-emerald-300/80"
+                  className="text-emerald-700"
                 />
 
               </div>
 
               <div className="min-w-0 flex-1">
 
-                <div className="text-[8px] font-semibold uppercase tracking-[0.15em] text-white/40">
+                <div className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-600">
                   Status Sistem
                 </div>
 
@@ -1177,13 +1177,13 @@ export default function DashboardLayout({
 
                   <span className="relative flex h-1.5 w-1.5">
 
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/40" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-50" />
 
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400/75" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-50" />
 
                   </span>
 
-                  <span className="text-[10px] font-medium text-emerald-100/75">
+                  <span className="text-xs font-medium text-emerald-700">
                     Sistem Aktif
                   </span>
 
@@ -1197,17 +1197,17 @@ export default function DashboardLayout({
 
           <div className="flex items-center gap-2.5 rounded-xl px-1.5 py-2">
 
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-[10px] font-bold text-white shadow-sm ring-1 ring-white/10">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 text-xs font-bold text-white shadow-sm ring-1 ring-white/10">
               A
             </div>
 
             <div className="min-w-0 flex-1">
 
-              <div className="truncate text-[11px] font-semibold text-white/90">
+              <div className="truncate text-sm font-semibold text-slate-600">
                 Administrator
               </div>
 
-              <div className="mt-0.5 truncate text-[8px] text-white/40">
+              <div className="mt-0.5 truncate text-xs text-slate-600">
                 Pengelola Sistem
               </div>
 
@@ -1222,7 +1222,7 @@ export default function DashboardLayout({
               disabled={
                 loggingOut
               }
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-white/45 transition-all duration-200 hover:bg-red-500/10 hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-600 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
             >
 
               <LogOut
@@ -1327,7 +1327,7 @@ export default function DashboardLayout({
       <style jsx global>{`
         .sidebar-scroll {
           scrollbar-width: thin;
-          scrollbar-color: rgba(167, 243, 208, 0.12) transparent;
+          scrollbar-color: rgba(100, 116, 139, 0.30) transparent;
         }
 
         .sidebar-scroll::-webkit-scrollbar {
@@ -1339,12 +1339,12 @@ export default function DashboardLayout({
         }
 
         .sidebar-scroll::-webkit-scrollbar-thumb {
-          background: rgba(167, 243, 208, 0.12);
+          background: rgba(100, 116, 139, 0.30);
           border-radius: 999px;
         }
 
         .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-          background: rgba(167, 243, 208, 0.22);
+          background: rgba(100, 116, 139, 0.50);
         }
 
         ::selection {
