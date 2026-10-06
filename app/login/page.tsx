@@ -115,11 +115,13 @@ export default function LoginPage() {
   // ==========================================================================
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f3f7f4] px-4 py-8 sm:px-6">
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-emerald-200/30 blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-emerald-100/60 blur-3xl" />
-      </div>
+    <main className="relative isolate flex min-h-screen items-center justify-center bg-[#063d31] px-4 py-8 sm:px-6">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/bg-sdit.jpg')" }}
+        aria-hidden="true"
+      />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-black/45" aria-hidden="true" />
 
       <section className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-white bg-white shadow-[0_24px_70px_rgba(6,78,59,0.12)]">
         <header className="bg-[#063d31] px-6 py-8 text-center text-white sm:px-10">
