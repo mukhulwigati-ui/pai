@@ -572,13 +572,13 @@ export default function ClassesPage() {
   // ==========================================================================
 
   return (
-    <div className="min-h-screen bg-[#f7f9f8] text-slate-800">
+    <div className="min-h-screen bg-[#f0f0f1] text-[#1d2327]">
 
       {/* ================================================================== */}
       {/* HEADER */}
       {/* ================================================================== */}
 
-      <header className="border-b border-slate-200/80 bg-white">
+      <header>
 
         <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
 
@@ -590,7 +590,7 @@ export default function ClassesPage() {
 
               <div className="mb-2.5 flex items-center gap-2">
 
-                <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                <span className="flex h-6 w-6 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
 
                   <School
                     size={13}
@@ -599,25 +599,25 @@ export default function ClassesPage() {
 
                 </span>
 
-                <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-emerald-700">
+                <span className="text-sm font-bold uppercase tracking-[0.22em] text-emerald-700">
                   Data Master
                 </span>
 
-                <span className="text-slate-300">
+                <span className="text-[#646970]">
                   /
                 </span>
 
-                <span className="text-[9px] font-medium uppercase tracking-[0.16em] text-slate-400">
+                <span className="text-sm font-medium uppercase tracking-[0.16em] text-[#646970]">
                   Struktur Akademik
                 </span>
 
               </div>
 
-              <h1 className="text-[23px] font-semibold tracking-tight text-slate-900 sm:text-[27px]">
+              <h1 className="text-2xl font-normal text-[#1d2327]">
                 Manajemen Kelas
               </h1>
 
-              <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500 sm:text-sm">
+              <p className="mt-1 max-w-xl text-base leading-6 text-[#646970] sm:text-sm">
                 Kelola struktur kelas siswa {SCHOOL_NAME} untuk tingkat 1 sampai 6.
               </p>
 
@@ -625,11 +625,11 @@ export default function ClassesPage() {
 
             {/* SUMMARY */}
 
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-slate-100 pt-4 lg:border-0 lg:pt-0">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-[#dcdcde] pt-4 lg:border-0 lg:pt-0">
 
               <div className="flex items-center gap-2.5">
 
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
                   <Layers3
                     size={15}
                   />
@@ -637,13 +637,13 @@ export default function ClassesPage() {
 
                 <div>
 
-                  <div className="text-base font-semibold text-slate-800">
+                  <div className="text-base font-semibold text-[#1d2327]">
                     {
                       classes.length
                     }
                   </div>
 
-                  <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                  <div className="text-sm font-medium uppercase tracking-[0.14em] text-[#646970]">
                     Total Kelas
                   </div>
 
@@ -655,7 +655,7 @@ export default function ClassesPage() {
 
               <div className="flex items-center gap-2.5">
 
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+                <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-teal-50 text-teal-700">
                   <School
                     size={15}
                   />
@@ -663,13 +663,13 @@ export default function ClassesPage() {
 
                 <div>
 
-                  <div className="text-base font-semibold text-slate-800">
+                  <div className="text-base font-semibold text-[#1d2327]">
                     {
                       totalGrades
                     }
                   </div>
 
-                  <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                  <div className="text-sm font-medium uppercase tracking-[0.14em] text-[#646970]">
                     Tingkat
                   </div>
 
@@ -681,7 +681,7 @@ export default function ClassesPage() {
 
               <div className="flex items-center gap-2.5">
 
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
                   <CheckCircle2
                     size={15}
                   />
@@ -689,13 +689,13 @@ export default function ClassesPage() {
 
                 <div>
 
-                  <div className="text-base font-semibold text-slate-800">
+                  <div className="text-base font-semibold text-[#1d2327]">
                     {
                       activeClasses
                     }
                   </div>
 
-                  <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                  <div className="text-sm font-medium uppercase tracking-[0.14em] text-[#646970]">
                     Aktif
                   </div>
 
@@ -707,7 +707,7 @@ export default function ClassesPage() {
 
               <div className="flex items-center gap-2.5">
 
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+                <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-amber-50 text-amber-700">
                   <BookOpen
                     size={15}
                   />
@@ -715,11 +715,11 @@ export default function ClassesPage() {
 
                 <div>
 
-                  <div className="text-base font-semibold text-slate-800">
+                  <div className="text-base font-semibold text-[#1d2327]">
                     SD
                   </div>
 
-                  <div className="text-[8px] font-medium uppercase tracking-[0.14em] text-slate-400">
+                  <div className="text-sm font-medium uppercase tracking-[0.14em] text-[#646970]">
                     Jenjang
                   </div>
 
@@ -746,7 +746,7 @@ export default function ClassesPage() {
         {message && (
           <div
             className={[
-              'mb-5 flex items-center gap-2 border-b px-1 pb-3 text-xs',
+              'mb-5 flex items-center gap-2 border-b px-1 pb-3 text-base',
               messageType ===
               'success'
                 ? 'border-emerald-200 text-emerald-700'
@@ -772,13 +772,13 @@ export default function ClassesPage() {
 
         {/* CONTENT */}
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[270px_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-8 xl:grid-cols-[320px_minmax(0,1fr)]">
 
           {/* ============================================================= */}
           {/* FORM */}
           {/* ============================================================= */}
 
-          <section className="lg:border-r lg:border-slate-200 lg:pr-7">
+          <section className="h-fit border border-[#c3c4c7] bg-white p-5">
 
             <div className="mb-5">
 
@@ -806,7 +806,7 @@ export default function ClassesPage() {
 
               </div>
 
-              <p className="mt-1 text-[11px] leading-5 text-slate-400">
+              <p className="mt-1 text-sm leading-6 text-[#646970]">
                 {editingId
                   ? 'Perbarui informasi kelas yang dipilih.'
                   : 'Tambahkan kelas baru jenjang SD.'}
@@ -825,7 +825,7 @@ export default function ClassesPage() {
 
               <div>
 
-                <label className="mb-1.5 block text-[9px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                <label className="mb-1.5 block text-sm font-bold uppercase tracking-[0.16em] text-[#646970]">
                   Nama Kelas
                 </label>
 
@@ -840,7 +840,7 @@ export default function ClassesPage() {
                   }
                   required
                   placeholder="Contoh: 1A"
-                  className="h-10 w-full border-b border-slate-200 bg-transparent px-0 text-sm font-medium text-slate-800 outline-none transition placeholder:text-slate-300 focus:border-emerald-600"
+                  className="h-11 w-full rounded-sm border border-[#8c8f94] bg-white px-3 text-sm font-medium text-[#1d2327] outline-none transition placeholder:text-[#646970] focus:border-[#2271b1]"
                 />
 
               </div>
@@ -849,7 +849,7 @@ export default function ClassesPage() {
 
               <div>
 
-                <label className="mb-1.5 block text-[9px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                <label className="mb-1.5 block text-sm font-bold uppercase tracking-[0.16em] text-[#646970]">
                   Tingkat
                 </label>
 
@@ -863,7 +863,7 @@ export default function ClassesPage() {
                           .value
                       )
                     }
-                    className="h-10 w-full appearance-none border-b border-slate-200 bg-transparent px-0 text-sm font-medium text-slate-800 outline-none transition focus:border-emerald-600"
+                    className="h-11 w-full appearance-none rounded-sm border border-[#8c8f94] bg-white pl-3 pr-8 text-sm font-medium text-[#1d2327] outline-none transition focus:border-[#2271b1]"
                   >
                     {GRADES.map(
                       (item) => (
@@ -886,7 +886,7 @@ export default function ClassesPage() {
 
                   <ChevronDown
                     size={15}
-                    className="pointer-events-none absolute right-0 top-3 text-slate-400"
+                    className="pointer-events-none absolute right-3 top-3 text-[#646970]"
                   />
 
                 </div>
@@ -897,17 +897,17 @@ export default function ClassesPage() {
 
               <div>
 
-                <label className="mb-1.5 block text-[9px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                <label className="mb-1.5 block text-sm font-bold uppercase tracking-[0.16em] text-[#646970]">
                   Jenjang
                 </label>
 
-                <div className="flex h-10 items-center justify-between border-b border-slate-200">
+                <div className="flex h-10 items-center justify-between border-b border-[#c3c4c7]">
 
                   <span className="text-sm font-semibold text-emerald-700">
                     SD
                   </span>
 
-                  <span className="text-[9px] text-slate-400">
+                  <span className="text-sm text-[#646970]">
                     Tetap
                   </span>
 
@@ -923,10 +923,10 @@ export default function ClassesPage() {
                   type="submit"
                   disabled={loading}
                   className={[
-                    'flex h-10 flex-1 items-center justify-center gap-2 rounded-lg text-xs font-semibold text-white shadow-sm transition',
+                    'flex h-10 flex-1 items-center justify-center gap-2 rounded-sm text-base font-semibold text-white  transition',
                     editingId
-                      ? 'bg-amber-600 hover:bg-amber-700'
-                      : 'bg-[#07543f] hover:bg-[#064633]',
+                      ? 'bg-[#2271b1] hover:bg-[#135e96]'
+                      : 'bg-[#2271b1] hover:bg-[#135e96]',
                     'disabled:cursor-not-allowed disabled:opacity-50',
                   ].join(' ')}
                 >
@@ -957,7 +957,7 @@ export default function ClassesPage() {
                     onClick={
                       resetForm
                     }
-                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:bg-slate-50"
+                    className="flex h-10 w-10 items-center justify-center rounded-sm border border-[#c3c4c7] bg-white text-[#646970] transition hover:border-slate-300 hover:bg-slate-50"
                     title="Batal edit"
                   >
                     <X
@@ -972,7 +972,7 @@ export default function ClassesPage() {
 
             {/* INFO */}
 
-            <div className="mt-7 border-t border-slate-100 pt-5">
+            <div className="mt-7 border-t border-[#dcdcde] pt-5">
 
               <div className="flex gap-2.5">
 
@@ -981,13 +981,13 @@ export default function ClassesPage() {
                   className="mt-0.5 shrink-0 text-emerald-600"
                 />
 
-                <p className="text-[10px] leading-5 text-slate-400">
+                <p className="text-sm leading-6 text-[#646970]">
                   {SCHOOL_NAME} menggunakan jenjang{' '}
-                  <strong className="text-slate-500">
+                  <strong className="text-[#646970]">
                     SD
                   </strong>{' '}
                   dengan tingkat kelas{' '}
-                  <strong className="text-slate-500">
+                  <strong className="text-[#646970]">
                     1 sampai 6
                   </strong>.
                 </p>
@@ -1002,7 +1002,7 @@ export default function ClassesPage() {
           {/* LIST */}
           {/* ============================================================= */}
 
-          <section className="min-w-0">
+          <section className="min-w-0 border border-[#c3c4c7] bg-white p-5">
 
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
@@ -1022,7 +1022,7 @@ export default function ClassesPage() {
 
                 </div>
 
-                <p className="mt-1 text-[11px] text-slate-400">
+                <p className="mt-1 text-sm text-[#646970]">
                   {
                     classes.length
                   }{' '}
@@ -1041,7 +1041,7 @@ export default function ClassesPage() {
                   disabled={
                     deletingAll
                   }
-                  className="inline-flex h-8 items-center justify-center gap-1.5 self-start border-b border-red-200 px-1 text-[10px] font-semibold text-red-500 transition hover:border-red-400 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 sm:self-auto"
+                  className="inline-flex h-8 items-center justify-center gap-1.5 self-start border-b border-red-200 px-1 text-sm font-semibold text-red-500 transition hover:border-red-400 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 sm:self-auto"
                 >
                   <Trash2
                     size={13}
@@ -1058,11 +1058,11 @@ export default function ClassesPage() {
             {/* LOADING */}
 
             {loadingClasses ? (
-              <div className="border-y border-slate-200 py-14 text-center">
+              <div className="border-y border-[#c3c4c7] py-14 text-center">
 
                 <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-emerald-200 border-t-emerald-600" />
 
-                <p className="mt-3 text-[11px] text-slate-400">
+                <p className="mt-3 text-sm text-[#646970]">
                   Memuat data kelas...
                 </p>
 
@@ -1071,19 +1071,19 @@ export default function ClassesPage() {
               0 ? (
               /* EMPTY */
 
-              <div className="border-y border-dashed border-slate-200 py-14 text-center">
+              <div className="border-y border-dashed border-[#c3c4c7] py-14 text-center">
 
                 <School
                   size={30}
                   strokeWidth={1.3}
-                  className="mx-auto mb-3 text-slate-300"
+                  className="mx-auto mb-3 text-[#646970]"
                 />
 
-                <p className="text-sm font-medium text-slate-500">
+                <p className="text-sm font-medium text-[#646970]">
                   Belum ada kelas
                 </p>
 
-                <p className="mt-1 text-[11px] text-slate-400">
+                <p className="mt-1 text-sm text-[#646970]">
                   Tambahkan kelas menggunakan formulir di sebelah kiri.
                 </p>
 
@@ -1095,19 +1095,19 @@ export default function ClassesPage() {
 
                 <div className="mb-2 flex items-center gap-3">
 
-                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-700">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
                     <School
                       size={13}
                     />
                   </div>
 
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">
+                  <span className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-700">
                     SD
                   </span>
 
                   <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent" />
 
-                  <span className="text-[10px] text-slate-400">
+                  <span className="text-sm text-[#646970]">
                     {
                       sortedClasses.length
                     }{' '}
@@ -1118,7 +1118,7 @@ export default function ClassesPage() {
 
                 {/* TABLE HEADER */}
 
-                <div className="hidden grid-cols-[70px_1fr_110px_140px_76px] gap-4 border-b border-slate-200 px-3 py-2.5 text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:grid">
+                <div className="hidden grid-cols-[70px_minmax(0,1fr)_110px_140px_96px] gap-4 border-b border-[#c3c4c7] px-3 py-2.5 text-sm font-bold uppercase tracking-wider text-[#646970] lg:grid">
 
                   <span>
                     Tingkat
@@ -1161,20 +1161,20 @@ export default function ClassesPage() {
                           key={
                             cls.id
                           }
-                          className="group border-b border-slate-100 px-3 py-3 transition hover:bg-emerald-50/30"
+                          className="group border-b border-[#dcdcde] px-3 py-3 transition hover:bg-[#f6f7f7]"
                         >
 
-                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[70px_1fr_110px_140px_76px] sm:items-center sm:gap-4">
+                          <div className="grid grid-cols-1 gap-3 lg:grid-cols-[70px_minmax(0,1fr)_110px_140px_96px] lg:items-center lg:gap-4">
 
                             {/* GRADE */}
 
-                            <div className="flex items-center gap-2 sm:block">
+                            <div className="flex items-center gap-2 lg:block">
 
-                              <span className="text-[9px] text-slate-400 sm:hidden">
+                              <span className="text-sm text-[#646970] lg:hidden">
                                 Tingkat
                               </span>
 
-                              <span className="text-xs font-semibold text-slate-600">
+                              <span className="text-base font-semibold text-slate-600">
                                 Kelas{' '}
                                 {
                                   cls.grade
@@ -1187,7 +1187,7 @@ export default function ClassesPage() {
 
                             <div className="flex min-w-0 items-center gap-3">
 
-                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-100">
+                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-100">
 
                                 <School
                                   size={14}
@@ -1197,13 +1197,13 @@ export default function ClassesPage() {
 
                               <div className="min-w-0">
 
-                                <div className="truncate text-sm font-semibold text-slate-800">
+                                <div className="truncate text-sm font-semibold text-[#1d2327]">
                                   {
                                     cls.name
                                   }
                                 </div>
 
-                                <div className="mt-0.5 text-[9px] text-slate-400">
+                                <div className="mt-0.5 text-sm text-[#646970]">
                                   SD
                                   {' · '}
                                   Kelas{' '}
@@ -1233,10 +1233,10 @@ export default function ClassesPage() {
 
                               <span
                                 className={[
-                                  'text-[10px] font-medium',
+                                  'text-sm font-medium',
                                   active
                                     ? 'text-emerald-700'
-                                    : 'text-slate-400',
+                                    : 'text-[#646970]',
                                 ].join(
                                   ' '
                                 )}
@@ -1250,7 +1250,7 @@ export default function ClassesPage() {
 
                             {/* STUDENT */}
 
-                            <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
+                            <div className="flex items-center gap-1.5 text-sm text-[#646970]">
 
                               <Users
                                 size={13}
@@ -1278,7 +1278,7 @@ export default function ClassesPage() {
                                   deletingAll
                                 }
                                 title="Edit kelas"
-                                className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-amber-50 hover:text-amber-600 disabled:cursor-not-allowed disabled:opacity-40"
+                                className="flex h-10 w-10 items-center justify-center rounded-sm text-[#646970] transition hover:bg-[#f0f6fc] hover:text-[#2271b1] disabled:cursor-not-allowed disabled:opacity-40"
                               >
 
                                 <Edit3
@@ -1299,7 +1299,7 @@ export default function ClassesPage() {
                                   deletingAll
                                 }
                                 title="Hapus kelas"
-                                className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+                                className="flex h-10 w-10 items-center justify-center rounded-sm text-[#646970] transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
                               >
 
                                 {deleting ? (
@@ -1332,17 +1332,6 @@ export default function ClassesPage() {
 
       </main>
 
-      {/* ACCENT */}
-
-      <div className="pointer-events-none fixed bottom-0 right-0 -z-0 hidden h-72 w-72 overflow-hidden opacity-[0.025] lg:block">
-
-        <div className="absolute -bottom-28 -right-28 h-80 w-80 rounded-full border-[16px] border-emerald-800" />
-
-        <div className="absolute -bottom-12 -right-12 h-56 w-56 rounded-full border-[8px] border-emerald-800" />
-
-        <div className="absolute bottom-16 right-16 h-24 w-24 rotate-45 border border-emerald-800" />
-
-      </div>
 
     </div>
   );

@@ -424,7 +424,7 @@ export default function SubjectsPage() {
   // ==========================================================================
 
   return (
-    <main className="min-h-screen bg-[#f7f9f8] text-slate-800">
+    <main className="min-h-screen bg-[#f0f0f1] text-[#1d2327]">
 
       <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
 
@@ -432,79 +432,16 @@ export default function SubjectsPage() {
         {/* HEADER */}
         {/* ================================================================ */}
 
-        <header className="mb-5 flex items-center justify-between border-b border-slate-200/80 pb-4">
-
-          <div className="flex items-center gap-3">
-
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
-              <BookIcon />
-            </div>
-
-            <div>
-
-              <div className="flex items-center gap-2">
-
-                <h1 className="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
-                  Mata Pelajaran
-                </h1>
-
-                <span className="hidden rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-700 sm:inline-flex">
-                  SD
-                </span>
-
-              </div>
-
-              <p className="mt-0.5 text-[11px] text-slate-500">
-                Kelola daftar mata pelajaran {SCHOOL_NAME}.
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className="hidden text-right sm:block">
-
-            <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-              SDIT Khoiro Ummah
-            </div>
-
-            <div className="mt-0.5 font-serif text-sm text-emerald-700">
-              العلم نور
-            </div>
-
-          </div>
-
+        <header className="mb-6">
+          <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Mata Pelajaran</h1>
+          <p className="mt-2 text-base text-[#646970]">Kelola mata pelajaran SDIT Khoiro Ummah.</p>
         </header>
-
-        {/* ================================================================ */}
-        {/* LEVEL */}
-        {/* ================================================================ */}
-
-        <div className="mb-5 inline-flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-2.5">
-
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white">
-            <GraduationIcon />
-          </div>
-
-          <div>
-
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-emerald-600">
-              Jenjang
-            </p>
-
-            <p className="text-xs font-bold text-emerald-900">
-              Sekolah Dasar
-            </p>
-
-          </div>
-
-        </div>
 
         {/* ================================================================ */}
         {/* SUMMARY */}
         {/* ================================================================ */}
 
-        <div className="mb-5 flex flex-wrap items-center divide-x divide-slate-200 rounded-xl border border-slate-200/80 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.03)]">
+        <div className="mb-5 flex flex-wrap items-center divide-x divide-[#dcdcde] rounded-sm border border-[#c3c4c7] bg-white">
 
           <MiniStat
             label="Total Mata Pelajaran"
@@ -514,7 +451,7 @@ export default function SubjectsPage() {
 
           <div className="flex min-w-[150px] flex-1 items-center gap-2 px-4 py-3">
 
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+            <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-emerald-50 text-[#2271b1]">
               <CheckIcon />
             </div>
 
@@ -522,7 +459,7 @@ export default function SubjectsPage() {
 
               <div className="flex items-center gap-1.5">
 
-                <span className="text-sm font-bold text-slate-800">
+                <span className="text-sm font-bold text-[#1d2327]">
                   Aktif
                 </span>
 
@@ -530,7 +467,7 @@ export default function SubjectsPage() {
 
               </div>
 
-              <div className="text-[9px] font-medium text-slate-400">
+              <div className="text-sm font-medium text-[#646970]">
                 Status sistem
               </div>
 
@@ -546,7 +483,7 @@ export default function SubjectsPage() {
 
         {message && (
           <div
-            className={`mb-5 flex items-center gap-2.5 rounded-lg border px-3.5 py-2.5 text-xs ${
+            className={`mb-5 flex items-center gap-2.5 rounded-sm border px-3.5 py-2.5 text-base ${
               message.startsWith(
                 'Sukses'
               )
@@ -573,25 +510,25 @@ export default function SubjectsPage() {
         {/* MAIN */}
         {/* ================================================================ */}
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
 
           {/* ============================================================= */}
           {/* FORM */}
           {/* ============================================================= */}
 
-          <section className="h-fit rounded-xl border border-slate-200 bg-white shadow-[0_3px_16px_rgba(15,23,42,0.035)]">
+          <section className="h-fit rounded-sm border border-[#c3c4c7] bg-white">
 
-            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5">
+            <div className="flex items-center justify-between border-b border-[#c3c4c7] px-4 py-3.5">
 
               <div>
 
-                <h2 className="text-xs font-bold text-slate-800">
+                <h2 className="text-base font-bold text-[#1d2327]">
                   {editingId
                     ? 'Edit Mata Pelajaran'
                     : 'Tambah Mata Pelajaran'}
                 </h2>
 
-                <p className="mt-0.5 text-[10px] text-slate-400">
+                <p className="mt-0.5 text-sm text-[#646970]">
                   {editingId
                     ? 'Perbarui mata pelajaran yang dipilih.'
                     : 'Pilih dari daftar atau tambahkan mapel lain.'}
@@ -605,7 +542,7 @@ export default function SubjectsPage() {
                   onClick={
                     handleCancelEdit
                   }
-                  className="text-[10px] font-semibold text-red-600 hover:text-red-700"
+                  className="text-sm font-semibold text-red-600 hover:text-red-700"
                 >
                   Batal
                 </button>
@@ -620,7 +557,7 @@ export default function SubjectsPage() {
 
               <div>
 
-                <label className="mb-1.5 block text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                <label className="mb-1.5 block text-sm font-bold text-[#646970]">
                   Nama Mata Pelajaran
                 </label>
 
@@ -640,20 +577,20 @@ export default function SubjectsPage() {
                       className="
                         h-11
                         w-full
-                        rounded-lg
+                        rounded-sm
                         border
-                        border-slate-200
-                        bg-slate-50
+                        border-[#c3c4c7]
+                        bg-[#f6f7f7]
                         px-3
-                        text-xs
-                        text-slate-800
+                        text-base
+                        text-[#1d2327]
                         outline-none
                         transition
 
-                        focus:border-emerald-500
+                        focus:border-[#2271b1]
                         focus:bg-white
-                        focus:ring-3
-                        focus:ring-emerald-500/10
+                        focus:ring-2
+                        focus:ring-[#2271b1]/20
                       "
                     >
                       <option value="">
@@ -686,7 +623,7 @@ export default function SubjectsPage() {
 
                         setMessage('');
                       }}
-                      className="text-[11px] font-semibold text-emerald-700 hover:underline"
+                      className="text-sm font-semibold text-emerald-700 hover:underline"
                     >
                       + Tambah Mapel Lain (Ketik Sendiri)
                     </button>
@@ -712,22 +649,22 @@ export default function SubjectsPage() {
                       className="
                         h-11
                         w-full
-                        rounded-lg
+                        rounded-sm
                         border
-                        border-slate-200
-                        bg-slate-50
+                        border-[#c3c4c7]
+                        bg-[#f6f7f7]
                         px-3
-                        text-xs
-                        text-slate-800
+                        text-base
+                        text-[#1d2327]
                         outline-none
                         transition
 
-                        placeholder:text-slate-400
+                        placeholder:text-[#646970]
 
-                        focus:border-emerald-500
+                        focus:border-[#2271b1]
                         focus:bg-white
-                        focus:ring-3
-                        focus:ring-emerald-500/10
+                        focus:ring-2
+                        focus:ring-[#2271b1]/20
                       "
                     />
 
@@ -744,7 +681,7 @@ export default function SubjectsPage() {
 
                         setMessage('');
                       }}
-                      className="text-[11px] font-semibold text-slate-500 hover:text-emerald-700 hover:underline"
+                      className="text-sm font-semibold text-[#646970] hover:text-[#2271b1] hover:underline"
                     >
                       ← Kembali ke pilihan standar
                     </button>
@@ -767,15 +704,14 @@ export default function SubjectsPage() {
                   items-center
                   justify-center
                   gap-2
-                  rounded-lg
-                  bg-emerald-600
-                  text-xs
+                  rounded-sm
+                  bg-[#2271b1]
+                  text-base
                   font-bold
                   text-white
-                  shadow-sm
                   transition
 
-                  hover:bg-emerald-700
+                  hover:bg-[#135e96]
 
                   disabled:cursor-not-allowed
                   disabled:opacity-60
@@ -802,27 +738,27 @@ export default function SubjectsPage() {
           {/* LIST */}
           {/* ============================================================= */}
 
-          <section className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_3px_16px_rgba(15,23,42,0.035)]">
+          <section className="min-w-0 overflow-hidden rounded-sm border border-[#c3c4c7] bg-white">
 
             {/* LIST HEADER */}
 
-            <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-b border-[#c3c4c7] px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
 
               <div>
 
                 <div className="flex items-center gap-2">
 
-                  <h2 className="text-xs font-bold text-slate-800">
+                  <h2 className="text-base font-bold text-[#1d2327]">
                     Daftar Mata Pelajaran
                   </h2>
 
-                  <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-bold text-slate-500">
+                  <span className="rounded-full bg-[#f6f7f7] px-2 py-0.5 text-sm font-bold text-[#646970]">
                     {totalSubjects}
                   </span>
 
                 </div>
 
-                <p className="mt-0.5 text-[10px] text-slate-400">
+                <p className="mt-0.5 text-sm text-[#646970]">
                   Mata pelajaran jenjang SD yang terdaftar.
                 </p>
 
@@ -838,7 +774,7 @@ export default function SubjectsPage() {
                   disabled={
                     deletingBulk
                   }
-                  className="flex items-center justify-center gap-1.5 rounded-lg bg-red-600 px-3 py-2 text-[10px] font-bold text-white transition hover:bg-red-700 disabled:opacity-60"
+                  className="flex items-center justify-center gap-1.5 rounded-sm bg-red-600 px-3 py-2 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-60"
                 >
                   <TrashIcon />
 
@@ -853,7 +789,7 @@ export default function SubjectsPage() {
             {/* SELECT ALL */}
 
             {subjects.length > 0 && (
-              <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50/60 px-4 py-2.5">
+              <div className="flex items-center gap-2 border-b border-[#c3c4c7] bg-[#f6f7f7] px-4 py-2.5">
 
                 <input
                   type="checkbox"
@@ -863,7 +799,7 @@ export default function SubjectsPage() {
                   onChange={
                     handleSelectAll
                   }
-                  className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                  className="h-4 w-4 cursor-pointer accent-[#2271b1] rounded border-[#c3c4c7] text-[#2271b1] focus:ring-[#2271b1]"
                 />
 
                 <button
@@ -884,7 +820,7 @@ export default function SubjectsPage() {
                       );
                     }
                   }}
-                  className="text-[10px] font-semibold text-slate-500 hover:text-emerald-700"
+                  className="text-sm font-semibold text-[#646970] hover:text-[#2271b1]"
                 >
                   {allSelected
                     ? 'Batalkan Semua'
@@ -893,7 +829,7 @@ export default function SubjectsPage() {
 
                 {selectedIds.length >
                   0 && (
-                  <span className="ml-auto text-[9px] font-medium text-emerald-600">
+                  <span className="ml-auto text-sm font-medium text-[#2271b1]">
                     {
                       selectedIds.length
                     }{' '}
@@ -914,11 +850,11 @@ export default function SubjectsPage() {
                 0 ? (
                 <EmptyState />
               ) : (
-                <div className="overflow-hidden rounded-lg border border-slate-200">
+                <div className="overflow-hidden rounded-sm border border-[#c3c4c7]">
 
                   {/* TABLE HEADER */}
 
-                  <div className="hidden grid-cols-[40px_minmax(0,1fr)_90px] items-center gap-3 border-b border-slate-100 bg-slate-50/80 px-3 py-2 text-[9px] font-bold uppercase tracking-wider text-slate-400 sm:grid">
+                  <div className="hidden grid-cols-[60px_minmax(0,1fr)_100px] items-center gap-3 border-b border-[#c3c4c7] bg-[#f6f7f7] px-3 py-2 text-sm font-bold text-[#646970] sm:grid">
 
                     <span>
                       No
@@ -936,7 +872,7 @@ export default function SubjectsPage() {
 
                   {/* ROWS */}
 
-                  <div className="divide-y divide-slate-100">
+                  <div className="divide-y divide-[#dcdcde]">
 
                     {subjects.map(
                       (
@@ -953,10 +889,10 @@ export default function SubjectsPage() {
                             key={
                               subject.id
                             }
-                            className={`group grid grid-cols-1 gap-2 px-3 py-3 transition sm:grid-cols-[40px_minmax(0,1fr)_90px] sm:items-center sm:gap-3 ${
+                            className={`group grid grid-cols-1 gap-2 px-3 py-3 transition sm:grid-cols-[60px_minmax(0,1fr)_100px] sm:items-center sm:gap-3 ${
                               isChecked
-                                ? 'bg-emerald-50/60'
-                                : 'bg-white hover:bg-slate-50/70'
+                                ? 'bg-[#f0f6fc]'
+                                : 'bg-white hover:bg-[#f6f7f7]'
                             }`}
                           >
 
@@ -974,10 +910,10 @@ export default function SubjectsPage() {
                                     subject.id
                                   )
                                 }
-                                className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                                className="h-4 w-4 cursor-pointer accent-[#2271b1] rounded border-[#c3c4c7] text-[#2271b1] focus:ring-[#2271b1]"
                               />
 
-                              <span className="text-[9px] font-bold text-slate-400">
+                              <span className="text-sm font-bold text-[#646970]">
                                 {String(
                                   index +
                                     1
@@ -995,13 +931,13 @@ export default function SubjectsPage() {
 
                               <div className="flex items-center gap-2">
 
-                                <h3 className="truncate text-xs font-bold text-slate-800">
+                                <h3 className="break-words text-base font-bold text-[#1d2327]">
                                   {
                                     subject.name
                                   }
                                 </h3>
 
-                                <span className="hidden shrink-0 rounded bg-emerald-50 px-1.5 py-0.5 text-[8px] font-semibold text-emerald-600 sm:inline-block">
+                                <span className="hidden shrink-0 rounded bg-emerald-50 px-1.5 py-0.5 text-sm font-semibold text-[#2271b1] sm:inline-block">
                                   SD
                                 </span>
 
@@ -1011,7 +947,7 @@ export default function SubjectsPage() {
 
                             {/* ACTION */}
 
-                            <div className="flex items-center justify-end gap-1.5 border-t border-slate-100 pt-2 sm:border-0 sm:pt-0">
+                            <div className="flex items-center justify-end gap-1.5 border-t border-[#c3c4c7] pt-2 sm:border-0 sm:pt-0">
 
                               <button
                                 type="button"
@@ -1021,7 +957,7 @@ export default function SubjectsPage() {
                                   )
                                 }
                                 title="Edit"
-                                className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-amber-50 hover:text-amber-600"
+                                className="flex h-9 w-9 items-center justify-center rounded-sm text-[#646970] transition hover:bg-[#f0f6fc] hover:text-[#2271b1]"
                               >
                                 <EditIcon />
                               </button>
@@ -1034,7 +970,7 @@ export default function SubjectsPage() {
                                   )
                                 }
                                 title="Hapus"
-                                className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+                                className="flex h-9 w-9 items-center justify-center rounded-sm text-[#646970] transition hover:bg-red-50 hover:text-red-600"
                               >
                                 <TrashIcon />
                               </button>
@@ -1061,13 +997,13 @@ export default function SubjectsPage() {
         {/* FOOTER */}
         {/* ================================================================ */}
 
-        <footer className="mt-5 flex items-center justify-between border-t border-slate-200/70 pt-3 text-[9px] text-slate-400">
+        <footer className="mt-5 flex items-center justify-between border-t border-[#c3c4c7] pt-3 text-sm text-[#646970]">
 
           <span>
             Sistem Akademik · Sekolah Dasar Islam Terpadu Khoiro Ummah
           </span>
 
-          <span className="hidden font-serif text-slate-500 sm:block">
+          <span className="hidden font-serif text-[#646970] sm:block">
             العلم نور
           </span>
 
@@ -1095,17 +1031,17 @@ function MiniStat({
   return (
     <div className="flex min-w-[140px] flex-1 items-center gap-2.5 px-4 py-3">
 
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-[#f6f7f7] text-[#646970]">
         {icon}
       </div>
 
       <div>
 
-        <div className="text-sm font-bold leading-none text-slate-800">
+        <div className="text-sm font-bold leading-none text-[#1d2327]">
           {value}
         </div>
 
-        <div className="mt-1 text-[9px] font-medium text-slate-400">
+        <div className="mt-1 text-sm font-medium text-[#646970]">
           {label}
         </div>
 
@@ -1121,19 +1057,19 @@ function MiniStat({
 
 function LoadingState() {
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200">
+    <div className="overflow-hidden rounded-sm border border-[#c3c4c7]">
 
       {[1, 2, 3, 4, 5].map(
         (item) => (
           <div
             key={item}
-            className="flex h-[54px] animate-pulse items-center gap-3 border-b border-slate-100 bg-slate-50/60 px-3 last:border-0"
+            className="flex h-[54px] animate-pulse items-center gap-3 border-b border-[#c3c4c7] bg-[#f6f7f7] px-3 last:border-0"
           >
-            <div className="h-3 w-3 rounded bg-slate-200" />
+            <div className="h-3 w-3 rounded bg-[#f6f7f7]" />
 
-            <div className="h-3 w-1/3 rounded bg-slate-200" />
+            <div className="h-3 w-1/3 rounded bg-[#f6f7f7]" />
 
-            <div className="ml-auto h-3 w-24 rounded bg-slate-200" />
+            <div className="ml-auto h-3 w-24 rounded bg-[#f6f7f7]" />
           </div>
         )
       )}
@@ -1148,17 +1084,17 @@ function LoadingState() {
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/50 px-6 py-12 text-center">
+    <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-[#c3c4c7] bg-[#f6f7f7] px-6 py-12 text-center">
 
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-sm bg-[#f6f7f7] text-[#646970]">
         <BookIcon />
       </div>
 
-      <h3 className="text-xs font-bold text-slate-700">
+      <h3 className="text-base font-bold text-[#1d2327]">
         Belum ada mata pelajaran
       </h3>
 
-      <p className="mt-1 max-w-xs text-[10px] leading-4 text-slate-400">
+      <p className="mt-1 max-w-xs text-sm leading-relaxed text-[#646970]">
         Tambahkan mata pelajaran menggunakan formulir di sebelah kiri.
       </p>
 

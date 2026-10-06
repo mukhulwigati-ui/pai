@@ -1700,7 +1700,7 @@ export default function AssessmentPage() {
   ========================================================== */
 
   return (
-    <main className="min-h-screen bg-[#f5f8f6]">
+    <main className="min-h-screen bg-[#f0f0f1]">
 
       <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
 
@@ -1708,79 +1708,15 @@ export default function AssessmentPage() {
             HEADER
         ===================================================== */}
 
-        <section className="relative overflow-hidden rounded-2xl bg-[#064e3b] px-6 py-7 text-white shadow-lg">
-
-          <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-emerald-300/[0.06] blur-3xl" />
-
-          <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-
-            <div className="flex items-start gap-4">
-
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.07]">
-
-                <ClipboardCheck
-                  size={23}
-                  className="text-emerald-200"
-                />
-
-              </div>
-
-              <div>
-
-                <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-emerald-200/60">
-                  Akademik • Asesmen
-                </span>
-
-                <h1 className="mt-1 text-xl font-bold sm:text-2xl">
-                  Input Nilai Asesmen
-                </h1>
-
-                <p className="mt-1.5 max-w-2xl text-xs leading-5 text-emerald-100/65">
-                  Pilih kelas dan mata pelajaran, kemudian isi nilai lisan/praktik dan tertulis siswa.
-                </p>
-
-              </div>
-
-            </div>
-
-            <div className="flex flex-col items-start gap-2 sm:items-end">
-
-              <button
-                type="button"
-                onClick={
-                  loadData
-                }
-                disabled={
-                  loadingData ||
-                  loading
-                }
-                className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-xs font-semibold transition hover:bg-white/20 disabled:opacity-50"
-              >
-
-                <RefreshCw
-                  size={14}
-                  className={
-                    loadingData
-                      ? 'animate-spin'
-                      : ''
-                  }
-                />
-
-                Perbarui
-
-              </button>
-
-              <div className="text-[9px] text-emerald-100/50">
-                {academicYear ||
-                  'Tahun ajaran belum diatur'}{' '}
-                • Semester{' '}
-                {activeSemester}
-              </div>
-
-            </div>
-
+        <section className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-normal text-[#1d2327]">Input Nilai Asesmen</h1>
+            <p className="mt-2 text-base leading-6 text-[#646970]">Pilih kelas dan mata pelajaran untuk mulai mengisi nilai.</p>
+            <p className="mt-2 text-sm text-[#646970]">{academicYear || 'Tahun ajaran belum diatur'} · Semester {activeSemester}</p>
           </div>
-
+          <button type="button" onClick={loadData} disabled={loadingData || loading} className="inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-sm border border-[#2271b1] bg-[#f6f7f7] px-4 py-2 text-base text-[#2271b1] hover:bg-[#f0f6fc] disabled:cursor-not-allowed disabled:opacity-50">
+            <RefreshCw size={18} className={loadingData ? 'animate-spin' : ''} /> Perbarui
+          </button>
         </section>
 
         {/* ====================================================
@@ -1789,7 +1725,7 @@ export default function AssessmentPage() {
 
         {message && (
           <div
-            className={`flex items-start gap-3 rounded-xl border p-4 text-xs font-semibold ${
+            className={`flex items-start gap-3 rounded-sm border p-4 text-base font-semibold ${
               messageType ===
               'success'
                 ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
@@ -1819,11 +1755,11 @@ export default function AssessmentPage() {
             FILTER
         ===================================================== */}
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-sm border border-[#c3c4c7] bg-white p-5">
 
           <div className="mb-4 flex items-center gap-3">
 
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
 
               <GraduationCap
                 size={18}
@@ -1833,11 +1769,11 @@ export default function AssessmentPage() {
 
             <div>
 
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm font-bold text-[#1d2327]">
                 Parameter Asesmen
               </h2>
 
-              <p className="mt-0.5 text-[10px] text-slate-400">
+              <p className="mt-0.5 text-sm text-[#646970]">
                 Jenjang SD • Kelas 1–6
               </p>
 
@@ -1853,7 +1789,7 @@ export default function AssessmentPage() {
                 className="animate-spin text-emerald-600"
               />
 
-              <span className="ml-2 text-xs text-slate-400">
+              <span className="ml-2 text-base text-[#646970]">
                 Memuat data...
               </span>
 
@@ -1865,7 +1801,7 @@ export default function AssessmentPage() {
 
               <div>
 
-                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                <label className="mb-1.5 block text-base font-bold text-slate-700">
                   1. Pilih Kelas *
                 </label>
 
@@ -1891,7 +1827,7 @@ export default function AssessmentPage() {
 
                     clearMessage();
                   }}
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                  className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-sm font-medium outline-none transition focus:border-[#2271b1] focus:ring-4 focus:ring-[#2271b1]/20"
                 >
 
                   <option value="">
@@ -1930,7 +1866,7 @@ export default function AssessmentPage() {
 
               <div>
 
-                <label className="mb-1.5 block text-xs font-bold text-slate-700">
+                <label className="mb-1.5 block text-base font-bold text-slate-700">
                   2. Pilih Mata Pelajaran *
                 </label>
 
@@ -1956,7 +1892,7 @@ export default function AssessmentPage() {
 
                     clearMessage();
                   }}
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                  className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-sm font-medium outline-none transition focus:border-[#2271b1] focus:ring-4 focus:ring-[#2271b1]/20"
                 >
 
                   <option value="">
@@ -2003,9 +1939,9 @@ export default function AssessmentPage() {
 
             {/* SELECTED INFO */}
 
-            <section className="flex flex-col gap-3 rounded-xl border border-emerald-100 bg-emerald-50/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <section className="flex flex-col gap-3 rounded-sm border border-emerald-100 bg-emerald-50/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
 
-              <div className="flex items-center gap-2 text-xs">
+              <div className="flex items-center gap-2 text-base">
 
                 <School
                   size={14}
@@ -2031,7 +1967,7 @@ export default function AssessmentPage() {
 
               </div>
 
-              <div className="text-[10px] text-emerald-700/60">
+              <div className="text-sm text-emerald-700/60">
                 {
                   filteredStudents.length
                 }{' '}
@@ -2097,7 +2033,7 @@ export default function AssessmentPage() {
                   Capaian &amp; Tujuan Pembelajaran
                 </h2>
 
-                <p className="mt-1 text-[10px] text-slate-400">
+                <p className="mt-1 text-sm text-[#646970]">
                   {
                     selectedSubject.name
                   }{' '}
@@ -2115,18 +2051,18 @@ export default function AssessmentPage() {
 
               {filteredCPs.length ===
               0 ? (
-                <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-12 text-center">
+                <div className="rounded-sm border border-dashed border-slate-300 bg-white py-12 text-center">
 
                   <BookOpen
                     size={28}
                     className="mx-auto text-slate-300"
                   />
 
-                  <p className="mt-3 text-xs font-semibold text-slate-600">
+                  <p className="mt-3 text-base font-semibold text-slate-600">
                     Belum ada struktur kurikulum
                   </p>
 
-                  <p className="mx-auto mt-1 max-w-lg text-[10px] leading-5 text-slate-400">
+                  <p className="mx-auto mt-1 max-w-lg text-sm leading-5 text-[#646970]">
                     Belum ditemukan CP untuk {selectedSubject.name}, Kelas {selectedClassData.grade}, Semester {activeSemester}.
                   </p>
 
@@ -2149,14 +2085,14 @@ export default function AssessmentPage() {
                         key={
                           cp.id
                         }
-                        className="space-y-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+                        className="space-y-4 overflow-hidden rounded-sm border border-[#c3c4c7] bg-white p-5"
                       >
 
                         <div>
 
                           <div className="flex flex-wrap items-center gap-2">
 
-                            <span className="rounded-lg bg-emerald-100 px-2.5 py-1 text-[10px] font-bold text-emerald-800">
+                            <span className="rounded-sm bg-emerald-100 px-2.5 py-1 text-sm font-bold text-emerald-800">
                               CP{' '}
                               {
                                 cpIndex +
@@ -2164,14 +2100,14 @@ export default function AssessmentPage() {
                               }
                             </span>
 
-                            <span className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
+                            <span className="rounded bg-slate-100 px-2 py-0.5 text-sm font-bold text-slate-600">
                               Kelas{' '}
                               {
                                 cp.grade
                               }
                             </span>
 
-                            <span className="rounded bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-600">
+                            <span className="rounded bg-blue-50 px-2 py-0.5 text-sm font-bold text-blue-600">
                               Semester{' '}
                               {cp.semester ||
                                 1}
@@ -2179,7 +2115,7 @@ export default function AssessmentPage() {
 
                           </div>
 
-                          <p className="mt-2 text-sm font-semibold leading-6 text-slate-800">
+                          <p className="mt-2 text-sm font-semibold leading-6 text-[#1d2327]">
                             {
                               cp.description
                             }
@@ -2187,11 +2123,11 @@ export default function AssessmentPage() {
 
                         </div>
 
-                        <div className="space-y-3 border-l-2 border-amber-400 pl-4">
+                        <div className="space-y-3 border-l-2 border-[#dcdcde] pl-4">
 
                           {tpList.length ===
                           0 ? (
-                            <div className="text-xs italic text-slate-400">
+                            <div className="text-base italic text-[#646970]">
                               Belum ada Tujuan Pembelajaran untuk CP ini.
                             </div>
                           ) : (
@@ -2211,14 +2147,14 @@ export default function AssessmentPage() {
                                     key={
                                       tp.id
                                     }
-                                    className="flex flex-col items-start justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center"
+                                    className="flex flex-col items-start justify-between gap-3 rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] p-4 sm:flex-row sm:items-center"
                                   >
 
                                     <div className="flex-1 space-y-1">
 
                                       <div className="flex flex-wrap items-center gap-2">
 
-                                        <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                                        <span className="rounded bg-amber-100 px-2 py-0.5 text-sm font-bold text-amber-800">
                                           TP{' '}
                                           {
                                             tpIndex +
@@ -2234,7 +2170,7 @@ export default function AssessmentPage() {
 
                                       </div>
 
-                                      <p className="text-xs font-medium leading-5 text-slate-700">
+                                      <p className="text-base font-medium leading-6 text-slate-700">
                                         {
                                           tp.description
                                         }
@@ -2251,11 +2187,11 @@ export default function AssessmentPage() {
                                           tp
                                         )
                                       }
-                                      className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold text-white shadow-sm transition ${
+                                      className={`shrink-0 rounded-sm px-4 py-2 text-base font-bold text-white transition ${
                                         percentage ===
                                         100
-                                          ? 'bg-emerald-700 hover:bg-emerald-800'
-                                          : 'bg-[#064e3b] hover:bg-[#053d2e]'
+                                          ? 'bg-[#2271b1] hover:bg-[#135e96]'
+                                          : 'bg-[#2271b1] hover:bg-[#135e96]'
                                       }`}
                                     >
                                       Input Nilai
@@ -2279,7 +2215,7 @@ export default function AssessmentPage() {
 
           </div>
         ) : (
-          <section className="rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center">
+          <section className="rounded-sm border border-dashed border-slate-300 bg-white py-16 text-center">
 
             <GraduationCap
               size={30}
@@ -2290,7 +2226,7 @@ export default function AssessmentPage() {
               Pilih kelas dan mata pelajaran
             </p>
 
-            <p className="mx-auto mt-1 max-w-md text-xs leading-5 text-slate-400">
+            <p className="mx-auto mt-1 max-w-md text-base leading-5 text-[#646970]">
               Pilih kelas dan mata pelajaran di atas untuk menampilkan lembar asesmen siswa.
             </p>
 
@@ -2301,7 +2237,7 @@ export default function AssessmentPage() {
             FOOTER
         ===================================================== */}
 
-        <footer className="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+        <footer className="flex flex-col items-center justify-between gap-2 border-t border-[#c3c4c7] pt-4 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_NAME}
@@ -2320,24 +2256,24 @@ export default function AssessmentPage() {
       ======================================================= */}
 
       {activeTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 backdrop-blur-sm sm:p-4">
+        <div role="dialog" aria-modal="true" aria-label="Input nilai asesmen" className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-3 backdrop-blur-sm sm:p-4">
 
-          <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+          <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-sm border border-[#c3c4c7] bg-white shadow-2xl">
 
             {/* HEADER */}
 
-            <div className="flex items-center justify-between gap-4 bg-[#064e3b] px-5 py-4 text-white">
+            <div className="flex items-center justify-between gap-4 bg-[#2271b1] px-5 py-4 text-white">
 
               <div>
 
-                <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-200">
+                <span className="text-sm font-bold uppercase tracking-widest text-white">
                   Input Nilai • Kelas{' '}
                   {
                     selectedClass
                   }
                 </span>
 
-                <h3 className="mt-1 text-xs font-bold leading-5">
+                <h3 className="mt-1 text-base font-bold leading-5">
                   {
                     activeTarget.title
                   }
@@ -2359,7 +2295,7 @@ export default function AssessmentPage() {
                     {}
                   );
                 }}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white disabled:opacity-50"
+                aria-label="Tutup formulir nilai" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-white/10 text-white/80 transition hover:bg-white/20 hover:text-white disabled:opacity-50"
               >
 
                 <X
@@ -2376,17 +2312,17 @@ export default function AssessmentPage() {
 
               {filteredStudents.length ===
               0 ? (
-                <div className="py-10 text-center text-xs text-slate-400">
+                <div className="py-10 text-center text-base text-[#646970]">
                   Tidak ada siswa di kelas ini.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
 
-                  <table className="w-full min-w-[650px] border-collapse text-left text-xs">
+                  <table className="w-full min-w-[650px] border-collapse text-left text-base">
 
                     <thead>
 
-                      <tr className="border-b border-slate-200 bg-slate-50 font-bold text-slate-600">
+                      <tr className="border-b border-[#c3c4c7] bg-[#f6f7f7] font-bold text-slate-600">
 
                         <th className="w-12 p-3 text-center">
                           No
@@ -2419,10 +2355,10 @@ export default function AssessmentPage() {
                             key={
                               student.id
                             }
-                            className="hover:bg-slate-50/50"
+                            className="hover:bg-[#f6f7f7]/50"
                           >
 
-                            <td className="p-3 text-center text-slate-400">
+                            <td className="p-3 text-center text-[#646970]">
                               {
                                 index +
                                 1
@@ -2431,14 +2367,14 @@ export default function AssessmentPage() {
 
                             <td className="p-3">
 
-                              <div className="font-semibold text-slate-800">
+                              <div className="font-semibold text-[#1d2327]">
                                 {
                                   student.fullname
                                 }
                               </div>
 
                               {student.nisn && (
-                                <div className="mt-0.5 text-[9px] text-slate-400">
+                                <div className="mt-0.5 text-sm text-[#646970]">
                                   NISN{' '}
                                   {
                                     student.nisn
@@ -2473,7 +2409,7 @@ export default function AssessmentPage() {
                                   )
                                 }
                                 placeholder="0-100"
-                                className="h-10 w-28 rounded-xl border border-slate-200 bg-white text-center text-xs font-bold text-slate-900 shadow-inner outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                                className="h-10 w-28 rounded-sm border border-[#c3c4c7] bg-white text-center text-base font-bold text-slate-900 outline-none transition focus:border-[#2271b1] focus:ring-4 focus:ring-[#2271b1]/20"
                               />
 
                             </td>
@@ -2503,7 +2439,7 @@ export default function AssessmentPage() {
                                   )
                                 }
                                 placeholder="0-100"
-                                className="h-10 w-28 rounded-xl border border-slate-200 bg-white text-center text-xs font-bold text-slate-900 shadow-inner outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                                className="h-10 w-28 rounded-sm border border-[#c3c4c7] bg-white text-center text-base font-bold text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
                               />
 
                             </td>
@@ -2523,9 +2459,9 @@ export default function AssessmentPage() {
 
             {/* FOOTER */}
 
-            <div className="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col-reverse gap-3 border-t border-[#c3c4c7] bg-[#f6f7f7] p-4 sm:flex-row sm:items-center sm:justify-between">
 
-              <p className="text-[10px] text-slate-400">
+              <p className="text-sm text-[#646970]">
                 Nilai yang diizinkan: 0–100
               </p>
 
@@ -2545,7 +2481,7 @@ export default function AssessmentPage() {
                       {}
                     );
                   }}
-                  className="rounded-xl bg-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-300 disabled:opacity-50"
+                  className="rounded-sm bg-slate-200 px-4 py-2.5 text-base font-bold text-slate-700 transition hover:bg-slate-300 disabled:opacity-50"
                 >
                   Batal
                 </button>
@@ -2560,7 +2496,7 @@ export default function AssessmentPage() {
                     filteredStudents.length ===
                       0
                   }
-                  className="inline-flex min-w-[130px] items-center justify-center gap-2 rounded-xl bg-[#064e3b] px-6 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-[#053d2e] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-w-[130px] items-center justify-center gap-2 rounded-sm bg-[#2271b1] px-6 py-2.5 text-base font-bold text-white transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
                 >
 
                   {loading ? (
@@ -2608,7 +2544,7 @@ function ProgressBadge({
 }) {
   return (
     <span
-      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+      className={`rounded-sm px-2 py-0.5 text-sm font-bold ${
         value === 100
           ? 'bg-emerald-100 text-emerald-800'
           : value > 0
@@ -2642,11 +2578,11 @@ function AssessmentSpecialCard({
 }) {
   const buttonClass =
     progress === 100
-      ? 'bg-emerald-700 hover:bg-emerald-800'
+      ? 'bg-[#2271b1] hover:bg-[#135e96]'
       : variant ===
           'blue'
-        ? 'bg-blue-700 hover:bg-blue-800'
-        : 'bg-purple-700 hover:bg-purple-800';
+        ? 'bg-[#2271b1] hover:bg-[#135e96]'
+        : 'bg-[#2271b1] hover:bg-[#135e96]';
 
   const badgeClass =
     variant ===
@@ -2655,14 +2591,14 @@ function AssessmentSpecialCard({
       : 'bg-purple-100 text-purple-800';
 
   return (
-    <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center">
+    <div className="flex flex-col justify-between gap-4 rounded-sm border border-[#c3c4c7] bg-white p-5 sm:flex-row sm:items-center">
 
       <div>
 
         <div className="flex flex-wrap items-center gap-2">
 
           <span
-            className={`rounded-lg px-2.5 py-1 text-[10px] font-bold ${badgeClass}`}
+            className={`rounded-sm px-2.5 py-1 text-sm font-bold ${badgeClass}`}
           >
             {subtitle}
           </span>
@@ -2675,7 +2611,7 @@ function AssessmentSpecialCard({
 
         </div>
 
-        <h3 className="mt-2 text-sm font-bold text-slate-800">
+        <h3 className="mt-2 text-sm font-bold text-[#1d2327]">
           {title}
         </h3>
 
@@ -2686,7 +2622,7 @@ function AssessmentSpecialCard({
         onClick={
           onClick
         }
-        className={`shrink-0 rounded-xl px-4 py-2.5 text-xs font-bold text-white shadow-sm transition ${buttonClass}`}
+        className={`shrink-0 rounded-sm px-4 py-2.5 text-base font-bold text-white transition ${buttonClass}`}
       >
         Input Nilai
       </button>

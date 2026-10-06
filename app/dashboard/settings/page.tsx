@@ -686,184 +686,17 @@ export default function SettingsPage() {
   ========================================================== */
 
   return (
-    <div className="min-h-screen bg-[#f5f8f6]">
-
-      {/* ======================================================
-          BACKGROUND
-      ======================================================= */}
-
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-
-        <div className="absolute -right-40 -top-40 h-[420px] w-[420px] rounded-full bg-emerald-100/40 blur-3xl" />
-
-        <div className="absolute -bottom-40 -left-40 h-[420px] w-[420px] rounded-full bg-amber-100/30 blur-3xl" />
-
-      </div>
-
-      {/* ======================================================
-          CONTENT
-      ======================================================= */}
-
-      <div className="relative mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-
-        {/* ====================================================
-            HEADER
-        ===================================================== */}
-
-        <div className="mb-7">
-
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-
-            <div className="flex items-center gap-4">
-
-              <div className="relative">
-
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#07543f] shadow-lg shadow-emerald-900/10">
-
-                  <Settings
-                    size={25}
-                    strokeWidth={
-                      1.7
-                    }
-                    className="text-emerald-100"
-                  />
-
-                </div>
-
-                <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#f5f8f6] bg-amber-400">
-
-                  <Sparkles
-                    size={10}
-                    className="text-white"
-                  />
-
-                </div>
-
-              </div>
-
-              <div>
-
-                <div className="mb-1 flex items-center gap-2">
-
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-700/60">
-                    Sistem
-                  </span>
-
-                  <span className="h-1 w-1 rounded-full bg-amber-400" />
-
-                  <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-slate-400">
-                    Konfigurasi
-                  </span>
-
-                </div>
-
-                <h1 className="text-2xl font-bold tracking-tight text-slate-800 sm:text-[27px]">
-                  Pengaturan Sistem
-                </h1>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Kelola identitas sekolah dan konfigurasi akademik E-Rapor.
-                </p>
-
-              </div>
-
-            </div>
-
-            {/* STATUS */}
-
-            <div className="hidden items-center gap-2 rounded-full border border-emerald-100 bg-white px-3.5 py-2 shadow-sm sm:flex">
-
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-50">
-
-                <ShieldCheck
-                  size={14}
-                  className="text-emerald-600"
-                />
-
-              </span>
-
-              <div>
-
-                <div className="text-[9px] font-semibold uppercase tracking-wide text-slate-400">
-                  Status
-                </div>
-
-                <div className="text-[11px] font-semibold text-emerald-700">
-                  Sistem Aktif
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* ====================================================
-            SCHOOL BANNER
-        ===================================================== */}
-
-        <div className="relative mb-6 overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-r from-[#063c30] to-[#07543f] px-5 py-5 shadow-sm sm:px-6">
-
-          <div className="pointer-events-none absolute -right-8 -top-16 h-40 w-40 rounded-full border border-white/5" />
-
-          <div className="pointer-events-none absolute -right-2 -top-10 h-28 w-28 rounded-full border border-amber-200/5" />
-
-          <div className="relative flex items-center justify-between gap-5">
-
-            <div>
-
-              <div
-                dir="rtl"
-                className="font-serif text-lg leading-relaxed text-amber-100/90"
-              >
-                بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-              </div>
-
-              <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.15em] text-emerald-100/45">
-                {SCHOOL_NAME}
-              </p>
-
-              <div className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1">
-
-                <GraduationCap
-                  size={11}
-                  className="text-emerald-200"
-                />
-
-                <span className="text-[8px] font-semibold uppercase tracking-[0.14em] text-emerald-100/65">
-                  Jenjang {SCHOOL_LEVEL} • Kelas 1–6
-                </span>
-
-              </div>
-
-            </div>
-
-            <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 sm:flex">
-
-              <BookOpen
-                size={20}
-                strokeWidth={
-                  1.5
-                }
-                className="text-amber-200/70"
-              />
-
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* ====================================================
-            MESSAGE
-        ===================================================== */}
+    <div className="min-h-screen bg-[#f0f0f1]">
+      <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
+        <header className="mb-6">
+          <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Pengaturan Sistem</h1>
+          <p className="mt-2 text-base text-[#646970]">Atur identitas sekolah, tahun ajaran, dan semester aktif.</p>
+        </header>
 
         {message && (
           <div
             className={[
-              'mb-6 flex items-start gap-3 rounded-xl border px-4 py-3.5',
+              'mb-6 flex items-start gap-3 rounded-sm border px-4 py-3.5',
 
               messageType ===
               'success'
@@ -907,13 +740,13 @@ export default function SettingsPage() {
         ===================================================== */}
 
         {loading ? (
-          <div className="flex min-h-[420px] items-center justify-center rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+          <div className="flex min-h-[420px] items-center justify-center rounded-sm border border-[#c3c4c7] bg-white">
 
             <div className="flex flex-col items-center">
 
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-emerald-100 border-t-emerald-700" />
 
-              <p className="mt-3 text-xs font-medium text-slate-400">
+              <p className="mt-3 text-base font-medium text-[#646970]">
                 Memuat pengaturan...
               </p>
 
@@ -937,33 +770,33 @@ export default function SettingsPage() {
                   LEFT
               =============================================== */}
 
-              <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-sm border border-[#c3c4c7] bg-white">
 
                 {/* HEADER */}
 
-                <div className="border-b border-slate-100 px-5 py-5 sm:px-6">
+                <div className="border-b border-[#c3c4c7] px-5 py-5 sm:px-6">
 
                   <div className="flex items-center gap-3">
 
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-emerald-50">
 
                       <School
                         size={19}
                         strokeWidth={
                           1.7
                         }
-                        className="text-emerald-700"
+                        className="text-[#2271b1]"
                       />
 
                     </div>
 
                     <div>
 
-                      <h2 className="text-sm font-bold text-slate-800">
+                      <h2 className="text-sm font-bold text-[#1d2327]">
                         Identitas Sekolah
                       </h2>
 
-                      <p className="mt-0.5 text-[11px] text-slate-400">
+                      <p className="mt-0.5 text-sm text-[#646970]">
                         Informasi utama sekolah untuk sistem dan dokumen rapor.
                       </p>
 
@@ -981,7 +814,7 @@ export default function SettingsPage() {
 
                   <div>
 
-                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    <label className="mb-2 block text-sm font-semibold text-[#646970]">
                       Nama Sekolah
                     </label>
 
@@ -992,7 +825,7 @@ export default function SettingsPage() {
                         strokeWidth={
                           1.7
                         }
-                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#646970]"
                       />
 
                       <input
@@ -1015,12 +848,12 @@ export default function SettingsPage() {
                         placeholder={
                           SCHOOL_NAME
                         }
-                        className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-300 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                        className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] pl-10 pr-4 text-base text-[#1d2327] outline-none transition placeholder:text-[#646970] hover:border-[#c3c4c7] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                       />
 
                     </div>
 
-                    <p className="mt-1.5 text-[10px] text-slate-400">
+                    <p className="mt-1.5 text-sm text-[#646970]">
                       Nama sekolah ini digunakan pada halaman sistem dan dokumen rapor siswa.
                     </p>
 
@@ -1030,7 +863,7 @@ export default function SettingsPage() {
                       AKADEMIK
                   ============================================= */}
 
-                  <div className="border-t border-slate-100 pt-5">
+                  <div className="border-t border-[#c3c4c7] pt-5">
 
                     <div className="mb-4 flex items-center gap-2">
 
@@ -1039,10 +872,10 @@ export default function SettingsPage() {
                         strokeWidth={
                           1.7
                         }
-                        className="text-emerald-600"
+                        className="text-[#2271b1]"
                       />
 
-                      <span className="text-xs font-bold text-slate-700">
+                      <span className="text-base font-bold text-[#1d2327]">
                         Konfigurasi Akademik
                       </span>
 
@@ -1054,7 +887,7 @@ export default function SettingsPage() {
 
                       <div>
 
-                        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                        <label className="mb-2 block text-sm font-semibold text-[#646970]">
                           Tahun Ajaran Aktif
                         </label>
 
@@ -1065,7 +898,7 @@ export default function SettingsPage() {
                             strokeWidth={
                               1.7
                             }
-                            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#646970]"
                           />
 
                           <input
@@ -1087,12 +920,12 @@ export default function SettingsPage() {
                             }
                             inputMode="numeric"
                             placeholder="2026/2027"
-                            className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-300 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                            className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] pl-10 pr-4 text-base text-[#1d2327] outline-none transition placeholder:text-[#646970] hover:border-[#c3c4c7] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                           />
 
                         </div>
 
-                        <p className="mt-1.5 text-[9px] text-slate-400">
+                        <p className="mt-1.5 text-sm text-[#646970]">
                           Format: 2026/2027
                         </p>
 
@@ -1102,7 +935,7 @@ export default function SettingsPage() {
 
                       <div>
 
-                        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                        <label className="mb-2 block text-sm font-semibold text-[#646970]">
                           Semester Aktif
                         </label>
 
@@ -1113,7 +946,7 @@ export default function SettingsPage() {
                             strokeWidth={
                               1.7
                             }
-                            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#646970]"
                           />
 
                           <select
@@ -1128,7 +961,7 @@ export default function SettingsPage() {
                                   .value
                               )
                             }
-                            className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-9 text-sm text-slate-800 outline-none transition hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                            className="h-11 w-full appearance-none rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] pl-10 pr-9 text-base text-[#1d2327] outline-none transition hover:border-[#c3c4c7] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                           >
 
                             <option value="Ganjil">
@@ -1142,7 +975,7 @@ export default function SettingsPage() {
                           </select>
 
                           <svg
-                            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+                            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#646970]"
                             width="14"
                             height="14"
                             viewBox="0 0 24 24"
@@ -1165,7 +998,7 @@ export default function SettingsPage() {
                       PRINCIPAL
                   ============================================= */}
 
-                  <div className="border-t border-slate-100 pt-5">
+                  <div className="border-t border-[#c3c4c7] pt-5">
 
                     <div className="mb-4 flex items-center gap-2">
 
@@ -1174,16 +1007,16 @@ export default function SettingsPage() {
                         strokeWidth={
                           1.7
                         }
-                        className="text-emerald-600"
+                        className="text-[#2271b1]"
                       />
 
-                      <span className="text-xs font-bold text-slate-700">
+                      <span className="text-base font-bold text-[#1d2327]">
                         Kepala Sekolah
                       </span>
 
                     </div>
 
-                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    <label className="mb-2 block text-sm font-semibold text-[#646970]">
                       Nama Kepala Sekolah
                     </label>
 
@@ -1194,7 +1027,7 @@ export default function SettingsPage() {
                         strokeWidth={
                           1.7
                         }
-                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#646970]"
                       />
 
                       <input
@@ -1215,12 +1048,12 @@ export default function SettingsPage() {
                           150
                         }
                         placeholder="Masukkan nama kepala sekolah"
-                        className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-10 pr-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-300 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                        className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] pl-10 pr-4 text-base text-[#1d2327] outline-none transition placeholder:text-[#646970] hover:border-[#c3c4c7] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                       />
 
                     </div>
 
-                    <p className="mt-1.5 text-[10px] text-slate-400">
+                    <p className="mt-1.5 text-sm text-[#646970]">
                       Nama ini dapat digunakan untuk identitas dan tanda tangan kepala sekolah pada rapor.
                     </p>
 
@@ -1230,7 +1063,7 @@ export default function SettingsPage() {
 
                 {/* FOOTER */}
 
-                <div className="flex flex-col gap-3 border-t border-slate-100 bg-slate-50/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                <div className="flex flex-col gap-3 border-t border-[#c3c4c7] bg-[#f6f7f7] px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
 
                   <div className="flex items-center gap-2">
 
@@ -1239,10 +1072,10 @@ export default function SettingsPage() {
                       strokeWidth={
                         1.7
                       }
-                      className="text-emerald-600"
+                      className="text-[#2271b1]"
                     />
 
-                    <span className="text-[10px] text-slate-400">
+                    <span className="text-sm text-[#646970]">
                       Data tersimpan secara permanen di database.
                     </span>
 
@@ -1253,7 +1086,7 @@ export default function SettingsPage() {
                     disabled={
                       saving
                     }
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#07543f] px-5 text-xs font-semibold text-white shadow-sm shadow-emerald-900/10 transition hover:bg-[#064534] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-sm bg-[#2271b1] px-5 text-base font-semibold text-white transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-60"
                   >
 
                     {saving ? (
@@ -1289,32 +1122,32 @@ export default function SettingsPage() {
 
                 {/* PREVIEW */}
 
-                <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+                <div className="overflow-hidden rounded-sm border border-[#c3c4c7] bg-white">
 
-                  <div className="bg-[#07543f] px-5 py-5">
+                  <div className="border-b border-[#dcdcde] bg-[#f6f7f7] px-5 py-5">
 
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/10">
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-sm border border-[#c3c4c7] bg-white">
 
                       <School
                         size={20}
                         strokeWidth={
                           1.6
                         }
-                        className="text-emerald-100"
+                        className="text-[#646970]"
                       />
 
                     </div>
 
-                    <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-emerald-200/50">
+                    <div className="text-sm font-semibold text-[#646970]">
                       Identitas Sekolah
                     </div>
 
-                    <div className="mt-1 line-clamp-2 text-sm font-semibold leading-relaxed text-white">
+                    <div className="mt-1 break-words text-sm font-semibold leading-relaxed text-[#1d2327]">
                       {schoolName ||
                         SCHOOL_NAME}
                     </div>
 
-                    <div className="mt-2 inline-flex rounded-full bg-white/10 px-2 py-1 text-[8px] font-semibold text-emerald-100">
+                    <div className="mt-2 inline-flex rounded-full bg-white px-2 py-1 text-sm font-semibold text-[#646970]">
                       Jenjang SD
                     </div>
 
@@ -1324,40 +1157,40 @@ export default function SettingsPage() {
 
                     <div>
 
-                      <div className="text-[9px] font-semibold uppercase tracking-wide text-slate-400">
+                      <div className="text-sm font-semibold text-[#646970]">
                         Tahun Ajaran
                       </div>
 
-                      <div className="mt-1 text-xs font-semibold text-slate-700">
+                      <div className="mt-1 text-base font-semibold text-[#1d2327]">
                         {academicYear ||
                           'Belum diatur'}
                       </div>
 
                     </div>
 
-                    <div className="h-px bg-slate-100" />
+                    <div className="h-px bg-[#f6f7f7]" />
 
                     <div>
 
-                      <div className="text-[9px] font-semibold uppercase tracking-wide text-slate-400">
+                      <div className="text-sm font-semibold text-[#646970]">
                         Semester
                       </div>
 
-                      <div className="mt-1 inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+                      <div className="mt-1 inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-sm font-semibold text-[#2271b1]">
                         {semester}
                       </div>
 
                     </div>
 
-                    <div className="h-px bg-slate-100" />
+                    <div className="h-px bg-[#f6f7f7]" />
 
                     <div>
 
-                      <div className="text-[9px] font-semibold uppercase tracking-wide text-slate-400">
+                      <div className="text-sm font-semibold text-[#646970]">
                         Kepala Sekolah
                       </div>
 
-                      <div className="mt-1 line-clamp-2 text-xs font-semibold text-slate-700">
+                      <div className="mt-1 break-words text-base font-semibold text-[#1d2327]">
                         {principalName ||
                           'Belum diatur'}
                       </div>
@@ -1370,11 +1203,11 @@ export default function SettingsPage() {
 
                 {/* TIP */}
 
-                <div className="rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-5">
+                <div className="rounded-sm border border-[#c3c4c7] bg-white p-5">
 
                   <div className="flex items-start gap-3">
 
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-100">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-amber-100">
 
                       <Sparkles
                         size={16}
@@ -1388,12 +1221,12 @@ export default function SettingsPage() {
 
                     <div>
 
-                      <h3 className="text-xs font-bold text-slate-700">
+                      <h3 className="text-base font-bold text-[#1d2327]">
                         Catatan
                       </h3>
 
-                      <p className="mt-1.5 text-[10px] leading-relaxed text-slate-500">
-                        Pastikan nama sekolah, tahun ajaran, semester, dan kepala sekolah sudah benar sebelum digunakan untuk pencetakan rapor siswa.
+                      <p className="mt-1.5 text-sm leading-relaxed text-[#646970]">
+                        Periksa pengaturan sebelum mencetak rapor.
                       </p>
 
                     </div>
@@ -1402,60 +1235,6 @@ export default function SettingsPage() {
 
                 </div>
 
-                {/* SCHOOL INFO */}
-
-                <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-5">
-
-                  <div className="flex items-center gap-3">
-
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-700 shadow-sm">
-
-                      <GraduationCap
-                        size={18}
-                      />
-
-                    </div>
-
-                    <div>
-
-                      <div className="text-[9px] font-semibold uppercase tracking-wide text-emerald-700/50">
-                        Sistem E-Rapor
-                      </div>
-
-                      <div className="mt-0.5 text-xs font-semibold text-emerald-900">
-                        {SCHOOL_SHORT_NAME}
-                      </div>
-
-                      <div className="mt-0.5 text-[9px] text-emerald-700/50">
-                        Sekolah Dasar • Kelas 1–6
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-                {/* ISLAMIC */}
-
-                <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-5 text-center">
-
-                  <div
-                    dir="rtl"
-                    className="font-serif text-base text-emerald-800/70"
-                  >
-                    وَقُلْ رَبِّ زِدْنِي عِلْمًا
-                  </div>
-
-                  <div className="mt-1 text-[9px] font-medium text-emerald-700/50">
-                    “Ya Tuhanku, tambahkanlah kepadaku ilmu.”
-                  </div>
-
-                  <div className="mt-1 text-[8px] uppercase tracking-wide text-slate-400">
-                    QS. Taha: 114
-                  </div>
-
-                </div>
 
               </div>
 
@@ -1468,7 +1247,7 @@ export default function SettingsPage() {
             FOOTER
         ===================================================== */}
 
-        <footer className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+        <footer className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-[#c3c4c7] pt-4 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_SHORT_NAME}

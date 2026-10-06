@@ -1610,51 +1610,24 @@ export default function ReportPage() {
           CONTROL PANEL
       ======================================================= */}
 
-      <section className="control-panel print:hidden border-b border-emerald-900/10 bg-[#174d40] text-white">
+      <section className="control-panel print:hidden border-b border-[#dcdcde] bg-[#f0f0f1] text-[#1d2327]">
 
         <div className="mx-auto max-w-[1500px] px-5 py-4 lg:px-8">
 
-          <div className="mb-4 flex items-center justify-between gap-4">
+          <header className="mb-5">
+            <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Rapor Siswa</h1>
+            <p className="mt-2 text-base text-[#646970]">Pilih kelas dan siswa untuk melihat atau mencetak rapor.</p>
+          </header>
 
-            <div className="flex items-center gap-3">
+          <div className="rounded-sm border border-[#c3c4c7] bg-white p-3">
 
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
-
-                <BookOpen
-                  size={20}
-                  strokeWidth={
-                    1.6
-                  }
-                  className="text-emerald-100"
-                />
-
-              </div>
-
-              <div>
-
-                <h1 className="text-[15px] font-semibold tracking-tight">
-                  Rapor Siswa
-                </h1>
-
-                <p className="mt-0.5 text-[10px] text-emerald-100/60">
-                  Sistem Penilaian &amp; Rapor {SCHOOL_SHORT_NAME} • Jenjang SD
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <div className="rounded-xl border border-white/10 bg-white/[0.06] p-3">
-
-            <div className="grid gap-3 lg:grid-cols-[180px_minmax(0,1fr)_auto_auto]">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[200px_minmax(0,1fr)_auto_auto]">
 
               {/* CLASS */}
 
               <div>
 
-                <label className="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-emerald-100/70">
+                <label className="mb-1.5 block text-sm font-bold text-[#646970]">
                   Kelas
                 </label>
 
@@ -1672,7 +1645,7 @@ export default function ReportPage() {
                           .value
                       )
                     }
-                    className="h-10 w-full appearance-none rounded-lg border border-white/10 bg-[#0f4035] px-3 pr-9 text-xs text-white outline-none focus:ring-2 focus:ring-emerald-300/10"
+                    className="h-11 w-full appearance-none rounded-sm border border-[#c3c4c7] bg-white px-3 pr-9 text-base text-[#1d2327] outline-none focus:ring-2 focus:ring-[#2271b1]/20"
                   >
 
                     <option value="">
@@ -1703,7 +1676,7 @@ export default function ReportPage() {
 
                   <ChevronDown
                     size={14}
-                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-emerald-100/40"
+                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#646970]"
                   />
 
                 </div>
@@ -1714,7 +1687,7 @@ export default function ReportPage() {
 
               <div>
 
-                <label className="mb-1.5 block text-[9px] font-bold uppercase tracking-wider text-emerald-100/70">
+                <label className="mb-1.5 block text-sm font-bold text-[#646970]">
                   Siswa
                 </label>
 
@@ -1722,7 +1695,7 @@ export default function ReportPage() {
 
                   <UserRound
                     size={14}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-emerald-100/40"
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#646970]"
                   />
 
                   <select
@@ -1740,7 +1713,7 @@ export default function ReportPage() {
                     disabled={
                       loadingStudents
                     }
-                    className="h-10 w-full appearance-none rounded-lg border border-white/10 bg-[#0f4035] px-9 pr-9 text-xs text-white outline-none focus:ring-2 focus:ring-emerald-300/10 disabled:opacity-50"
+                    className="h-11 w-full appearance-none rounded-sm border border-[#c3c4c7] bg-white px-9 pr-9 text-base text-[#1d2327] outline-none focus:ring-2 focus:ring-[#2271b1]/20 disabled:opacity-50"
                   >
 
                     <option value="">
@@ -1775,7 +1748,7 @@ export default function ReportPage() {
 
                   <ChevronDown
                     size={14}
-                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-emerald-100/40"
+                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#646970]"
                   />
 
                 </div>
@@ -1793,7 +1766,7 @@ export default function ReportPage() {
                   loadingReport ||
                   !studentId
                 }
-                className="h-10 self-end rounded-lg bg-[#6b9b88] px-5 text-xs font-bold text-white transition hover:bg-[#78a995] disabled:cursor-not-allowed disabled:opacity-40"
+                className="h-11 self-end rounded-sm bg-[#2271b1] px-5 text-base font-bold text-white transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-40"
               >
 
                 {loadingReport ? (
@@ -1831,7 +1804,7 @@ export default function ReportPage() {
                 disabled={
                   !reportData
                 }
-                className="h-10 self-end rounded-lg border border-amber-200/20 bg-amber-100/10 px-5 text-xs font-bold text-amber-100 transition hover:bg-amber-100/15 disabled:cursor-not-allowed disabled:opacity-30"
+                className="h-11 self-end rounded-sm border border-[#2271b1] bg-[#2271b1] px-5 text-base font-bold text-white transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-30"
               >
 
                 <span className="flex items-center gap-2">
@@ -1849,7 +1822,7 @@ export default function ReportPage() {
             </div>
 
             {error && (
-              <div className="mt-3 rounded-lg border border-red-200/10 bg-red-300/10 px-3 py-2 text-xs text-red-100">
+              <div className="mt-3 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-base text-red-700">
                 {error}
               </div>
             )}
@@ -1866,11 +1839,11 @@ export default function ReportPage() {
 
       {!reportData &&
         !loadingReport && (
-          <div className="print:hidden flex min-h-[calc(100vh-190px)] items-center justify-center bg-[#f5f7f6] px-5">
+          <div className="print:hidden flex min-h-[calc(100vh-190px)] items-center justify-center bg-[#f0f0f1] px-5">
 
             <div className="max-w-md text-center">
 
-              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-100 bg-white text-emerald-700 shadow-sm">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-sm border border-[#c3c4c7] bg-white text-[#2271b1]">
 
                 <BookOpen
                   size={27}
@@ -1881,11 +1854,11 @@ export default function ReportPage() {
 
               </div>
 
-              <h2 className="text-base font-semibold tracking-tight text-slate-800">
+              <h2 className="text-base font-semibold tracking-tight text-[#1d2327]">
                 Pilih Siswa untuk Melihat Rapor
               </h2>
 
-              <p className="mt-2 text-xs leading-6 text-slate-400">
+              <p className="mt-2 text-base leading-6 text-[#646970]">
                 Pilih kelas dan nama siswa pada panel di atas untuk menampilkan laporan hasil belajar.
               </p>
 
@@ -1899,16 +1872,16 @@ export default function ReportPage() {
       ======================================================= */}
 
       {loadingReport && (
-        <div className="print:hidden flex min-h-[calc(100vh-190px)] items-center justify-center bg-[#f5f7f6]">
+        <div className="print:hidden flex min-h-[calc(100vh-190px)] items-center justify-center bg-[#f0f0f1]">
 
           <div className="text-center">
 
             <Loader2
               size={28}
-              className="mx-auto animate-spin text-emerald-700"
+              className="mx-auto animate-spin text-[#2271b1]"
             />
 
-            <p className="mt-3 text-xs font-medium text-slate-500">
+            <p className="mt-3 text-base font-medium text-[#646970]">
               Menyiapkan rapor siswa...
             </p>
 
@@ -1923,7 +1896,7 @@ export default function ReportPage() {
 
       {reportData &&
         !loadingReport && (
-          <main className="report-screen bg-[#dfe5e2] px-3 py-6 print:bg-white print:p-0">
+          <main className="report-screen overflow-x-auto bg-[#f0f0f1] px-3 py-6 print:overflow-visible print:bg-white print:p-0">
 
             <div className="report-document mx-auto w-[215.9mm] bg-white text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.14)] print:w-[215.9mm] print:shadow-none">
 

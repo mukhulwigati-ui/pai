@@ -924,7 +924,7 @@ export default function PersonalityPage() {
   ========================================================== */
 
   return (
-    <div className="min-h-screen bg-[#f5f8f6]">
+    <div className="min-h-screen bg-[#f0f0f1]">
 
       <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
@@ -932,117 +932,24 @@ export default function PersonalityPage() {
             PAGE HEADER
         ===================================================== */}
 
-        <section className="relative mb-6 overflow-hidden rounded-2xl border border-emerald-900/10 bg-[#063d31] shadow-[0_12px_40px_rgba(6,61,49,0.10)]">
-
-          <div className="pointer-events-none absolute -right-20 -top-28 h-72 w-72 rounded-full bg-emerald-300/[0.06] blur-3xl" />
-
-          <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-amber-300/[0.035] blur-3xl" />
-
-          <div className="relative flex flex-col gap-5 px-5 py-6 sm:px-7 sm:py-7 lg:flex-row lg:items-center lg:justify-between">
-
-            <div className="flex items-start gap-4">
-
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200/10 bg-white/[0.07] shadow-inner">
-
-                <Award
-                  size={23}
-                  strokeWidth={
-                    1.6
-                  }
-                  className="text-emerald-200"
-                />
-
-              </div>
-
-              <div>
-
-                <div className="mb-1.5 flex items-center gap-2">
-
-                  <Sparkles
-                    size={12}
-                    className="text-amber-200/70"
-                  />
-
-                  <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-emerald-200/60">
-                    Penilaian Karakter Siswa
-                  </span>
-
-                </div>
-
-                <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                  Kepribadian &amp; Akhlak Siswa
-                </h1>
-
-                <p className="mt-1.5 max-w-2xl text-[11px] leading-relaxed text-emerald-50/50 sm:text-xs">
-                  Penilaian sikap, akhlak, kebersihan,
-                  ketekunan, dan kedisiplinan siswa
-                  sebagai bagian dari pembinaan karakter.
-                </p>
-
-              </div>
-
-            </div>
-
-            <div className="hidden items-center gap-3 rounded-xl border border-white/[0.07] bg-white/[0.035] px-4 py-3 lg:flex">
-
-              <GraduationCap
-                size={18}
-                className="text-emerald-200/60"
-                strokeWidth={
-                  1.5
-                }
-              />
-
-              <div>
-
-                <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-emerald-100/30">
-                  Institusi
-                </div>
-
-                <div className="mt-0.5 text-[11px] font-medium text-white/70">
-                  {SCHOOL_NAME}
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <div className="relative border-t border-white/[0.06] px-5 py-2.5 sm:px-7">
-
-            <div className="flex items-center justify-center gap-3">
-
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-emerald-300/10" />
-
-              <span
-                dir="rtl"
-                className="font-serif text-[10px] text-amber-100/40"
-              >
-                بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-              </span>
-
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-emerald-300/10" />
-
-            </div>
-
-          </div>
-
-        </section>
+        <header className="mb-6">
+          <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Kepribadian &amp; Akhlak Siswa</h1>
+          <p className="mt-2 text-base text-[#646970]">Pilih kelas dan isi empat aspek penilaian kepribadian siswa.</p>
+        </header>
 
         {/* ====================================================
             FILTER CARD
         ===================================================== */}
 
-        <section className="mb-6 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_4px_20px_rgba(15,23,42,0.035)] sm:p-5">
+        <section className="mb-6 rounded-sm border border-[#dcdcde] bg-white p-4 sm:p-5">
 
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
 
             <div className="w-full max-w-md">
 
-              <label className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
+              <label className="mb-2 flex items-center gap-2 text-sm font-bold text-[#646970]">
 
-                <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-50 text-emerald-700">
+                <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-[#f0f6fc] text-[#2271b1]">
 
                   <Users
                     size={11}
@@ -1075,7 +982,7 @@ export default function PersonalityPage() {
                     classes.length ===
                     0
                   }
-                  className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 pr-10 text-xs font-medium text-slate-700 outline-none transition-all hover:border-emerald-200 hover:bg-white focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="h-11 w-full appearance-none rounded-sm border border-[#dcdcde] bg-white px-3.5 pr-10 text-base font-medium text-[#1d2327] outline-none transition-all hover:border-[#c3c4c7] hover:bg-white focus:border-[#c3c4c7] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20 disabled:cursor-not-allowed disabled:opacity-60"
                 >
 
                   <option value="">
@@ -1113,14 +1020,14 @@ export default function PersonalityPage() {
 
                 <ChevronDown
                   size={16}
-                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#646970]"
                 />
 
               </div>
 
               {classes.length ===
                 0 && (
-                <p className="mt-2 text-[9px] text-amber-600">
+                <p className="mt-2 text-sm text-amber-600">
                   Belum ada kelas SD yang tersedia. Tambahkan kelas terlebih dahulu melalui Manajemen Kelas.
                 </p>
               )}
@@ -1128,9 +1035,9 @@ export default function PersonalityPage() {
             </div>
 
             {selectedClass && (
-              <div className="flex items-center gap-3 rounded-xl border border-emerald-100 bg-emerald-50/60 px-4 py-2.5">
+              <div className="flex items-center gap-3 rounded-sm border border-[#c3c4c7] bg-[#f0f6fc] px-4 py-2.5">
 
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-emerald-700 shadow-sm">
+                <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-white text-[#2271b1]">
 
                   <Users
                     size={15}
@@ -1143,11 +1050,11 @@ export default function PersonalityPage() {
 
                 <div>
 
-                  <div className="text-[8px] font-bold uppercase tracking-[0.14em] text-emerald-600/60">
+                  <div className="text-sm font-bold text-[#2271b1]">
                     Data Kelas
                   </div>
 
-                  <div className="mt-0.5 text-[11px] font-semibold text-emerald-900">
+                  <div className="mt-0.5 text-sm font-semibold text-[#2271b1]">
                     Kelas{' '}
                     {
                       selectedClass
@@ -1160,15 +1067,15 @@ export default function PersonalityPage() {
 
                 </div>
 
-                <div className="ml-2 border-l border-emerald-200 pl-3">
+                <div className="ml-2 border-l border-[#c3c4c7] pl-3">
 
-                  <div className="text-sm font-bold text-emerald-800">
+                  <div className="text-sm font-bold text-[#2271b1]">
                     {
                       students.length
                     }
                   </div>
 
-                  <div className="text-[8px] text-emerald-600/60">
+                  <div className="text-sm text-[#2271b1]">
                     Siswa
                   </div>
 
@@ -1187,10 +1094,10 @@ export default function PersonalityPage() {
 
         {message && (
           <div
-            className={`mb-5 flex items-start gap-3 rounded-xl border px-4 py-3 text-xs ${
+            className={`mb-5 flex items-start gap-3 rounded-sm border px-4 py-3 text-base ${
               messageType ===
               'success'
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                ? 'border-[#c3c4c7] bg-[#f0f6fc] text-[#2271b1]'
                 : 'border-red-200 bg-red-50 text-red-700'
             }`}
           >
@@ -1212,15 +1119,13 @@ export default function PersonalityPage() {
         ===================================================== */}
 
         {!selectedClass && (
-          <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.035)]">
+          <section className="overflow-hidden rounded-sm border border-[#dcdcde] bg-white">
 
             <div className="flex min-h-[360px] flex-col items-center justify-center px-6 py-12 text-center">
 
               <div className="relative mb-5">
 
-                <div className="absolute inset-0 scale-150 rounded-full bg-emerald-50 blur-xl" />
-
-                <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-700">
+                <div className="relative flex h-16 w-16 items-center justify-center rounded-sm border border-[#c3c4c7] bg-[#f0f6fc] text-[#2271b1]">
 
                   <ClipboardCheck
                     size={28}
@@ -1233,25 +1138,16 @@ export default function PersonalityPage() {
 
               </div>
 
-              <h2 className="text-sm font-semibold text-slate-700">
+              <h2 className="text-sm font-semibold text-[#1d2327]">
                 Belum ada kelas yang dipilih
               </h2>
 
-              <p className="mt-2 max-w-md text-[11px] leading-relaxed text-slate-400">
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-[#646970]">
                 Pilih kelas terlebih dahulu untuk
                 menampilkan daftar siswa dan mulai
                 memberikan penilaian kepribadian.
               </p>
 
-              <div className="mt-5 flex items-center gap-2 rounded-full border border-amber-100 bg-amber-50 px-3 py-1.5 text-[9px] font-medium text-amber-700">
-
-                <Sparkles
-                  size={11}
-                />
-
-                Pembinaan karakter merupakan bagian penting dari pendidikan siswa
-
-              </div>
 
             </div>
 
@@ -1264,11 +1160,11 @@ export default function PersonalityPage() {
 
         {selectedClass &&
           loadingData && (
-          <section className="rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.035)]">
+          <section className="rounded-sm border border-[#dcdcde] bg-white">
 
             <div className="flex min-h-[320px] flex-col items-center justify-center">
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+              <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-[#f0f6fc] text-[#2271b1]">
 
                 <Loader2
                   size={22}
@@ -1277,11 +1173,11 @@ export default function PersonalityPage() {
 
               </div>
 
-              <p className="mt-4 text-xs font-semibold text-slate-600">
+              <p className="mt-4 text-base font-semibold text-[#646970]">
                 Memuat data siswa...
               </p>
 
-              <p className="mt-1 text-[10px] text-slate-400">
+              <p className="mt-1 text-sm text-[#646970]">
                 Menyiapkan penilaian kelas{' '}
                 {
                   selectedClass
@@ -1303,18 +1199,18 @@ export default function PersonalityPage() {
             onSubmit={
               handleSave
             }
-            className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.04)]"
+            className="overflow-hidden rounded-sm border border-[#dcdcde] bg-white"
           >
 
             {/* HEADER */}
 
-            <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-col gap-4 border-b border-[#dcdcde] px-5 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
 
               <div>
 
                 <div className="flex items-center gap-2">
 
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#f0f6fc] text-[#2271b1]">
 
                     <Award
                       size={15}
@@ -1325,13 +1221,13 @@ export default function PersonalityPage() {
 
                   </div>
 
-                  <h2 className="text-sm font-semibold text-slate-800">
+                  <h2 className="text-sm font-semibold text-[#1d2327]">
                     Penilaian Kepribadian
                   </h2>
 
                 </div>
 
-                <p className="mt-2 pl-10 text-[10px] text-slate-400">
+                <p className="mt-2 pl-10 text-sm text-[#646970]">
                   Kelas{' '}
                   {
                     selectedClass
@@ -1352,7 +1248,7 @@ export default function PersonalityPage() {
                   students.length ===
                     0
                 }
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#07543f] px-5 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(7,84,63,0.15)] transition-all hover:bg-[#064735] hover:shadow-[0_8px_20px_rgba(7,84,63,0.20)] disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-sm bg-[#2271b1] px-5 text-base font-semibold text-white transition-all hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
               >
 
                 {loading ? (
@@ -1389,13 +1285,13 @@ export default function PersonalityPage() {
 
                 <thead>
 
-                  <tr className="border-b border-slate-200 bg-[#f8faf9]">
+                  <tr className="border-b border-[#dcdcde] bg-[#f6f7f7]">
 
-                    <th className="w-14 px-4 py-4 text-center text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                    <th className="w-14 px-4 py-4 text-center text-sm font-bold text-[#646970]">
                       No
                     </th>
 
-                    <th className="sticky left-0 z-10 min-w-[260px] bg-[#f8faf9] px-4 py-4 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                    <th className="sticky left-0 z-10 min-w-[260px] bg-[#f6f7f7] px-4 py-4 text-left text-sm font-bold text-[#646970]">
                       Nama Siswa
                     </th>
 
@@ -1412,7 +1308,7 @@ export default function PersonalityPage() {
 
                           <div className="flex flex-col items-center">
 
-                            <span className="text-[10px] font-bold text-slate-700">
+                            <span className="text-sm font-bold text-[#1d2327]">
                               {
                                 field.title
                               }
@@ -1420,14 +1316,14 @@ export default function PersonalityPage() {
 
                             <span
                               dir="rtl"
-                              className="mt-0.5 font-serif text-[12px] font-medium text-emerald-700/70"
+                              className="mt-0.5 font-serif text-sm font-medium text-[#2271b1]"
                             >
                               {
                                 field.arabic
                               }
                             </span>
 
-                            <span className="mt-1 text-[8px] font-normal text-slate-400">
+                            <span className="mt-1 text-sm font-normal text-[#646970]">
                               {
                                 field.description
                               }
@@ -1458,7 +1354,7 @@ export default function PersonalityPage() {
 
                         <div className="mx-auto flex max-w-sm flex-col items-center">
 
-                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-[#f0f0f1] text-[#646970]">
 
                             <Users
                               size={21}
@@ -1466,11 +1362,11 @@ export default function PersonalityPage() {
 
                           </div>
 
-                          <p className="mt-3 text-xs font-semibold text-slate-600">
+                          <p className="mt-3 text-base font-semibold text-[#646970]">
                             Tidak ada siswa
                           </p>
 
-                          <p className="mt-1 text-[10px] text-slate-400">
+                          <p className="mt-1 text-sm text-[#646970]">
                             Belum terdapat data siswa pada kelas ini.
                           </p>
 
@@ -1495,12 +1391,12 @@ export default function PersonalityPage() {
                             key={
                               student.id
                             }
-                            className="group border-b border-slate-100 transition-colors last:border-b-0 hover:bg-emerald-50/[0.28]"
+                            className="group border-b border-[#dcdcde] transition-colors last:border-b-0 hover:bg-[#f6f7f7]"
                           >
 
                             <td className="px-4 py-4 text-center align-middle">
 
-                              <span className="text-[10px] font-semibold text-slate-400">
+                              <span className="text-sm font-semibold text-[#646970]">
                                 {String(
                                   index +
                                     1
@@ -1512,11 +1408,11 @@ export default function PersonalityPage() {
 
                             </td>
 
-                            <td className="sticky left-0 z-10 bg-white px-4 py-3 align-middle transition-colors group-hover:bg-[#fbfdfc]">
+                            <td className="sticky left-0 z-10 bg-white px-4 py-3 align-middle transition-colors group-hover:bg-[#f6f7f7]">
 
                               <div className="flex items-center gap-3">
 
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-200/60">
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-[#f0f0f1] text-sm font-bold text-[#2271b1] ring-1 ring-[#2271b1]/20">
 
                                   {getInitial(
                                     student.fullname
@@ -1526,13 +1422,13 @@ export default function PersonalityPage() {
 
                                 <div className="min-w-0">
 
-                                  <div className="truncate text-[11px] font-semibold text-slate-700">
+                                  <div className="break-words text-sm font-semibold text-[#1d2327]">
                                     {
                                       student.fullname
                                     }
                                   </div>
 
-                                  <div className="mt-0.5 flex items-center gap-1.5 text-[8px] text-slate-400">
+                                  <div className="mt-0.5 flex items-center gap-1.5 text-sm text-[#646970]">
 
                                     {student.nisn ? (
                                       <>
@@ -1540,7 +1436,7 @@ export default function PersonalityPage() {
                                           NISN
                                         </span>
 
-                                        <span className="text-slate-300">
+                                        <span className="text-[#646970]">
                                           •
                                         </span>
 
@@ -1599,7 +1495,7 @@ export default function PersonalityPage() {
                                               .value
                                           )
                                         }
-                                        className={`h-10 w-full appearance-none rounded-xl border px-3 pr-8 text-[10px] font-medium outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 ${getPredicateStyle(
+                                        className={`h-10 w-full appearance-none rounded-sm border px-3 pr-8 text-sm font-medium outline-none transition-all focus:ring-2 focus:ring-[#2271b1]/20 ${getPredicateStyle(
                                           value
                                         )}`}
                                       >
@@ -1653,11 +1549,11 @@ export default function PersonalityPage() {
 
             {students.length >
               0 && (
-              <div className="flex flex-col gap-3 border-t border-slate-100 bg-[#fbfcfb] px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div className="flex flex-col gap-3 border-t border-[#dcdcde] bg-[#f6f7f7] px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
 
-                <div className="flex items-center gap-2 text-[9px] text-slate-400">
+                <div className="flex items-center gap-2 text-sm text-[#646970]">
 
-                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-50 text-emerald-600">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-[#f0f6fc] text-[#2271b1]">
 
                     <CheckCircle2
                       size={12}
@@ -1676,7 +1572,7 @@ export default function PersonalityPage() {
                   disabled={
                     loading
                   }
-                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-[#07543f] px-4 text-[10px] font-semibold text-white transition hover:bg-[#064735] disabled:opacity-50"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-sm bg-[#2271b1] px-4 text-sm font-semibold text-white transition hover:bg-[#135e96] disabled:opacity-50"
                 >
 
                   {loading ? (
@@ -1710,7 +1606,7 @@ export default function PersonalityPage() {
             FOOTER IDENTITAS
         ===================================================== */}
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-[#dcdcde] pt-4 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_SHORT_NAME}

@@ -1160,7 +1160,7 @@ export default function CurriculumPage() {
   ========================================================== */
 
   return (
-    <main className="min-h-screen bg-[#f5f8f6]">
+    <main className="min-h-screen bg-[#f0f0f1]">
 
       <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
@@ -1168,81 +1168,9 @@ export default function CurriculumPage() {
             HEADER
         ===================================================== */}
 
-        <section className="relative overflow-hidden rounded-2xl bg-[#063d31] px-5 py-6 text-white shadow-[0_12px_35px_rgba(6,61,49,0.12)] sm:px-7">
-
-          <div className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-emerald-300/[0.07] blur-3xl" />
-
-          <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-amber-300/[0.04] blur-3xl" />
-
-          <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-
-            <div className="flex items-start gap-4">
-
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06]">
-
-                <BookOpenCheck
-                  size={23}
-                  strokeWidth={
-                    1.6
-                  }
-                  className="text-emerald-200"
-                />
-
-              </div>
-
-              <div>
-
-                <div className="mb-1 flex items-center gap-2">
-
-                  <Sparkles
-                    size={11}
-                    className="text-amber-200"
-                  />
-
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.22em] text-emerald-200/60">
-                    Akademik • Kurikulum SD
-                  </span>
-
-                </div>
-
-                <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-                  Kurikulum CP &amp; TP
-                </h1>
-
-                <p className="mt-1.5 max-w-2xl text-xs leading-5 text-emerald-50/55">
-                  Kelola Capaian Pembelajaran dan Tujuan Pembelajaran berdasarkan mata pelajaran, tingkat kelas, dan semester.
-                </p>
-
-              </div>
-
-            </div>
-
-            <div className="hidden items-center gap-3 rounded-xl border border-white/[0.07] bg-white/[0.035] px-4 py-3 lg:flex">
-
-              <School
-                size={18}
-                strokeWidth={
-                  1.5
-                }
-                className="text-emerald-200/70"
-              />
-
-              <div>
-
-                <div className="text-[8px] font-semibold uppercase tracking-[0.16em] text-emerald-100/35">
-                  Institusi
-                </div>
-
-                <div className="mt-0.5 text-[11px] font-medium text-white/75">
-                  {SCHOOL_NAME}
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
+        <section>
+          <h1 className="text-2xl font-normal text-[#1d2327]">Kurikulum CP &amp; TP</h1>
+          <p className="mt-2 text-base leading-6 text-[#646970]">Kelola CP dan TP berdasarkan mata pelajaran, kelas, dan semester.</p>
         </section>
 
         {/* ====================================================
@@ -1251,7 +1179,7 @@ export default function CurriculumPage() {
 
         {message && (
           <div
-            className={`flex items-start gap-3 rounded-xl border px-4 py-3 ${
+            className={`flex items-start gap-3 rounded-sm border px-4 py-3 ${
               messageType ===
               'success'
                 ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
@@ -1260,7 +1188,7 @@ export default function CurriculumPage() {
           >
 
             <div
-              className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
+              className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-sm ${
                 messageType ===
                 'success'
                   ? 'bg-emerald-600 text-white'
@@ -1275,14 +1203,14 @@ export default function CurriculumPage() {
 
             <div>
 
-              <div className="text-xs font-bold">
+              <div className="text-base font-bold">
                 {messageType ===
                 'success'
                   ? 'Berhasil'
                   : 'Terjadi Kesalahan'}
               </div>
 
-              <div className="mt-0.5 text-xs opacity-80">
+              <div className="mt-0.5 text-base opacity-80">
                 {message}
               </div>
 
@@ -1300,11 +1228,11 @@ export default function CurriculumPage() {
 
             {/* SD INFORMATION */}
 
-            <section className="flex flex-col gap-4 rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <section className="flex flex-col gap-4 rounded-sm border border-emerald-100 bg-white p-5  sm:flex-row sm:items-center sm:justify-between">
 
               <div className="flex items-center gap-3">
 
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
 
                   <GraduationCap
                     size={20}
@@ -1314,15 +1242,15 @@ export default function CurriculumPage() {
 
                 <div>
 
-                  <div className="text-[9px] font-bold uppercase tracking-[0.16em] text-emerald-600">
+                  <div className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-600">
                     Jenjang Aktif
                   </div>
 
-                  <div className="mt-0.5 text-sm font-semibold text-slate-800">
+                  <div className="mt-0.5 text-sm font-semibold text-[#1d2327]">
                     Sekolah Dasar
                   </div>
 
-                  <div className="mt-0.5 text-[10px] text-slate-400">
+                  <div className="mt-0.5 text-sm text-[#646970]">
                     Tingkat 1 sampai 6
                   </div>
 
@@ -1330,7 +1258,7 @@ export default function CurriculumPage() {
 
               </div>
 
-              <span className="inline-flex w-fit rounded-lg bg-emerald-50 px-3 py-1.5 text-[10px] font-bold text-emerald-700">
+              <span className="inline-flex w-fit rounded-sm bg-emerald-50 px-3 py-1.5 text-sm font-bold text-emerald-700">
                 LEVEL: SD
               </span>
 
@@ -1338,13 +1266,13 @@ export default function CurriculumPage() {
 
             {/* SUBJECT LIST */}
 
-            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <section className="rounded-sm border border-[#c3c4c7] bg-white p-5  sm:p-6">
 
               <div className="mb-5 flex items-center justify-between">
 
                 <div>
 
-                  <h2 className="flex items-center gap-2 text-sm font-bold text-slate-800">
+                  <h2 className="flex items-center gap-2 text-sm font-bold text-[#1d2327]">
 
                     <BookOpen
                       size={16}
@@ -1355,14 +1283,14 @@ export default function CurriculumPage() {
 
                   </h2>
 
-                  <p className="mt-1 text-[10px] text-slate-400">
+                  <p className="mt-1 text-sm text-[#646970]">
                     Mata pelajaran jenjang SD yang tersedia pada Manajemen Mata Pelajaran.
                   </p>
 
                 </div>
 
                 {!loadingData && (
-                  <span className="rounded-lg bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
+                  <span className="rounded-sm bg-slate-50 px-2.5 py-1 text-sm font-semibold text-[#646970]">
                     {subjects.length}{' '}
                     mapel
                   </span>
@@ -1378,25 +1306,25 @@ export default function CurriculumPage() {
                     className="animate-spin text-emerald-600"
                   />
 
-                  <p className="mt-3 text-xs text-slate-400">
+                  <p className="mt-3 text-base text-[#646970]">
                     Memuat mata pelajaran...
                   </p>
 
                 </div>
               ) : subjects.length ===
                 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 py-12 text-center">
+                <div className="rounded-sm border border-dashed border-[#c3c4c7] bg-slate-50 py-12 text-center">
 
                   <BookOpen
                     size={28}
-                    className="mx-auto text-slate-300"
+                    className="mx-auto text-[#646970]"
                   />
 
-                  <p className="mt-3 text-xs font-semibold text-slate-600">
+                  <p className="mt-3 text-base font-semibold text-slate-600">
                     Belum ada mata pelajaran SD
                   </p>
 
-                  <p className="mx-auto mt-1 max-w-sm text-[10px] leading-5 text-slate-400">
+                  <p className="mx-auto mt-1 max-w-sm text-sm leading-6 text-[#646970]">
                     Tambahkan mata pelajaran terlebih dahulu melalui menu Manajemen Mata Pelajaran.
                   </p>
 
@@ -1418,24 +1346,24 @@ export default function CurriculumPage() {
                             subject
                           )
                         }
-                        className="group flex min-h-[90px] items-center justify-between rounded-xl border border-slate-200 p-4 text-left shadow-sm transition hover:border-emerald-400 hover:bg-emerald-50/50"
+                        className="group flex min-h-[90px] items-center justify-between rounded-sm border border-[#c3c4c7] p-4 text-left  transition hover:border-emerald-400 hover:bg-emerald-50/50"
                       >
 
                         <div className="min-w-0">
 
-                          <div className="truncate text-xs font-bold text-slate-800 group-hover:text-emerald-900">
+                          <div className="truncate text-base font-bold text-[#1d2327] group-hover:text-emerald-900">
                             {
                               subject.name
                             }
                           </div>
 
-                          <span className="mt-1 block text-[10px] text-slate-400">
+                          <span className="mt-1 block text-sm text-[#646970]">
                             Kelola CP &amp; TP • SD
                           </span>
 
                         </div>
 
-                        <span className="ml-3 shrink-0 rounded-lg bg-emerald-100 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
+                        <span className="ml-3 shrink-0 rounded-sm bg-emerald-100 px-2.5 py-1 text-sm font-bold text-emerald-700">
                           Pilih →
                         </span>
 
@@ -1463,7 +1391,7 @@ export default function CurriculumPage() {
               onClick={
                 handleBack
               }
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-200"
+              className="inline-flex items-center gap-2 rounded-sm bg-slate-100 px-4 py-2 text-base font-bold text-slate-700 transition hover:bg-slate-200"
             >
 
               <ArrowLeft
@@ -1476,13 +1404,13 @@ export default function CurriculumPage() {
 
             {/* SUBJECT / GRADE / SEMESTER */}
 
-            <section className="rounded-2xl bg-[#064e3b] p-5 text-white shadow-sm">
+            <section className="border border-[#c3c4c7] bg-white p-5 text-[#1d2327]">
 
               <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
                 <div>
 
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-emerald-200">
+                  <span className="text-sm font-semibold uppercase tracking-[0.18em] text-[#646970]">
                     Mata Pelajaran Aktif
                   </span>
 
@@ -1492,7 +1420,7 @@ export default function CurriculumPage() {
                     }
                   </h2>
 
-                  <div className="mt-1 text-[11px] text-emerald-200">
+                  <div className="mt-1 text-sm text-[#646970]">
                     Kelas{' '}
                     {
                       selectedGrade
@@ -1512,7 +1440,7 @@ export default function CurriculumPage() {
 
                   <div className="flex items-center gap-2">
 
-                    <span className="whitespace-nowrap text-xs font-medium text-emerald-100">
+                    <span className="whitespace-nowrap text-base font-medium text-[#646970]">
                       Tingkat:
                     </span>
 
@@ -1533,7 +1461,7 @@ export default function CurriculumPage() {
                             )
                           )
                         }
-                        className="appearance-none rounded-xl bg-white py-2 pl-3 pr-8 text-xs font-bold text-slate-800 shadow-sm outline-none"
+                        className="appearance-none rounded-sm border border-[#8c8f94] bg-white py-2 pl-3 pr-8 text-base font-bold text-[#1d2327]  outline-none"
                       >
 
                         {GRADES.map(
@@ -1560,7 +1488,7 @@ export default function CurriculumPage() {
 
                       <ChevronDown
                         size={13}
-                        className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500"
+                        className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#646970]"
                       />
 
                     </div>
@@ -1571,7 +1499,7 @@ export default function CurriculumPage() {
 
                   <div className="flex items-center gap-2">
 
-                    <span className="whitespace-nowrap text-xs font-medium text-emerald-100">
+                    <span className="whitespace-nowrap text-base font-medium text-[#646970]">
                       Semester:
                     </span>
 
@@ -1592,7 +1520,7 @@ export default function CurriculumPage() {
                             )
                           )
                         }
-                        className="appearance-none rounded-xl bg-white py-2 pl-3 pr-8 text-xs font-bold text-slate-800 shadow-sm outline-none"
+                        className="appearance-none rounded-sm border border-[#8c8f94] bg-white py-2 pl-3 pr-8 text-base font-bold text-[#1d2327]  outline-none"
                       >
 
                         <option value={1}>
@@ -1607,7 +1535,7 @@ export default function CurriculumPage() {
 
                       <ChevronDown
                         size={13}
-                        className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500"
+                        className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#646970]"
                       />
 
                     </div>
@@ -1628,12 +1556,12 @@ export default function CurriculumPage() {
               onSubmit={
                 handleSaveCP
               }
-              className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"
+              className="space-y-4 rounded-sm border border-[#c3c4c7] bg-white p-5  sm:p-6"
             >
 
               <div className="flex items-start gap-3">
 
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
 
                   <Layers3
                     size={17}
@@ -1643,11 +1571,11 @@ export default function CurriculumPage() {
 
                 <div>
 
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                  <h3 className="text-base font-bold uppercase tracking-wider text-[#1d2327]">
                     Tambah Capaian Pembelajaran (CP)
                   </h3>
 
-                  <p className="mt-1 text-[11px] text-slate-500">
+                  <p className="mt-1 text-sm text-[#646970]">
                     {
                       selectedSubject.name
                     }{' '}
@@ -1680,7 +1608,7 @@ export default function CurriculumPage() {
                 placeholder={`Tuliskan Capaian Pembelajaran ${selectedSubject.name} untuk Kelas ${selectedGrade} Semester ${selectedSemester}...`}
                 rows={4}
                 required
-                className="w-full resize-y rounded-xl border border-slate-200 bg-slate-50/40 p-3 text-sm leading-6 text-slate-700 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
+                className="w-full resize-y rounded-sm border border-[#c3c4c7] bg-slate-50/40 p-3 text-sm leading-6 text-slate-700 outline-none transition focus:border-[#2271b1] focus:bg-white focus:ring-4 focus:ring-[#2271b1]/20"
               />
 
               <div className="flex justify-end">
@@ -1691,7 +1619,7 @@ export default function CurriculumPage() {
                     loading ||
                     !cpDesc.trim()
                   }
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#064e3b] px-5 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-[#053d2e] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-sm bg-[#2271b1] px-5 py-2.5 text-base font-bold text-white  transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
                 >
 
                   {loading ? (
@@ -1719,20 +1647,20 @@ export default function CurriculumPage() {
                 CP LIST
             ================================================== */}
 
-            <section className="space-y-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <section className="space-y-5 rounded-sm border border-[#c3c4c7] bg-white p-5  sm:p-6">
 
-              <div className="flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 border-b border-[#dcdcde] pb-4 sm:flex-row sm:items-center sm:justify-between">
 
                 <div>
 
-                  <h3 className="text-sm font-bold text-slate-800">
+                  <h3 className="text-sm font-bold text-[#1d2327]">
                     Daftar CP &amp; TP —{' '}
                     {
                       selectedSubject.name
                     }
                   </h3>
 
-                  <p className="mt-1 text-[11px] text-slate-500">
+                  <p className="mt-1 text-sm text-[#646970]">
                     Kelas{' '}
                     {
                       selectedGrade
@@ -1745,7 +1673,7 @@ export default function CurriculumPage() {
 
                 </div>
 
-                <span className="w-fit rounded-lg bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
+                <span className="w-fit rounded-sm bg-slate-50 px-2.5 py-1 text-sm font-semibold text-[#646970]">
                   {
                     currentSubjectCPs.length
                   }{' '}
@@ -1762,25 +1690,25 @@ export default function CurriculumPage() {
                     className="animate-spin text-emerald-600"
                   />
 
-                  <p className="mt-3 text-xs text-slate-400">
+                  <p className="mt-3 text-base text-[#646970]">
                     Memuat kurikulum...
                   </p>
 
                 </div>
               ) : currentSubjectCPs.length ===
                 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-12 text-center">
+                <div className="rounded-sm border border-dashed border-[#c3c4c7] bg-slate-50 px-4 py-12 text-center">
 
                   <BookOpen
                     size={28}
-                    className="mx-auto mb-3 text-slate-300"
+                    className="mx-auto mb-3 text-[#646970]"
                   />
 
-                  <div className="text-xs font-semibold text-slate-500">
+                  <div className="text-base font-semibold text-[#646970]">
                     Belum ada Capaian Pembelajaran
                   </div>
 
-                  <div className="mt-1 text-[11px] text-slate-400">
+                  <div className="mt-1 text-sm text-[#646970]">
                     {
                       selectedSubject.name
                     }{' '}
@@ -1794,7 +1722,7 @@ export default function CurriculumPage() {
                     }
                   </div>
 
-                  <div className="mt-2 text-[10px] text-slate-400">
+                  <div className="mt-2 text-sm text-[#646970]">
                     Tambahkan CP melalui formulir di atas.
                   </div>
 
@@ -1828,7 +1756,7 @@ export default function CurriculumPage() {
                           key={
                             cp.id
                           }
-                          className="space-y-4 rounded-xl border border-slate-200 bg-slate-50/50 p-4"
+                          className="space-y-4 rounded-sm border border-[#c3c4c7] bg-slate-50/50 p-4"
                         >
 
                           {/* CP HEADER */}
@@ -1839,20 +1767,20 @@ export default function CurriculumPage() {
 
                               <div className="flex flex-wrap items-center gap-2">
 
-                                <span className="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                                <span className="rounded bg-emerald-100 px-2 py-0.5 text-sm font-bold text-emerald-800">
                                   CP:{' '}
                                   {
                                     cp.code
                                   }
                                 </span>
 
-                                <span className="rounded bg-slate-200 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
+                                <span className="rounded bg-slate-200 px-2 py-0.5 text-sm font-semibold text-slate-700">
                                   Kelas{' '}
                                   {cp.grade ||
                                     selectedGrade}
                                 </span>
 
-                                <span className="rounded bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                                <span className="rounded bg-blue-100 px-2 py-0.5 text-sm font-semibold text-blue-700">
                                   Semester{' '}
                                   {
                                     cpSemester
@@ -1861,7 +1789,7 @@ export default function CurriculumPage() {
 
                               </div>
 
-                              <p className="mt-2 whitespace-pre-line text-xs font-semibold leading-6 text-slate-800">
+                              <p className="mt-2 whitespace-pre-line text-base font-semibold leading-6 text-[#1d2327]">
                                 {
                                   cp.description
                                 }
@@ -1880,7 +1808,7 @@ export default function CurriculumPage() {
                               disabled={
                                 loading
                               }
-                              className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-red-50 px-2.5 py-1.5 text-[10px] font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
+                              className="inline-flex shrink-0 items-center gap-1 rounded-sm bg-red-50 px-2.5 py-1.5 text-sm font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
                             >
 
                               <Trash2
@@ -1895,11 +1823,11 @@ export default function CurriculumPage() {
 
                           {/* TP */}
 
-                          <div className="space-y-2 border-l-2 border-amber-400 pl-4">
+                          <div className="space-y-2 border-l-2 border-[#dcdcde] pl-4">
 
                             <div className="flex items-center justify-between gap-3">
 
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                              <span className="text-sm font-bold uppercase tracking-wider text-[#646970]">
                                 Tujuan Pembelajaran (TP)
                               </span>
 
@@ -1919,7 +1847,7 @@ export default function CurriculumPage() {
                                   setTpDesc('');
                                   clearMessage();
                                 }}
-                                className="flex shrink-0 items-center gap-1 rounded border border-amber-200 bg-amber-50 px-2 py-1 text-[10px] font-bold text-amber-800 transition hover:bg-amber-100"
+                                className="flex shrink-0 items-center gap-1 rounded border border-amber-200 bg-amber-50 px-2 py-1 text-sm font-bold text-amber-800 transition hover:bg-amber-100"
                               >
 
                                 <Plus
@@ -1936,7 +1864,7 @@ export default function CurriculumPage() {
 
                             {activeCpIdForTp ===
                               cp.id && (
-                              <div className="my-2 space-y-2 rounded-xl border border-amber-200 bg-white p-3 shadow-inner">
+                              <div className="my-2 space-y-2 rounded-sm border border-amber-200 bg-white p-3 ">
 
                                 <input
                                   type="text"
@@ -1973,7 +1901,7 @@ export default function CurriculumPage() {
                                       }
                                     }
                                   }}
-                                  className="h-10 w-full rounded-lg border border-slate-200 px-3 text-xs outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10"
+                                  className="h-10 w-full rounded-sm border border-[#c3c4c7] px-3 text-base outline-none transition focus:border-[#2271b1] focus:ring-4 focus:ring-[#2271b1]/20"
                                 />
 
                                 <div className="flex justify-end gap-2">
@@ -1987,7 +1915,7 @@ export default function CurriculumPage() {
 
                                       setTpDesc('');
                                     }}
-                                    className="h-8 rounded-lg bg-slate-100 px-3 text-xs font-bold text-slate-600 hover:bg-slate-200"
+                                    className="h-8 rounded-sm bg-slate-100 px-3 text-base font-bold text-slate-600 hover:bg-slate-200"
                                   >
                                     Batal
                                   </button>
@@ -2003,7 +1931,7 @@ export default function CurriculumPage() {
                                       loading ||
                                       !tpDesc.trim()
                                     }
-                                    className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-amber-600 px-4 text-xs font-bold text-white hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="inline-flex h-8 items-center gap-1.5 rounded-sm bg-[#2271b1] px-4 text-base font-bold text-white hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
                                   >
 
                                     {loading && (
@@ -2026,7 +1954,7 @@ export default function CurriculumPage() {
 
                             {tpList.length ===
                             0 ? (
-                              <div className="py-1 text-[10px] italic text-slate-400">
+                              <div className="py-1 text-sm italic text-[#646970]">
                                 Belum ada TP untuk CP ini.
                               </div>
                             ) : (
@@ -2040,18 +1968,18 @@ export default function CurriculumPage() {
                                       key={
                                         tp.id
                                       }
-                                      className="flex items-start justify-between gap-3 rounded-lg border border-slate-200 bg-white p-2.5"
+                                      className="flex items-start justify-between gap-3 rounded-sm border border-[#c3c4c7] bg-white p-2.5"
                                     >
 
                                       <div className="min-w-0">
 
-                                        <span className="mr-2 rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold text-amber-800">
+                                        <span className="mr-2 rounded bg-amber-100 px-1.5 py-0.5 text-sm font-bold text-amber-800">
                                           {
                                             tp.code
                                           }
                                         </span>
 
-                                        <span className="text-[11px] leading-relaxed text-slate-700">
+                                        <span className="text-sm leading-relaxed text-slate-700">
                                           {
                                             tp.description
                                           }
@@ -2070,7 +1998,7 @@ export default function CurriculumPage() {
                                             'TP'
                                           )
                                         }
-                                        className="inline-flex shrink-0 items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-[9px] font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
+                                        className="inline-flex shrink-0 items-center gap-1 rounded-sm bg-red-50 px-2 py-1 text-sm font-bold text-red-600 transition hover:bg-red-100 disabled:opacity-50"
                                       >
 
                                         <Trash2
@@ -2107,7 +2035,7 @@ export default function CurriculumPage() {
             FOOTER
         ===================================================== */}
 
-        <footer className="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+        <footer className="flex flex-col items-center justify-between gap-2 border-t border-[#c3c4c7] pt-4 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_SHORT_NAME}

@@ -816,7 +816,7 @@ export default function NilaiPage() {
   ========================================================== */
 
   return (
-    <main className="min-h-screen bg-[#f5f7f5]">
+    <main className="min-h-screen bg-[#f0f0f1]">
 
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
 
@@ -824,66 +824,14 @@ export default function NilaiPage() {
             HEADER
         ===================================================== */}
 
-        <header className="relative overflow-hidden rounded-2xl bg-[#064e3b] px-6 py-7 text-white shadow-lg">
-
-          <div className="pointer-events-none absolute -right-20 -top-28 h-72 w-72 rounded-full border border-emerald-200/10" />
-
-          <div className="pointer-events-none absolute -bottom-24 right-1/3 h-56 w-56 rounded-full bg-emerald-200/[0.04] blur-3xl" />
-
-          <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-
-            <div>
-
-              <span className="inline-flex rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-100">
-                Akademik • Rekapitulasi
-              </span>
-
-              <h1 className="mt-2 text-xl font-bold tracking-tight sm:text-2xl">
-                Rekapitulasi Nilai Asesmen Siswa
-              </h1>
-
-              <p className="mt-1 max-w-2xl text-xs leading-5 text-emerald-100/70">
-                Rekap nilai siswa yang bersumber dari hasil input asesmen ustadz dan ustadzah.
-              </p>
-
-              <div className="mt-3 flex items-center gap-2 text-[9px] uppercase tracking-[0.14em] text-emerald-100/45">
-
-                <School
-                  size={12}
-                />
-
-                {SCHOOL_SHORT_NAME}
-
-              </div>
-
-            </div>
-
-            <button
-              type="button"
-              onClick={
-                fetchData
-              }
-              disabled={
-                loading
-              }
-              className="flex w-fit items-center gap-2 rounded-xl bg-white/10 px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/20 disabled:opacity-50"
-            >
-
-              <RefreshCw
-                size={14}
-                className={
-                  loading
-                    ? 'animate-spin'
-                    : ''
-                }
-              />
-
-              Perbarui Data
-
-            </button>
-
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-normal text-[#1d2327]">Rekapitulasi Nilai Asesmen</h1>
+            <p className="mt-2 text-base leading-6 text-[#646970]">Lihat nilai siswa berdasarkan kelas, mata pelajaran, dan jenis asesmen.</p>
           </div>
-
+          <button type="button" onClick={fetchData} disabled={loading} className="inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-sm border border-[#2271b1] bg-[#f6f7f7] px-4 py-2 text-base text-[#2271b1] hover:bg-[#f0f6fc] disabled:cursor-not-allowed disabled:opacity-50">
+            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Perbarui Data
+          </button>
         </header>
 
         {/* ====================================================
@@ -892,7 +840,7 @@ export default function NilaiPage() {
 
         {message && (
           <div
-            className={`flex items-start gap-3 rounded-xl border p-4 text-sm ${
+            className={`flex items-start gap-3 rounded-sm border p-4 text-sm ${
               messageType ===
               'success'
                 ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
@@ -972,11 +920,11 @@ export default function NilaiPage() {
             FILTER
         ===================================================== */}
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <section className="rounded-sm border border-[#c3c4c7] bg-white p-5  sm:p-6">
 
           <div className="mb-4 flex items-center gap-3">
 
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#f0f6fc] text-[#2271b1]">
 
               <GraduationCap
                 size={18}
@@ -986,11 +934,11 @@ export default function NilaiPage() {
 
             <div>
 
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm font-bold text-[#1d2327]">
                 Filter Rekapitulasi
               </h2>
 
-              <p className="mt-0.5 text-[10px] text-slate-400">
+              <p className="mt-0.5 text-sm text-[#646970]">
                 Tampilkan nilai berdasarkan kelas, mata pelajaran, dan jenis asesmen.
               </p>
 
@@ -1004,7 +952,7 @@ export default function NilaiPage() {
 
             <div>
 
-              <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+              <label className="mb-1.5 block text-base font-semibold text-slate-700">
                 Filter Kelas
               </label>
 
@@ -1020,7 +968,7 @@ export default function NilaiPage() {
                       .value
                   )
                 }
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-sm outline-none focus:border-[#2271b1] focus:ring-4 focus:ring-[#2271b1]/20"
               >
 
                 <option value="">
@@ -1059,7 +1007,7 @@ export default function NilaiPage() {
 
             <div>
 
-              <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+              <label className="mb-1.5 block text-base font-semibold text-slate-700">
                 Filter Mata Pelajaran
               </label>
 
@@ -1075,7 +1023,7 @@ export default function NilaiPage() {
                       .value
                   )
                 }
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-sm outline-none focus:border-[#2271b1] focus:ring-4 focus:ring-[#2271b1]/20"
               >
 
                 <option value="">
@@ -1109,7 +1057,7 @@ export default function NilaiPage() {
 
             <div>
 
-              <label className="mb-1.5 block text-xs font-semibold text-slate-700">
+              <label className="mb-1.5 block text-base font-semibold text-slate-700">
                 Jenis Asesmen
               </label>
 
@@ -1125,7 +1073,7 @@ export default function NilaiPage() {
                       .value
                   )
                 }
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-sm outline-none focus:border-[#2271b1] focus:ring-4 focus:ring-[#2271b1]/20"
               >
 
                 <option value="">
@@ -1152,23 +1100,23 @@ export default function NilaiPage() {
             TABLE
         ===================================================== */}
 
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <section className="overflow-hidden rounded-sm border border-[#c3c4c7] bg-white ">
 
-          <div className="flex flex-col gap-2 border-b border-slate-200 bg-slate-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2 border-b border-[#c3c4c7] bg-slate-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
 
             <div>
 
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm font-bold text-[#1d2327]">
                 Daftar Nilai Berdasarkan Asesmen
               </h2>
 
-              <p className="mt-0.5 text-[10px] text-slate-400">
+              <p className="mt-0.5 text-sm text-[#646970]">
                 Jenjang SD • Kelas 1–6
               </p>
 
             </div>
 
-            <span className="text-xs font-normal text-slate-500">
+            <span className="text-base font-normal text-[#646970]">
               Total Rekap:{' '}
               {
                 filteredAssessments.length
@@ -1179,7 +1127,7 @@ export default function NilaiPage() {
           </div>
 
           {loading ? (
-            <div className="flex flex-col items-center justify-center p-14 text-sm text-slate-400">
+            <div className="flex flex-col items-center justify-center p-14 text-sm text-[#646970]">
 
               <RefreshCw
                 size={22}
@@ -1197,14 +1145,14 @@ export default function NilaiPage() {
 
               <BookOpen
                 size={28}
-                className="mx-auto text-slate-300"
+                className="mx-auto text-[#646970]"
               />
 
               <p className="mt-3 text-sm font-semibold text-slate-600">
                 Belum ada data asesmen
               </p>
 
-              <p className="mx-auto mt-1 max-w-lg text-xs leading-5 text-slate-400">
+              <p className="mx-auto mt-1 max-w-lg text-base leading-6 text-[#646970]">
                 Belum ada data asesmen untuk filter yang dipilih. Silakan input nilai melalui menu <strong>Input Asesmen</strong>.
               </p>
 
@@ -1212,11 +1160,11 @@ export default function NilaiPage() {
           ) : (
             <div className="overflow-x-auto">
 
-              <table className="w-full min-w-[1000px] border-collapse text-left text-xs">
+              <table className="w-full min-w-[1000px] border-collapse text-left text-base">
 
                 <thead>
 
-                  <tr className="border-b border-slate-200 bg-slate-50/70 text-[10px] font-bold uppercase text-slate-400">
+                  <tr className="border-b border-[#c3c4c7] bg-[#f6f7f7] text-base font-semibold text-[#646970]">
 
                     <th className="p-4">
                       No
@@ -1300,7 +1248,7 @@ export default function NilaiPage() {
                           className="transition hover:bg-slate-50"
                         >
 
-                          <td className="p-4 font-medium text-slate-400">
+                          <td className="p-4 font-medium text-[#646970]">
                             {
                               index +
                               1
@@ -1309,7 +1257,7 @@ export default function NilaiPage() {
 
                           <td className="p-4">
 
-                            <div className="font-bold text-slate-800">
+                            <div className="font-bold text-[#1d2327]">
                               {item.student
                                 ?.fullname ||
                                 `Siswa ID: ${item.studentId}`}
@@ -1319,7 +1267,7 @@ export default function NilaiPage() {
 
                           <td className="p-4">
 
-                            <span className="rounded-md bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+                            <span className="rounded-sm bg-emerald-50 px-2.5 py-1 text-sm font-semibold text-emerald-700">
                               {item.student
                                 ?.class_name ||
                                 '-'}
@@ -1343,7 +1291,7 @@ export default function NilaiPage() {
 
                             {item.tp
                               ?.description && (
-                              <div className="mt-1 max-w-[260px] truncate text-[9px] text-slate-400">
+                              <div className="mt-1 max-w-[260px] whitespace-normal break-words text-sm text-[#646970]">
                                 {
                                   item.tp
                                     .description
@@ -1356,7 +1304,7 @@ export default function NilaiPage() {
                           <td className="p-4">
 
                             <span
-                              className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                              className={`rounded-sm px-2 py-0.5 text-sm font-bold ${
                                 isFormative
                                   ? 'bg-blue-50 text-blue-700'
                                   : 'bg-amber-50 text-amber-700'
@@ -1382,7 +1330,7 @@ export default function NilaiPage() {
                           <td className="p-4">
 
                             <span
-                              className={`inline-flex rounded-lg border px-2.5 py-1 text-[10px] font-semibold ${predicate.style}`}
+                              className={`inline-flex rounded-sm border px-2.5 py-1 text-sm font-semibold ${predicate.style}`}
                             >
                               {
                                 predicate.label
@@ -1413,7 +1361,7 @@ export default function NilaiPage() {
             FOOTER
         ===================================================== */}
 
-        <footer className="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+        <footer className="flex flex-col items-center justify-between gap-2 border-t border-[#c3c4c7] pt-4 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_NAME}
@@ -1445,9 +1393,9 @@ function StatCard({
   icon: React.ElementType;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-sm border border-[#c3c4c7] bg-white p-4 ">
 
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+      <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#f0f6fc] text-[#2271b1]">
 
         <Icon
           size={17}
@@ -1455,11 +1403,11 @@ function StatCard({
 
       </div>
 
-      <div className="mt-3 text-xl font-bold text-slate-800">
+      <div className="mt-3 text-xl font-bold text-[#1d2327]">
         {value}
       </div>
 
-      <div className="mt-0.5 text-[10px] font-medium text-slate-400">
+      <div className="mt-0.5 text-sm font-medium text-[#646970]">
         {label}
       </div>
 

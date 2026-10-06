@@ -617,125 +617,17 @@ export default function TeachersPage() {
     );
 
   return (
-    <main className="min-h-screen bg-[#f4f7f6] text-slate-800">
+    <main className="min-h-screen bg-[#f0f0f1] text-[#1d2327]">
 
-      <section className="relative overflow-hidden border-b border-emerald-950/20 bg-[#062f28]">
-
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)
-            `,
-            backgroundSize:
-              '38px 38px',
-          }}
-        />
-
-        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl" />
-
-        <div className="pointer-events-none absolute -bottom-40 left-1/3 h-80 w-80 rounded-full bg-teal-300/10 blur-3xl" />
-
-        <div className="relative mx-auto max-w-[1500px] px-5 py-7 sm:px-7 lg:px-10">
-
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-
-            <div>
-
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-300/15 bg-white/[0.06] px-3 py-1.5">
-
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-50" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300" />
-                </span>
-
-                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-emerald-100/70">
-                  Data Master • Academic
-                </span>
-
-              </div>
-
-              <div className="flex items-center gap-4">
-
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.07] shadow-[0_0_30px_rgba(52,211,153,0.08)]">
-
-                  <GraduationCap
-                    size={28}
-                    strokeWidth={1.5}
-                    className="text-emerald-200"
-                  />
-
-                </div>
-
-                <div>
-
-                  <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                    Ustadz &amp; Ustadzah
-                  </h1>
-
-                  <p className="mt-1 max-w-xl text-xs leading-5 text-emerald-100/55">
-                    Kelola data ustadz dan ustadzah,
-                    informasi akademik,
-                    serta akses akun secara terpusat.
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-            <div className="flex items-center gap-2">
-
-              <div className="hidden rounded-xl border border-white/10 bg-white/[0.05] px-4 py-3 sm:block">
-
-                <div className="flex items-center gap-2">
-
-                  <ShieldCheck
-                    size={15}
-                    className="text-emerald-300"
-                  />
-
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-emerald-100/60">
-                    Sistem Akademik
-                  </span>
-
-                </div>
-
-                <div className="mt-1 text-[10px] text-white/40">
-                  Pengelolaan Ustadz & Ustadzah
-                </div>
-
-              </div>
-
-              <button
-                type="button"
-                onClick={fetchTeachers}
-                disabled={loading}
-                className="flex h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-4 text-[10px] font-bold text-white transition hover:bg-white/[0.12] disabled:opacity-50"
-              >
-
-                <RefreshCw
-                  size={14}
-                  className={
-                    loading
-                      ? 'animate-spin'
-                      : ''
-                  }
-                />
-
-                Refresh
-
-              </button>
-
-            </div>
-
-          </div>
-
+      <header className="mx-auto flex max-w-[1500px] flex-col gap-4 px-4 pt-6 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div>
+          <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Ustadz &amp; Ustadzah</h1>
+          <p className="mt-2 text-base text-[#646970]">Kelola data pengajar dan status akun login.</p>
         </div>
-
-      </section>
+        <button type="button" onClick={fetchTeachers} disabled={loading} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-sm border border-[#2271b1] bg-white px-4 py-2 text-sm font-semibold text-[#2271b1] hover:bg-[#f0f6fc] disabled:opacity-50">
+          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} /> Muat Ulang
+        </button>
+      </header>
 
       <div className="mx-auto max-w-[1500px] space-y-5 px-4 py-6 sm:px-6 lg:px-8">
 
@@ -775,7 +667,7 @@ export default function TeachersPage() {
 
         {message && (
           <div
-            className={`flex items-start gap-3 rounded-2xl border px-4 py-3 text-xs font-medium shadow-sm ${
+            className={`flex items-start gap-3 rounded-sm border px-4 py-3 text-base font-medium ${
               message.startsWith(
                 'Sukses'
               )
@@ -817,13 +709,13 @@ export default function TeachersPage() {
 
         <section>
 
-          <div className="mb-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
+          <div className="mb-3 rounded-sm border border-[#c3c4c7] bg-white p-4">
 
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 
               <div className="flex items-center gap-3">
 
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
 
                   <Users size={18} />
 
@@ -831,11 +723,11 @@ export default function TeachersPage() {
 
                 <div>
 
-                  <h2 className="text-sm font-bold text-slate-800">
+                  <h2 className="text-sm font-bold text-[#1d2327]">
                     Daftar Ustadz & Ustadzah
                   </h2>
 
-                  <p className="text-[9px] text-slate-400">
+                  <p className="text-sm text-[#646970]">
                     {filteredTeachers.length}{' '}
                     dari{' '}
                     {teachers.length}{' '}
@@ -852,7 +744,7 @@ export default function TeachersPage() {
 
                   <Search
                     size={14}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#646970]"
                   />
 
                   <input
@@ -864,7 +756,7 @@ export default function TeachersPage() {
                       )
                     }
                     placeholder="Cari ustadz/ustadzah..."
-                    className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-9 pr-3 text-xs outline-none transition placeholder:text-slate-300 focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5 sm:w-56"
+                    className="h-10 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] pl-9 pr-3 text-base outline-none transition placeholder:text-[#646970] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20 sm:w-56"
                   />
 
                 </div>
@@ -879,7 +771,7 @@ export default function TeachersPage() {
                     disabled={
                       deletingBulk
                     }
-                    className="flex h-10 items-center justify-center gap-2 rounded-xl bg-red-600 px-4 text-[10px] font-bold text-white shadow-lg shadow-red-600/10 transition hover:bg-red-700 disabled:opacity-60"
+                    className="flex h-10 items-center justify-center gap-2 rounded-sm bg-red-600 px-4 text-sm font-bold text-white shadow-red-600/10 transition hover:bg-red-700 disabled:opacity-60"
                   >
 
                     {deletingBulk ? (
@@ -907,7 +799,7 @@ export default function TeachersPage() {
                   onClick={
                     openAddModal
                   }
-                  className="group flex h-10 items-center justify-center gap-2 rounded-xl bg-[#0b5d4b] px-4 text-[10px] font-bold text-white shadow-lg shadow-emerald-900/10 transition hover:bg-[#084c3e]"
+                  className="group flex h-10 items-center justify-center gap-2 rounded-sm bg-[#2271b1] px-4 text-sm font-bold text-white transition hover:bg-[#135e96]"
                 >
 
                   <Plus
@@ -925,7 +817,7 @@ export default function TeachersPage() {
 
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_10px_40px_rgba(15,23,42,0.04)]">
+          <div className="overflow-hidden rounded-sm border border-[#c3c4c7] bg-white">
 
             {loading ? (
               <LoadingState />
@@ -941,11 +833,11 @@ export default function TeachersPage() {
             ) : (
               <div className="overflow-x-auto">
 
-                <table className="w-full min-w-[1100px] border-collapse text-xs">
+                <table className="w-full min-w-[1100px] border-collapse text-base">
 
                   <thead>
 
-                    <tr className="border-b border-slate-200 bg-[#f8faf9]">
+                    <tr className="border-b border-[#c3c4c7] bg-[#f6f7f7]">
 
                       <th className="w-12 px-4 py-3 text-center">
                         <input
@@ -956,31 +848,31 @@ export default function TeachersPage() {
                           onChange={
                             handleSelectAll
                           }
-                          className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                          className="h-3.5 w-3.5 cursor-pointer rounded border-[#c3c4c7] text-emerald-600 focus:ring-[#2271b1]/20"
                         />
                       </th>
 
-                      <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                      <th className="px-3 py-3 text-left text-sm font-bold text-[#646970]">
                         Identitas
                       </th>
 
-                      <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                      <th className="px-3 py-3 text-left text-sm font-bold text-[#646970]">
                         Ustadz / Ustadzah
                       </th>
 
-                      <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                      <th className="px-3 py-3 text-left text-sm font-bold text-[#646970]">
                         Pendidikan
                       </th>
 
-                      <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                      <th className="px-3 py-3 text-left text-sm font-bold text-[#646970]">
                         Alamat
                       </th>
 
-                      <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                      <th className="px-3 py-3 text-left text-sm font-bold text-[#646970]">
                         Status
                       </th>
 
-                      <th className="px-4 py-3 text-right text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+                      <th className="px-4 py-3 text-right text-sm font-bold text-[#646970]">
                         Aksi
                       </th>
 
@@ -988,7 +880,7 @@ export default function TeachersPage() {
 
                   </thead>
 
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-[#dcdcde]">
 
                     {filteredTeachers.map(
                       (teacher) => {
@@ -1009,7 +901,7 @@ export default function TeachersPage() {
                             className={`group transition ${
                               isChecked
                                 ? 'bg-emerald-50/60'
-                                : 'hover:bg-slate-50/70'
+                                : 'hover:bg-[#f6f7f7]'
                             }`}
                           >
 
@@ -1025,7 +917,7 @@ export default function TeachersPage() {
                                     teacher.id
                                   )
                                 }
-                                className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                                className="h-3.5 w-3.5 cursor-pointer rounded border-[#c3c4c7] text-emerald-600 focus:ring-[#2271b1]/20"
                               />
 
                             </td>
@@ -1034,7 +926,7 @@ export default function TeachersPage() {
 
                               <div className="flex items-center gap-2.5">
 
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-[10px] font-bold text-slate-500 transition group-hover:bg-emerald-50 group-hover:text-emerald-700">
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-[#f6f7f7] text-sm font-bold text-[#646970] transition group-hover:bg-emerald-50 group-hover:text-emerald-700">
 
                                   #
                                   {
@@ -1045,12 +937,12 @@ export default function TeachersPage() {
 
                                 <div className="min-w-0">
 
-                                  <div className="truncate text-[10px] font-bold text-slate-700">
+                                  <div className="break-words text-sm font-bold text-[#1d2327]">
                                     {teacher.identity_number ||
                                       '-'}
                                   </div>
 
-                                  <div className="mt-0.5 flex items-center gap-1 text-[8px] text-slate-400">
+                                  <div className="mt-0.5 flex items-center gap-1 text-sm text-[#646970]">
 
                                     <IdCard
                                       size={9}
@@ -1070,7 +962,7 @@ export default function TeachersPage() {
 
                               <div className="flex items-start gap-2.5">
 
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-100 to-teal-50 text-emerald-700">
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f0f6fc] text-emerald-700">
 
                                   <CircleUserRound
                                     size={18}
@@ -1081,13 +973,13 @@ export default function TeachersPage() {
 
                                 <div className="min-w-0">
 
-                                  <div className="max-w-[230px] truncate font-bold text-slate-800">
+                                  <div className="max-w-[230px] break-words font-bold text-[#1d2327]">
                                     {
                                       teacher.fullname
                                     }
                                   </div>
 
-                                  <div className="mt-1 flex items-center gap-1 text-[9px] text-slate-400">
+                                  <div className="mt-1 flex items-center gap-1 text-sm text-[#646970]">
 
                                     <CalendarDays
                                       size={10}
@@ -1112,13 +1004,13 @@ export default function TeachersPage() {
                             <td className="px-3 py-4">
 
                               {teacher.education ? (
-                                <span className="inline-flex max-w-[200px] items-center gap-1.5 rounded-lg border border-emerald-100 bg-emerald-50 px-2.5 py-1.5 text-[9px] font-semibold text-emerald-700">
+                                <span className="inline-flex max-w-[200px] items-center gap-1.5 rounded-sm border border-emerald-100 bg-emerald-50 px-2.5 py-1.5 text-sm font-semibold text-emerald-700">
 
                                   <GraduationCap
                                     size={11}
                                   />
 
-                                  <span className="truncate">
+                                  <span className="break-words">
                                     {
                                       teacher.education
                                     }
@@ -1126,7 +1018,7 @@ export default function TeachersPage() {
 
                                 </span>
                               ) : (
-                                <span className="text-[10px] italic text-slate-300">
+                                <span className="text-sm italic text-[#646970]">
                                   Belum diisi
                                 </span>
                               )}
@@ -1142,7 +1034,7 @@ export default function TeachersPage() {
                                   className="mt-0.5 shrink-0 text-emerald-500"
                                 />
 
-                                <span className="line-clamp-2 text-[10px] leading-4 text-slate-500">
+                                <span className="break-words text-sm leading-relaxed text-[#646970]">
                                   {
                                     teacher.address ||
                                     'Alamat belum diisi'
@@ -1162,7 +1054,7 @@ export default function TeachersPage() {
                                     teacher
                                   )
                                 }
-                                className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1.5 text-[9px] font-bold transition ${
+                                className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1.5 text-sm font-bold transition ${
                                   isInactive
                                     ? 'border-red-100 bg-red-50 text-red-600 hover:border-red-200 hover:bg-red-100'
                                     : 'border-emerald-100 bg-emerald-50 text-emerald-700 hover:border-emerald-200 hover:bg-emerald-100'
@@ -1197,7 +1089,7 @@ export default function TeachersPage() {
                                       teacher
                                     )
                                   }
-                                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-100 bg-amber-50 text-amber-600 transition hover:bg-amber-100 hover:text-amber-700"
+                                  className="flex h-8 w-8 items-center justify-center rounded-sm border border-amber-100 bg-amber-50 text-amber-600 transition hover:bg-amber-100 hover:text-amber-700"
                                   title="Edit ustadz/ustadzah"
                                 >
                                   <Pencil
@@ -1212,7 +1104,7 @@ export default function TeachersPage() {
                                       teacher.id
                                     )
                                   }
-                                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-100 bg-red-50 text-red-500 transition hover:bg-red-100 hover:text-red-700"
+                                  className="flex h-8 w-8 items-center justify-center rounded-sm border border-red-100 bg-red-50 text-red-500 transition hover:bg-red-100 hover:text-red-700"
                                   title="Hapus ustadz/ustadzah"
                                 >
                                   <Trash2
@@ -1258,29 +1150,15 @@ export default function TeachersPage() {
             className="absolute inset-0 cursor-default bg-slate-950/55 backdrop-blur-sm"
           />
 
-          <div className="relative z-10 flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.30)]">
+          <div className="relative z-10 flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-sm border border-[#c3c4c7] bg-white">
 
-            <div className="relative overflow-hidden bg-[#062f28] px-5 py-5 text-white sm:px-6">
-
-              <div
-                className="pointer-events-none absolute inset-0 opacity-[0.08]"
-                style={{
-                  backgroundImage: `
-                    linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)
-                  `,
-                  backgroundSize:
-                    '28px 28px',
-                }}
-              />
-
-              <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-400/15 blur-3xl" />
+            <div className="relative overflow-hidden border-b border-[#dcdcde] bg-[#f6f7f7] px-5 py-5 text-[#1d2327] sm:px-6">
 
               <div className="relative flex items-center justify-between gap-4">
 
                 <div className="flex items-center gap-3">
 
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.08] text-emerald-200">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border border-[#c3c4c7] bg-white text-[#646970]">
 
                     {editingId ? (
                       <Pencil size={19} />
@@ -1304,14 +1182,14 @@ export default function TeachersPage() {
                       </h2>
 
                       {editingId && (
-                        <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-2 py-0.5 text-[8px] font-bold text-emerald-200">
+                        <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-2 py-0.5 text-sm font-bold text-[#646970]">
                           #{editingId}
                         </span>
                       )}
 
                     </div>
 
-                    <p className="mt-0.5 text-[9px] text-emerald-100/55">
+                    <p className="mt-0.5 text-sm text-[#646970]">
                       {editingId
                         ? 'Perbarui informasi ustadz/ustadzah.'
                         : 'Masukkan data ustadz/ustadzah baru ke sistem.'}
@@ -1325,7 +1203,7 @@ export default function TeachersPage() {
                   type="button"
                   onClick={closeModal}
                   disabled={submitting}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.07] text-white/70 transition hover:bg-white/[0.14] hover:text-white disabled:opacity-50"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-[#c3c4c7] bg-white text-[#646970] transition hover:bg-[#f0f6fc] hover:text-[#2271b1] disabled:opacity-50"
                 >
                   <X size={17} />
                 </button>
@@ -1341,9 +1219,9 @@ export default function TeachersPage() {
                 className="p-5 sm:p-6"
               >
 
-                <div className="mb-5 flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3">
+                <div className="mb-5 flex items-start gap-3 rounded-sm border border-emerald-100 bg-emerald-50/60 px-4 py-3">
 
-                  <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-emerald-600 shadow-sm">
+                  <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-sm bg-white text-emerald-600">
 
                     <BadgeCheck
                       size={15}
@@ -1353,11 +1231,11 @@ export default function TeachersPage() {
 
                   <div>
 
-                    <p className="text-[10px] font-bold text-emerald-800">
+                    <p className="text-sm font-bold text-emerald-800">
                       Informasi Ustadz & Ustadzah
                     </p>
 
-                    <p className="mt-0.5 text-[9px] leading-4 text-emerald-700/70">
+                    <p className="mt-0.5 text-sm leading-relaxed text-emerald-700/70">
                       Data ini akan digunakan
                       untuk administrasi
                       akademik dan akses
@@ -1398,7 +1276,7 @@ export default function TeachersPage() {
 
                   <div>
 
-                    <label className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold text-slate-600">
+                    <label className="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-[#646970]">
 
                       <CalendarDays
                         size={12}
@@ -1422,7 +1300,7 @@ export default function TeachersPage() {
                             .value
                         )
                       }
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs text-slate-700 outline-none transition focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5"
+                      className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-3 text-base text-[#1d2327] outline-none transition focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                     />
 
                   </div>
@@ -1443,7 +1321,7 @@ export default function TeachersPage() {
 
                   <div className="sm:col-span-2">
 
-                    <label className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold text-slate-600">
+                    <label className="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-[#646970]">
 
                       <MapPin
                         size={12}
@@ -1468,14 +1346,14 @@ export default function TeachersPage() {
                       }
                       placeholder="Masukkan alamat domisili lengkap..."
                       rows={3}
-                      className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-xs leading-5 text-slate-700 outline-none transition placeholder:text-slate-300 focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5"
+                      className="w-full resize-y rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-3 py-2.5 text-base leading-5 text-[#1d2327] outline-none transition placeholder:text-[#646970] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                     />
 
                   </div>
 
                   <div>
 
-                    <label className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold text-slate-600">
+                    <label className="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-[#646970]">
 
                       <ShieldCheck
                         size={12}
@@ -1500,7 +1378,7 @@ export default function TeachersPage() {
                               .value
                           )
                         }
-                        className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/50 px-3 pr-9 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5"
+                        className="h-11 w-full appearance-none rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-3 pr-9 text-base font-semibold text-[#1d2327] outline-none transition focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                       >
 
                         <option value="Aktif">
@@ -1515,7 +1393,7 @@ export default function TeachersPage() {
 
                       <ChevronDown
                         size={14}
-                        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+                        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#646970]"
                       />
 
                     </div>
@@ -1542,7 +1420,7 @@ export default function TeachersPage() {
 
                 </div>
 
-                <div className="mt-6 flex flex-col-reverse gap-2 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
+                <div className="mt-6 flex flex-col-reverse gap-2 border-t border-[#c3c4c7] pt-5 sm:flex-row sm:justify-end">
 
                   <button
                     type="button"
@@ -1552,7 +1430,7 @@ export default function TeachersPage() {
                     disabled={
                       submitting
                     }
-                    className="h-11 rounded-xl border border-slate-200 bg-white px-5 text-xs font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+                    className="h-11 rounded-sm border border-[#c3c4c7] bg-white px-5 text-base font-bold text-[#646970] transition hover:bg-[#f6f7f7] disabled:opacity-50"
                   >
                     Batal
                   </button>
@@ -1562,10 +1440,8 @@ export default function TeachersPage() {
                     disabled={
                       submitting
                     }
-                    className="group relative flex h-11 items-center justify-center gap-2 overflow-hidden rounded-xl bg-[#0b5d4b] px-6 text-xs font-bold text-white shadow-lg shadow-emerald-900/10 transition hover:bg-[#084c3e] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="group relative flex h-11 items-center justify-center gap-2 overflow-hidden rounded-sm bg-[#2271b1] px-6 text-base font-bold text-white transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-60"
                   >
-
-                    <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
 
                     {submitting ? (
                       <>
@@ -1625,7 +1501,7 @@ export default function TeachersPage() {
         }
 
         ::selection {
-          background: rgba(16, 185, 129, 0.18);
+          background: rgba(34, 113, 177, 0.18);
         }
 
         input[type='search']::-webkit-search-cancel-button {
@@ -1633,7 +1509,7 @@ export default function TeachersPage() {
         }
 
         input[type='checkbox'] {
-          accent-color: #059669;
+          accent-color: #2271b1;
         }
 
         button {
@@ -1688,19 +1564,17 @@ function StatCard({
   warning?: boolean;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_8px_30px_rgba(15,23,42,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_35px_rgba(15,23,42,0.07)]">
-
-      <div className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-emerald-50 opacity-0 blur-2xl transition group-hover:opacity-100" />
+    <div className="group relative overflow-hidden rounded-sm border border-[#c3c4c7] bg-white p-4 transition">
 
       <div className="relative flex items-center gap-3">
 
         <div
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-sm ${
             warning
               ? 'bg-red-50 text-red-500'
               : positive
                 ? 'bg-emerald-50 text-emerald-600'
-                : 'bg-slate-100 text-slate-500'
+                : 'bg-[#f6f7f7] text-[#646970]'
           }`}
         >
 
@@ -1713,15 +1587,15 @@ function StatCard({
 
         <div className="min-w-0">
 
-          <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">
+          <div className="text-sm font-bold text-[#646970]">
             {label}
           </div>
 
-          <div className="mt-0.5 text-xl font-bold tracking-tight text-slate-800">
+          <div className="mt-0.5 text-xl font-bold tracking-tight text-[#1d2327]">
             {value}
           </div>
 
-          <div className="truncate text-[8px] text-slate-400">
+          <div className="break-words text-sm text-[#646970]">
             {description}
           </div>
 
@@ -1755,7 +1629,7 @@ function FormInput({
   return (
     <div>
 
-      <label className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold text-slate-600">
+      <label className="mb-1.5 flex items-center gap-1.5 text-sm font-bold text-[#646970]">
 
         <Icon
           size={12}
@@ -1784,7 +1658,7 @@ function FormInput({
         placeholder={
           placeholder
         }
-        className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs text-slate-700 outline-none transition placeholder:text-slate-300 focus:border-emerald-400 focus:bg-white focus:ring-4 focus:ring-emerald-500/5"
+        className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-3 text-base text-[#1d2327] outline-none transition placeholder:text-[#646970] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
       />
 
     </div>
@@ -1795,7 +1669,7 @@ function LoadingState() {
   return (
     <div className="flex min-h-[420px] flex-col items-center justify-center">
 
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50">
+      <div className="flex h-14 w-14 items-center justify-center rounded-sm bg-emerald-50">
 
         <Loader2
           size={24}
@@ -1804,11 +1678,11 @@ function LoadingState() {
 
       </div>
 
-      <p className="mt-4 text-xs font-semibold text-slate-500">
+      <p className="mt-4 text-base font-semibold text-[#646970]">
         Memuat data ustadz & ustadzah...
       </p>
 
-      <p className="mt-1 text-[9px] text-slate-300">
+      <p className="mt-1 text-sm text-[#646970]">
         Menghubungkan ke database akademik
       </p>
 
@@ -1824,7 +1698,7 @@ function EmptyState({
   return (
     <div className="flex min-h-[420px] flex-col items-center justify-center px-5 text-center">
 
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+      <div className="flex h-16 w-16 items-center justify-center rounded-sm bg-[#f6f7f7] text-[#646970]">
 
         <GraduationCap
           size={28}
@@ -1833,11 +1707,11 @@ function EmptyState({
 
       </div>
 
-      <h3 className="mt-4 text-sm font-bold text-slate-700">
+      <h3 className="mt-4 text-sm font-bold text-[#1d2327]">
         Belum Ada Ustadz & Ustadzah
       </h3>
 
-      <p className="mt-1 max-w-xs text-[10px] leading-5 text-slate-400">
+      <p className="mt-1 max-w-xs text-sm leading-5 text-[#646970]">
         Belum terdapat data ustadz
         atau ustadzah yang terdaftar
         dalam sistem.
@@ -1846,7 +1720,7 @@ function EmptyState({
       <button
         type="button"
         onClick={onAdd}
-        className="mt-4 flex h-9 items-center gap-2 rounded-xl bg-[#0b5d4b] px-4 text-[10px] font-bold text-white shadow-lg shadow-emerald-900/10 transition hover:bg-[#084c3e]"
+        className="mt-4 flex h-9 items-center gap-2 rounded-sm bg-[#2271b1] px-4 text-sm font-bold text-white transition hover:bg-[#135e96]"
       >
 
         <Plus size={14} />
@@ -1863,7 +1737,7 @@ function SearchEmptyState() {
   return (
     <div className="flex min-h-[420px] flex-col items-center justify-center px-5 text-center">
 
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+      <div className="flex h-16 w-16 items-center justify-center rounded-sm bg-[#f6f7f7] text-[#646970]">
 
         <Search
           size={26}
@@ -1872,11 +1746,11 @@ function SearchEmptyState() {
 
       </div>
 
-      <h3 className="mt-4 text-sm font-bold text-slate-700">
+      <h3 className="mt-4 text-sm font-bold text-[#1d2327]">
         Data Tidak Ditemukan
       </h3>
 
-      <p className="mt-1 text-[10px] text-slate-400">
+      <p className="mt-1 text-sm text-[#646970]">
         Coba gunakan nama, ID,
         pendidikan, tanggal lahir,
         atau alamat yang berbeda.

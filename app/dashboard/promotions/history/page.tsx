@@ -830,107 +830,21 @@ export default function PromotionHistoryPage() {
   ========================================================== */
 
   return (
-    <div className="min-h-screen bg-[#f7f9f7]">
+    <div className="min-h-screen bg-[#f0f0f1]">
 
       {/* ======================================================
           HEADER
       ======================================================= */}
 
-      <div className="border-b border-slate-200/70 bg-white">
-
-        <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8">
-
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-
-            <div className="flex items-start gap-4">
-
-              <Link
-                href="/dashboard/promotions"
-                className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
-                title="Kembali ke Kenaikan Kelas"
-              >
-
-                <ArrowLeft
-                  size={17}
-                  strokeWidth={
-                    1.8
-                  }
-                />
-
-              </Link>
-
-              <div>
-
-                <div className="flex items-center gap-2">
-
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-
-                    <History
-                      size={18}
-                      strokeWidth={
-                        1.7
-                      }
-                    />
-
-                  </div>
-
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700/60">
-                    Akademik • Jenjang {SCHOOL_LEVEL}
-                  </span>
-
-                </div>
-
-                <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-800">
-                  Riwayat Kenaikan &amp; Kelulusan
-                </h1>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  Riwayat kenaikan kelas, tinggal kelas, dan kelulusan siswa {SCHOOL_SHORT_NAME}.
-                </p>
-
-              </div>
-
-            </div>
-
-            <div className="flex flex-col gap-2 sm:flex-row">
-
-              <div className="hidden items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-[10px] font-semibold text-emerald-700 xl:flex">
-
-                <School
-                  size={13}
-                />
-
-                {SCHOOL_SHORT_NAME}
-
-              </div>
-
-              <Link
-                href="/dashboard/promotions"
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#07543f] px-4 text-xs font-semibold text-white shadow-sm transition hover:bg-[#064735]"
-              >
-
-                <ArrowUpRight
-                  size={15}
-                  strokeWidth={
-                    1.8
-                  }
-                />
-
-                Kelola Kenaikan Kelas
-
-              </Link>
-
-            </div>
-
-          </div>
-
+      <header className="mx-auto flex max-w-[1500px] flex-col gap-4 px-4 pt-6 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div>
+          <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Riwayat Kenaikan &amp; Kelulusan</h1>
+          <p className="mt-2 text-base text-[#646970]">Telusuri riwayat siswa berdasarkan nama, tahun pelajaran, atau status.</p>
         </div>
-
-      </div>
-
-      {/* ======================================================
-          CONTENT
-      ======================================================= */}
+        <Link href="/dashboard/promotions" className="inline-flex min-h-10 items-center justify-center gap-2 rounded-sm border border-[#2271b1] bg-[#2271b1] px-4 py-2 text-sm font-semibold text-white hover:bg-[#135e96]">
+          <ArrowLeft size={17} /> Kelola Kenaikan Kelas
+        </Link>
+      </header>
 
       <main className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8">
 
@@ -989,7 +903,7 @@ export default function PromotionHistoryPage() {
             FILTER
         ===================================================== */}
 
-        <div className="mt-5 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_4px_20px_rgba(15,23,42,0.035)]">
+        <div className="mt-5 rounded-sm border border-[#dcdcde] bg-white p-4">
 
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
 
@@ -1002,7 +916,7 @@ export default function PromotionHistoryPage() {
                 strokeWidth={
                   1.8
                 }
-                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#646970]"
               />
 
               <input
@@ -1019,7 +933,7 @@ export default function PromotionHistoryPage() {
                   )
                 }
                 placeholder="Cari nama, NISN, kelas, atau catatan..."
-                className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-10 pr-10 text-xs text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-500/10"
+                className="h-10 w-full rounded-sm border border-[#dcdcde] bg-[#f6f7f7] pl-10 pr-10 text-base text-[#1d2327] outline-none transition placeholder:text-[#646970] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
               />
 
               {search && (
@@ -1030,7 +944,7 @@ export default function PromotionHistoryPage() {
                       ''
                     )
                   }
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#646970] hover:text-[#646970]"
                 >
 
                   <X
@@ -1056,7 +970,7 @@ export default function PromotionHistoryPage() {
                     .value
                 )
               }
-              className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-medium text-slate-600 outline-none transition focus:border-emerald-300 focus:ring-2 focus:ring-emerald-500/10"
+              className="h-10 rounded-sm border border-[#dcdcde] bg-white px-3 text-base font-medium text-[#646970] outline-none transition focus:border-[#2271b1] focus:ring-2 focus:ring-[#2271b1]/20"
             >
 
               <option value="SEMUA">
@@ -1096,7 +1010,7 @@ export default function PromotionHistoryPage() {
                     .value
                 )
               }
-              className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-medium text-slate-600 outline-none transition focus:border-emerald-300 focus:ring-2 focus:ring-emerald-500/10"
+              className="h-10 rounded-sm border border-[#dcdcde] bg-white px-3 text-base font-medium text-[#646970] outline-none transition focus:border-[#2271b1] focus:ring-2 focus:ring-[#2271b1]/20"
             >
 
               {STATUS_OPTIONS.map(
@@ -1129,7 +1043,7 @@ export default function PromotionHistoryPage() {
                 onClick={
                   resetFilter
                 }
-                className="h-10 rounded-xl border border-slate-200 px-4 text-xs font-semibold text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
+                className="h-10 rounded-sm border border-[#dcdcde] px-4 text-base font-semibold text-[#646970] transition hover:bg-[#f6f7f7] hover:text-[#1d2327]"
               >
                 Reset
               </button>
@@ -1143,17 +1057,17 @@ export default function PromotionHistoryPage() {
             TABLE
         ===================================================== */}
 
-        <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.035)]">
+        <div className="mt-5 overflow-hidden rounded-sm border border-[#dcdcde] bg-white">
 
-          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+          <div className="flex items-center justify-between border-b border-[#dcdcde] px-5 py-4">
 
             <div>
 
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm font-bold text-[#1d2327]">
                 Data Riwayat
               </h2>
 
-              <p className="mt-0.5 text-[11px] text-slate-400">
+              <p className="mt-0.5 text-sm text-[#646970]">
                 Menampilkan {filteredData.length} riwayat siswa
               </p>
 
@@ -1173,7 +1087,7 @@ export default function PromotionHistoryPage() {
                   className="animate-spin text-emerald-600"
                 />
 
-                <p className="mt-3 text-xs text-slate-400">
+                <p className="mt-3 text-base text-[#646970]">
                   Memuat riwayat...
                 </p>
 
@@ -1188,13 +1102,13 @@ export default function PromotionHistoryPage() {
             error && (
               <div className="p-6">
 
-                <div className="rounded-xl border border-red-100 bg-red-50 p-4">
+                <div className="rounded-sm border border-red-100 bg-red-50 p-4">
 
-                  <p className="text-xs font-semibold text-red-700">
+                  <p className="text-base font-semibold text-red-700">
                     Gagal memuat data
                   </p>
 
-                  <p className="mt-1 text-xs text-red-600/80">
+                  <p className="mt-1 text-base text-red-600/80">
                     {error}
                   </p>
 
@@ -1211,7 +1125,7 @@ export default function PromotionHistoryPage() {
               0 && (
               <div className="flex min-h-[300px] flex-col items-center justify-center px-5 text-center">
 
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-50 text-slate-300">
+                <div className="flex h-14 w-14 items-center justify-center rounded-sm bg-[#f6f7f7] text-[#646970]">
 
                   <History
                     size={26}
@@ -1222,11 +1136,11 @@ export default function PromotionHistoryPage() {
 
                 </div>
 
-                <h3 className="mt-4 text-sm font-semibold text-slate-700">
+                <h3 className="mt-4 text-sm font-semibold text-[#1d2327]">
                   Belum ada riwayat
                 </h3>
 
-                <p className="mt-1 max-w-sm text-xs leading-5 text-slate-400">
+                <p className="mt-1 max-w-sm text-base leading-5 text-[#646970]">
                   Belum terdapat data kenaikan kelas, tinggal kelas, atau kelulusan yang sesuai dengan filter.
                 </p>
 
@@ -1236,7 +1150,7 @@ export default function PromotionHistoryPage() {
                     onClick={
                       resetFilter
                     }
-                    className="mt-4 text-xs font-semibold text-emerald-700 hover:text-emerald-800"
+                    className="mt-4 text-base font-semibold text-emerald-700 hover:text-emerald-800"
                   >
                     Hapus filter
                   </button>
@@ -1261,33 +1175,33 @@ export default function PromotionHistoryPage() {
 
                     <thead>
 
-                      <tr className="border-b border-slate-100 bg-slate-50/60">
+                      <tr className="border-b border-[#dcdcde] bg-[#f6f7f7]">
 
-                        <th className="w-12 px-5 py-3 text-center text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                        <th className="w-12 px-5 py-3 text-center text-sm font-bold  tracking-wider text-[#646970]">
                           #
                         </th>
 
-                        <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                        <th className="px-3 py-3 text-left text-sm font-bold  tracking-wider text-[#646970]">
                           Siswa
                         </th>
 
-                        <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                        <th className="px-3 py-3 text-left text-sm font-bold  tracking-wider text-[#646970]">
                           Tahun Pelajaran
                         </th>
 
-                        <th className="px-3 py-3 text-center text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                        <th className="px-3 py-3 text-center text-sm font-bold  tracking-wider text-[#646970]">
                           Kelas Asal
                         </th>
 
-                        <th className="px-3 py-3 text-center text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                        <th className="px-3 py-3 text-center text-sm font-bold  tracking-wider text-[#646970]">
                           Tujuan
                         </th>
 
-                        <th className="px-3 py-3 text-center text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                        <th className="px-3 py-3 text-center text-sm font-bold  tracking-wider text-[#646970]">
                           Status
                         </th>
 
-                        <th className="px-3 py-3 text-left text-[9px] font-bold uppercase tracking-wider text-slate-400">
+                        <th className="px-3 py-3 text-left text-sm font-bold  tracking-wider text-[#646970]">
                           Tanggal
                         </th>
 
@@ -1297,7 +1211,7 @@ export default function PromotionHistoryPage() {
 
                     </thead>
 
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#dcdcde]">
 
                       {paginatedData.map(
                         (
@@ -1317,12 +1231,12 @@ export default function PromotionHistoryPage() {
                               key={
                                 item.id
                               }
-                              className="group transition hover:bg-emerald-50/[0.35]"
+                              className="group transition hover:bg-[#f0f6fc]/[0.35]"
                             >
 
                               {/* NO */}
 
-                              <td className="px-5 py-3.5 text-center text-[10px] text-slate-400">
+                              <td className="px-5 py-3.5 text-center text-sm text-[#646970]">
                                 {(currentPage -
                                   1) *
                                   pageSize +
@@ -1336,7 +1250,7 @@ export default function PromotionHistoryPage() {
 
                                 <div className="flex items-center gap-3">
 
-                                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[10px] font-bold text-emerald-700">
+                                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-emerald-50 text-sm font-bold text-emerald-700">
                                     {student?.fullname
                                       ?.charAt(
                                         0
@@ -1347,12 +1261,12 @@ export default function PromotionHistoryPage() {
 
                                   <div className="min-w-0">
 
-                                    <div className="truncate text-xs font-semibold text-slate-700">
+                                    <div className="break-words text-base font-semibold text-[#1d2327]">
                                       {student?.fullname ||
                                         '-'}
                                     </div>
 
-                                    <div className="mt-0.5 text-[10px] text-slate-400">
+                                    <div className="mt-0.5 text-sm text-[#646970]">
                                       NISN:{' '}
                                       {student?.nisn ||
                                         '-'}
@@ -1372,10 +1286,10 @@ export default function PromotionHistoryPage() {
 
                                   <CalendarDays
                                     size={14}
-                                    className="text-slate-300"
+                                    className="text-[#646970]"
                                   />
 
-                                  <span className="text-xs font-medium text-slate-600">
+                                  <span className="text-base font-medium text-[#646970]">
                                     {item.academicYear ||
                                       '-'}
                                   </span>
@@ -1388,7 +1302,7 @@ export default function PromotionHistoryPage() {
 
                               <td className="px-3 py-3.5 text-center">
 
-                                <span className="inline-flex rounded-lg bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
+                                <span className="inline-flex rounded-sm bg-[#f6f7f7] px-2.5 py-1 text-sm font-semibold text-[#646970]">
                                   {item.fromClass ||
                                     '-'}
                                 </span>
@@ -1400,13 +1314,13 @@ export default function PromotionHistoryPage() {
                               <td className="px-3 py-3.5 text-center">
 
                                 <span
-                                  className={`text-xs font-semibold ${
+                                  className={`text-base font-semibold ${
                                     normalizeStatus(
                                       item.status
                                     ) ===
                                     'LULUS'
                                       ? 'text-blue-700'
-                                      : 'text-slate-600'
+                                      : 'text-[#646970]'
                                   }`}
                                 >
                                   {
@@ -1423,7 +1337,7 @@ export default function PromotionHistoryPage() {
                               <td className="px-3 py-3.5 text-center">
 
                                 <span
-                                  className={`inline-flex rounded-full px-2.5 py-1 text-[9px] font-bold ${config.className}`}
+                                  className={`inline-flex rounded-sm px-2.5 py-1 text-sm font-bold ${config.className}`}
                                 >
                                   {
                                     config.label
@@ -1436,7 +1350,7 @@ export default function PromotionHistoryPage() {
 
                               <td className="px-3 py-3.5">
 
-                                <span className="text-[10px] text-slate-400">
+                                <span className="text-sm text-[#646970]">
                                   {
                                     formatDate(
                                       item.promotedAt
@@ -1457,7 +1371,7 @@ export default function PromotionHistoryPage() {
                                       item
                                     )
                                   }
-                                  className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-700"
+                                  className="flex h-8 w-8 items-center justify-center rounded-sm text-[#646970] transition hover:bg-[#f0f6fc] hover:text-[#2271b1]"
                                   title="Lihat detail"
                                 >
 
@@ -1484,7 +1398,7 @@ export default function PromotionHistoryPage() {
                     MOBILE CARDS
                 ============================================= */}
 
-                <div className="divide-y divide-slate-100 md:hidden">
+                <div className="divide-y divide-[#dcdcde] md:hidden">
 
                   {paginatedData.map(
                     (
@@ -1506,20 +1420,20 @@ export default function PromotionHistoryPage() {
                               item
                             )
                           }
-                          className="block w-full p-4 text-left transition hover:bg-slate-50"
+                          className="block w-full p-4 text-left transition hover:bg-[#f6f7f7]"
                         >
 
                           <div className="flex items-start justify-between gap-3">
 
                             <div className="min-w-0">
 
-                              <div className="truncate text-sm font-bold text-slate-800">
+                              <div className="break-words text-sm font-bold text-[#1d2327]">
                                 {item.student
                                   ?.fullname ||
                                   '-'}
                               </div>
 
-                              <div className="mt-0.5 text-[10px] text-slate-400">
+                              <div className="mt-0.5 text-sm text-[#646970]">
                                 NISN:{' '}
                                 {item.student
                                   ?.nisn ||
@@ -1529,7 +1443,7 @@ export default function PromotionHistoryPage() {
                             </div>
 
                             <span
-                              className={`shrink-0 rounded-full px-2.5 py-1 text-[9px] font-bold ${config.className}`}
+                              className={`shrink-0 rounded-sm px-2.5 py-1 text-sm font-bold ${config.className}`}
                             >
                               {
                                 config.label
@@ -1538,28 +1452,28 @@ export default function PromotionHistoryPage() {
 
                           </div>
 
-                          <div className="mt-3 grid grid-cols-2 gap-2 text-[10px]">
+                          <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
 
-                            <div className="rounded-lg bg-slate-50 p-2">
+                            <div className="rounded-sm bg-[#f6f7f7] p-2">
 
-                              <div className="text-slate-400">
+                              <div className="text-[#646970]">
                                 Kelas Asal
                               </div>
 
-                              <div className="mt-0.5 font-semibold text-slate-700">
+                              <div className="mt-0.5 font-semibold text-[#1d2327]">
                                 {item.fromClass ||
                                   '-'}
                               </div>
 
                             </div>
 
-                            <div className="rounded-lg bg-slate-50 p-2">
+                            <div className="rounded-sm bg-[#f6f7f7] p-2">
 
-                              <div className="text-slate-400">
+                              <div className="text-[#646970]">
                                 Tujuan
                               </div>
 
-                              <div className="mt-0.5 font-semibold text-slate-700">
+                              <div className="mt-0.5 font-semibold text-[#1d2327]">
                                 {
                                   getDestinationLabel(
                                     item
@@ -1571,7 +1485,7 @@ export default function PromotionHistoryPage() {
 
                           </div>
 
-                          <div className="mt-3 flex items-center justify-between text-[10px] text-slate-400">
+                          <div className="mt-3 flex items-center justify-between text-sm text-[#646970]">
 
                             <span>
                               {item.academicYear ||
@@ -1599,13 +1513,13 @@ export default function PromotionHistoryPage() {
                     PAGINATION
                 ============================================= */}
 
-                <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 sm:px-5">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#dcdcde] px-4 py-3 sm:px-5">
 
-                  <p className="text-[10px] text-slate-400">
+                  <p className="text-sm text-[#646970]">
 
                     Menampilkan{' '}
 
-                    <span className="font-semibold text-slate-600">
+                    <span className="font-semibold text-[#646970]">
                       {filteredData.length ===
                       0
                         ? 0
@@ -1617,7 +1531,7 @@ export default function PromotionHistoryPage() {
 
                     {' - '}
 
-                    <span className="font-semibold text-slate-600">
+                    <span className="font-semibold text-[#646970]">
                       {Math.min(
                         currentPage *
                           pageSize,
@@ -1627,7 +1541,7 @@ export default function PromotionHistoryPage() {
 
                     {' dari '}
 
-                    <span className="font-semibold text-slate-600">
+                    <span className="font-semibold text-[#646970]">
                       {
                         filteredData.length
                       }
@@ -1655,7 +1569,7 @@ export default function PromotionHistoryPage() {
                             )
                         )
                       }
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-30"
+                      className="flex h-8 w-8 items-center justify-center rounded-sm border border-[#dcdcde] text-[#646970] transition hover:bg-[#f6f7f7] disabled:cursor-not-allowed disabled:opacity-30"
                     >
 
                       <ChevronLeft
@@ -1664,7 +1578,7 @@ export default function PromotionHistoryPage() {
 
                     </button>
 
-                    <span className="px-2 text-[10px] font-semibold text-slate-500">
+                    <span className="px-2 text-sm font-semibold text-[#646970]">
                       {currentPage} /{' '}
                       {
                         totalPages
@@ -1689,7 +1603,7 @@ export default function PromotionHistoryPage() {
                             )
                         )
                       }
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-30"
+                      className="flex h-8 w-8 items-center justify-center rounded-sm border border-[#dcdcde] text-[#646970] transition hover:bg-[#f6f7f7] disabled:cursor-not-allowed disabled:opacity-30"
                     >
 
                       <ChevronRight
@@ -1711,7 +1625,7 @@ export default function PromotionHistoryPage() {
             FOOTER
         ===================================================== */}
 
-        <footer className="mt-5 flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+        <footer className="mt-5 flex flex-col items-center justify-between gap-2 border-t border-[#dcdcde] pt-4 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_NAME}
@@ -1746,19 +1660,19 @@ export default function PromotionHistoryPage() {
           }}
         >
 
-          <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-sm bg-white">
 
             {/* HEADER */}
 
-            <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center justify-between border-b border-[#dcdcde] px-5 py-4">
 
               <div>
 
-                <div className="text-sm font-bold text-slate-800">
+                <div className="text-sm font-bold text-[#1d2327]">
                   Detail Riwayat
                 </div>
 
-                <div className="mt-0.5 text-[10px] text-slate-400">
+                <div className="mt-0.5 text-sm text-[#646970]">
                   Data perubahan status akademik siswa
                 </div>
 
@@ -1771,7 +1685,7 @@ export default function PromotionHistoryPage() {
                     null
                   )
                 }
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-50 hover:text-slate-600"
+                className="flex h-8 w-8 items-center justify-center rounded-sm text-[#646970] transition hover:bg-[#f6f7f7] hover:text-[#646970]"
               >
 
                 <X
@@ -1788,9 +1702,9 @@ export default function PromotionHistoryPage() {
 
               {/* STUDENT */}
 
-              <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3">
+              <div className="flex items-center gap-3 rounded-sm bg-[#f6f7f7] p-3">
 
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-sm font-bold text-emerald-700">
+                <div className="flex h-11 w-11 items-center justify-center rounded-sm bg-emerald-100 text-sm font-bold text-emerald-700">
                   {selected.student
                     ?.fullname
                     ?.charAt(
@@ -1802,13 +1716,13 @@ export default function PromotionHistoryPage() {
 
                 <div className="min-w-0">
 
-                  <div className="truncate text-sm font-bold text-slate-700">
+                  <div className="break-words text-sm font-bold text-[#1d2327]">
                     {selected.student
                       ?.fullname ||
                       '-'}
                   </div>
 
-                  <div className="mt-0.5 text-[10px] text-slate-400">
+                  <div className="mt-0.5 text-sm text-[#646970]">
                     NISN:{' '}
                     {selected.student
                       ?.nisn ||
@@ -1853,14 +1767,14 @@ export default function PromotionHistoryPage() {
 
               {/* STATUS */}
 
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center justify-between border-b border-[#dcdcde] pb-3">
 
-                <span className="text-[11px] text-slate-400">
+                <span className="text-sm text-[#646970]">
                   Status
                 </span>
 
                 <span
-                  className={`rounded-full px-2.5 py-1 text-[9px] font-bold ${
+                  className={`rounded-sm px-2.5 py-1 text-sm font-bold ${
                     getStatusConfig(
                       selected.status
                     ).className
@@ -1888,11 +1802,11 @@ export default function PromotionHistoryPage() {
 
               <div>
 
-                <div className="mb-1.5 text-[11px] text-slate-400">
+                <div className="mb-1.5 text-sm text-[#646970]">
                   Catatan
                 </div>
 
-                <div className="min-h-[60px] rounded-xl bg-slate-50 p-3 text-xs leading-5 text-slate-600">
+                <div className="min-h-[60px] rounded-sm bg-[#f6f7f7] p-3 text-base leading-5 text-[#646970]">
                   {selected.note ||
                     'Tidak ada catatan.'}
                 </div>
@@ -1903,7 +1817,7 @@ export default function PromotionHistoryPage() {
 
             {/* FOOTER */}
 
-            <div className="border-t border-slate-100 bg-slate-50/60 px-5 py-3 text-right">
+            <div className="border-t border-[#dcdcde] bg-[#f6f7f7] px-5 py-3 text-right">
 
               <button
                 type="button"
@@ -1912,7 +1826,7 @@ export default function PromotionHistoryPage() {
                     null
                   )
                 }
-                className="rounded-xl bg-[#07543f] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#064735]"
+                className="rounded-sm bg-[#2271b1] px-4 py-2 text-base font-semibold text-white transition hover:bg-[#135e96]"
               >
                 Tutup
               </button>
@@ -1962,12 +1876,12 @@ function SummaryCard({
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_4px_20px_rgba(15,23,42,0.025)]">
+    <div className="rounded-sm border border-[#dcdcde] bg-white p-4">
 
       <div className="flex items-center justify-between">
 
         <div
-          className={`flex h-8 w-8 items-center justify-center rounded-lg ${tones[tone]}`}
+          className={`flex h-8 w-8 items-center justify-center rounded-sm ${tones[tone]}`}
         >
 
           <Icon
@@ -1979,13 +1893,13 @@ function SummaryCard({
 
         </div>
 
-        <span className="text-lg font-bold tracking-tight text-slate-700">
+        <span className="text-lg font-bold  text-[#1d2327]">
           {value}
         </span>
 
       </div>
 
-      <div className="mt-3 text-[10px] font-medium text-slate-400">
+      <div className="mt-3 text-sm font-medium text-[#646970]">
         {label}
       </div>
 
@@ -2005,13 +1919,13 @@ function DetailRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-5 border-b border-slate-100 pb-3">
+    <div className="flex items-center justify-between gap-5 border-b border-[#dcdcde] pb-3">
 
-      <span className="text-[11px] text-slate-400">
+      <span className="text-sm text-[#646970]">
         {label}
       </span>
 
-      <span className="text-right text-xs font-semibold text-slate-600">
+      <span className="text-right text-base font-semibold text-[#646970]">
         {value}
       </span>
 

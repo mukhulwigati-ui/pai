@@ -1570,69 +1570,15 @@ export default function AttendancePage() {
   ========================================================== */
 
   return (
-    <div className="min-h-screen bg-[#f5f7f6]">
+    <div className="min-h-screen bg-[#f0f0f1]">
 
       {/* ======================================================
           HERO
       ======================================================= */}
 
-      <section className="relative overflow-hidden bg-[#063c30]">
-
-        <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full border border-emerald-200/10" />
-
-        <div className="pointer-events-none absolute -right-8 -top-12 h-48 w-48 rounded-full border border-amber-200/10" />
-
-        <div className="relative mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
-
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-
-            <div>
-
-              <div className="mb-3 flex items-center gap-2">
-
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-emerald-200">
-
-                  <CalendarCheck
-                    size={15}
-                    strokeWidth={
-                      1.7
-                    }
-                  />
-
-                </span>
-
-                <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200/70">
-                  Akademik • Kehadiran
-                </span>
-
-              </div>
-
-              <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                Kehadiran Siswa
-              </h1>
-
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-emerald-100/55">
-                Catat kehadiran seluruh siswa dalam satu kelas sekaligus dan pantau rekapitulasi kehadiran setiap siswa.
-              </p>
-
-            </div>
-
-            <div className="hidden text-right lg:block">
-
-              <p className="text-xs font-semibold text-emerald-100/80">
-                {SCHOOL_SHORT_NAME}
-              </p>
-
-              <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-emerald-100/40">
-                Jenjang Sekolah Dasar
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
+      <section className="mx-auto max-w-7xl px-5 pt-6 sm:px-8 lg:px-10">
+        <h1 className="text-2xl font-normal text-[#1d2327]">Kehadiran Siswa</h1>
+        <p className="mt-2 text-base leading-6 text-[#646970]">Catat kehadiran kelas dan lihat rekap siswa.</p>
       </section>
 
       {/* ======================================================
@@ -1648,7 +1594,7 @@ export default function AttendancePage() {
         {message && (
           <div
             className={[
-              'mb-6 flex items-center gap-3 rounded-xl border px-4 py-3 text-sm',
+              'mb-6 flex items-center gap-3 rounded-sm border px-4 py-3 text-sm',
 
               messageType ===
               'success'
@@ -1765,11 +1711,11 @@ export default function AttendancePage() {
               INPUT / REKAP
           =================================================== */}
 
-          <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
+          <section className="overflow-hidden rounded-sm border border-[#c3c4c7] bg-white ">
 
             {/* TABS */}
 
-            <div className="flex gap-4 overflow-x-auto border-b border-slate-100 bg-slate-50/50 px-6 pt-4">
+            <div className="flex gap-4 overflow-x-auto border-b border-[#dcdcde] bg-slate-50/50 px-6 pt-4">
 
               <button
                 type="button"
@@ -1778,11 +1724,11 @@ export default function AttendancePage() {
                     'input'
                   )
                 }
-                className={`flex shrink-0 items-center gap-1.5 border-b-2 pb-3 text-xs font-bold transition ${
+                className={`flex shrink-0 items-center gap-1.5 border-b-2 pb-3 text-base font-bold transition ${
                   activeTab ===
                   'input'
                     ? 'border-[#063c30] text-[#063c30]'
-                    : 'border-transparent text-slate-400 hover:text-slate-600'
+                    : 'border-transparent text-[#646970] hover:text-slate-600'
                 }`}
               >
 
@@ -1801,11 +1747,11 @@ export default function AttendancePage() {
                     'rekap'
                   )
                 }
-                className={`flex shrink-0 items-center gap-1.5 border-b-2 pb-3 text-xs font-bold transition ${
+                className={`flex shrink-0 items-center gap-1.5 border-b-2 pb-3 text-base font-bold transition ${
                   activeTab ===
                   'rekap'
                     ? 'border-[#063c30] text-[#063c30]'
-                    : 'border-transparent text-slate-400 hover:text-slate-600'
+                    : 'border-transparent text-[#646970] hover:text-slate-600'
                 }`}
               >
 
@@ -1821,13 +1767,13 @@ export default function AttendancePage() {
 
             {/* HEADER */}
 
-            <div className="border-b border-slate-100 px-5 py-4 sm:px-6">
+            <div className="border-b border-[#dcdcde] px-5 py-4 sm:px-6">
 
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
                 <div className="flex items-center gap-3">
 
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#063c30] text-emerald-200">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-[#2271b1] text-white">
 
                     <UserCheck
                       size={18}
@@ -1840,7 +1786,7 @@ export default function AttendancePage() {
 
                   <div>
 
-                    <h2 className="text-sm font-semibold text-slate-800">
+                    <h2 className="text-sm font-semibold text-[#1d2327]">
 
                       {activeTab ===
                       'input'
@@ -1849,7 +1795,7 @@ export default function AttendancePage() {
 
                     </h2>
 
-                    <p className="mt-0.5 text-[11px] text-slate-400">
+                    <p className="mt-0.5 text-sm text-[#646970]">
 
                       {activeTab ===
                       'input'
@@ -1868,7 +1814,7 @@ export default function AttendancePage() {
                     0 && (
                     <div className="flex flex-wrap items-center gap-1.5">
 
-                      <span className="mr-1 text-[10px] font-semibold text-slate-400">
+                      <span className="mr-1 text-sm font-semibold text-[#646970]">
                         Set Semua:
                       </span>
 
@@ -1879,7 +1825,7 @@ export default function AttendancePage() {
                             'HADIR'
                           )
                         }
-                        className="rounded bg-emerald-100 px-2.5 py-1 text-[10px] font-bold text-emerald-800 hover:bg-emerald-200"
+                        className="rounded bg-emerald-100 px-2.5 py-1 text-sm font-bold text-emerald-800 hover:bg-emerald-200"
                       >
                         Hadir
                       </button>
@@ -1891,7 +1837,7 @@ export default function AttendancePage() {
                             'SAKIT'
                           )
                         }
-                        className="rounded bg-blue-100 px-2.5 py-1 text-[10px] font-bold text-blue-800 hover:bg-blue-200"
+                        className="rounded bg-blue-100 px-2.5 py-1 text-sm font-bold text-blue-800 hover:bg-blue-200"
                       >
                         Sakit
                       </button>
@@ -1903,7 +1849,7 @@ export default function AttendancePage() {
                             'IZIN'
                           )
                         }
-                        className="rounded bg-amber-100 px-2.5 py-1 text-[10px] font-bold text-amber-800 hover:bg-amber-200"
+                        className="rounded bg-amber-100 px-2.5 py-1 text-sm font-bold text-amber-800 hover:bg-amber-200"
                       >
                         Izin
                       </button>
@@ -1915,7 +1861,7 @@ export default function AttendancePage() {
                             'ALPA'
                           )
                         }
-                        className="rounded bg-red-100 px-2.5 py-1 text-[10px] font-bold text-red-800 hover:bg-red-200"
+                        className="rounded bg-red-100 px-2.5 py-1 text-sm font-bold text-red-800 hover:bg-red-200"
                       >
                         Alpa
                       </button>
@@ -1935,7 +1881,7 @@ export default function AttendancePage() {
                       disabled={
                         invalidRekapPeriod
                       }
-                      className="flex items-center gap-2 rounded-xl bg-[#063c30] px-4 py-2 text-xs font-bold text-white shadow transition hover:bg-[#042a21] disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex items-center gap-2 rounded-sm bg-[#2271b1] px-4 py-2 text-base font-bold text-white shadow transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
                     >
 
                       <Printer
@@ -1953,11 +1899,11 @@ export default function AttendancePage() {
                   FILTER
               =============================================== */}
 
-              <div className="mt-4 grid grid-cols-1 gap-3 border-t border-slate-100 pt-3 sm:grid-cols-2">
+              <div className="mt-4 grid grid-cols-1 gap-3 border-t border-[#dcdcde] pt-3 sm:grid-cols-2">
 
                 <div>
 
-                  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                  <label className="mb-1 block text-sm font-semiboldr text-[#646970]">
                     Pilih Kelas *
                   </label>
 
@@ -1979,7 +1925,7 @@ export default function AttendancePage() {
                       classList.length ===
                         0
                     }
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-700 outline-none focus:border-emerald-500 focus:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full rounded-sm border border-[#c3c4c7] bg-slate-50 px-3.5 py-2.5 text-base text-slate-700 outline-none focus:border-[#2271b1] focus:bg-white disabled:cursor-not-allowed disabled:opacity-60"
                   >
 
                     <option value="">
@@ -2023,7 +1969,7 @@ export default function AttendancePage() {
                 'input' ? (
                   <div>
 
-                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <label className="mb-1 block text-sm font-semiboldr text-[#646970]">
                       Tanggal Kehadiran *
                     </label>
 
@@ -2041,7 +1987,7 @@ export default function AttendancePage() {
                         )
                       }
                       required
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs text-slate-700 outline-none focus:border-emerald-500 focus:bg-white"
+                      className="w-full rounded-sm border border-[#c3c4c7] bg-slate-50 px-3.5 py-2 text-base text-slate-700 outline-none focus:border-[#2271b1] focus:bg-white"
                     />
 
                   </div>
@@ -2050,7 +1996,7 @@ export default function AttendancePage() {
 
                     <div>
 
-                      <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      <label className="mb-1 block text-sm font-semiboldr text-[#646970]">
                         Dari Tanggal
                       </label>
 
@@ -2067,10 +2013,10 @@ export default function AttendancePage() {
                               .value
                           )
                         }
-                        className={`w-full rounded-xl border bg-slate-50 px-2.5 py-2 text-xs text-slate-700 outline-none focus:bg-white ${
+                        className={`w-full rounded-sm border bg-slate-50 px-2.5 py-2 text-base text-slate-700 outline-none focus:bg-white ${
                           invalidRekapPeriod
                             ? 'border-red-300 focus:border-red-500'
-                            : 'border-slate-200 focus:border-emerald-500'
+                            : 'border-[#c3c4c7] focus:border-[#2271b1]'
                         }`}
                       />
 
@@ -2078,7 +2024,7 @@ export default function AttendancePage() {
 
                     <div>
 
-                      <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      <label className="mb-1 block text-sm font-semiboldr text-[#646970]">
                         Sampai Tanggal
                       </label>
 
@@ -2095,10 +2041,10 @@ export default function AttendancePage() {
                               .value
                           )
                         }
-                        className={`w-full rounded-xl border bg-slate-50 px-2.5 py-2 text-xs text-slate-700 outline-none focus:bg-white ${
+                        className={`w-full rounded-sm border bg-slate-50 px-2.5 py-2 text-base text-slate-700 outline-none focus:bg-white ${
                           invalidRekapPeriod
                             ? 'border-red-300 focus:border-red-500'
-                            : 'border-slate-200 focus:border-emerald-500'
+                            : 'border-[#c3c4c7] focus:border-[#2271b1]'
                         }`}
                       />
 
@@ -2112,7 +2058,7 @@ export default function AttendancePage() {
               {invalidRekapPeriod &&
                 activeTab ===
                   'rekap' && (
-                  <p className="mt-2 text-[10px] font-medium text-red-600">
+                  <p className="mt-2 text-sm font-medium text-red-600">
                     Tanggal awal tidak boleh melebihi tanggal akhir.
                   </p>
                 )}
@@ -2126,14 +2072,14 @@ export default function AttendancePage() {
             <div className="overflow-x-auto p-5">
 
               {!selectedClass ? (
-                <div className="py-12 text-center text-xs text-slate-400">
+                <div className="py-12 text-center text-base text-[#646970]">
                   Silakan pilih kelas terlebih dahulu.
                 </div>
               ) : activeTab ===
                 'input' ? (
                 filteredStudentsByClass.length ===
                 0 ? (
-                  <div className="py-12 text-center text-xs text-slate-400">
+                  <div className="py-12 text-center text-base text-[#646970]">
                     Tidak ada siswa di kelas ini.
                   </div>
                 ) : (
@@ -2144,11 +2090,11 @@ export default function AttendancePage() {
                     className="space-y-4"
                   >
 
-                    <table className="w-full min-w-[620px] border-collapse text-left text-xs">
+                    <table className="w-full min-w-[620px] border-collapse text-left text-base">
 
                       <thead>
 
-                        <tr className="border-b border-slate-200 bg-slate-50 font-bold text-slate-600">
+                        <tr className="border-b border-[#c3c4c7] bg-slate-50 font-bold text-slate-600">
 
                           <th className="w-12 p-3 text-center">
                             No
@@ -2187,14 +2133,14 @@ export default function AttendancePage() {
                                 className="hover:bg-slate-50/50"
                               >
 
-                                <td className="p-3 text-center text-slate-400">
+                                <td className="p-3 text-center text-[#646970]">
                                   {
                                     index +
                                     1
                                   }
                                 </td>
 
-                                <td className="p-3 font-semibold text-slate-800">
+                                <td className="p-3 font-semibold text-[#1d2327]">
                                   {
                                     student.fullname
                                   }
@@ -2202,7 +2148,7 @@ export default function AttendancePage() {
 
                                 <td className="p-3 text-center">
 
-                                  <div className="inline-flex gap-1 rounded-xl bg-slate-100 p-1">
+                                  <div className="inline-flex gap-1 rounded-sm bg-slate-100 p-1">
 
                                     {STATUS_OPTIONS.map(
                                       (
@@ -2225,19 +2171,19 @@ export default function AttendancePage() {
                                               )
                                             }
                                             className={[
-                                              'rounded-lg px-3 py-1.5 text-[11px] font-bold transition',
+                                              'rounded-sm px-3 py-1.5 text-sm font-bold transition',
 
                                               isSelected
                                                 ? option.value ===
                                                   'HADIR'
-                                                  ? 'bg-emerald-600 text-white shadow-sm'
+                                                  ? 'bg-emerald-600 text-white '
                                                   : option.value ===
                                                       'SAKIT'
-                                                    ? 'bg-blue-600 text-white shadow-sm'
+                                                    ? 'bg-blue-600 text-white '
                                                     : option.value ===
                                                         'IZIN'
-                                                      ? 'bg-amber-600 text-white shadow-sm'
-                                                      : 'bg-red-600 text-white shadow-sm'
+                                                      ? 'bg-amber-600 text-white '
+                                                      : 'bg-red-600 text-white '
                                                 : 'text-slate-600 hover:bg-slate-200',
                                             ].join(
                                               ' '
@@ -2273,7 +2219,7 @@ export default function AttendancePage() {
                           filteredStudentsByClass.length ===
                             0
                         }
-                        className="flex items-center gap-2 rounded-xl bg-[#064e3b] px-6 py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#053d2e] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex items-center gap-2 rounded-sm bg-[#2271b1] px-6 py-3 text-base font-bold text-white  transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
                       >
 
                         {loading ? (
@@ -2298,7 +2244,7 @@ export default function AttendancePage() {
                   </form>
                 )
               ) : invalidRekapPeriod ? (
-                <div className="py-12 text-center text-xs text-red-500">
+                <div className="py-12 text-center text-base text-red-500">
                   Periode rekap tidak valid.
                 </div>
               ) : (
@@ -2310,15 +2256,15 @@ export default function AttendancePage() {
 
                   {studentRecapList.length ===
                   0 ? (
-                    <div className="py-12 text-center text-xs text-slate-400">
+                    <div className="py-12 text-center text-base text-[#646970]">
                       Tidak ada data rekap untuk kelas dan rentang tanggal ini.
                     </div>
                   ) : (
-                    <table className="w-full min-w-[620px] border-collapse text-left text-xs">
+                    <table className="w-full min-w-[620px] border-collapse text-left text-base">
 
                       <thead>
 
-                        <tr className="border-b border-slate-200 bg-slate-50 font-bold text-slate-600">
+                        <tr className="border-b border-[#c3c4c7] bg-slate-50 font-bold text-slate-600">
 
                           <th className="w-12 border border-slate-300 p-3 text-center">
                             No
@@ -2365,14 +2311,14 @@ export default function AttendancePage() {
                               }
                             >
 
-                              <td className="border border-slate-300 p-3 text-center text-slate-500">
+                              <td className="border border-slate-300 p-3 text-center text-[#646970]">
                                 {
                                   index +
                                   1
                                 }
                               </td>
 
-                              <td className="border border-slate-300 p-3 font-semibold text-slate-800">
+                              <td className="border border-slate-300 p-3 font-semibold text-[#1d2327]">
                                 {
                                   item.fullname
                                 }
@@ -2402,7 +2348,7 @@ export default function AttendancePage() {
                                 }
                               </td>
 
-                              <td className="border border-slate-300 p-3 text-center font-bold text-slate-800">
+                              <td className="border border-slate-300 p-3 text-center font-bold text-[#1d2327]">
                                 {
                                   item.total
                                 }
@@ -2428,9 +2374,9 @@ export default function AttendancePage() {
               RIWAYAT
           =================================================== */}
 
-          <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.04)]">
+          <section className="overflow-hidden rounded-sm border border-[#c3c4c7] bg-white ">
 
-            <div className="border-b border-slate-100 px-5 py-5 sm:px-6">
+            <div className="border-b border-[#dcdcde] px-5 py-5 sm:px-6">
 
               <div className="flex items-center justify-between">
 
@@ -2444,7 +2390,7 @@ export default function AttendancePage() {
                     }
                   />
 
-                  <h2 className="text-sm font-semibold text-slate-800">
+                  <h2 className="text-sm font-semibold text-[#1d2327]">
                     Riwayat Kehadiran
                   </h2>
 
@@ -2458,7 +2404,7 @@ export default function AttendancePage() {
                   disabled={
                     loadingData
                   }
-                  className="flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+                  className="flex items-center justify-center gap-2 rounded-sm border border-[#c3c4c7] bg-white px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
                 >
 
                   <RefreshCw
@@ -2489,10 +2435,10 @@ export default function AttendancePage() {
                       'SEMUA'
                     )
                   }
-                  className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
+                  className={`rounded-sm px-2.5 py-1 text-sm font-semibold transition ${
                     filterClass ===
                     'SEMUA'
-                      ? 'bg-[#063c30] text-white shadow-sm'
+                      ? 'bg-[#2271b1] text-white '
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -2513,10 +2459,10 @@ export default function AttendancePage() {
                           className
                         )
                       }
-                      className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition ${
+                      className={`rounded-sm px-2.5 py-1 text-sm font-semibold transition ${
                         filterClass ===
                         className
-                          ? 'bg-[#063c30] text-white shadow-sm'
+                          ? 'bg-[#2271b1] text-white '
                           : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                       }`}
                     >
@@ -2538,7 +2484,7 @@ export default function AttendancePage() {
 
                   <Search
                     size={14}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#646970]"
                   />
 
                   <input
@@ -2555,7 +2501,7 @@ export default function AttendancePage() {
                       )
                     }
                     placeholder="Cari siswa..."
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-8 pr-3 text-xs text-slate-700 outline-none focus:border-emerald-500 focus:bg-white"
+                    className="w-full rounded-sm border border-[#c3c4c7] bg-slate-50 py-2 pl-8 pr-3 text-base text-slate-700 outline-none focus:border-[#2271b1] focus:bg-white"
                   />
 
                 </div>
@@ -2572,7 +2518,7 @@ export default function AttendancePage() {
                         .value
                     )
                   }
-                  className="w-28 rounded-lg border border-slate-200 bg-slate-50 px-2 py-2 text-xs text-slate-600 outline-none"
+                  className="w-28 rounded-sm border border-[#c3c4c7] bg-slate-50 px-2 py-2 text-base text-slate-600 outline-none"
                 >
 
                   <option value="SEMUA">
@@ -2613,7 +2559,7 @@ export default function AttendancePage() {
                     className="animate-spin text-emerald-600"
                   />
 
-                  <p className="mt-3 text-xs text-slate-400">
+                  <p className="mt-3 text-base text-[#646970]">
                     Memuat riwayat...
                   </p>
 
@@ -2624,17 +2570,17 @@ export default function AttendancePage() {
 
                   <CalendarCheck
                     size={24}
-                    className="text-slate-300"
+                    className="text-[#646970]"
                     strokeWidth={
                       1.5
                     }
                   />
 
-                  <h3 className="mt-3 text-xs font-semibold text-slate-600">
+                  <h3 className="mt-3 text-base font-semibold text-slate-600">
                     Belum ada catatan
                   </h3>
 
-                  <p className="mt-1 text-[10px] text-slate-400">
+                  <p className="mt-1 text-sm text-[#646970]">
                     Data kehadiran belum tersedia untuk filter yang dipilih.
                   </p>
 
@@ -2671,7 +2617,7 @@ export default function AttendancePage() {
                           className="flex items-center gap-3 px-4 py-3 transition hover:bg-slate-50"
                         >
 
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e9f2ef] text-xs font-bold text-[#07543f]">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-[#f0f6fc] text-base font-bold text-[#2271b1]">
                             {
                               initial
                             }
@@ -2679,13 +2625,13 @@ export default function AttendancePage() {
 
                           <div className="min-w-0 flex-1">
 
-                            <div className="truncate text-xs font-semibold text-slate-800">
+                            <div className="truncate text-base font-semibold text-[#1d2327]">
                               {
                                 fullname
                               }
                             </div>
 
-                            <div className="text-[10px] text-slate-400">
+                            <div className="text-sm text-[#646970]">
                               Kelas{' '}
                               {attendance.student
                                 ?.class_name ||
@@ -2700,7 +2646,7 @@ export default function AttendancePage() {
 
                           <div
                             className={[
-                              'flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide',
+                              'flex shrink-0 items-center gap-1.5 rounded-sm border px-2.5 py-1 text-sm font-semibold',
                               style.wrapper,
                             ].join(
                               ' '
@@ -2768,10 +2714,10 @@ function StatisticCard({
   const styles = {
     slate: {
       icon:
-        'bg-slate-100 text-slate-500',
+        'bg-slate-100 text-[#646970]',
 
       value:
-        'text-slate-800',
+        'text-[#1d2327]',
     },
 
     emerald: {
@@ -2808,13 +2754,13 @@ function StatisticCard({
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_6px_24px_rgba(15,23,42,0.035)]">
+    <div className="rounded-sm border border-[#c3c4c7] bg-white p-4 ">
 
       <div className="flex items-center justify-between gap-2">
 
         <div
           className={[
-            'flex h-9 w-9 items-center justify-center rounded-xl',
+            'flex h-9 w-9 items-center justify-center rounded-sm',
             styles[
               accent
             ].icon,
@@ -2849,7 +2795,7 @@ function StatisticCard({
           {value}
         </div>
 
-        <div className="mt-0.5 text-[10px] font-medium text-slate-400">
+        <div className="mt-0.5 text-sm font-medium text-[#646970]">
           {label}
         </div>
 

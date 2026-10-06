@@ -1289,7 +1289,7 @@ export default function StudentsPage() {
   ========================================================== */
 
   return (
-    <main className="min-h-screen bg-[#f6f8f7] text-slate-800">
+    <main className="min-h-screen bg-[#f0f0f1] text-[#1d2327]">
 
       <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
 
@@ -1297,34 +1297,11 @@ export default function StudentsPage() {
             HEADER
         ==================================================== */}
 
-        <header className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#064e3b] via-[#065f46] to-[#047857] px-5 py-5 text-white shadow-[0_10px_30px_rgba(6,95,70,0.15)] sm:px-6">
-
-          <div className="relative flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-
-            <div className="flex items-center gap-3">
-
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
-
-                <UsersIcon />
-
-              </div>
-
-              <div>
-
-                <div className="text-[9px] font-semibold uppercase tracking-[0.2em] text-emerald-200">
-                  Data Master • SD
-                </div>
-
-                <h1 className="mt-0.5 text-xl font-bold tracking-tight">
-                  Manajemen Siswa
-                </h1>
-
-                <p className="mt-0.5 text-[11px] text-emerald-50/75">
-                  Kelola data siswa SDIT Khoiro Ummah secara cepat dan terstruktur.
-                </p>
-
-              </div>
-
+        <header className="mb-6">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div>
+              <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Manajemen Siswa</h1>
+              <p className="mt-2 text-base text-[#646970]">Kelola data siswa atau impor melalui CSV.</p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -1334,7 +1311,7 @@ export default function StudentsPage() {
                 onClick={
                   openAddModal
                 }
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-white px-3.5 text-[11px] font-bold text-emerald-800 shadow-sm transition hover:bg-emerald-50"
+                className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-[#2271b1] bg-[#2271b1] px-3.5 text-sm font-semibold text-white transition hover:bg-[#135e96]"
               >
                 <PlusIcon />
 
@@ -1346,14 +1323,14 @@ export default function StudentsPage() {
                 onClick={
                   downloadTemplate
                 }
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 text-[11px] font-semibold text-white transition hover:bg-white/20"
+                className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-[#2271b1] bg-white px-3 text-sm font-semibold text-[#2271b1] transition hover:bg-[#f0f6fc]"
               >
                 <DownloadIcon />
 
                 Template CSV
               </button>
 
-              <label className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-lg bg-amber-500 px-3 text-[11px] font-bold text-white shadow-sm transition hover:bg-amber-600">
+              <label className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-sm bg-[#2271b1] px-3 text-sm font-bold text-white transition hover:bg-[#135e96]">
 
                 <UploadIcon />
 
@@ -1385,7 +1362,7 @@ export default function StudentsPage() {
             STAT
         ==================================================== */}
 
-        <section className="mt-4 grid grid-cols-3 gap-2.5">
+        <section className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
 
           <MiniStat
             label="Total Siswa"
@@ -1425,7 +1402,7 @@ export default function StudentsPage() {
 
         {message && (
           <div
-            className={`mt-4 flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-xs ${
+            className={`mt-4 flex items-center gap-2.5 rounded-sm border px-3.5 py-2.5 text-base ${
               message.startsWith(
                 'Sukses'
               )
@@ -1455,27 +1432,27 @@ export default function StudentsPage() {
 
         <section
           id="student-table"
-          className="mt-4 min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_5px_20px_rgba(15,23,42,0.04)]"
+          className="mt-4 min-w-0 overflow-hidden rounded-sm border border-[#c3c4c7] bg-white"
         >
 
-          <div className="border-b border-slate-100 px-4 py-3.5">
+          <div className="border-b border-[#c3c4c7] px-4 py-3.5">
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
               <div>
 
-                <h2 className="text-xs font-bold text-slate-800">
+                <h2 className="text-base font-bold text-[#1d2327]">
                   Daftar Siswa
                 </h2>
 
-                <p className="mt-0.5 text-[10px] text-slate-400">
+                <p className="mt-0.5 text-sm text-[#646970]">
 
                   {students.length >
                   0 ? (
                     <>
                       Menampilkan{' '}
 
-                      <span className="font-semibold text-slate-600">
+                      <span className="font-semibold text-[#646970]">
                         {
                           startIndex +
                           1
@@ -1484,7 +1461,7 @@ export default function StudentsPage() {
 
                       {' '}–{' '}
 
-                      <span className="font-semibold text-slate-600">
+                      <span className="font-semibold text-[#646970]">
                         {Math.min(
                           startIndex +
                             currentStudents.length,
@@ -1494,7 +1471,7 @@ export default function StudentsPage() {
 
                       {' '}dari{' '}
 
-                      <span className="font-semibold text-slate-600">
+                      <span className="font-semibold text-[#646970]">
                         {
                           students.length
                         }
@@ -1520,7 +1497,7 @@ export default function StudentsPage() {
                   disabled={
                     deletingBulk
                   }
-                  className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-red-600 px-3 text-[10px] font-bold text-white transition hover:bg-red-700 disabled:opacity-60"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-sm bg-red-600 px-3 text-sm font-bold text-white transition hover:bg-red-700 disabled:opacity-60"
                 >
 
                   <TrashIcon />
@@ -1544,11 +1521,11 @@ export default function StudentsPage() {
               0 ? (
               <EmptyState />
             ) : (
-              <table className="w-full min-w-[780px] border-collapse text-xs">
+              <table className="w-full min-w-[780px] border-collapse text-base">
 
                 <thead>
 
-                  <tr className="border-b border-slate-100 bg-slate-50/70 text-[10px] font-bold uppercase tracking-wide text-slate-400">
+                  <tr className="border-b border-[#c3c4c7] bg-[#f6f7f7]/70 text-sm font-bold tracking-wide text-[#646970]">
 
                     <th className="w-10 px-3 py-2.5 text-center">
 
@@ -1560,7 +1537,7 @@ export default function StudentsPage() {
                         onChange={
                           handleSelectAll
                         }
-                        className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                        className="h-3.5 w-3.5 cursor-pointer rounded border-[#c3c4c7] text-emerald-600 focus:ring-emerald-500"
                       />
 
                     </th>
@@ -1597,7 +1574,7 @@ export default function StudentsPage() {
 
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#dcdcde]">
 
                   {currentStudents.map(
                     (
@@ -1617,7 +1594,7 @@ export default function StudentsPage() {
                           className={`group transition ${
                             isChecked
                               ? 'bg-emerald-50/50'
-                              : 'hover:bg-slate-50/70'
+                              : 'hover:bg-[#f6f7f7]/70'
                           }`}
                         >
 
@@ -1633,12 +1610,12 @@ export default function StudentsPage() {
                                   student.id
                                 )
                               }
-                              className="h-3.5 w-3.5 cursor-pointer rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                              className="h-3.5 w-3.5 cursor-pointer rounded border-[#c3c4c7] text-emerald-600 focus:ring-emerald-500"
                             />
 
                           </td>
 
-                          <td className="px-2 py-2.5 font-semibold text-slate-300">
+                          <td className="px-2 py-2.5 font-semibold text-[#646970]">
                             {
                               startIndex +
                               index +
@@ -1648,13 +1625,13 @@ export default function StudentsPage() {
 
                           <td className="px-3 py-2.5">
 
-                            <div className="font-semibold text-slate-800">
+                            <div className="font-semibold text-[#1d2327]">
                               {
                                 student.fullname
                               }
                             </div>
 
-                            <div className="mt-0.5 text-[9px] text-slate-400">
+                            <div className="mt-0.5 text-sm text-[#646970]">
                               NISN{' '}
                               {
                                 student.nisn
@@ -1665,7 +1642,7 @@ export default function StudentsPage() {
 
                           <td className="px-3 py-2.5">
 
-                            <span className="inline-flex rounded-md bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-700">
+                            <span className="inline-flex rounded-sm bg-emerald-50 px-2 py-1 text-sm font-bold text-emerald-700">
                               {
                                 student.class_name
                               }
@@ -1676,7 +1653,7 @@ export default function StudentsPage() {
                           <td className="px-3 py-2.5">
 
                             <span
-                              className={`inline-flex h-6 w-6 items-center justify-center rounded-md text-[9px] font-bold ${
+                              className={`inline-flex h-6 w-6 items-center justify-center rounded-sm text-sm font-bold ${
                                 student.gender ===
                                 'L'
                                   ? 'bg-blue-50 text-blue-600'
@@ -1690,12 +1667,12 @@ export default function StudentsPage() {
 
                           </td>
 
-                          <td className="px-3 py-2.5 text-[10px] font-medium text-slate-700">
+                          <td className="px-3 py-2.5 text-sm font-medium text-[#1d2327]">
                             {student.birth_info ||
                               '—'}
                           </td>
 
-                          <td className="max-w-[220px] truncate px-3 py-2.5 text-[10px] text-slate-500">
+                          <td className="max-w-[220px] break-words px-3 py-2.5 text-sm text-[#646970]">
                             {student.address ||
                               '—'}
                           </td>
@@ -1711,7 +1688,7 @@ export default function StudentsPage() {
                                     student
                                   )
                                 }
-                                className="rounded-md bg-amber-50 px-2 py-1 text-[9px] font-semibold text-amber-700 transition hover:bg-amber-100"
+                                className="rounded-sm bg-amber-50 px-2 py-1 text-sm font-semibold text-amber-700 transition hover:bg-amber-100"
                               >
                                 Edit
                               </button>
@@ -1723,7 +1700,7 @@ export default function StudentsPage() {
                                     student.id
                                   )
                                 }
-                                className="rounded-md bg-red-50 px-2 py-1 text-[9px] font-semibold text-red-600 transition hover:bg-red-100"
+                                className="rounded-sm bg-red-50 px-2 py-1 text-sm font-semibold text-red-600 transition hover:bg-red-100"
                               >
                                 Hapus
                               </button>
@@ -1773,11 +1750,11 @@ export default function StudentsPage() {
         ==================================================== */}
 
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
 
-            <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl">
+            <div className="w-full max-w-lg overflow-hidden rounded-sm bg-white">
 
-              <div className="flex items-center justify-between border-b border-slate-100 bg-[#064e3b] px-5 py-4 text-white">
+              <div className="flex items-center justify-between border-b border-[#c3c4c7] bg-[#f6f7f7] px-5 py-4 text-[#1d2327]">
 
                 <div>
 
@@ -1787,7 +1764,7 @@ export default function StudentsPage() {
                       : 'Tambah Siswa Baru'}
                   </h3>
 
-                  <p className="text-[10px] text-emerald-200">
+                  <p className="text-sm text-emerald-200">
                     Lengkapi formulir informasi siswa di bawah ini.
                   </p>
 
@@ -1801,7 +1778,7 @@ export default function StudentsPage() {
                   disabled={
                     submitting
                   }
-                  className="rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-white hover:bg-white/20 disabled:opacity-50"
+                  className="rounded-sm bg-white/10 px-2.5 py-1 text-base font-bold text-[#2271b1] hover:bg-[#f0f6fc] disabled:opacity-50"
                 >
                   ✕ Tutup
                 </button>
@@ -1830,7 +1807,7 @@ export default function StudentsPage() {
 
                   <div>
 
-                    <label className="mb-1 block text-[10px] font-semibold text-slate-600">
+                    <label className="mb-1 block text-sm font-semibold text-[#646970]">
                       Kelas
                     </label>
 
@@ -1846,7 +1823,7 @@ export default function StudentsPage() {
                         )
                       }
                       required
-                      className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 text-xs text-slate-800 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/10"
+                      className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-2.5 text-base text-[#1d2327] outline-none transition focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                     >
 
                       <option value="">
@@ -1881,7 +1858,7 @@ export default function StudentsPage() {
 
                     {classes.length ===
                       0 && (
-                      <p className="mt-1 text-[9px] text-amber-600">
+                      <p className="mt-1 text-sm text-amber-600">
                         Belum ada kelas SD. Tambahkan kelas terlebih dahulu di menu Manajemen Kelas.
                       </p>
                     )}
@@ -1919,7 +1896,7 @@ export default function StudentsPage() {
 
                   <div>
 
-                    <label className="mb-1 block text-[10px] font-semibold text-slate-600">
+                    <label className="mb-1 block text-sm font-semibold text-[#646970]">
                       Jenis Kelamin
                     </label>
 
@@ -1934,7 +1911,7 @@ export default function StudentsPage() {
                           e.target.value
                         )
                       }
-                      className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 text-xs outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/10"
+                      className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-2.5 text-base outline-none transition focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                     >
 
                       <option value="L">
@@ -1953,7 +1930,7 @@ export default function StudentsPage() {
 
                 <div>
 
-                  <label className="mb-1 block text-[10px] font-semibold text-slate-600">
+                  <label className="mb-1 block text-sm font-semibold text-[#646970]">
                     Alamat
                   </label>
 
@@ -1970,12 +1947,12 @@ export default function StudentsPage() {
                     }
                     placeholder="Alamat lengkap siswa"
                     rows={2}
-                    className="w-full resize-none rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-2 text-xs outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/10"
+                    className="w-full min-h-[90px] resize-y rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-2.5 py-2 text-base outline-none transition focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
                   />
 
                 </div>
 
-                <div className="flex justify-end gap-2 border-t border-slate-100 pt-3">
+                <div className="flex justify-end gap-2 border-t border-[#c3c4c7] pt-3">
 
                   <button
                     type="button"
@@ -1985,7 +1962,7 @@ export default function StudentsPage() {
                     disabled={
                       submitting
                     }
-                    className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-50"
+                    className="rounded-sm bg-[#f6f7f7] px-4 py-2 text-base font-bold text-[#646970] hover:bg-[#f6f7f7] disabled:opacity-50"
                   >
                     Batal
                   </button>
@@ -1997,7 +1974,7 @@ export default function StudentsPage() {
                       classes.length ===
                         0
                     }
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-5 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-800 disabled:opacity-60"
+                    className="inline-flex items-center gap-1.5 rounded-sm bg-[#2271b1] px-5 py-2 text-base font-bold text-white transition hover:bg-[#135e96] disabled:opacity-60"
                   >
 
                     {submitting ? (
@@ -2030,13 +2007,13 @@ export default function StudentsPage() {
             FOOTER
         ==================================================== */}
 
-        <footer className="mt-5 flex flex-col items-center justify-between gap-1 border-t border-slate-200/70 pt-3 text-[9px] text-slate-400 sm:flex-row">
+        <footer className="mt-5 flex flex-col items-center justify-between gap-1 border-t border-[#c3c4c7] pt-3 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_NAME}
           </span>
 
-          <span className="font-serif text-slate-500">
+          <span className="font-serif text-[#646970]">
             العلم نور
           </span>
 
@@ -2070,7 +2047,7 @@ function Field({
   return (
     <div>
 
-      <label className="mb-1 block text-[10px] font-semibold text-slate-600">
+      <label className="mb-1 block text-sm font-semibold text-[#646970]">
         {label}
       </label>
 
@@ -2090,7 +2067,7 @@ function Field({
         placeholder={
           placeholder
         }
-        className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 text-xs text-slate-800 outline-none transition placeholder:text-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/10"
+        className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-2.5 text-base text-[#1d2327] outline-none transition placeholder:text-[#646970] focus:border-[#2271b1] focus:bg-white focus:ring-2 focus:ring-[#2271b1]/20"
       />
 
     </div>
@@ -2112,19 +2089,19 @@ function MiniStat({
     React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-3.5 py-3 shadow-[0_3px_15px_rgba(15,23,42,0.03)]">
+    <div className="flex items-center gap-2.5 rounded-sm border border-[#c3c4c7] bg-white px-3.5 py-3">
 
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm bg-emerald-50 text-emerald-700">
         {icon}
       </div>
 
       <div className="min-w-0">
 
-        <div className="text-sm font-bold leading-none text-slate-800">
+        <div className="text-sm font-bold leading-none text-[#1d2327]">
           {value}
         </div>
 
-        <div className="mt-1 truncate text-[9px] font-medium text-slate-400">
+        <div className="mt-1 break-words text-sm font-medium text-[#646970]">
           {label}
         </div>
 
@@ -2237,12 +2214,12 @@ function Pagination({
     );
 
   return (
-    <div className="flex flex-col gap-3 border-t border-slate-100 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 border-t border-[#c3c4c7] bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
 
-      <div className="text-[9px] text-slate-400">
+      <div className="text-sm text-[#646970]">
         Menampilkan{' '}
 
-        <span className="font-semibold text-slate-600">
+        <span className="font-semibold text-[#646970]">
           {
             firstItem
           }
@@ -2250,7 +2227,7 @@ function Pagination({
 
         {' '}–{' '}
 
-        <span className="font-semibold text-slate-600">
+        <span className="font-semibold text-[#646970]">
           {
             lastItem
           }
@@ -2258,7 +2235,7 @@ function Pagination({
 
         {' '}dari{' '}
 
-        <span className="font-semibold text-slate-600">
+        <span className="font-semibold text-[#646970]">
           {
             totalItems
           }
@@ -2282,7 +2259,7 @@ function Pagination({
             )
           }
           aria-label="Halaman sebelumnya"
-          className="flex h-7 min-w-7 items-center justify-center rounded-md border border-slate-200 bg-white px-2 text-[11px] font-bold text-slate-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-30"
+          className="flex h-9 min-w-9 items-center justify-center rounded-sm border border-[#c3c4c7] bg-white px-2 text-sm font-bold text-[#646970] transition hover:border-[#2271b1] hover:bg-[#f0f6fc] hover:text-[#2271b1] disabled:cursor-not-allowed disabled:opacity-30"
         >
           ‹
         </button>
@@ -2296,7 +2273,7 @@ function Pagination({
             '...' ? (
               <span
                 key={`dots-${index}`}
-                className="flex h-7 w-6 items-center justify-center text-[10px] text-slate-400"
+                className="flex h-9 w-6 items-center justify-center text-sm text-[#646970]"
               >
                 …
               </span>
@@ -2311,11 +2288,11 @@ function Pagination({
                     page as number
                   )
                 }
-                className={`flex h-7 min-w-7 items-center justify-center rounded-md px-2 text-[10px] font-semibold transition ${
+                className={`flex h-9 min-w-9 items-center justify-center rounded-sm px-2 text-sm font-semibold transition ${
                   currentPage ===
                   page
-                    ? 'bg-emerald-700 text-white shadow-sm'
-                    : 'border border-slate-200 bg-white text-slate-500 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700'
+                    ? 'bg-[#2271b1] text-white'
+                    : 'border border-[#c3c4c7] bg-white text-[#646970] hover:border-[#2271b1] hover:bg-[#f0f6fc] hover:text-[#2271b1]'
                 }`}
               >
                 {
@@ -2338,7 +2315,7 @@ function Pagination({
             )
           }
           aria-label="Halaman berikutnya"
-          className="flex h-7 min-w-7 items-center justify-center rounded-md border border-slate-200 bg-white px-2 text-[11px] font-bold text-slate-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-30"
+          className="flex h-9 min-w-9 items-center justify-center rounded-sm border border-[#c3c4c7] bg-white px-2 text-sm font-bold text-[#646970] transition hover:border-[#2271b1] hover:bg-[#f0f6fc] hover:text-[#2271b1] disabled:cursor-not-allowed disabled:opacity-30"
         >
           ›
         </button>
@@ -2355,7 +2332,7 @@ function Pagination({
 
 function LoadingTable() {
   return (
-    <div className="divide-y divide-slate-100">
+    <div className="divide-y divide-[#dcdcde]">
 
       {[
         1,
@@ -2373,21 +2350,21 @@ function LoadingTable() {
             className="flex animate-pulse items-center gap-4 px-4 py-3"
           >
 
-            <div className="h-3 w-3 rounded bg-slate-200" />
+            <div className="h-3 w-3 rounded bg-[#f6f7f7]" />
 
-            <div className="h-3 w-8 rounded bg-slate-200" />
+            <div className="h-3 w-8 rounded bg-[#f6f7f7]" />
 
             <div className="flex-1">
 
-              <div className="h-3 w-40 rounded bg-slate-200" />
+              <div className="h-3 w-40 rounded bg-[#f6f7f7]" />
 
-              <div className="mt-1 h-2 w-24 rounded bg-slate-100" />
+              <div className="mt-1 h-2 w-24 rounded bg-[#f6f7f7]" />
 
             </div>
 
-            <div className="h-5 w-10 rounded bg-slate-100" />
+            <div className="h-5 w-10 rounded bg-[#f6f7f7]" />
 
-            <div className="h-5 w-5 rounded bg-slate-100" />
+            <div className="h-5 w-5 rounded bg-[#f6f7f7]" />
 
           </div>
         )
@@ -2405,15 +2382,15 @@ function EmptyState() {
   return (
     <div className="flex min-h-[280px] flex-col items-center justify-center px-6 text-center">
 
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
+      <div className="flex h-12 w-12 items-center justify-center rounded-sm bg-[#f6f7f7] text-[#646970]">
         <UsersIcon />
       </div>
 
-      <h3 className="mt-3 text-xs font-bold text-slate-700">
+      <h3 className="mt-3 text-base font-bold text-[#1d2327]">
         Belum ada data siswa
       </h3>
 
-      <p className="mt-1 max-w-xs text-[10px] leading-4 text-slate-400">
+      <p className="mt-1 max-w-xs text-sm leading-4 text-[#646970]">
         Tambahkan siswa baru melalui tombol &quot;Tambah Siswa&quot; di atas atau gunakan fitur impor CSV.
       </p>
 

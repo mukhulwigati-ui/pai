@@ -1295,7 +1295,7 @@ export default function PromotionsPage() {
   ========================================================== */
 
   return (
-    <main className="min-h-screen bg-[#f5f8f6]">
+    <main className="min-h-screen bg-[#f0f0f1]">
 
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
 
@@ -1303,65 +1303,14 @@ export default function PromotionsPage() {
             HEADER
         ===================================================== */}
 
-        <header className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#064e3b] via-[#065f46] to-[#047857] px-6 py-7 text-white shadow-lg">
-
-          <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-emerald-200/[0.06] blur-3xl" />
-
-          <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-
-            <div className="flex items-start gap-4">
-
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/10">
-
-                <GraduationCap
-                  size={23}
-                  className="text-emerald-100"
-                />
-
-              </div>
-
-              <div>
-
-                <div className="flex items-center gap-2">
-
-                  <Sparkles
-                    size={11}
-                    className="text-amber-200"
-                  />
-
-                  <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-emerald-100/70">
-                    Akademik • Jenjang SD
-                  </span>
-
-                </div>
-
-                <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
-                  Kenaikan Kelas &amp; Kelulusan
-                </h1>
-
-                <p className="mt-1 text-sm text-emerald-50/75">
-                  Kelola kenaikan kelas, tinggal kelas, dan kelulusan siswa {SCHOOL_SHORT_NAME}.
-                </p>
-
-              </div>
-
-            </div>
-
-            <div className="rounded-xl border border-white/10 bg-white/10 px-4 py-3 md:text-right">
-
-              <div className="text-[9px] uppercase tracking-wider text-emerald-100/70">
-                Tahun Pelajaran
-              </div>
-
-              <div className="mt-0.5 text-lg font-bold">
-                {academicYear ||
-                  'Belum diatur'}
-              </div>
-
-            </div>
-
+        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Kenaikan Kelas &amp; Kelulusan</h1>
+            <p className="mt-2 text-base text-[#646970]">Pilih siswa dan tentukan kenaikan kelas, tinggal kelas, atau kelulusan.</p>
           </div>
-
+          <div className="text-sm text-[#646970]">
+            Tahun Pelajaran <span className="ml-2 font-semibold text-[#1d2327]">{academicYear || 'Belum diatur'}</span>
+          </div>
         </header>
 
         {/* ====================================================
@@ -1370,7 +1319,7 @@ export default function PromotionsPage() {
 
         {message && (
           <div
-            className={`flex items-start gap-3 rounded-xl border px-4 py-3 text-sm font-medium ${
+            className={`flex items-start gap-3 rounded-sm border px-4 py-3 text-sm font-medium ${
               messageType ===
               'success'
                 ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
@@ -1400,17 +1349,17 @@ export default function PromotionsPage() {
             FILTER / FORM
         ===================================================== */}
 
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-sm border border-[#c3c4c7] bg-white p-5">
 
           <div className="mb-5 flex items-center justify-between gap-4">
 
             <div>
 
-              <h2 className="text-sm font-bold text-slate-800">
+              <h2 className="text-sm font-bold text-[#1d2327]">
                 Pengaturan Proses
               </h2>
 
-              <p className="mt-1 text-[10px] text-slate-400">
+              <p className="mt-1 text-sm text-[#646970]">
                 Pilih kelas asal dan keputusan kenaikan/kelulusan.
               </p>
 
@@ -1424,7 +1373,7 @@ export default function PromotionsPage() {
               disabled={
                 loadingClasses
               }
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-[10px] font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-sm border border-[#c3c4c7] px-3 py-2 text-sm font-semibold text-[#646970] transition hover:bg-[#f6f7f7] disabled:opacity-50"
             >
 
               <RefreshCw
@@ -1442,13 +1391,13 @@ export default function PromotionsPage() {
 
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
             {/* ACADEMIC YEAR */}
 
             <div>
 
-              <label className="mb-1.5 block text-xs font-bold text-slate-700">
+              <label className="mb-1.5 block text-sm font-bold text-[#1d2327]">
                 Tahun Pelajaran
               </label>
 
@@ -1467,7 +1416,7 @@ export default function PromotionsPage() {
                 }
                 maxLength={9}
                 placeholder="2026/2027"
-                className="h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                className="h-11 w-full rounded-sm border border-[#c3c4c7] px-3 text-base outline-none transition focus:border-[#2271b1] focus:ring-2 focus:ring-[#2271b1]/20"
               />
 
             </div>
@@ -1476,7 +1425,7 @@ export default function PromotionsPage() {
 
             <div>
 
-              <label className="mb-1.5 block text-xs font-bold text-slate-700">
+              <label className="mb-1.5 block text-sm font-bold text-[#1d2327]">
                 Kelas Asal
               </label>
 
@@ -1501,7 +1450,7 @@ export default function PromotionsPage() {
                 disabled={
                   loadingClasses
                 }
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 disabled:bg-slate-50"
+                className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-base outline-none transition focus:border-[#2271b1] focus:ring-2 focus:ring-[#2271b1]/20 disabled:bg-[#f6f7f7]"
               >
 
                 <option value="">
@@ -1540,18 +1489,18 @@ export default function PromotionsPage() {
 
             <div>
 
-              <label className="mb-1.5 block text-xs font-bold text-slate-700">
+              <label className="mb-1.5 block text-sm font-bold text-[#1d2327]">
                 Kelas Tujuan
               </label>
 
               {status ===
               'TINGGAL' ? (
-                <div className="flex h-11 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-500">
+                <div className="flex h-11 items-center rounded-sm border border-[#c3c4c7] bg-[#f6f7f7] px-3 text-sm text-[#646970]">
                   Tetap di {fromClass || 'kelas asal'}
                 </div>
               ) : status ===
                 'LULUS' ? (
-                <div className="flex h-11 items-center rounded-xl border border-emerald-200 bg-emerald-50 px-3 text-sm font-semibold text-emerald-700">
+                <div className="flex h-11 items-center rounded-sm border border-emerald-200 bg-emerald-50 px-3 text-sm font-semibold text-emerald-700">
                   Lulus dari SD
                 </div>
               ) : (
@@ -1572,7 +1521,7 @@ export default function PromotionsPage() {
                     loadingClasses ||
                     isGradeSix
                   }
-                  className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 disabled:bg-slate-50 disabled:text-slate-400"
+                  className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-base outline-none transition focus:border-[#2271b1] focus:ring-2 focus:ring-[#2271b1]/20 disabled:bg-[#f6f7f7] disabled:text-[#646970]"
                 >
 
                   <option value="">
@@ -1610,7 +1559,7 @@ export default function PromotionsPage() {
 
             <div>
 
-              <label className="mb-1.5 block text-xs font-bold text-slate-700">
+              <label className="mb-1.5 block text-sm font-bold text-[#1d2327]">
                 Status Keputusan
               </label>
 
@@ -1629,7 +1578,7 @@ export default function PromotionsPage() {
                 disabled={
                   !fromClass
                 }
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 disabled:bg-slate-50"
+                className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-base outline-none transition focus:border-[#2271b1] focus:ring-2 focus:ring-[#2271b1]/20 disabled:bg-[#f6f7f7]"
               >
 
                 {sourceGrade <
@@ -1660,10 +1609,10 @@ export default function PromotionsPage() {
 
           <div className="mt-4">
 
-            <label className="mb-1.5 block text-xs font-bold text-slate-700">
+            <label className="mb-1.5 block text-sm font-bold text-[#1d2327]">
               Catatan{' '}
 
-              <span className="font-normal text-slate-400">
+              <span className="font-normal text-[#646970]">
                 (opsional)
               </span>
             </label>
@@ -1689,7 +1638,7 @@ export default function PromotionsPage() {
                     ? 'Contoh: Memerlukan penguatan dan pendampingan pada beberapa kompetensi.'
                     : 'Contoh: Dinyatakan naik ke tingkat berikutnya.'
               }
-              className="w-full resize-none rounded-xl border border-slate-200 p-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+              className="w-full min-h-[100px] resize-y rounded-sm border border-[#c3c4c7] p-3 text-base outline-none transition focus:border-[#2271b1] focus:ring-2 focus:ring-[#2271b1]/20"
             />
 
           </div>
@@ -1700,17 +1649,17 @@ export default function PromotionsPage() {
             STUDENTS
         ===================================================== */}
 
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <section className="overflow-hidden rounded-sm border border-[#c3c4c7] bg-white">
 
-          <div className="flex flex-col justify-between gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-center">
+          <div className="flex flex-col justify-between gap-3 border-b border-[#c3c4c7] p-4 sm:flex-row sm:items-center">
 
             <div>
 
-              <h2 className="font-bold text-slate-800">
+              <h2 className="font-bold text-[#1d2327]">
                 Daftar Siswa
               </h2>
 
-              <p className="mt-0.5 text-xs text-slate-400">
+              <p className="mt-0.5 text-sm text-[#646970]">
                 {fromClass
                   ? `Siswa kelas ${fromClass} • Tingkat ${sourceGrade}`
                   : 'Pilih kelas asal terlebih dahulu'}
@@ -1722,7 +1671,7 @@ export default function PromotionsPage() {
 
               {selectedIds.length >
                 0 && (
-                <span className="rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
+                <span className="rounded-sm bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-700">
                   {
                     selectedIds.length
                   }{' '}
@@ -1737,7 +1686,7 @@ export default function PromotionsPage() {
                   onClick={
                     resetSelection
                   }
-                  className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                  className="rounded-sm border border-[#c3c4c7] px-3 py-2 text-sm font-semibold text-[#646970] hover:bg-[#f6f7f7]"
                 >
                   Batal Pilih
                 </button>
@@ -1752,24 +1701,24 @@ export default function PromotionsPage() {
 
               <School
                 size={34}
-                className="mx-auto text-slate-300"
+                className="mx-auto text-[#646970]"
               />
 
-              <p className="mt-3 font-semibold text-slate-600">
+              <p className="mt-3 font-semibold text-[#646970]">
                 Pilih kelas asal
               </p>
 
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-sm text-[#646970]">
                 Daftar siswa akan muncul setelah kelas dipilih.
               </p>
 
             </div>
           ) : loadingStudents ? (
-            <div className="flex flex-col items-center justify-center p-14 text-sm text-slate-400">
+            <div className="flex flex-col items-center justify-center p-14 text-sm text-[#646970]">
 
               <Loader2
                 size={22}
-                className="animate-spin text-emerald-600"
+                className="animate-spin text-[#2271b1]"
               />
 
               <span className="mt-3">
@@ -1783,14 +1732,14 @@ export default function PromotionsPage() {
 
               <Users
                 size={34}
-                className="mx-auto text-slate-300"
+                className="mx-auto text-[#646970]"
               />
 
-              <p className="mt-3 font-semibold text-slate-600">
+              <p className="mt-3 font-semibold text-[#646970]">
                 Belum ada siswa
               </p>
 
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-sm text-[#646970]">
                 Tidak ditemukan siswa pada kelas ini.
               </p>
 
@@ -1798,11 +1747,11 @@ export default function PromotionsPage() {
           ) : (
             <div className="overflow-x-auto">
 
-              <table className="w-full min-w-[720px] text-sm">
+              <table className="w-full min-w-[720px] text-base">
 
                 <thead>
 
-                  <tr className="border-b border-slate-200 bg-slate-50 text-xs text-slate-600">
+                  <tr className="border-b border-[#c3c4c7] bg-[#f6f7f7] text-sm text-[#646970]">
 
                     <th className="w-12 p-3 text-center">
 
@@ -1820,7 +1769,7 @@ export default function PromotionsPage() {
                               .checked
                           )
                         }
-                        className="rounded text-emerald-600"
+                        className="h-4 w-4 rounded-sm accent-[#2271b1] text-[#2271b1]"
                       />
 
                     </th>
@@ -1849,7 +1798,7 @@ export default function PromotionsPage() {
 
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-[#dcdcde]">
 
                   {students.map(
                     (
@@ -1868,8 +1817,8 @@ export default function PromotionsPage() {
                           }
                           className={`transition ${
                             checked
-                              ? 'bg-emerald-50/60'
-                              : 'hover:bg-slate-50'
+                              ? 'bg-[#f0f6fc]'
+                              : 'hover:bg-[#f6f7f7]'
                           }`}
                         >
 
@@ -1885,26 +1834,26 @@ export default function PromotionsPage() {
                                   student.id
                                 )
                               }
-                              className="rounded text-emerald-600"
+                              className="h-4 w-4 rounded-sm accent-[#2271b1] text-[#2271b1]"
                             />
 
                           </td>
 
-                          <td className="p-3 text-slate-400">
+                          <td className="p-3 text-[#646970]">
                             {
                               index +
                               1
                             }
                           </td>
 
-                          <td className="p-3 font-mono text-xs text-slate-500">
+                          <td className="p-3 font-mono text-sm text-[#646970]">
                             {student.nisn ||
                               '-'}
                           </td>
 
                           <td className="p-3">
 
-                            <div className="font-semibold text-slate-800">
+                            <div className="font-semibold text-[#1d2327]">
                               {
                                 student.fullname
                               }
@@ -1920,7 +1869,7 @@ export default function PromotionsPage() {
 
                           <td className="p-3">
 
-                            <span className="inline-flex rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                            <span className="inline-flex rounded-sm bg-[#f6f7f7] px-2.5 py-1 text-sm font-semibold text-[#646970]">
                               {
                                 student.class_name
                               }
@@ -1950,28 +1899,28 @@ export default function PromotionsPage() {
           0 && (
           <section className="sticky bottom-4 z-20">
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
+            <div className="rounded-sm border border-[#c3c4c7] bg-white p-4">
 
               <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
 
                 <div>
 
-                  <div className="text-xs text-slate-400">
+                  <div className="text-sm text-[#646970]">
                     Siswa yang akan diproses
                   </div>
 
-                  <div className="text-lg font-bold text-slate-800">
+                  <div className="text-lg font-bold text-[#1d2327]">
                     {
                       selectedIds.length
                     }{' '}
 
-                    <span className="text-sm font-normal text-slate-400">
+                    <span className="text-sm font-normal text-[#646970]">
                       siswa
                     </span>
                   </div>
 
                   {selectedSourceClass && (
-                    <div className="mt-1 text-[10px] text-slate-400">
+                    <div className="mt-1 text-sm text-[#646970]">
 
                       {status ===
                       'NAIK'
@@ -1996,15 +1945,7 @@ export default function PromotionsPage() {
                     selectedIds.length ===
                       0
                   }
-                  className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl px-6 text-sm font-bold text-white shadow transition disabled:cursor-not-allowed disabled:opacity-50 ${
-                    status ===
-                    'NAIK'
-                      ? 'bg-emerald-700 hover:bg-emerald-800'
-                      : status ===
-                          'TINGGAL'
-                        ? 'bg-amber-600 hover:bg-amber-700'
-                        : 'bg-indigo-600 hover:bg-indigo-700'
-                  }`}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border border-[#2271b1] bg-[#2271b1] px-6 py-2 text-base font-semibold text-white transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
                 >
 
                   {processing ? (
@@ -2041,7 +1982,7 @@ export default function PromotionsPage() {
             FOOTER
         ===================================================== */}
 
-        <footer className="flex flex-col items-center justify-between gap-2 border-t border-slate-200/70 pt-4 text-[9px] text-slate-400 sm:flex-row">
+        <footer className="flex flex-col items-center justify-between gap-2 border-t border-[#c3c4c7] pt-4 text-sm text-[#646970] sm:flex-row">
 
           <span>
             Sistem Akademik · {SCHOOL_NAME}
