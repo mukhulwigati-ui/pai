@@ -115,16 +115,14 @@ export default function LoginPage() {
   // ==========================================================================
 
   return (
-    <main className="relative isolate flex min-h-screen items-center justify-center bg-[#063d31] px-4 py-8 sm:px-6">
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/bg-sdit.jpg')" }}
-        aria-hidden="true"
-      />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-black/45" aria-hidden="true" />
+    <main className="relative flex min-h-screen items-center justify-center bg-[#f3f7f4] px-4 py-8 sm:px-6">
 
       <section className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-white bg-white shadow-[0_24px_70px_rgba(6,78,59,0.12)]">
-        <header className="bg-[#063d31] px-6 py-8 text-center text-white sm:px-10">
+        <header
+          className="relative isolate overflow-hidden bg-[#063d31] bg-cover bg-center bg-no-repeat px-6 py-8 text-center text-white sm:px-10"
+          style={{ backgroundImage: "url('/bg-sdit.jpg')" }}
+        >
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-black/45" aria-hidden="true" />
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10">
             <GraduationCap size={36} strokeWidth={1.7} aria-hidden="true" />
           </div>
