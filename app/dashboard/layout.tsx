@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   usePathname,
   useRouter,
@@ -545,72 +546,32 @@ export default function DashboardLayout({
           MOBILE HEADER
       ======================================================= */}
 
-      <header className="fixed inset-x-0 top-0 z-[60] flex h-16 items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 shadow-sm backdrop-blur-xl lg:hidden">
-
-        <div className="flex items-center gap-3">
-
-          <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-[#063d31] text-white shadow-sm">
-
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-transparent" />
-
-            <GraduationCap
-              size={20}
-              strokeWidth={
-                1.7
-              }
-              className="relative"
-            />
-
-          </div>
-
-          <div>
-
-            <div className="text-sm font-bold tracking-tight text-slate-800">
-              E-Rapor
-            </div>
-
-            <div className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-emerald-700/60">
-              {SCHOOL_SHORT_NAME}
-            </div>
-
-          </div>
-
-        </div>
-
+      <header className="fixed inset-x-0 top-0 z-[60] flex h-16 items-center gap-3 border-b border-slate-200/80 bg-white/95 px-4 shadow-sm backdrop-blur-xl lg:hidden">
         <button
           type="button"
-          onClick={() =>
-            setMobileOpen(
-              (prev) =>
-                !prev
-            )
-          }
-          aria-label={
-            mobileOpen
-              ? 'Tutup menu'
-              : 'Buka menu'
-          }
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+          onClick={() => setMobileOpen((prev) => !prev)}
+          aria-label={mobileOpen ? 'Tutup menu' : 'Buka menu'}
+          aria-expanded={mobileOpen}
+          aria-controls="dashboard-sidebar"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-600"
         >
-
-          {mobileOpen ? (
-            <X
-              size={19}
-              strokeWidth={
-                1.8
-              }
-            />
-          ) : (
-            <Menu
-              size={19}
-              strokeWidth={
-                1.8
-              }
-            />
-          )}
-
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
 
+        <div className="flex min-w-0 items-center gap-3">
+          <Image
+            src="/sdit.png"
+            alt="Logo SDIT Khoiro Ummah"
+            width={40}
+            height={40}
+            priority
+            className="h-10 w-10 shrink-0 object-contain"
+          />
+          <div className="min-w-0">
+            <div className="text-base font-bold tracking-tight text-slate-800">E-Rapor</div>
+            <div className="truncate text-xs font-medium text-emerald-700">{SCHOOL_SHORT_NAME}</div>
+          </div>
+        </div>
       </header>
 
       {/* ======================================================
@@ -635,9 +596,10 @@ export default function DashboardLayout({
       ======================================================= */}
 
       <aside
+        id="dashboard-sidebar"
         className={[
           'fixed left-0 top-0 z-50',
-          'flex h-screen w-[258px] flex-col',
+          'flex h-screen w-[258px] flex-col pt-16 lg:pt-0',
           'overflow-hidden',
           'bg-[#052f27]',
           'text-white',
@@ -672,18 +634,14 @@ export default function DashboardLayout({
 
           <div className="flex items-center gap-3">
 
-            <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-200/10 bg-white/[0.055] shadow-inner">
-
-              <div className="absolute inset-[5px] rounded-xl border border-amber-200/10" />
-
-              <GraduationCap
-                size={22}
-                strokeWidth={
-                  1.6
-                }
-                className="relative text-emerald-200"
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white p-1">
+              <Image
+                src="/sdit.png"
+                alt="Logo SDIT Khoiro Ummah"
+                width={40}
+                height={40}
+                className="h-10 w-10 object-contain"
               />
-
             </div>
 
             <div className="min-w-0">
