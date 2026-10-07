@@ -2543,70 +2543,38 @@ export default function ReportPage() {
                   SIGNATURE
               ================================================== */}
 
-              <section className="report-block mx-[10mm] pb-6 text-[14px]">
-
+              <section className="report-block report-signatures mx-[10mm] pb-6 text-[14px]">
                 <div className="grid grid-cols-3 gap-4 text-center">
-
-                  {/* PARENT */}
-
-                  <div>
-
-                    <div className="mb-1 text-slate-600">
-                      Mengetahui,
+                  <div className="signature-column">
+                    <div className="signature-heading">
+                      <div className="mb-1 text-slate-600">Mengetahui,</div>
+                      <div className="font-bold text-slate-800">Orang Tua / Wali Siswa</div>
                     </div>
-
-                    <div className="font-bold text-slate-800">
-                      Orang Tua / Wali Siswa
-                    </div>
-
-                    <div className="h-14" />
-
-                    <div className="border-b border-slate-400 pb-0.5 font-bold text-slate-800">
+                    <div aria-hidden="true" />
+                    <div className="signature-name border-b border-slate-400 pb-0.5 font-bold text-slate-800">
                       ( ........................................ )
                     </div>
-
                   </div>
-
-                  {/* GURU PAI */}
-
-                  <div>
-
-                    <div className="mb-1 text-slate-600">
-                      Guru PAI
+                  <div className="signature-column">
+                    <div className="signature-heading">
+                      <div className="mb-1 text-slate-600">Guru PAI</div>
                     </div>
-
-                    
-
-                    <div className="h-14" />
-
-                    <div className="border-b border-slate-400 pb-0.5 font-bold text-slate-800">
+                    <div aria-hidden="true" />
+                    <div className="signature-name border-b border-slate-400 pb-0.5 font-bold text-slate-800">
                       {paiTeacherName || '( ........................................ )'}
                     </div>
-
                   </div>
-
-                  {/* PRINCIPAL */}
-
-                  <div>
-
-                    <div className="mb-1 text-slate-600">
-                      {formattedPrintDate}
+                  <div className="signature-column">
+                    <div className="signature-heading">
+                      <div className="mb-1 text-slate-600">{formattedPrintDate}</div>
+                      <div className="font-bold text-slate-800">Kepala Sekolah</div>
                     </div>
-
-                    <div className="font-bold text-slate-800">
-                      Kepala Sekolah
-                    </div>
-
-                    <div className="h-14" />
-
-                    <div className="border-b border-slate-400 pb-0.5 font-bold text-slate-800">
+                    <div aria-hidden="true" />
+                    <div className="signature-name border-b border-slate-400 pb-0.5 font-bold text-slate-800">
                       {principalName}
                     </div>
-
                   </div>
-
                 </div>
-
               </section>
 
             </div>
@@ -2616,6 +2584,12 @@ export default function ReportPage() {
 
 
       <style jsx global>{`
+        .report-signatures .signature-column {
+          display: grid;
+          grid-template-rows: 60px 64px auto;
+          min-width: 0;
+        }
+        .report-signatures .signature-name { overflow-wrap: anywhere; }
         .report-document { font-size: 14px; line-height: 1.5; }
         .report-document .report-table td,
         .report-document .report-table th { padding-top: 7px; padding-bottom: 7px; }
