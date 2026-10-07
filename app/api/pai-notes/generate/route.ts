@@ -96,7 +96,7 @@ Keluarkan JSON dengan achievement dan guidance, masing-masing SATU paragraf.
 Total 80–120 kata. Bahasa Indonesia lembut, sopan, ringkas, dan bervariasi.
 achievement: ringkas pencapaian keempat aspek sesuai predikat, tanpa saran.
 guidance: saran konkret, motivasi, dan doa kepada Allah sesuai aspek yang relatif perlu dikembangkan; jika semua sangat baik, tekankan mempertahankan pencapaian.
-Awali achievement dengan sapaan persis "Ananda [NAMA]". Gunakan "Ananda" selanjutnya, jangan kata "siswa" atau "murid".
+Jangan membuat nama orang atau placeholder nama. Awali achievement tepat dengan kata "menunjukkan" (huruf kecil), tanpa sapaan atau subjek sebelumnya; server akan menambahkan nama asli. Gunakan "Ananda" tanpa nama untuk sapaan selanjutnya. Jangan kata "siswa" atau "murid".
 Jangan mengarang kejadian, kebiasaan, perkembangan dari waktu ke waktu, atau perilaku spesifik yang tidak tersedia dalam input.
 Jangan menyebut nilai cukup sebagai sangat baik. Jangan merendahkan atau memberi label buruk.
 Tanpa tulisan Arab, judul, daftar, Markdown, atau baris baru di dalam paragraf.
@@ -128,14 +128,14 @@ Doa dan motivasi harus sesuai profil pencapaian, bukan janji hasil tertentu.`,
     if (paragraphs.some(value => !value)) {
       return fail('AI belum menghasilkan dua paragraf yang lengkap. Silakan coba lagi.', 502);
     }
-    // Batas kata merupakan arahan penulisan, bukan alasan menolak hasil yang layak.
-    // Sapaan dan nama dipastikan oleh server, bukan bergantung pada format AI.
-    if (!/^Ananda\b/i.test(paragraphs[0])) {
-      paragraphs[0] = `Ananda [NAMA], ${paragraphs[0].charAt(0).toLowerCase()}${paragraphs[0].slice(1)}`;
-    } else if (!paragraphs[0].includes('[NAMA]')) {
-      paragraphs[0] = paragraphs[0].replace(/^Ananda\b/i, 'Ananda [NAMA]');
+    // Nama hanya berasal dari database. Tolak pembuka yang tidak mengikuti
+    // kontrak agar nama rekaan AI tidak ikut digabungkan ke nama asli.
+    if (!/^menunjukkan\b/i.test(paragraphs[0]) ||
+        paragraphs.some(value => /\[NAMA\]/i.test(value))) {
+      return fail('AI belum mengikuti format nama yang benar. Silakan buat ulang catatan.', 502);
     }
-    const note = paragraphs.join('\n\n').replaceAll('[NAMA]', student.fullname);
+    paragraphs[0] = `Ananda ${student.fullname} ${paragraphs[0].charAt(0).toLowerCase()}${paragraphs[0].slice(1)}`;
+    const note = paragraphs.join('\n\n');
     if (note.length > 2000) {
       return fail('Catatan AI melebihi 2000 karakter. Silakan buat ulang.', 502);
     }
