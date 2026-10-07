@@ -20,7 +20,7 @@ const SCHOOL_NAME = 'SDIT Khoiro Ummah';
 const LEVEL = 'SD';
 
 const DEFAULT_SUBJECTS = [
-  'Aqidah Islamiyah',
+  'Akidah Akhlak',
   'Fikih',
   'Siroh',
   'Bahasa Arab',
