@@ -606,9 +606,11 @@ function getPersonalityValue(
     return '-';
   }
 
-  return String(
-    found.value
-  ).trim();
+  return String(found.value)
+    .replace(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/g, '')
+    .replace(/\(\s*\)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim() || '-';
 }
 
 /* ============================================================
@@ -742,6 +744,87 @@ function getPersonalityDescription(
     achieved:
       `Siswa memperoleh predikat ${value} pada aspek ${aspectName}.`,
   };
+}
+
+function personalityLevel(value: string): number | null {
+  const text = normalizeText(value);
+  if (/mumta[z sh]+|sangat baik/.test(text)) return 4;
+  if (/kurang|dhaif|daif|dhoif|lemah|perlu bimbingan/.test(text)) return 0;
+  if (/maqbul|makbul|cukup/.test(text)) return 1;
+  if (/jiddan|jidan/.test(text)) return 3;
+  if (/jeid|jayyid|jayid|baik/.test(text)) return 2;
+  return null;
+}
+
+function summarizePersonality(personality: PersonalityRecord[], fullname: string): string {
+  const guidance = [
+    {
+      practice: 'membiasakan tutur kata yang santun, menghargai teman, dan menjaga adab dalam kegiatan sehari-hari',
+      strength: 'Akhlak baik Ananda menjadi bekal berharga dalam menjalin hubungan dengan orang lain.',
+      growth: 'Setiap langkah Ananda dalam membiasakan adab yang baik merupakan kemajuan yang berharga.',
+      prayer: 'melembutkan hati Ananda dan membimbingnya menjadi pribadi yang santun serta berakhlak mulia',
+    },
+    {
+      practice: 'menjalankan jadwal belajar sederhana dan menyelesaikan kegiatan sedikit demi sedikit secara teratur',
+      strength: 'Ketekunan Ananda menjadi bekal berharga untuk terus bertumbuh dalam belajar.',
+      growth: 'Usaha kecil yang Ananda lakukan secara teratur sangat berarti dalam membangun ketekunan.',
+      prayer: 'menganugerahkan ketekunan, kesabaran, dan kemudahan bagi Ananda dalam menuntut ilmu',
+    },
+    {
+      practice: 'merapikan perlengkapan setelah digunakan dan menjaga kebersihan diri serta lingkungan',
+      strength: 'Kebiasaan menjaga kebersihan dan kerapian yang Ananda tunjukkan merupakan pencapaian yang berharga.',
+      growth: 'Setiap usaha Ananda untuk menjaga kebersihan dan kerapian merupakan langkah baik yang patut dihargai.',
+      prayer: 'memudahkan Ananda menjaga kebersihan dan menumbuhkan kepedulian terhadap lingkungan',
+    },
+    {
+      practice: 'menepati waktu dan menuntaskan tanggung jawab sederhana yang telah disepakati',
+      strength: 'Sikap disiplin dan tanggung jawab Ananda menjadi bekal berharga untuk tumbuh mandiri.',
+      growth: 'Setiap tanggung jawab yang Ananda selesaikan merupakan langkah berharga menuju kemandirian.',
+      prayer: 'membimbing Ananda menjadi pribadi yang amanah, disiplin, dan bertanggung jawab',
+    },
+  ];
+  const assessed = PERSONALITY_ASPECTS.map((aspect, index) => {
+    const value = getPersonalityValue(personality, aspect.name, aspect.arabic);
+    return { aspect, index, value, level: personalityLevel(value) };
+  }).filter((item) => item.value !== '-');
+  if (assessed.length === 0) return '';
+
+  const list = (items: string[]) => items.length === 1 ? items[0]
+    : `${items.slice(0, -1).join(', ')} serta ${items[items.length - 1]}`;
+  const groups = new Map<string, string[]>();
+  for (const item of assessed) {
+    const predicate = item.level === 4 ? 'sangat baik'
+      : item.level === 3 ? 'baik sekali'
+      : item.level === 2 ? 'baik'
+      : item.level === 1 ? 'cukup'
+      : item.level === 0 ? 'masih berkembang'
+      : `berpredikat ${item.value}`;
+    const names = groups.get(predicate) ?? [];
+    names.push(item.aspect.name.toLowerCase().replace(/ & /g, ' dan '));
+    groups.set(predicate, names);
+  }
+  const greeting = fullname.trim() ? `Ananda ${fullname.trim()}` : 'Ananda';
+  const achievement = Array.from(groups, ([predicate, names], index) =>
+    `${index === 0 ? greeting : 'Ananda'} menunjukkan ${list(names)} ${predicate.startsWith('berpredikat') ? predicate : `yang ${predicate}`}.`
+  ).join(' ');
+  const known = assessed.filter((item) => item.level !== null);
+  if (known.length === 0) return achievement;
+  const minimum = Math.min(...known.map((item) => item.level ?? 0));
+  const maximum = Math.max(...known.map((item) => item.level ?? 0));
+  const focus = known.filter((item) => item.level === minimum);
+  const strongest = known.find((item) => item.level === maximum)!;
+  const practices = list(focus.map((item) => guidance[item.index].practice));
+  const suggestion = minimum <= 1
+    ? `Dengan pendampingan guru dan orang tua, Ananda dapat mengembangkan kebiasaan baik melalui ${practices}.`
+    : minimum === 2
+      ? `Ananda dapat memperkuat kebiasaan baik dengan ${practices}.`
+      : `Ananda dapat menjaga pencapaian ini dengan tetap ${practices}.`;
+  const motivation = maximum >= 3
+    ? guidance[strongest.index].strength
+    : guidance[focus[0].index].growth;
+  const prayerFocus = minimum === maximum ? [strongest] : focus;
+  const prayer = `Semoga Allah ${list(prayerFocus.map((item) => guidance[item.index].prayer))}.`;
+  return `${achievement}\n\n${suggestion}\n\n${motivation} ${prayer}`;
 }
 
 /* ============================================================
@@ -1486,7 +1569,7 @@ export default function ReportPage() {
     reportData?.paiTeacherName?.trim() ||
     reportData?.settings?.paiTeacherName?.trim() || '';
 
-  const paiTeacherNote = reportData?.paiTeacherNote ?? reportData?.homeroomNote;
+  const paiTeacherNote = summarizePersonality(personality, reportData?.fullname ?? '');
 
   const principalName =
     reportData?.principalName ||
@@ -2394,7 +2477,7 @@ export default function ReportPage() {
                       paiTeacherNote
                     ) : (
                       <span className="italic text-slate-400">
-                        Belum ada catatan guru PAI.
+                        Penilaian kepribadian belum diisi.
                       </span>
                     )}
 
