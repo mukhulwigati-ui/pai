@@ -74,6 +74,8 @@ type PersonalityRecord = {
    PREDIKAT
 ============================================================ */
 
+// Nilai internal lama dipertahankan agar kompatibel dengan API dan data tersimpan.
+// Label pilihan ditampilkan dengan ejaan Jayyid.
 const PREDICATES = [
   '-',
   'Mumtaz (ممتاز)',
@@ -1512,9 +1514,7 @@ export default function PersonalityPage() {
                                                 predicate
                                               }
                                             >
-                                              {
-                                                predicate
-                                              }
+                                              {predicate.replace(/Jeid/g, 'Jayyid')}
                                             </option>
                                           )
                                         )}

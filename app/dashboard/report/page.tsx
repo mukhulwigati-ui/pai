@@ -607,6 +607,7 @@ function getPersonalityValue(
   }
 
   return String(found.value)
+    .replace(/\bjeid\b/gi, 'Jayyid')
     .replace(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/g, '')
     .replace(/\(\s*\)/g, '')
     .replace(/\s+/g, ' ')
@@ -2472,7 +2473,7 @@ export default function ReportPage() {
                   </div>
                   <div className="signature-column">
                     <div className="signature-heading">
-                      <div className="mb-1 text-slate-600">{formattedPrintDate}</div>
+                      <div className="mb-1 text-slate-600">Purwokerto, {formattedPrintDate}</div>
                       <div className="font-bold text-slate-800">Kepala Sekolah</div>
                     </div>
                     <div aria-hidden="true" />
