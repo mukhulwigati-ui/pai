@@ -27,6 +27,7 @@ type ClassRoom = {
   level: string;
   grade: number;
   status?: string;
+  student_count: number;
 };
 
 type MessageType =
@@ -1257,7 +1258,7 @@ export default function ClassesPage() {
                               />
 
                               <span>
-                                Belum ditentukan
+                                {cls.student_count ?? 0} siswa
                               </span>
 
                             </div>

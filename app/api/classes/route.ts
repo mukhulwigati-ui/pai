@@ -296,12 +296,26 @@ export async function GET(
         ],
       });
 
-    return NextResponse.json(
-      classes,
-      {
-        status: 200,
-      }
-    );
+    const studentGroups = await prisma.student.groupBy({
+      by: ['class_name'],
+      _count: { _all: true },
+    });
+
+    const studentCounts = new Map<string, number>();
+    for (const group of studentGroups) {
+      const name = normalizeClassName(group.class_name);
+      studentCounts.set(name, (studentCounts.get(name) ?? 0) + group._count._all);
+    }
+
+    const classesWithCounts = classes.map((classRoom) => ({
+      ...classRoom,
+      student_count: studentCounts.get(normalizeClassName(classRoom.name)) ?? 0,
+    }));
+
+    return NextResponse.json(classesWithCounts, {
+      status: 200,
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (error) {
     console.error(
       'GET /api/classes ERROR:',
