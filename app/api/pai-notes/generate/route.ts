@@ -120,16 +120,25 @@ Doa dan motivasi harus sesuai profil pencapaian, bukan janji hasil tertentu.`,
       return fail('AI belum menghasilkan dua paragraf yang lengkap.', 502);
     }
     const paragraphs = [fields.achievement, fields.guidance]
-      .map(value => value.replace(/\s+/g, ' ').trim());
-    const draft = paragraphs.join('\n\n');
-    const words = draft.split(/\s+/).length;
-    if (paragraphs.some(value => !value) || !paragraphs[0].startsWith('Ananda [NAMA]') ||
-      words < 80 || words > 120 || draft.length > 1800 ||
-      /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]|\b(siswa|murid)\b|[*#`]/i.test(draft)) {
-      return fail('Format catatan AI belum sesuai. Silakan coba lagi; catatan lama tetap tersimpan.', 502);
+      .map(value => value
+        .replace(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/g, '')
+        .replace(/[*#`]/g, '')
+        .replace(/\b(siswa|murid)\b/gi, 'Ananda')
+        .replace(/\s+/g, ' ').trim());
+    if (paragraphs.some(value => !value)) {
+      return fail('AI belum menghasilkan dua paragraf yang lengkap. Silakan coba lagi.', 502);
     }
-    const note = draft.replaceAll('[NAMA]', student.fullname);
-    if (note.length > 2000) return fail('Catatan AI terlalu panjang.', 502);
+    // Batas kata merupakan arahan penulisan, bukan alasan menolak hasil yang layak.
+    // Sapaan dan nama dipastikan oleh server, bukan bergantung pada format AI.
+    if (!/^Ananda\b/i.test(paragraphs[0])) {
+      paragraphs[0] = `Ananda [NAMA], ${paragraphs[0].charAt(0).toLowerCase()}${paragraphs[0].slice(1)}`;
+    } else if (!paragraphs[0].includes('[NAMA]')) {
+      paragraphs[0] = paragraphs[0].replace(/^Ananda\b/i, 'Ananda [NAMA]');
+    }
+    const note = paragraphs.join('\n\n').replaceAll('[NAMA]', student.fullname);
+    if (note.length > 2000) {
+      return fail('Catatan AI melebihi 2000 karakter. Silakan buat ulang.', 502);
+    }
     return NextResponse.json({
       success: true,
       message: 'Draf catatan berhasil dibuat. Periksa sebelum menyimpan.',
