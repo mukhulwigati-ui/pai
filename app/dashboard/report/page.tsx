@@ -751,24 +751,18 @@ function getPersonalityDescription(
 ============================================================ */
 
 function ReportSection({
-  number,
   title,
   children,
 }: {
-  number: string;
   title: string;
   children: ReactNode;
 }) {
   return (
     <section className="report-block mx-[10mm] mb-3">
 
-      <div className="mb-1 flex items-center justify-between border-b-2 border-[#315f50] pb-1">
+      <div className="mb-1 flex items-center justify-between border-b-2 border-black pb-1">
 
         <div className="flex items-center gap-2">
-
-          <span className="flex h-6 w-6 items-center justify-center rounded bg-[#315f50] text-[12px] font-bold text-white">
-            {number}
-          </span>
 
           <h3 className="text-[16px] font-bold uppercase tracking-wide text-slate-800">
             {title}
@@ -1914,7 +1908,7 @@ export default function ReportPage() {
                     SEKOLAH DASAR ISLAM TERPADU
                   </div>
 
-                  <h2 className="mt-0.5 text-[24px] font-black leading-tight tracking-tight text-[#315f50]">
+                  <h2 className="mt-0.5 text-[24px] font-black leading-tight tracking-tight text-black">
                     {schoolName}
                   </h2>
 
@@ -2014,7 +2008,6 @@ export default function ReportPage() {
               ================================================== */}
 
               <ReportSection
-                number="03"
                 title="Asesmen Lisan dan Praktik"
 
               >
@@ -2139,7 +2132,6 @@ export default function ReportPage() {
               ================================================== */}
 
               <ReportSection
-                number="04"
                 title="Asesmen Tertulis"
 
               >
@@ -2264,7 +2256,6 @@ export default function ReportPage() {
               ================================================== */}
 
               <ReportSection
-                number="05"
                 title="Kepribadian Siswa"
 
               >
@@ -2385,7 +2376,7 @@ export default function ReportPage() {
 
                 <section className="report-block">
 
-                  <div className="mb-1 flex items-center justify-between border-b-2 border-[#315f50] pb-1">
+                  <div className="mb-1 flex items-center justify-between border-b-2 border-black pb-1">
 
                     <span className="text-[14px] font-bold uppercase tracking-wide text-slate-800">
                       Catatan Guru PAI
@@ -2499,6 +2490,12 @@ export default function ReportPage() {
 
 
       <style jsx global>{`
+        /* Seluruh teks rapor hitam; warna asli gambar logo tetap utuh. */
+        .report-document,
+        .report-document * {
+          color: #000 !important;
+          -webkit-text-fill-color: #000 !important;
+        }
         .report-signatures .signature-column {
           display: grid;
           grid-template-rows: 60px 64px auto;
