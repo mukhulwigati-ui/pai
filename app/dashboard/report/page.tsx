@@ -1625,7 +1625,7 @@ export default function ReportPage() {
         <div className="mx-auto max-w-[1500px] px-5 py-4 lg:px-8">
 
           <header className="mb-5">
-            <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Rapor PAI dan Akhlaq</h1>
+            <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Rapor PAI</h1>
             <p className="mt-2 text-base text-[#646970]">Pilih kelas dan siswa untuk melihat atau mencetak rapor.</p>
           </header>
 
@@ -1996,7 +1996,7 @@ export default function ReportPage() {
                 </div>
 
                 <div className="text-[11px] font-bold uppercase tracking-wide text-slate-800">
-                  RAPOR PAI DAN AKHLAQ TINGKAT SD
+                  RAPOR PAI TINGKAT SD
                 </div>
 
                 <div className="text-[7.5px] font-medium tracking-[0.12em] text-slate-500">

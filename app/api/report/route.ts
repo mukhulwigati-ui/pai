@@ -1107,7 +1107,7 @@ export async function GET(
         success: true,
 
         message:
-          'Data rapor PAI dan Akhlaq berhasil dimuat.',
+          'Data rapor PAI berhasil dimuat.',
 
         /*
          * Untuk frontend rapor yang sudah ada.

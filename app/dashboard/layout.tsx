@@ -251,7 +251,7 @@ const menus: MenuItem[] = [
 
   {
     title:
-      'Rapor PAI dan Akhlaq',
+      'Rapor PAI',
 
     href:
       '/dashboard/report',
@@ -551,7 +551,7 @@ export default function DashboardLayout({
           {mobileOpen ? <X size={23} /> : <Menu size={23} />}
         </button>
         <Image src="/sdit.png" alt="Logo SDIT Khoiro Ummah" width={28} height={28} className="h-7 w-7 shrink-0 object-contain" />
-        <Link href="/dashboard" className="min-w-0 truncate text-sm font-medium hover:text-[#72aee6]">Rapor PAI dan Akhlaq · {SCHOOL_SHORT_NAME}</Link>
+        <Link href="/dashboard" className="min-w-0 truncate text-sm font-medium hover:text-[#72aee6]">Rapor PAI · {SCHOOL_SHORT_NAME}</Link>
         <span className="ml-auto hidden text-sm sm:block">PAI dan Akhlaq</span>
         <button type="button" onClick={handleLogout} disabled={loggingOut} aria-label="Keluar dari sistem" title="Keluar" className="flex h-9 w-9 shrink-0 items-center justify-center text-[#a7aaad] hover:text-white disabled:opacity-50">
           <LogOut size={18} />
@@ -569,7 +569,7 @@ export default function DashboardLayout({
         <div className="flex items-center gap-3 border-b border-white/10 px-4 py-5">
           <Image src="/sdit.png" alt="Logo SDIT Khoiro Ummah" width={44} height={44} className="h-11 w-11 shrink-0 object-contain" />
           <div>
-            <p className="text-lg font-semibold text-white">Rapor PAI dan Akhlaq</p>
+            <p className="text-lg font-semibold text-white">Rapor PAI</p>
             <p className="mt-1 text-sm text-[#a7aaad]">{SCHOOL_SHORT_NAME}</p>
           </div>
         </div>
@@ -628,7 +628,7 @@ export default function DashboardLayout({
           </div>
         </nav>
 
-        <div className="border-t border-white/10 px-4 py-4 text-sm text-[#a7aaad]">Rapor PAI dan Akhlaq</div>
+        <div className="border-t border-white/10 px-4 py-4 text-sm text-[#a7aaad]">Rapor PAI</div>
       </aside>
 
       <div className="pt-12 lg:pl-[258px] lg:pt-10 print:!pl-0 print:!pt-0">
