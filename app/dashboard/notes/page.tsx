@@ -3,6 +3,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -219,6 +220,41 @@ export default function NotesPage() {
       ''
     );
 
+  const [generatingId, setGeneratingId] = useState<number | null>(null);
+  const busyRef = useRef(false);
+
+  const handleGenerate = async (student: Student) => {
+    if (busyRef.current || loading || loadingStudents || !selectedClass) return;
+    busyRef.current = true;
+    setGeneratingId(student.id);
+    setMessage('');
+    setMessageType('');
+    try {
+      const response = await fetch('/api/pai-notes/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: student.id, className: selectedClass }),
+      });
+      if (!response.ok) throw new Error(await getApiError(response, 'Gagal membuat catatan AI.'));
+      const result = await response.json();
+      const note = result?.data?.note;
+      if (!result.success || result?.data?.studentId !== student.id ||
+          typeof note !== 'string' || !note.trim() || note.length > MAX_NOTE_LENGTH ||
+          note.trim().split(/\n\s*\n/).length !== 2) {
+        throw new Error('Hasil AI belum berupa dua paragraf yang valid. Catatan sebelumnya tetap tersedia.');
+      }
+      setNotesData(previous => ({ ...previous, [student.id]: note }));
+      setMessageType('success');
+      setMessage(`Draf AI untuk ${student.fullname} sudah dibuat. Periksa dan edit bila perlu, lalu klik Simpan Catatan.`);
+    } catch (error) {
+      setMessageType('error');
+      setMessage(error instanceof Error ? error.message : 'Gagal membuat catatan AI.');
+    } finally {
+      busyRef.current = false;
+      setGeneratingId(null);
+    }
+  };
+
   /* ==========================================================
      LOAD CLASSES
   ========================================================== */
@@ -425,6 +461,10 @@ export default function NotesPage() {
       return;
     }
 
+    let cancelled = false;
+    setStudents([]);
+    setNotesData({});
+
     const fetchStudentsAndNotes =
       async () => {
         try {
@@ -506,6 +546,7 @@ export default function NotesPage() {
                   )
               );
 
+          if (cancelled) return;
           setStudents(
             filteredStudents
           );
@@ -567,12 +608,14 @@ export default function NotesPage() {
               );
           }
 
+          if (cancelled) return;
           setNotesData(
             map
           );
         } catch (
           error
         ) {
+          if (cancelled) return;
           console.error(
             'FETCH STUDENTS / NOTES ERROR:',
             error
@@ -597,13 +640,14 @@ export default function NotesPage() {
               : 'Gagal memuat data.'
           );
         } finally {
-          setLoadingStudents(
+          if (!cancelled) setLoadingStudents(
             false
           );
         }
       };
 
     fetchStudentsAndNotes();
+    return () => { cancelled = true; };
   }, [
     selectedClass,
   ]);
@@ -652,6 +696,7 @@ export default function NotesPage() {
       event: React.FormEvent<HTMLFormElement>
     ) => {
       event.preventDefault();
+      if (busyRef.current || loading || loadingStudents) return;
 
       setMessage('');
 
@@ -775,13 +820,10 @@ export default function NotesPage() {
           );
         }
 
-        setMessageType(
-          'success'
-        );
-
-        setMessage(
-          `Catatan guru PAI untuk ${students.length} siswa kelas ${classRoom.name} berhasil disimpan.`
-        );
+        const result = await response.json();
+        if (!result.success) throw new Error(result.message || 'Gagal menyimpan catatan.');
+        setMessageType(result.skipped > 0 ? 'error' : 'success');
+        setMessage(result.message || `${result.saved ?? students.length} catatan berhasil disimpan.`);
       } catch (
         error
       ) {
@@ -869,7 +911,7 @@ export default function NotesPage() {
 
         <section>
           <h1 className="text-2xl font-normal text-[#1d2327]">Catatan Guru PAI</h1>
-          <p className="mt-2 text-base leading-6 text-[#646970]">Pilih kelas dan tuliskan catatan perkembangan siswa untuk rapor.</p>
+          <p className="mt-2 text-base leading-6 text-[#646970]">Pilih kelas, buat catatan AI dari penilaian kepribadian yang sudah disimpan, lalu periksa dan simpan hasilnya.</p>
         </section>
 
         {/* ====================================================
@@ -958,7 +1000,7 @@ export default function NotesPage() {
                       )
                     }
                     disabled={
-                      loadingClasses ||
+                      loading || generatingId !== null || loadingStudents || loadingClasses ||
                       classes.length ===
                         0
                     }
@@ -1156,7 +1198,7 @@ export default function NotesPage() {
                 <button
                   type="submit"
                   disabled={
-                    loading ||
+                    generatingId !== null || loading ||
                     loadingStudents ||
                     students.length ===
                       0
@@ -1375,9 +1417,23 @@ export default function NotesPage() {
 
                                     <div className="relative">
 
+                                      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                                        <span className="text-sm text-[#646970]">Dua paragraf: pencapaian, lalu saran, motivasi, dan doa.</span>
+                                        <button
+                                          type="button"
+                                          disabled={loading || loadingStudents || generatingId !== null}
+                                          onClick={() => handleGenerate(student)}
+                                          className="inline-flex items-center gap-2 rounded-sm border border-[#2271b1] px-3 py-2 text-sm font-semibold text-[#2271b1] hover:bg-[#f0f6fc] disabled:cursor-not-allowed disabled:opacity-50"
+                                        >
+                                          {generatingId === student.id ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
+                                          {generatingId === student.id ? 'Membuat catatan...' : hasNote ? 'Buat Ulang Catatan AI' : 'Buat Catatan AI'}
+                                        </button>
+                                      </div>
                                       <textarea
+                                        disabled={loading || generatingId !== null}
+                                        aria-label={`Catatan Guru PAI untuk ${student.fullname}`}
                                         rows={
-                                          3
+                                          7
                                         }
                                         value={
                                           note
@@ -1395,7 +1451,7 @@ export default function NotesPage() {
                                               .value
                                           )
                                         }
-                                        placeholder="Tuliskan perkembangan, prestasi, sikap, apresiasi, atau nasihat untuk siswa..."
+                                        placeholder="Klik Buat Catatan AI atau tuliskan catatan dua paragraf untuk Ananda..."
                                         className="min-h-[110px] w-full resize-y rounded-sm border border-[#c3c4c7] bg-slate-50/40 px-3 py-2.5 text-base leading-6 text-slate-700 outline-none transition-all placeholder:text-[#646970] focus:border-[#2271b1] focus:bg-white focus:ring-4 focus:ring-[#2271b1]/20"
                                       />
 
