@@ -799,11 +799,11 @@ function ReportSection({
 
         <div className="flex items-center gap-2">
 
-          <span className="flex h-4 w-4 items-center justify-center rounded bg-[#315f50] text-[8px] font-bold text-white">
+          <span className="flex h-6 w-6 items-center justify-center rounded bg-[#315f50] text-[12px] font-bold text-white">
             {number}
           </span>
 
-          <h3 className="text-[11px] font-bold uppercase tracking-wide text-slate-800">
+          <h3 className="text-[16px] font-bold uppercase tracking-wide text-slate-800">
             {title}
           </h3>
 
@@ -811,7 +811,7 @@ function ReportSection({
 
         <div
           dir="rtl"
-          className="arabic text-[11px] font-semibold text-slate-600"
+          className="arabic text-[16px] font-semibold text-slate-600"
         >
           {arabic}
         </div>
@@ -1925,7 +1925,7 @@ export default function ReportPage() {
         !loadingReport && (
           <main className="report-screen overflow-x-auto bg-[#f0f0f1] px-3 py-6 print:overflow-visible print:bg-white print:p-0">
 
-            <div className="report-document mx-auto w-[215.9mm] bg-white text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.14)] print:w-[215.9mm] print:shadow-none">
+            <div className="report-document mx-auto w-[215.9mm] bg-white text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.14)] print:w-full print:shadow-none">
 
               {/* ==================================================
                   HEADER
@@ -1947,20 +1947,20 @@ export default function ReportPage() {
 
                   <div
                     dir="rtl"
-                    className="arabic mb-0.5 text-[13px] font-bold text-slate-600"
+                    className="arabic mb-0.5 text-[18px] font-bold text-slate-600"
                   >
                     بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
                   </div>
 
-                  <div className="text-[8px] font-bold tracking-[0.14em] text-slate-500">
+                  <div className="text-[12px] font-bold tracking-[0.14em] text-slate-500">
                     SEKOLAH DASAR ISLAM TERPADU
                   </div>
 
-                  <h2 className="mt-0.5 text-[17px] font-black leading-tight tracking-tight text-[#315f50]">
+                  <h2 className="mt-0.5 text-[24px] font-black leading-tight tracking-tight text-[#315f50]">
                     {schoolName}
                   </h2>
 
-                  <p className="mt-0.5 text-[8px] text-slate-400">
+                  <p className="mt-0.5 text-[12px] text-slate-400">
                     Jenjang Sekolah Dasar
                   </p>
 
@@ -1968,7 +1968,7 @@ export default function ReportPage() {
 
                 <div className="mt-1.5 border-t border-slate-100 pt-1 text-center">
 
-                  <div className="arabic text-[11px] font-semibold text-slate-600">
+                  <div className="arabic text-[16px] font-semibold text-slate-600">
                     السنة الدراسية / Tahun Ajaran: {academicYear}
                   </div>
 
@@ -1984,7 +1984,7 @@ export default function ReportPage() {
 
                 <div
                   dir="rtl"
-                  className="arabic text-[12px] font-bold leading-5 text-[#315f50]"
+                  className="arabic text-[16px] font-bold leading-5 text-[#315f50]"
                 >
                   كَشْفُ دَرَجَاتِ الطَّالِبِ
 
@@ -1995,11 +1995,11 @@ export default function ReportPage() {
                   {semesterArabic}
                 </div>
 
-                <div className="text-[11px] font-bold uppercase tracking-wide text-slate-800">
+                <div className="text-[16px] font-bold uppercase tracking-wide text-slate-800">
                   RAPOR PAI TINGKAT SD
                 </div>
 
-                <div className="text-[7.5px] font-medium tracking-[0.12em] text-slate-500">
+                <div className="text-[12px] font-medium tracking-[0.12em] text-slate-500">
                   SEMESTER {semesterLabel.toUpperCase()} • TAHUN AJARAN {academicYear}
                 </div>
 
@@ -2011,7 +2011,7 @@ export default function ReportPage() {
 
               <section className="report-block mx-[10mm] mb-2.5 rounded-lg border border-slate-200 bg-[#fafbfa] p-2.5">
 
-                <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 text-[10px]">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 text-[14px]">
 
                   <div className="flex items-center justify-between border-b border-slate-200/70 pb-1">
 
@@ -2020,7 +2020,7 @@ export default function ReportPage() {
 
                       <span
                         dir="rtl"
-                        className="arabic ml-1 text-[12px] font-semibold"
+                        className="arabic ml-1 text-[16px] font-semibold"
                       >
                         / اسم الطالب
                       </span>
@@ -2041,7 +2041,7 @@ export default function ReportPage() {
 
                       <span
                         dir="rtl"
-                        className="arabic ml-1 text-[12px] font-semibold"
+                        className="arabic ml-1 text-[16px] font-semibold"
                       >
                         / رقم القيد
                       </span>
@@ -2061,7 +2061,7 @@ export default function ReportPage() {
 
                       <span
                         dir="rtl"
-                        className="arabic ml-1 text-[12px] font-semibold"
+                        className="arabic ml-1 text-[16px] font-semibold"
                       >
                         / الفصل
                       </span>
@@ -2101,7 +2101,7 @@ export default function ReportPage() {
                 arabic="التقييم الشفوي والتطبيقي"
               >
 
-                <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[9.5px]">
+                <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[14px]">
 
                   <thead>
 
@@ -2182,7 +2182,7 @@ export default function ReportPage() {
 
                                 <div
                                   dir="rtl"
-                                  className="arabic mt-0.5 text-[10.5px] font-semibold leading-tight text-slate-500"
+                                  className="arabic mt-1 text-[14px] font-semibold leading-tight text-slate-500"
                                 >
                                   {
                                     subject.arabic
@@ -2198,7 +2198,7 @@ export default function ReportPage() {
                                   : '-'}
                               </td>
 
-                              <td className="border border-slate-300 px-2.5 py-1.5 align-top leading-[1.3] text-slate-700">
+                              <td className="border border-slate-300 px-2.5 py-1.5 align-top leading-[1.5] text-slate-700">
 
                                 <div>
                                   {
@@ -2207,7 +2207,7 @@ export default function ReportPage() {
                                   }
                                 </div>
 
-                                <div className="mt-0.5 text-[8.5px] leading-[1.3] text-slate-500">
+                                <div className="mt-0.5 text-[13px] leading-[1.5] text-slate-500">
                                   {
                                     description
                                       .needsImprovement
@@ -2238,7 +2238,7 @@ export default function ReportPage() {
                 arabic="التقييم التحريري"
               >
 
-                <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[9px]">
+                <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[14px]">
 
                   <thead>
 
@@ -2319,7 +2319,7 @@ export default function ReportPage() {
 
                                 <div
                                   dir="rtl"
-                                  className="arabic mt-0.5 text-[9.5px] font-semibold leading-tight text-slate-500"
+                                  className="arabic mt-1 text-[14px] font-semibold leading-tight text-slate-500"
                                 >
                                   {
                                     subject.arabic
@@ -2335,7 +2335,7 @@ export default function ReportPage() {
                                   : '-'}
                               </td>
 
-                              <td className="border border-slate-300 px-2.5 py-1 align-top leading-[1.25] text-slate-700">
+                              <td className="border border-slate-300 px-2.5 py-1 align-top leading-[1.5] text-slate-700">
 
                                 <div>
                                   {
@@ -2344,7 +2344,7 @@ export default function ReportPage() {
                                   }
                                 </div>
 
-                                <div className="mt-0.5 text-[8px] leading-[1.25] text-slate-500">
+                                <div className="mt-0.5 text-[12px] leading-[1.5] text-slate-500">
                                   {
                                     description
                                       .needsImprovement
@@ -2375,7 +2375,7 @@ export default function ReportPage() {
                 arabic="شخصية الطالب / الطالبة"
               >
 
-                <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[9px]">
+                <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[14px]">
 
                   <thead>
 
@@ -2442,7 +2442,7 @@ export default function ReportPage() {
 
                               <div
                                 dir="rtl"
-                                className="arabic mt-0.5 text-[9.5px] font-semibold leading-tight text-slate-500"
+                                className="arabic mt-1 text-[14px] font-semibold leading-tight text-slate-500"
                               >
                                 {
                                   item.arabic
@@ -2464,7 +2464,7 @@ export default function ReportPage() {
                               }
                             </td>
 
-                            <td className="border border-slate-300 px-2.5 py-1 align-top leading-[1.25] text-slate-700">
+                            <td className="border border-slate-300 px-2.5 py-1 align-top leading-[1.5] text-slate-700">
 
                               <div>
                                 {
@@ -2473,7 +2473,7 @@ export default function ReportPage() {
                                 }
                               </div>
 
-                              <div className="mt-0.5 text-[8px] leading-[1.25] text-slate-500">
+                              <div className="mt-0.5 text-[12px] leading-[1.5] text-slate-500">
                                 {
                                   description
                                     .needsImprovement
@@ -2505,20 +2505,20 @@ export default function ReportPage() {
 
                   <div className="mb-1 flex items-center justify-between border-b-2 border-[#315f50] pb-1">
 
-                    <span className="text-[10px] font-bold uppercase tracking-wide text-slate-800">
+                    <span className="text-[14px] font-bold uppercase tracking-wide text-slate-800">
                       Ketidakhadiran
                     </span>
 
                     <span
                       dir="rtl"
-                      className="arabic text-[10px] font-semibold text-slate-600"
+                      className="arabic text-[14px] font-semibold text-slate-600"
                     >
                       الغياب
                     </span>
 
                   </div>
 
-                  <table className="w-full border-collapse border border-slate-300 bg-white text-[9.5px]">
+                  <table className="w-full border-collapse border border-slate-300 bg-white text-[14px]">
 
                     <tbody>
 
@@ -2579,20 +2579,20 @@ export default function ReportPage() {
 
                   <div className="mb-1 flex items-center justify-between border-b-2 border-[#315f50] pb-1">
 
-                    <span className="text-[10px] font-bold uppercase tracking-wide text-slate-800">
+                    <span className="text-[14px] font-bold uppercase tracking-wide text-slate-800">
                       Catatan Guru PAI
                     </span>
 
                     <span
                       dir="rtl"
-                      className="arabic text-[10px] font-semibold text-slate-600"
+                      className="arabic text-[14px] font-semibold text-slate-600"
                     >
                       ملاحظات معلم التربية الإسلامية
                     </span>
 
                   </div>
 
-                  <div className="h-[74px] overflow-y-auto rounded border border-slate-300 bg-white p-2 text-[9px] leading-relaxed text-slate-700">
+                  <div className="min-h-[100px] whitespace-pre-wrap break-words rounded border border-slate-300 bg-white p-2 text-[14px] leading-relaxed text-slate-700">
 
                     {paiTeacherNote ? (
                       paiTeacherNote
@@ -2619,11 +2619,11 @@ export default function ReportPage() {
               reportData.rank ? (
                 <section className="report-block mx-[10mm] mb-4">
 
-                  <div className="grid grid-cols-3 gap-2 text-center text-[9px]">
+                  <div className="grid grid-cols-3 gap-2 text-center text-[14px]">
 
                     <div className="rounded border border-slate-200 bg-[#fafbfa] px-2 py-2">
 
-                      <div className="text-[8px] uppercase tracking-wide text-slate-400">
+                      <div className="text-[12px] uppercase tracking-wide text-slate-400">
                         Rata-rata
                       </div>
 
@@ -2636,7 +2636,7 @@ export default function ReportPage() {
 
                     <div className="rounded border border-slate-200 bg-[#fafbfa] px-2 py-2">
 
-                      <div className="text-[8px] uppercase tracking-wide text-slate-400">
+                      <div className="text-[12px] uppercase tracking-wide text-slate-400">
                         Peringkat
                       </div>
 
@@ -2649,7 +2649,7 @@ export default function ReportPage() {
 
                     <div className="rounded border border-slate-200 bg-[#fafbfa] px-2 py-2">
 
-                      <div className="text-[8px] uppercase tracking-wide text-slate-400">
+                      <div className="text-[12px] uppercase tracking-wide text-slate-400">
                         Jumlah Siswa
                       </div>
 
@@ -2669,7 +2669,7 @@ export default function ReportPage() {
                   SIGNATURE
               ================================================== */}
 
-              <section className="report-block mx-[10mm] pb-6 text-[9.5px]">
+              <section className="report-block mx-[10mm] pb-6 text-[14px]">
 
                 <div className="grid grid-cols-3 gap-4 text-center">
 
@@ -2742,6 +2742,30 @@ export default function ReportPage() {
           </main>
         )}
 
+
+      <style jsx global>{`
+        .report-document { font-size: 14px; line-height: 1.5; }
+        .report-document .report-table td,
+        .report-document .report-table th { padding-top: 7px; padding-bottom: 7px; }
+        .report-document .report-table td { overflow-wrap: anywhere; }
+        .report-document .arabic { line-height: 1.6; }
+        .report-document .report-block { margin-bottom: 16px; }
+        @media print {
+          @page { size: 215.9mm 330mm; margin: 10mm; }
+          html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+          .report-screen { overflow: visible !important; padding: 0 !important; }
+          .report-document { width: 100% !important; margin: 0 !important; box-shadow: none !important; }
+          .report-document .report-header { padding-left: 0; padding-right: 0; }
+          .report-document .report-block,
+          .report-document > div { margin-left: 0; margin-right: 0; }
+          .report-document .report-block { break-inside: auto; }
+          .report-document .report-block > div:first-child { break-after: avoid; }
+          .report-document .report-table thead { display: table-header-group; }
+          .report-document .report-row { break-inside: avoid; page-break-inside: avoid; }
+          .report-document section:last-child { break-inside: avoid; page-break-inside: avoid; }
+          .report-document { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+        }
+      `}</style>
     </>
   );
 }
