@@ -1921,7 +1921,7 @@ export default function ReportPage() {
                   TITLE
               ================================================== */}
 
-              <div className="report-block mx-[10mm] my-2.5 border-y border-[#9db9ad]/60 bg-[#f4f8f6] px-3 py-1.5 text-center">
+              <div className="report-block mx-[10mm] my-2.5 border-y border-[#b3b3b3]/60 bg-[#f5f5f5] px-3 py-1.5 text-center">
 
                 <div className="text-[16px] font-bold uppercase tracking-wide text-slate-800">
                   RAPOR PAI TINGKAT SD
@@ -1937,7 +1937,7 @@ export default function ReportPage() {
                   STUDENT INFO
               ================================================== */}
 
-              <section className="report-block mx-[10mm] mb-2.5 rounded-lg border border-slate-200 bg-[#fafbfa] p-2.5">
+              <section className="report-block mx-[10mm] mb-2.5 rounded-lg border border-slate-200 bg-[#fafafa] p-2.5">
 
                 <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 text-[14px]">
 
@@ -2017,7 +2017,7 @@ export default function ReportPage() {
 
                   <thead>
 
-                    <tr className="bg-[#f1f6f3] text-center font-bold text-slate-700">
+                    <tr className="bg-[#f2f2f2] text-center font-bold text-slate-700">
 
                       <th className="w-[6%] border border-slate-300 py-1.5">
                         No
@@ -2141,7 +2141,7 @@ export default function ReportPage() {
 
                   <thead>
 
-                    <tr className="bg-[#f1f6f3] text-center font-bold text-slate-700">
+                    <tr className="bg-[#f2f2f2] text-center font-bold text-slate-700">
 
                       <th className="w-[6%] border border-slate-300 py-1.5">
                         No
@@ -2265,7 +2265,7 @@ export default function ReportPage() {
 
                   <thead>
 
-                    <tr className="bg-[#f1f6f3] text-center font-bold text-slate-700">
+                    <tr className="bg-[#f2f2f2] text-center font-bold text-slate-700">
 
                       <th className="w-[6%] border border-slate-300 py-1.5">
                         No
@@ -2415,7 +2415,7 @@ export default function ReportPage() {
 
                   <div className="grid grid-cols-2 gap-2 text-center text-[14px]">
 
-                    <div className="rounded border border-slate-200 bg-[#fafbfa] px-2 py-2">
+                    <div className="rounded border border-slate-200 bg-[#fafafa] px-2 py-2">
 
                       <div className="text-[12px] uppercase tracking-wide text-slate-400">
                         Rata-rata
@@ -2428,7 +2428,7 @@ export default function ReportPage() {
 
                     </div>
 
-                    <div className="rounded border border-slate-200 bg-[#fafbfa] px-2 py-2">
+                    <div className="rounded border border-slate-200 bg-[#fafafa] px-2 py-2">
 
                       <div className="text-[12px] uppercase tracking-wide text-slate-400">
                         Jumlah Siswa
