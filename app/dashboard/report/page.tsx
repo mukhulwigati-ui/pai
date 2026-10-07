@@ -1960,18 +1960,6 @@ export default function ReportPage() {
                     {schoolName}
                   </h2>
 
-                  <p className="mt-0.5 text-[12px] text-slate-400">
-                    Jenjang Sekolah Dasar
-                  </p>
-
-                </div>
-
-                <div className="mt-1.5 border-t border-slate-100 pt-1 text-center">
-
-                  <div className="arabic text-[16px] font-semibold text-slate-600">
-                    السنة الدراسية / Tahun Ajaran: {academicYear}
-                  </div>
-
                 </div>
 
               </header>
@@ -1981,19 +1969,6 @@ export default function ReportPage() {
               ================================================== */}
 
               <div className="report-block mx-[10mm] my-2.5 border-y border-[#9db9ad]/60 bg-[#f4f8f6] px-3 py-1.5 text-center">
-
-                <div
-                  dir="rtl"
-                  className="arabic text-[16px] font-bold leading-5 text-[#315f50]"
-                >
-                  كَشْفُ دَرَجَاتِ الطَّالِبِ
-
-                  <span className="mx-2 text-[#b29b65]">
-                    •
-                  </span>
-
-                  {semesterArabic}
-                </div>
 
                 <div className="text-[16px] font-bold uppercase tracking-wide text-slate-800">
                   RAPOR PAI TINGKAT SD
