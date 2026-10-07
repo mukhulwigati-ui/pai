@@ -625,9 +625,6 @@ function getCompetencyDescriptions(
     return {
       achieved:
         `Nilai ${subjectName} belum tersedia.`,
-
-      needsImprovement:
-        `Nilai perlu dilengkapi untuk mengetahui perkembangan kompetensi siswa pada mata pelajaran ${subjectName}.`,
     };
   }
 
@@ -637,9 +634,6 @@ function getCompetencyDescriptions(
     return {
       achieved:
         `Siswa menunjukkan penguasaan kompetensi ${subjectName} dengan sangat baik.`,
-
-      needsImprovement:
-        `Pertahankan konsistensi belajar dan kembangkan kemampuan pada materi ${subjectName} secara lebih mendalam.`,
     };
   }
 
@@ -649,9 +643,6 @@ function getCompetencyDescriptions(
     return {
       achieved:
         `Siswa mampu memahami dan menguasai materi utama ${subjectName} dengan baik.`,
-
-      needsImprovement:
-        `Pertahankan pencapaian dan tingkatkan ketelitian serta penerapan materi ${subjectName}.`,
     };
   }
 
@@ -661,9 +652,6 @@ function getCompetencyDescriptions(
     return {
       achieved:
         `Siswa telah menunjukkan pemahaman yang cukup baik terhadap kompetensi ${subjectName}.`,
-
-      needsImprovement:
-        `Perlu peningkatan pada pendalaman materi dan konsistensi latihan ${subjectName}.`,
     };
   }
 
@@ -673,18 +661,12 @@ function getCompetencyDescriptions(
     return {
       achieved:
         `Siswa mulai menguasai kompetensi dasar pada mata pelajaran ${subjectName}.`,
-
-      needsImprovement:
-        `Perlu latihan dan pendampingan yang lebih teratur agar pemahaman ${subjectName} semakin baik.`,
     };
   }
 
   return {
     achieved:
-      `Siswa masih memerlukan penguatan dalam memahami kompetensi ${subjectName}.`,
-
-    needsImprovement:
-      `Perlu bimbingan, pengulangan materi, dan latihan yang lebih intensif pada ${subjectName}.`,
+      `Penguasaan kompetensi ${subjectName} masih terbatas.`,
   };
 }
 
@@ -708,9 +690,6 @@ function getPersonalityDescription(
     return {
       achieved:
         `Penilaian aspek ${aspectName} belum diisi.`,
-
-      needsImprovement:
-        `Guru PAI perlu melengkapi penilaian sesuai perkembangan siswa.`,
     };
   }
 
@@ -725,9 +704,6 @@ function getPersonalityDescription(
     return {
       achieved:
         `Siswa menunjukkan ${aspectName.toLowerCase()} yang sangat baik dan konsisten.`,
-
-      needsImprovement:
-        `Pertahankan kebiasaan positif dan keteladanan tersebut dalam kehidupan sehari-hari.`,
     };
   }
 
@@ -742,9 +718,6 @@ function getPersonalityDescription(
     return {
       achieved:
         `Siswa menunjukkan ${aspectName.toLowerCase()} yang baik dalam kegiatan sehari-hari.`,
-
-      needsImprovement:
-        `Pertahankan sikap positif dan tingkatkan konsistensinya.`,
     };
   }
 
@@ -762,18 +735,12 @@ function getPersonalityDescription(
     return {
       achieved:
         `Siswa memperoleh predikat ${value} pada aspek ${aspectName}.`,
-
-      needsImprovement:
-        `Perlu pembiasaan dan pendampingan secara konsisten agar aspek ${aspectName.toLowerCase()} semakin berkembang.`,
     };
   }
 
   return {
     achieved:
       `Siswa memperoleh predikat ${value} pada aspek ${aspectName}.`,
-
-    needsImprovement:
-      `Tetap lakukan pembinaan dan penguatan karakter secara berkelanjutan.`,
   };
 }
 
@@ -784,12 +751,10 @@ function getPersonalityDescription(
 function ReportSection({
   number,
   title,
-  arabic,
   children,
 }: {
   number: string;
   title: string;
-  arabic: string;
   children: ReactNode;
 }) {
   return (
@@ -809,12 +774,7 @@ function ReportSection({
 
         </div>
 
-        <div
-          dir="rtl"
-          className="arabic text-[16px] font-semibold text-slate-600"
-        >
-          {arabic}
-        </div>
+        
 
       </div>
 
@@ -1993,12 +1953,7 @@ export default function ReportPage() {
                     <span className="font-semibold text-slate-600">
                       Nama Siswa
 
-                      <span
-                        dir="rtl"
-                        className="arabic ml-1 text-[16px] font-semibold"
-                      >
-                        / اسم الطالب
-                      </span>
+                      
                     </span>
 
                     <span className="max-w-[55%] truncate font-bold text-slate-900">
@@ -2014,12 +1969,7 @@ export default function ReportPage() {
                     <span className="font-semibold text-slate-600">
                       NISN
 
-                      <span
-                        dir="rtl"
-                        className="arabic ml-1 text-[16px] font-semibold"
-                      >
-                        / رقم القيد
-                      </span>
+                      
                     </span>
 
                     <span className="font-semibold text-slate-800">
@@ -2034,12 +1984,7 @@ export default function ReportPage() {
                     <span className="font-semibold text-slate-600">
                       Kelas
 
-                      <span
-                        dir="rtl"
-                        className="arabic ml-1 text-[16px] font-semibold"
-                      >
-                        / الفصل
-                      </span>
+                      
                     </span>
 
                     <span className="font-bold text-[#477b69]">
@@ -2073,7 +2018,7 @@ export default function ReportPage() {
               <ReportSection
                 number="03"
                 title="Asesmen Lisan dan Praktik"
-                arabic="التقييم الشفوي والتطبيقي"
+
               >
 
                 <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[14px]">
@@ -2087,7 +2032,7 @@ export default function ReportPage() {
                       </th>
 
                       <th className="w-[27%] border border-slate-300 py-1.5 text-center">
-                        Mata Pelajaran / المواد
+                        Mata Pelajaran
                       </th>
 
                       <th className="w-[12%] border border-slate-300 py-1.5">
@@ -2155,14 +2100,7 @@ export default function ReportPage() {
                                   }
                                 </div>
 
-                                <div
-                                  dir="rtl"
-                                  className="arabic mt-1 text-[14px] font-semibold leading-tight text-slate-500"
-                                >
-                                  {
-                                    subject.arabic
-                                  }
-                                </div>
+                                
 
                               </td>
 
@@ -2182,12 +2120,7 @@ export default function ReportPage() {
                                   }
                                 </div>
 
-                                <div className="mt-0.5 text-[13px] leading-[1.5] text-slate-500">
-                                  {
-                                    description
-                                      .needsImprovement
-                                  }
-                                </div>
+                                
 
                               </td>
 
@@ -2210,7 +2143,7 @@ export default function ReportPage() {
               <ReportSection
                 number="04"
                 title="Asesmen Tertulis"
-                arabic="التقييم التحريري"
+
               >
 
                 <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[14px]">
@@ -2224,7 +2157,7 @@ export default function ReportPage() {
                       </th>
 
                       <th className="w-[27%] border border-slate-300 py-1.5 text-center">
-                        Mata Pelajaran / المواد
+                        Mata Pelajaran
                       </th>
 
                       <th className="w-[12%] border border-slate-300 py-1.5">
@@ -2292,14 +2225,7 @@ export default function ReportPage() {
                                   }
                                 </div>
 
-                                <div
-                                  dir="rtl"
-                                  className="arabic mt-1 text-[14px] font-semibold leading-tight text-slate-500"
-                                >
-                                  {
-                                    subject.arabic
-                                  }
-                                </div>
+                                
 
                               </td>
 
@@ -2319,12 +2245,7 @@ export default function ReportPage() {
                                   }
                                 </div>
 
-                                <div className="mt-0.5 text-[12px] leading-[1.5] text-slate-500">
-                                  {
-                                    description
-                                      .needsImprovement
-                                  }
-                                </div>
+                                
 
                               </td>
 
@@ -2347,7 +2268,7 @@ export default function ReportPage() {
               <ReportSection
                 number="05"
                 title="Kepribadian Siswa"
-                arabic="شخصية الطالب / الطالبة"
+
               >
 
                 <table className="report-table w-full border-collapse border border-slate-300 bg-white text-[14px]">
@@ -2361,7 +2282,7 @@ export default function ReportPage() {
                       </th>
 
                       <th className="w-[27%] border border-slate-300 py-1.5 text-center">
-                        Aspek / الصفة
+                        Aspek
                       </th>
 
                       <th className="w-[18%] border border-slate-300 py-1.5">
@@ -2415,14 +2336,7 @@ export default function ReportPage() {
                                 }
                               </div>
 
-                              <div
-                                dir="rtl"
-                                className="arabic mt-1 text-[14px] font-semibold leading-tight text-slate-500"
-                              >
-                                {
-                                  item.arabic
-                                }
-                              </div>
+                              
 
                             </td>
 
@@ -2448,12 +2362,7 @@ export default function ReportPage() {
                                 }
                               </div>
 
-                              <div className="mt-0.5 text-[12px] leading-[1.5] text-slate-500">
-                                {
-                                  description
-                                    .needsImprovement
-                                }
-                              </div>
+                              
 
                             </td>
 
@@ -2484,12 +2393,7 @@ export default function ReportPage() {
                       Ketidakhadiran
                     </span>
 
-                    <span
-                      dir="rtl"
-                      className="arabic text-[14px] font-semibold text-slate-600"
-                    >
-                      الغياب
-                    </span>
+                    
 
                   </div>
 
@@ -2500,7 +2404,7 @@ export default function ReportPage() {
                       <tr>
 
                         <td className="border border-slate-300 px-2 py-1 text-slate-600">
-                          Sakit (مرض)
+                          Sakit
                         </td>
 
                         <td className="border border-slate-300 px-2 py-1 text-center font-bold text-slate-800">
@@ -2515,7 +2419,7 @@ export default function ReportPage() {
                       <tr>
 
                         <td className="border border-slate-300 px-2 py-1 text-slate-600">
-                          Izin (إذن)
+                          Izin
                         </td>
 
                         <td className="border border-slate-300 px-2 py-1 text-center font-bold text-slate-800">
@@ -2530,7 +2434,7 @@ export default function ReportPage() {
                       <tr>
 
                         <td className="border border-slate-300 px-2 py-1 text-slate-600">
-                          Alpa / Tanpa Keterangan (غائب)
+                          Alpa / Tanpa Keterangan
                         </td>
 
                         <td className="border border-slate-300 px-2 py-1 text-center font-bold text-slate-800">
@@ -2558,12 +2462,7 @@ export default function ReportPage() {
                       Catatan Guru PAI
                     </span>
 
-                    <span
-                      dir="rtl"
-                      className="arabic text-[14px] font-semibold text-slate-600"
-                    >
-                      ملاحظات معلم التربية الإسلامية
-                    </span>
+                    
 
                   </div>
 
@@ -2573,7 +2472,7 @@ export default function ReportPage() {
                       paiTeacherNote
                     ) : (
                       <span className="italic text-slate-400">
-                        Terus tingkatkan prestasi belajar, jaga adab, kedisiplinan, dan semangat dalam menuntut ilmu.
+                        Belum ada catatan guru PAI.
                       </span>
                     )}
 
@@ -2676,9 +2575,7 @@ export default function ReportPage() {
                       Guru PAI
                     </div>
 
-                    <div className="font-bold text-slate-800">
-                      معلم التربية الإسلامية
-                    </div>
+                    
 
                     <div className="h-14" />
 
