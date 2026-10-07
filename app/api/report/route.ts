@@ -76,7 +76,7 @@ type PersonalityShape = {
   indhiplat?: string | null;
 };
 
-type HomeroomNoteShape = {
+type PaiTeacherNoteShape = {
   note?: string | null;
 };
 
@@ -342,7 +342,18 @@ export async function GET(
         },
       });
 
+    // Baca field hanya jika sudah ada pada skema pengaturan saat ini.
+    // Tidak menambah kolom Prisma atau memakai nama admin sebagai guru.
+    const configuredPaiTeacherName = normalizeText(
+      systemSetting && 'paiTeacherName' in systemSetting
+        ? systemSetting.paiTeacherName
+        : ''
+    );
+    const paiTeacherName = configuredPaiTeacherName ||
+      normalizeText(process.env.PAI_TEACHER_NAME);
+
     const settings = {
+      paiTeacherName,
       schoolName:
         systemSetting
           ?.schoolName ||
@@ -986,19 +997,17 @@ export async function GET(
         : [];
 
     /* ========================================================
-       7. CATATAN WALI KELAS
+       7. CATATAN GURU PAI
     ======================================================== */
 
-    const rawHomeroomNote =
+    const rawPaiTeacherNote =
       student.homeroomNote as
-        | HomeroomNoteShape
+        | PaiTeacherNoteShape
         | null;
 
-    const homeroomNote =
-      normalizeText(
-        rawHomeroomNote
-          ?.note
-      );
+    // Model lama tetap dipakai agar catatan tersimpan tidak hilang.
+    // Pertahankan baris baru dalam catatan guru PAI.
+    const paiTeacherNote = String(rawPaiTeacherNote?.note ?? '').trim();
 
     /* ========================================================
        8. DATA SISWA AMAN
@@ -1041,6 +1050,8 @@ export async function GET(
       principalName:
         settings.principalName,
 
+      paiTeacherName: settings.paiTeacherName,
+
       settings,
 
       class: {
@@ -1061,7 +1072,10 @@ export async function GET(
 
       personality,
 
-      homeroomNote,
+      paiTeacherNote,
+
+      // Alias untuk halaman lama yang belum diperbarui.
+      homeroomNote: paiTeacherNote,
 
       attendance: {
         sakit,
@@ -1093,7 +1107,7 @@ export async function GET(
         success: true,
 
         message:
-          'Data rapor siswa berhasil dimuat.',
+          'Data rapor PAI dan Akhlaq berhasil dimuat.',
 
         /*
          * Untuk frontend rapor yang sudah ada.

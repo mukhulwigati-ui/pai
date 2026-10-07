@@ -1,8 +1,6 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
 export type AuthUser = {
   id: number;
   identity_number: string;
@@ -10,13 +8,39 @@ export type AuthUser = {
   role: string;
 };
 
-export async function getAuthUser(): Promise<AuthUser | null> {
-  try {
-    if (!JWT_SECRET) {
-      console.error('JWT_SECRET belum tersedia.');
-      return null;
+type AuthResult =
+  | {
+      authorized: true;
+      user: AuthUser;
+      status: 200;
+      message: string;
     }
+  | {
+      authorized: false;
+      user: AuthUser | null;
+      status: 401 | 403;
+      message: string;
+    };
 
+function normalizeRole(value: unknown): string {
+  return String(value ?? '')
+    .trim()
+    .toUpperCase()
+    .replace(/[\s-]+/g, '_');
+}
+
+/**
+ * Mengambil identitas dari token login yang terverifikasi.
+ */
+export async function getAuthUser(): Promise<AuthUser | null> {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    console.error('JWT_SECRET belum tersedia.');
+    return null;
+  }
+
+  try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
 
@@ -24,43 +48,52 @@ export async function getAuthUser(): Promise<AuthUser | null> {
       return null;
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+    const decoded = jwt.verify(token, secret);
+
+    if (typeof decoded === 'string') {
+      return null;
+    }
 
     if (
-      !decoded ||
-      !decoded.id ||
-      !decoded.role
+      typeof decoded.id !== 'number' &&
+      typeof decoded.id !== 'string'
+    ) {
+      return null;
+    }
+
+    const id = Number(decoded.id);
+    const role = normalizeRole(decoded.role);
+
+    if (
+      !Number.isSafeInteger(id) ||
+      id <= 0 ||
+      !role
     ) {
       return null;
     }
 
     return {
-      id: Number(decoded.id),
+      id,
       identity_number: String(
         decoded.identity_number ?? ''
-      ),
-      fullname: String(
-        decoded.fullname ?? ''
-      ),
-      role: String(
-        decoded.role
-      ).toUpperCase(),
+      ).trim(),
+      fullname: String(decoded.fullname ?? '').trim(),
+      role,
     };
-  } catch (error) {
-    console.error('AUTH ERROR:', error);
+  } catch {
     return null;
   }
 }
 
 /**
- * Memastikan user sudah login.
+ * Memastikan pengguna sudah login.
  */
-export async function requireAuth() {
+export async function requireAuth(): Promise<AuthResult> {
   const user = await getAuthUser();
 
   if (!user) {
     return {
-      authorized: false as const,
+      authorized: false,
       user: null,
       status: 401,
       message: 'Anda belum login atau sesi telah berakhir.',
@@ -68,7 +101,7 @@ export async function requireAuth() {
   }
 
   return {
-    authorized: true as const,
+    authorized: true,
     user,
     status: 200,
     message: 'Authorized',
@@ -76,33 +109,50 @@ export async function requireAuth() {
 }
 
 /**
- * Memastikan user adalah ADMIN.
+ * Memastikan pengguna memiliki salah satu peran yang diizinkan.
  */
-export async function requireAdmin() {
-  const user = await getAuthUser();
+export async function requireRoles(
+  allowedRoles: readonly string[],
+  deniedMessage = 'Akses ditolak. Anda tidak memiliki izin.'
+): Promise<AuthResult> {
+  const auth = await requireAuth();
 
-  if (!user) {
-    return {
-      authorized: false as const,
-      user: null,
-      status: 401,
-      message: 'Anda belum login atau sesi telah berakhir.',
-    };
+  if (!auth.authorized) {
+    return auth;
   }
 
-  if (user.role !== 'ADMIN') {
+  const roles = allowedRoles.map(normalizeRole);
+
+  if (!roles.includes(auth.user.role)) {
     return {
-      authorized: false as const,
-      user,
+      authorized: false,
+      user: auth.user,
       status: 403,
-      message: 'Akses ditolak. Halaman ini hanya dapat diakses oleh Administrator.',
+      message: deniedMessage,
     };
   }
 
-  return {
-    authorized: true as const,
-    user,
-    status: 200,
-    message: 'Authorized',
-  };
+  return auth;
+}
+
+/**
+ * Khusus administrator.
+ */
+export async function requireAdmin(): Promise<AuthResult> {
+  return requireRoles(
+    ['ADMIN'],
+    'Akses ditolak. Fitur ini hanya dapat diakses oleh Administrator.'
+  );
+}
+
+/**
+ * Administrator dan guru PAI.
+ *
+ * Mendukung penamaan role GURU_PAI atau PAI_TEACHER.
+ */
+export async function requirePaiTeacher(): Promise<AuthResult> {
+  return requireRoles(
+    ['ADMIN', 'GURU_PAI', 'PAI_TEACHER'],
+    'Akses ditolak. Fitur ini hanya dapat diakses oleh Administrator atau Guru PAI.'
+  );
 }

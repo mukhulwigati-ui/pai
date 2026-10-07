@@ -13,6 +13,9 @@ const MAX_GRADE = 6;
 
 const MAX_NOTE_LENGTH = 2000;
 
+// Catatan Guru PAI memakai model homeroomNote yang sudah tersedia.
+// Identitas guru penandatangan dikelola oleh pengaturan guru dan API rapor.
+
 /* ============================================================
    TYPES
 ============================================================ */
@@ -72,7 +75,7 @@ function normalizeNote(
 
 /* ============================================================
    GET /api/notes
-   AMBIL CATATAN BERDASARKAN KELAS
+   AMBIL CATATAN GURU PAI BERDASARKAN KELAS
    HANYA ADMIN
 ============================================================ */
 
@@ -247,7 +250,7 @@ export async function GET(
       {
         success: false,
         message:
-          'Gagal memuat catatan wali kelas.',
+          'Gagal memuat catatan guru PAI.',
       },
       {
         status: 500,
@@ -258,7 +261,7 @@ export async function GET(
 
 /* ============================================================
    POST /api/notes
-   SIMPAN / UPDATE CATATAN WALI KELAS SECARA MASSAL
+   SIMPAN / UPDATE CATATAN GURU PAI SECARA MASSAL
    HANYA ADMIN
 ============================================================ */
 
@@ -330,7 +333,7 @@ export async function POST(
         {
           success: false,
           message:
-            'Data catatan wali kelas kosong atau tidak valid.',
+            'Data catatan guru PAI kosong atau tidak valid.',
         },
         {
           status: 400,
@@ -734,7 +737,7 @@ export async function POST(
         success: true,
 
         message:
-          `${savedRecords.length} catatan wali kelas untuk siswa kelas ${classRoom.name} berhasil disimpan${errors.length > 0 ? `, ${errors.length} data dilewati` : ''}.`,
+          `${savedRecords.length} catatan guru PAI untuk siswa kelas ${classRoom.name} berhasil disimpan${errors.length > 0 ? `, ${errors.length} data dilewati` : ''}.`,
 
         saved:
           savedRecords.length,
@@ -816,7 +819,7 @@ export async function POST(
         {
           success: false,
           message:
-            'Data siswa atau catatan wali kelas tidak ditemukan.',
+            'Data siswa atau catatan guru PAI tidak ditemukan.',
         },
         {
           status: 404,
@@ -828,7 +831,7 @@ export async function POST(
       {
         success: false,
         message:
-          'Gagal menyimpan catatan wali kelas.',
+          'Gagal menyimpan catatan guru PAI.',
       },
       {
         status: 500,

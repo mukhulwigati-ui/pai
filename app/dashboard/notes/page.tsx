@@ -520,7 +520,7 @@ export default function NotesPage() {
             throw new Error(
               await getApiError(
                 notesRes,
-                'Gagal memuat catatan wali kelas.'
+                'Gagal memuat catatan guru PAI.'
               )
             );
           }
@@ -770,7 +770,7 @@ export default function NotesPage() {
           throw new Error(
             await getApiError(
               response,
-              'Gagal menyimpan catatan wali kelas.'
+              'Gagal menyimpan catatan guru PAI.'
             )
           );
         }
@@ -780,7 +780,7 @@ export default function NotesPage() {
         );
 
         setMessage(
-          `Catatan wali kelas untuk ${students.length} siswa kelas ${classRoom.name} berhasil disimpan.`
+          `Catatan guru PAI untuk ${students.length} siswa kelas ${classRoom.name} berhasil disimpan.`
         );
       } catch (
         error
@@ -798,7 +798,7 @@ export default function NotesPage() {
           error instanceof
             Error
               ? error.message
-              : 'Gagal menyimpan catatan wali kelas.'
+              : 'Gagal menyimpan catatan guru PAI.'
         );
       } finally {
         setLoading(
@@ -868,7 +868,7 @@ export default function NotesPage() {
         ===================================================== */}
 
         <section>
-          <h1 className="text-2xl font-normal text-[#1d2327]">Catatan Wali Kelas</h1>
+          <h1 className="text-2xl font-normal text-[#1d2327]">Catatan Guru PAI</h1>
           <p className="mt-2 text-base leading-6 text-[#646970]">Pilih kelas dan tuliskan catatan perkembangan siswa untuk rapor.</p>
         </section>
 

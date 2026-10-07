@@ -90,6 +90,7 @@ type ReportSettings = {
   academicYear?: string;
   semester?: string;
   principalName?: string;
+  paiTeacherName?: string;
 };
 
 type ReportData = Student & {
@@ -100,6 +101,7 @@ type ReportData = Student & {
   semester?: string;
 
   principalName?: string;
+  paiTeacherName?: string;
 
   settings?: ReportSettings;
 
@@ -107,7 +109,8 @@ type ReportData = Student & {
 
   personality?: PersonalityRecord[];
 
-  homeroomNote?: string | null;
+  paiTeacherNote?: string | null;
+  homeroomNote?: string | null; // Kompatibilitas API catatan lama.
 
   attendance?: Attendance | null;
 
@@ -707,7 +710,7 @@ function getPersonalityDescription(
         `Penilaian aspek ${aspectName} belum diisi.`,
 
       needsImprovement:
-        `Wali kelas perlu melengkapi penilaian sesuai perkembangan siswa.`,
+        `Guru PAI perlu melengkapi penilaian sesuai perkembangan siswa.`,
     };
   }
 
@@ -826,6 +829,7 @@ function ReportSection({
 ============================================================ */
 
 export default function ReportPage() {
+  const [teacherNameOverride, setTeacherNameOverride] = useState('');
   /* ==========================================================
      STATE
   ========================================================== */
@@ -1527,6 +1531,12 @@ export default function ReportPage() {
       ?.semester ||
     'Ganjil';
 
+  const paiTeacherName = teacherNameOverride.trim() ||
+    reportData?.paiTeacherName?.trim() ||
+    reportData?.settings?.paiTeacherName?.trim() || '';
+
+  const paiTeacherNote = reportData?.paiTeacherNote ?? reportData?.homeroomNote;
+
   const principalName =
     reportData?.principalName ||
     reportData?.settings
@@ -1615,9 +1625,26 @@ export default function ReportPage() {
         <div className="mx-auto max-w-[1500px] px-5 py-4 lg:px-8">
 
           <header className="mb-5">
-            <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Rapor Siswa</h1>
+            <h1 className="text-2xl font-normal text-[#1d2327] sm:text-3xl">Rapor PAI dan Akhlaq</h1>
             <p className="mt-2 text-base text-[#646970]">Pilih kelas dan siswa untuk melihat atau mencetak rapor.</p>
           </header>
+
+          <div className="mb-4 rounded-sm border border-[#c3c4c7] bg-white p-3">
+            <label htmlFor="pai-teacher-name" className="mb-1.5 block text-sm font-bold text-[#646970]">
+              Nama Guru PAI Penandatangan
+            </label>
+            <input
+              id="pai-teacher-name"
+              type="text"
+              value={teacherNameOverride}
+              onChange={(event) => setTeacherNameOverride(event.target.value)}
+              placeholder={reportData?.paiTeacherName || reportData?.settings?.paiTeacherName || 'Masukkan nama lengkap guru PAI'}
+              className="h-11 w-full rounded-sm border border-[#c3c4c7] bg-white px-3 text-base text-[#1d2327] outline-none focus:ring-2 focus:ring-[#2271b1]/20"
+            />
+            <p className="mt-2 text-sm text-[#646970]">
+              Nama ini digunakan pada tanda tangan rapor yang dicetak. Isian manual berlaku selama halaman terbuka.
+            </p>
+          </div>
 
           <div className="rounded-sm border border-[#c3c4c7] bg-white p-3">
 
@@ -1969,7 +1996,7 @@ export default function ReportPage() {
                 </div>
 
                 <div className="text-[11px] font-bold uppercase tracking-wide text-slate-800">
-                  LAPORAN HASIL BELAJAR SISWA TINGKAT SD
+                  RAPOR PAI DAN AKHLAQ TINGKAT SD
                 </div>
 
                 <div className="text-[7.5px] font-medium tracking-[0.12em] text-slate-500">
@@ -2467,7 +2494,7 @@ export default function ReportPage() {
               </ReportSection>
 
               {/* ==================================================
-                  ATTENDANCE + HOMEROOM NOTE
+                  ATTENDANCE + PAI TEACHER NOTE
               ================================================== */}
 
               <div className="mx-[10mm] mb-4 grid grid-cols-2 gap-3">
@@ -2553,22 +2580,22 @@ export default function ReportPage() {
                   <div className="mb-1 flex items-center justify-between border-b-2 border-[#315f50] pb-1">
 
                     <span className="text-[10px] font-bold uppercase tracking-wide text-slate-800">
-                      Catatan Wali Kelas
+                      Catatan Guru PAI
                     </span>
 
                     <span
                       dir="rtl"
                       className="arabic text-[10px] font-semibold text-slate-600"
                     >
-                      ملاحظات مربي الفصل
+                      ملاحظات معلم التربية الإسلامية
                     </span>
 
                   </div>
 
                   <div className="h-[74px] overflow-y-auto rounded border border-slate-300 bg-white p-2 text-[9px] leading-relaxed text-slate-700">
 
-                    {reportData.homeroomNote ? (
-                      reportData.homeroomNote
+                    {paiTeacherNote ? (
+                      paiTeacherNote
                     ) : (
                       <span className="italic text-slate-400">
                         Terus tingkatkan prestasi belajar, jaga adab, kedisiplinan, dan semangat dalam menuntut ilmu.
@@ -2666,22 +2693,22 @@ export default function ReportPage() {
 
                   </div>
 
-                  {/* HOMEROOM */}
+                  {/* GURU PAI */}
 
                   <div>
 
                     <div className="mb-1 text-slate-600">
-                      Wali Kelas
+                      Guru PAI
                     </div>
 
                     <div className="font-bold text-slate-800">
-                      مربي الفصل
+                      معلم التربية الإسلامية
                     </div>
 
                     <div className="h-14" />
 
                     <div className="border-b border-slate-400 pb-0.5 font-bold text-slate-800">
-                      ________________________
+                      {paiTeacherName || '( ........................................ )'}
                     </div>
 
                   </div>
