@@ -2413,7 +2413,7 @@ export default function ReportPage() {
                   undefined) ? (
                 <section className="report-block mx-[10mm] mb-4">
 
-                  <div className="grid grid-cols-2 gap-2 text-center text-[14px]">
+                  <div className="grid grid-cols-1 gap-2 text-center text-[14px]">
 
                     <div className="rounded border border-slate-200 bg-[#fafafa] px-2 py-2">
 
@@ -2428,18 +2428,7 @@ export default function ReportPage() {
 
                     </div>
 
-                    <div className="rounded border border-slate-200 bg-[#fafafa] px-2 py-2">
 
-                      <div className="text-[12px] uppercase tracking-wide text-slate-400">
-                        Jumlah Siswa
-                      </div>
-
-                      <div className="mt-0.5 font-bold text-[#477b69]">
-                        {reportData.totalStudents ??
-                          '-'}
-                      </div>
-
-                    </div>
 
                   </div>
 
