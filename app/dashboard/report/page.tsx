@@ -1456,15 +1456,6 @@ export default function ReportPage() {
      ATTENDANCE / PERSONALITY
   ========================================================== */
 
-  const attendance:
-    Attendance =
-    reportData?.attendance ??
-    {
-      sakit: 0,
-      izin: 0,
-      alpa: 0,
-    };
-
   const personality =
     reportData?.personality ??
     [];
@@ -2378,79 +2369,10 @@ export default function ReportPage() {
               </ReportSection>
 
               {/* ==================================================
-                  ATTENDANCE + PAI TEACHER NOTE
+                  PAI TEACHER NOTE
               ================================================== */}
 
-              <div className="mx-[10mm] mb-4 grid grid-cols-2 gap-3">
-
-                {/* ATTENDANCE */}
-
-                <section className="report-block">
-
-                  <div className="mb-1 flex items-center justify-between border-b-2 border-[#315f50] pb-1">
-
-                    <span className="text-[14px] font-bold uppercase tracking-wide text-slate-800">
-                      Ketidakhadiran
-                    </span>
-
-                    
-
-                  </div>
-
-                  <table className="w-full border-collapse border border-slate-300 bg-white text-[14px]">
-
-                    <tbody>
-
-                      <tr>
-
-                        <td className="border border-slate-300 px-2 py-1 text-slate-600">
-                          Sakit
-                        </td>
-
-                        <td className="border border-slate-300 px-2 py-1 text-center font-bold text-slate-800">
-                          {
-                            attendance.sakit
-                          }{' '}
-                          hari
-                        </td>
-
-                      </tr>
-
-                      <tr>
-
-                        <td className="border border-slate-300 px-2 py-1 text-slate-600">
-                          Izin
-                        </td>
-
-                        <td className="border border-slate-300 px-2 py-1 text-center font-bold text-slate-800">
-                          {
-                            attendance.izin
-                          }{' '}
-                          hari
-                        </td>
-
-                      </tr>
-
-                      <tr>
-
-                        <td className="border border-slate-300 px-2 py-1 text-slate-600">
-                          Alpa / Tanpa Keterangan
-                        </td>
-
-                        <td className="border border-slate-300 px-2 py-1 text-center font-bold text-slate-800">
-                          {
-                            attendance.alpa
-                          }{' '}
-                          hari
-                        </td>
-
-                      </tr>
-
-                    </tbody>
-
-                  </table>
-
-                </section>
+              <div className="mx-[10mm] mb-4">
 
                 {/* NOTE */}
 
@@ -2489,11 +2411,10 @@ export default function ReportPage() {
               {(reportData.averageScore !==
                 null &&
                 reportData.averageScore !==
-                  undefined) ||
-              reportData.rank ? (
+                  undefined) ? (
                 <section className="report-block mx-[10mm] mb-4">
 
-                  <div className="grid grid-cols-3 gap-2 text-center text-[14px]">
+                  <div className="grid grid-cols-2 gap-2 text-center text-[14px]">
 
                     <div className="rounded border border-slate-200 bg-[#fafbfa] px-2 py-2">
 
@@ -2503,19 +2424,6 @@ export default function ReportPage() {
 
                       <div className="mt-0.5 font-bold text-[#477b69]">
                         {reportData.averageScore ??
-                          '-'}
-                      </div>
-
-                    </div>
-
-                    <div className="rounded border border-slate-200 bg-[#fafbfa] px-2 py-2">
-
-                      <div className="text-[12px] uppercase tracking-wide text-slate-400">
-                        Peringkat
-                      </div>
-
-                      <div className="mt-0.5 font-bold text-[#477b69]">
-                        {reportData.rank ??
                           '-'}
                       </div>
 
