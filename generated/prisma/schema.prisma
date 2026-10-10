@@ -19,6 +19,7 @@ model Teacher {
   status          String  @default("Aktif")
 
   assignments Assignment[]
+  halaqahs    Halaqah[]
 }
 
 model Subject {
@@ -41,8 +42,9 @@ model CP {
   grade       Int    @default(7)
   semester    Int    @default(1)
 
-  subject Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  tps     TP[]
+  subject  Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  tps      TP[]
+  halaqahs Halaqah[]
 
   @@index([subjectId])
   @@index([grade])
@@ -72,12 +74,13 @@ model Student {
   address    String?
   status     String  @default("Aktif")
 
-  assessments  Assessment[]
-  attendances  Attendance[]
-  homeroomNote HomeroomNote?
-  personality  Personality?
-  tahfidzs     Tahfidz[]
-  promotions   StudentPromotion[]
+  assessments    Assessment[]
+  attendances    Attendance[]
+  homeroomNote   HomeroomNote?
+  personality    Personality?
+  tahfidzs       Tahfidz[]
+  promotions     StudentPromotion[]
+  halaqahMembers HalaqahMember[]
 
   @@index([class_name])
   @@index([status])
@@ -216,4 +219,33 @@ model StudentPromotion {
   @@index([fromClass])
   @@index([toClass])
   @@index([status])
+}
+
+// Keanggotaan dipisahkan dari kelas sekolah. Riwayat disimpan saat pindah kelompok.
+model Halaqah {
+  id           Int             @id @default(autoincrement())
+  name         String
+  jilid        Int
+  academicYear String
+  semester     Int
+  teacherId    Int?
+  active       Boolean         @default(true)
+  teacher      Teacher?        @relation(fields: [teacherId], references: [id])
+  cps          CP[]
+  members      HalaqahMember[]
+
+  @@unique([name, academicYear, semester])
+}
+
+model HalaqahMember {
+  id        Int       @id @default(autoincrement())
+  halaqahId Int
+  studentId Int
+  joinedAt  DateTime  @default(now())
+  leftAt    DateTime?
+  halaqah   Halaqah   @relation(fields: [halaqahId], references: [id])
+  student   Student   @relation(fields: [studentId], references: [id])
+
+  @@index([studentId, leftAt])
+  @@index([halaqahId, leftAt])
 }

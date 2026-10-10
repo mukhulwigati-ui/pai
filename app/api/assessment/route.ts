@@ -545,49 +545,24 @@ export async function POST(
        CEK TP
     -------------------------------------------------------- */
 
+    if (body?.halaqahId && !finalTpId) return errorResponse('Tartili harus dinilai melalui CP/TP.', 400);
+
     if (finalTpId) {
-      const tp =
-        await prisma.tP.findFirst({
-          where: {
-            id:
-              finalTpId,
-
-            cp: {
-              grade:
-                classRoom.grade,
-
-              semester: {
-                in:
-                  VALID_SEMESTERS,
-              },
-
-              subject: {
-                level:
-                  SCHOOL_LEVEL,
-              },
-            },
-          },
-
-          include: {
-            cp: {
-              include: {
-                subject: {
-                  select: {
-                    id: true,
-                    name: true,
-                    level: true,
-                  },
-                },
-              },
-            },
-          },
-        });
-
-      if (!tp) {
-        return errorResponse(
-          `Tujuan Pembelajaran tidak valid untuk siswa kelas ${classRoom.grade}.`,
-          404
-        );
+      const tp = await prisma.tP.findUnique({ where: { id: finalTpId }, include: { cp: { include: { subject: true } } } });
+      if (!tp || tp.cp.subject.level !== SCHOOL_LEVEL || !VALID_SEMESTERS.includes(tp.cp.semester)) {
+        return errorResponse('Tujuan Pembelajaran tidak valid.', 400);
+      }
+      if (tp.cp.subject.name.trim().toLowerCase() === 'tartili') {
+        const halaqahId = toPositiveInteger(body?.halaqahId);
+        const settings = await prisma.systemSetting.findFirst({ orderBy: { id: 'asc' } });
+        const semester = /genap|2/i.test(settings?.semester || '') ? 2 : 1;
+        const group = halaqahId ? await prisma.halaqah.findFirst({
+          where: { id: halaqahId, active: true, academicYear: settings?.academicYear || '', semester,
+            members: { some: { studentId, leftAt: null } }, cps: { some: { id: tp.cpId } } },
+        }) : null;
+        if (!group || tp.cp.semester !== semester) return errorResponse('Pilih halaqah aktif dengan anggota dan CP Tartili yang sesuai periode aktif.', 400);
+      } else if (tp.cp.grade !== classRoom.grade) {
+        return errorResponse('TP tidak sesuai kelas sekolah anak.', 400);
       }
     }
 

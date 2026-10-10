@@ -83,6 +83,16 @@ export type SystemSetting = $Result.DefaultSelection<Prisma.$SystemSettingPayloa
  * 
  */
 export type StudentPromotion = $Result.DefaultSelection<Prisma.$StudentPromotionPayload>
+/**
+ * Model Halaqah
+ * 
+ */
+export type Halaqah = $Result.DefaultSelection<Prisma.$HalaqahPayload>
+/**
+ * Model HalaqahMember
+ * 
+ */
+export type HalaqahMember = $Result.DefaultSelection<Prisma.$HalaqahMemberPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -344,6 +354,26 @@ export class PrismaClient<
     * ```
     */
   get studentPromotion(): Prisma.StudentPromotionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.halaqah`: Exposes CRUD operations for the **Halaqah** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Halaqahs
+    * const halaqahs = await prisma.halaqah.findMany()
+    * ```
+    */
+  get halaqah(): Prisma.HalaqahDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.halaqahMember`: Exposes CRUD operations for the **HalaqahMember** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HalaqahMembers
+    * const halaqahMembers = await prisma.halaqahMember.findMany()
+    * ```
+    */
+  get halaqahMember(): Prisma.HalaqahMemberDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -804,7 +834,9 @@ export namespace Prisma {
     Personality: 'Personality',
     HomeroomNote: 'HomeroomNote',
     SystemSetting: 'SystemSetting',
-    StudentPromotion: 'StudentPromotion'
+    StudentPromotion: 'StudentPromotion',
+    Halaqah: 'Halaqah',
+    HalaqahMember: 'HalaqahMember'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -820,7 +852,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "teacher" | "subject" | "cP" | "tP" | "student" | "assessment" | "tahfidz" | "attendance" | "classRoom" | "assignment" | "personality" | "homeroomNote" | "systemSetting" | "studentPromotion"
+      modelProps: "teacher" | "subject" | "cP" | "tP" | "student" | "assessment" | "tahfidz" | "attendance" | "classRoom" | "assignment" | "personality" | "homeroomNote" | "systemSetting" | "studentPromotion" | "halaqah" | "halaqahMember"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1860,6 +1892,154 @@ export namespace Prisma {
           }
         }
       }
+      Halaqah: {
+        payload: Prisma.$HalaqahPayload<ExtArgs>
+        fields: Prisma.HalaqahFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HalaqahFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HalaqahFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>
+          }
+          findFirst: {
+            args: Prisma.HalaqahFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HalaqahFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>
+          }
+          findMany: {
+            args: Prisma.HalaqahFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>[]
+          }
+          create: {
+            args: Prisma.HalaqahCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>
+          }
+          createMany: {
+            args: Prisma.HalaqahCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HalaqahCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>[]
+          }
+          delete: {
+            args: Prisma.HalaqahDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>
+          }
+          update: {
+            args: Prisma.HalaqahUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>
+          }
+          deleteMany: {
+            args: Prisma.HalaqahDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HalaqahUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HalaqahUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>[]
+          }
+          upsert: {
+            args: Prisma.HalaqahUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahPayload>
+          }
+          aggregate: {
+            args: Prisma.HalaqahAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHalaqah>
+          }
+          groupBy: {
+            args: Prisma.HalaqahGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HalaqahGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HalaqahCountArgs<ExtArgs>
+            result: $Utils.Optional<HalaqahCountAggregateOutputType> | number
+          }
+        }
+      }
+      HalaqahMember: {
+        payload: Prisma.$HalaqahMemberPayload<ExtArgs>
+        fields: Prisma.HalaqahMemberFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HalaqahMemberFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HalaqahMemberFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>
+          }
+          findFirst: {
+            args: Prisma.HalaqahMemberFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HalaqahMemberFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>
+          }
+          findMany: {
+            args: Prisma.HalaqahMemberFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>[]
+          }
+          create: {
+            args: Prisma.HalaqahMemberCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>
+          }
+          createMany: {
+            args: Prisma.HalaqahMemberCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HalaqahMemberCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>[]
+          }
+          delete: {
+            args: Prisma.HalaqahMemberDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>
+          }
+          update: {
+            args: Prisma.HalaqahMemberUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>
+          }
+          deleteMany: {
+            args: Prisma.HalaqahMemberDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HalaqahMemberUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HalaqahMemberUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>[]
+          }
+          upsert: {
+            args: Prisma.HalaqahMemberUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HalaqahMemberPayload>
+          }
+          aggregate: {
+            args: Prisma.HalaqahMemberAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHalaqahMember>
+          }
+          groupBy: {
+            args: Prisma.HalaqahMemberGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HalaqahMemberGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HalaqahMemberCountArgs<ExtArgs>
+            result: $Utils.Optional<HalaqahMemberCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1997,6 +2177,8 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteOmit
     systemSetting?: SystemSettingOmit
     studentPromotion?: StudentPromotionOmit
+    halaqah?: HalaqahOmit
+    halaqahMember?: HalaqahMemberOmit
   }
 
   /* Types for Logging */
@@ -2078,10 +2260,12 @@ export namespace Prisma {
 
   export type TeacherCountOutputType = {
     assignments: number
+    halaqahs: number
   }
 
   export type TeacherCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | TeacherCountOutputTypeCountAssignmentsArgs
+    halaqahs?: boolean | TeacherCountOutputTypeCountHalaqahsArgs
   }
 
   // Custom InputTypes
@@ -2100,6 +2284,13 @@ export namespace Prisma {
    */
   export type TeacherCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AssignmentWhereInput
+  }
+
+  /**
+   * TeacherCountOutputType without action
+   */
+  export type TeacherCountOutputTypeCountHalaqahsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HalaqahWhereInput
   }
 
 
@@ -2149,10 +2340,12 @@ export namespace Prisma {
 
   export type CPCountOutputType = {
     tps: number
+    halaqahs: number
   }
 
   export type CPCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tps?: boolean | CPCountOutputTypeCountTpsArgs
+    halaqahs?: boolean | CPCountOutputTypeCountHalaqahsArgs
   }
 
   // Custom InputTypes
@@ -2171,6 +2364,13 @@ export namespace Prisma {
    */
   export type CPCountOutputTypeCountTpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TPWhereInput
+  }
+
+  /**
+   * CPCountOutputType without action
+   */
+  export type CPCountOutputTypeCountHalaqahsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HalaqahWhereInput
   }
 
 
@@ -2214,6 +2414,7 @@ export namespace Prisma {
     attendances: number
     tahfidzs: number
     promotions: number
+    halaqahMembers: number
   }
 
   export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2221,6 +2422,7 @@ export namespace Prisma {
     attendances?: boolean | StudentCountOutputTypeCountAttendancesArgs
     tahfidzs?: boolean | StudentCountOutputTypeCountTahfidzsArgs
     promotions?: boolean | StudentCountOutputTypeCountPromotionsArgs
+    halaqahMembers?: boolean | StudentCountOutputTypeCountHalaqahMembersArgs
   }
 
   // Custom InputTypes
@@ -2260,6 +2462,53 @@ export namespace Prisma {
    */
   export type StudentCountOutputTypeCountPromotionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentPromotionWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountHalaqahMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HalaqahMemberWhereInput
+  }
+
+
+  /**
+   * Count Type HalaqahCountOutputType
+   */
+
+  export type HalaqahCountOutputType = {
+    cps: number
+    members: number
+  }
+
+  export type HalaqahCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cps?: boolean | HalaqahCountOutputTypeCountCpsArgs
+    members?: boolean | HalaqahCountOutputTypeCountMembersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * HalaqahCountOutputType without action
+   */
+  export type HalaqahCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahCountOutputType
+     */
+    select?: HalaqahCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * HalaqahCountOutputType without action
+   */
+  export type HalaqahCountOutputTypeCountCpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CPWhereInput
+  }
+
+  /**
+   * HalaqahCountOutputType without action
+   */
+  export type HalaqahCountOutputTypeCountMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HalaqahMemberWhereInput
   }
 
 
@@ -2498,6 +2747,7 @@ export namespace Prisma {
     role?: boolean
     status?: boolean
     assignments?: boolean | Teacher$assignmentsArgs<ExtArgs>
+    halaqahs?: boolean | Teacher$halaqahsArgs<ExtArgs>
     _count?: boolean | TeacherCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["teacher"]>
 
@@ -2540,6 +2790,7 @@ export namespace Prisma {
   export type TeacherOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "identity_number" | "password" | "fullname" | "birth_date" | "education" | "address" | "role" | "status", ExtArgs["result"]["teacher"]>
   export type TeacherInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | Teacher$assignmentsArgs<ExtArgs>
+    halaqahs?: boolean | Teacher$halaqahsArgs<ExtArgs>
     _count?: boolean | TeacherCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TeacherIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2549,6 +2800,7 @@ export namespace Prisma {
     name: "Teacher"
     objects: {
       assignments: Prisma.$AssignmentPayload<ExtArgs>[]
+      halaqahs: Prisma.$HalaqahPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2955,6 +3207,7 @@ export namespace Prisma {
   export interface Prisma__TeacherClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     assignments<T extends Teacher$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    halaqahs<T extends Teacher$halaqahsArgs<ExtArgs> = {}>(args?: Subset<T, Teacher$halaqahsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3407,6 +3660,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AssignmentScalarFieldEnum | AssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Teacher.halaqahs
+   */
+  export type Teacher$halaqahsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    where?: HalaqahWhereInput
+    orderBy?: HalaqahOrderByWithRelationInput | HalaqahOrderByWithRelationInput[]
+    cursor?: HalaqahWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HalaqahScalarFieldEnum | HalaqahScalarFieldEnum[]
   }
 
   /**
@@ -4759,6 +5036,7 @@ export namespace Prisma {
     semester?: boolean
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
     tps?: boolean | CP$tpsArgs<ExtArgs>
+    halaqahs?: boolean | CP$halaqahsArgs<ExtArgs>
     _count?: boolean | CPCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cP"]>
 
@@ -4795,6 +5073,7 @@ export namespace Prisma {
   export type CPInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
     tps?: boolean | CP$tpsArgs<ExtArgs>
+    halaqahs?: boolean | CP$halaqahsArgs<ExtArgs>
     _count?: boolean | CPCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CPIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4809,6 +5088,7 @@ export namespace Prisma {
     objects: {
       subject: Prisma.$SubjectPayload<ExtArgs>
       tps: Prisma.$TPPayload<ExtArgs>[]
+      halaqahs: Prisma.$HalaqahPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5213,6 +5493,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     subject<T extends SubjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectDefaultArgs<ExtArgs>>): Prisma__SubjectClient<$Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     tps<T extends CP$tpsArgs<ExtArgs> = {}>(args?: Subset<T, CP$tpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TPPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    halaqahs<T extends CP$halaqahsArgs<ExtArgs> = {}>(args?: Subset<T, CP$halaqahsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5670,6 +5951,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TPScalarFieldEnum | TPScalarFieldEnum[]
+  }
+
+  /**
+   * CP.halaqahs
+   */
+  export type CP$halaqahsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    where?: HalaqahWhereInput
+    orderBy?: HalaqahOrderByWithRelationInput | HalaqahOrderByWithRelationInput[]
+    cursor?: HalaqahWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HalaqahScalarFieldEnum | HalaqahScalarFieldEnum[]
   }
 
   /**
@@ -7037,6 +7342,7 @@ export namespace Prisma {
     personality?: boolean | Student$personalityArgs<ExtArgs>
     tahfidzs?: boolean | Student$tahfidzsArgs<ExtArgs>
     promotions?: boolean | Student$promotionsArgs<ExtArgs>
+    halaqahMembers?: boolean | Student$halaqahMembersArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -7081,6 +7387,7 @@ export namespace Prisma {
     personality?: boolean | Student$personalityArgs<ExtArgs>
     tahfidzs?: boolean | Student$tahfidzsArgs<ExtArgs>
     promotions?: boolean | Student$promotionsArgs<ExtArgs>
+    halaqahMembers?: boolean | Student$halaqahMembersArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7095,6 +7402,7 @@ export namespace Prisma {
       personality: Prisma.$PersonalityPayload<ExtArgs> | null
       tahfidzs: Prisma.$TahfidzPayload<ExtArgs>[]
       promotions: Prisma.$StudentPromotionPayload<ExtArgs>[]
+      halaqahMembers: Prisma.$HalaqahMemberPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7505,6 +7813,7 @@ export namespace Prisma {
     personality<T extends Student$personalityArgs<ExtArgs> = {}>(args?: Subset<T, Student$personalityArgs<ExtArgs>>): Prisma__PersonalityClient<$Result.GetResult<Prisma.$PersonalityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     tahfidzs<T extends Student$tahfidzsArgs<ExtArgs> = {}>(args?: Subset<T, Student$tahfidzsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TahfidzPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     promotions<T extends Student$promotionsArgs<ExtArgs> = {}>(args?: Subset<T, Student$promotionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPromotionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    halaqahMembers<T extends Student$halaqahMembersArgs<ExtArgs> = {}>(args?: Subset<T, Student$halaqahMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8066,6 +8375,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentPromotionScalarFieldEnum | StudentPromotionScalarFieldEnum[]
+  }
+
+  /**
+   * Student.halaqahMembers
+   */
+  export type Student$halaqahMembersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    where?: HalaqahMemberWhereInput
+    orderBy?: HalaqahMemberOrderByWithRelationInput | HalaqahMemberOrderByWithRelationInput[]
+    cursor?: HalaqahMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HalaqahMemberScalarFieldEnum | HalaqahMemberScalarFieldEnum[]
   }
 
   /**
@@ -18035,6 +18368,2331 @@ export namespace Prisma {
 
 
   /**
+   * Model Halaqah
+   */
+
+  export type AggregateHalaqah = {
+    _count: HalaqahCountAggregateOutputType | null
+    _avg: HalaqahAvgAggregateOutputType | null
+    _sum: HalaqahSumAggregateOutputType | null
+    _min: HalaqahMinAggregateOutputType | null
+    _max: HalaqahMaxAggregateOutputType | null
+  }
+
+  export type HalaqahAvgAggregateOutputType = {
+    id: number | null
+    jilid: number | null
+    semester: number | null
+    teacherId: number | null
+  }
+
+  export type HalaqahSumAggregateOutputType = {
+    id: number | null
+    jilid: number | null
+    semester: number | null
+    teacherId: number | null
+  }
+
+  export type HalaqahMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    jilid: number | null
+    academicYear: string | null
+    semester: number | null
+    teacherId: number | null
+    active: boolean | null
+  }
+
+  export type HalaqahMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    jilid: number | null
+    academicYear: string | null
+    semester: number | null
+    teacherId: number | null
+    active: boolean | null
+  }
+
+  export type HalaqahCountAggregateOutputType = {
+    id: number
+    name: number
+    jilid: number
+    academicYear: number
+    semester: number
+    teacherId: number
+    active: number
+    _all: number
+  }
+
+
+  export type HalaqahAvgAggregateInputType = {
+    id?: true
+    jilid?: true
+    semester?: true
+    teacherId?: true
+  }
+
+  export type HalaqahSumAggregateInputType = {
+    id?: true
+    jilid?: true
+    semester?: true
+    teacherId?: true
+  }
+
+  export type HalaqahMinAggregateInputType = {
+    id?: true
+    name?: true
+    jilid?: true
+    academicYear?: true
+    semester?: true
+    teacherId?: true
+    active?: true
+  }
+
+  export type HalaqahMaxAggregateInputType = {
+    id?: true
+    name?: true
+    jilid?: true
+    academicYear?: true
+    semester?: true
+    teacherId?: true
+    active?: true
+  }
+
+  export type HalaqahCountAggregateInputType = {
+    id?: true
+    name?: true
+    jilid?: true
+    academicYear?: true
+    semester?: true
+    teacherId?: true
+    active?: true
+    _all?: true
+  }
+
+  export type HalaqahAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Halaqah to aggregate.
+     */
+    where?: HalaqahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Halaqahs to fetch.
+     */
+    orderBy?: HalaqahOrderByWithRelationInput | HalaqahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HalaqahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Halaqahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Halaqahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Halaqahs
+    **/
+    _count?: true | HalaqahCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HalaqahAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HalaqahSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HalaqahMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HalaqahMaxAggregateInputType
+  }
+
+  export type GetHalaqahAggregateType<T extends HalaqahAggregateArgs> = {
+        [P in keyof T & keyof AggregateHalaqah]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHalaqah[P]>
+      : GetScalarType<T[P], AggregateHalaqah[P]>
+  }
+
+
+
+
+  export type HalaqahGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HalaqahWhereInput
+    orderBy?: HalaqahOrderByWithAggregationInput | HalaqahOrderByWithAggregationInput[]
+    by: HalaqahScalarFieldEnum[] | HalaqahScalarFieldEnum
+    having?: HalaqahScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HalaqahCountAggregateInputType | true
+    _avg?: HalaqahAvgAggregateInputType
+    _sum?: HalaqahSumAggregateInputType
+    _min?: HalaqahMinAggregateInputType
+    _max?: HalaqahMaxAggregateInputType
+  }
+
+  export type HalaqahGroupByOutputType = {
+    id: number
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    teacherId: number | null
+    active: boolean
+    _count: HalaqahCountAggregateOutputType | null
+    _avg: HalaqahAvgAggregateOutputType | null
+    _sum: HalaqahSumAggregateOutputType | null
+    _min: HalaqahMinAggregateOutputType | null
+    _max: HalaqahMaxAggregateOutputType | null
+  }
+
+  type GetHalaqahGroupByPayload<T extends HalaqahGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HalaqahGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HalaqahGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HalaqahGroupByOutputType[P]>
+            : GetScalarType<T[P], HalaqahGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HalaqahSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    jilid?: boolean
+    academicYear?: boolean
+    semester?: boolean
+    teacherId?: boolean
+    active?: boolean
+    teacher?: boolean | Halaqah$teacherArgs<ExtArgs>
+    cps?: boolean | Halaqah$cpsArgs<ExtArgs>
+    members?: boolean | Halaqah$membersArgs<ExtArgs>
+    _count?: boolean | HalaqahCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["halaqah"]>
+
+  export type HalaqahSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    jilid?: boolean
+    academicYear?: boolean
+    semester?: boolean
+    teacherId?: boolean
+    active?: boolean
+    teacher?: boolean | Halaqah$teacherArgs<ExtArgs>
+  }, ExtArgs["result"]["halaqah"]>
+
+  export type HalaqahSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    jilid?: boolean
+    academicYear?: boolean
+    semester?: boolean
+    teacherId?: boolean
+    active?: boolean
+    teacher?: boolean | Halaqah$teacherArgs<ExtArgs>
+  }, ExtArgs["result"]["halaqah"]>
+
+  export type HalaqahSelectScalar = {
+    id?: boolean
+    name?: boolean
+    jilid?: boolean
+    academicYear?: boolean
+    semester?: boolean
+    teacherId?: boolean
+    active?: boolean
+  }
+
+  export type HalaqahOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "jilid" | "academicYear" | "semester" | "teacherId" | "active", ExtArgs["result"]["halaqah"]>
+  export type HalaqahInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teacher?: boolean | Halaqah$teacherArgs<ExtArgs>
+    cps?: boolean | Halaqah$cpsArgs<ExtArgs>
+    members?: boolean | Halaqah$membersArgs<ExtArgs>
+    _count?: boolean | HalaqahCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type HalaqahIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teacher?: boolean | Halaqah$teacherArgs<ExtArgs>
+  }
+  export type HalaqahIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teacher?: boolean | Halaqah$teacherArgs<ExtArgs>
+  }
+
+  export type $HalaqahPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Halaqah"
+    objects: {
+      teacher: Prisma.$TeacherPayload<ExtArgs> | null
+      cps: Prisma.$CPPayload<ExtArgs>[]
+      members: Prisma.$HalaqahMemberPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      jilid: number
+      academicYear: string
+      semester: number
+      teacherId: number | null
+      active: boolean
+    }, ExtArgs["result"]["halaqah"]>
+    composites: {}
+  }
+
+  type HalaqahGetPayload<S extends boolean | null | undefined | HalaqahDefaultArgs> = $Result.GetResult<Prisma.$HalaqahPayload, S>
+
+  type HalaqahCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HalaqahFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HalaqahCountAggregateInputType | true
+    }
+
+  export interface HalaqahDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Halaqah'], meta: { name: 'Halaqah' } }
+    /**
+     * Find zero or one Halaqah that matches the filter.
+     * @param {HalaqahFindUniqueArgs} args - Arguments to find a Halaqah
+     * @example
+     * // Get one Halaqah
+     * const halaqah = await prisma.halaqah.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HalaqahFindUniqueArgs>(args: SelectSubset<T, HalaqahFindUniqueArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Halaqah that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HalaqahFindUniqueOrThrowArgs} args - Arguments to find a Halaqah
+     * @example
+     * // Get one Halaqah
+     * const halaqah = await prisma.halaqah.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HalaqahFindUniqueOrThrowArgs>(args: SelectSubset<T, HalaqahFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Halaqah that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahFindFirstArgs} args - Arguments to find a Halaqah
+     * @example
+     * // Get one Halaqah
+     * const halaqah = await prisma.halaqah.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HalaqahFindFirstArgs>(args?: SelectSubset<T, HalaqahFindFirstArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Halaqah that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahFindFirstOrThrowArgs} args - Arguments to find a Halaqah
+     * @example
+     * // Get one Halaqah
+     * const halaqah = await prisma.halaqah.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HalaqahFindFirstOrThrowArgs>(args?: SelectSubset<T, HalaqahFindFirstOrThrowArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Halaqahs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Halaqahs
+     * const halaqahs = await prisma.halaqah.findMany()
+     * 
+     * // Get first 10 Halaqahs
+     * const halaqahs = await prisma.halaqah.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const halaqahWithIdOnly = await prisma.halaqah.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HalaqahFindManyArgs>(args?: SelectSubset<T, HalaqahFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Halaqah.
+     * @param {HalaqahCreateArgs} args - Arguments to create a Halaqah.
+     * @example
+     * // Create one Halaqah
+     * const Halaqah = await prisma.halaqah.create({
+     *   data: {
+     *     // ... data to create a Halaqah
+     *   }
+     * })
+     * 
+     */
+    create<T extends HalaqahCreateArgs>(args: SelectSubset<T, HalaqahCreateArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Halaqahs.
+     * @param {HalaqahCreateManyArgs} args - Arguments to create many Halaqahs.
+     * @example
+     * // Create many Halaqahs
+     * const halaqah = await prisma.halaqah.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HalaqahCreateManyArgs>(args?: SelectSubset<T, HalaqahCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Halaqahs and returns the data saved in the database.
+     * @param {HalaqahCreateManyAndReturnArgs} args - Arguments to create many Halaqahs.
+     * @example
+     * // Create many Halaqahs
+     * const halaqah = await prisma.halaqah.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Halaqahs and only return the `id`
+     * const halaqahWithIdOnly = await prisma.halaqah.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HalaqahCreateManyAndReturnArgs>(args?: SelectSubset<T, HalaqahCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Halaqah.
+     * @param {HalaqahDeleteArgs} args - Arguments to delete one Halaqah.
+     * @example
+     * // Delete one Halaqah
+     * const Halaqah = await prisma.halaqah.delete({
+     *   where: {
+     *     // ... filter to delete one Halaqah
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HalaqahDeleteArgs>(args: SelectSubset<T, HalaqahDeleteArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Halaqah.
+     * @param {HalaqahUpdateArgs} args - Arguments to update one Halaqah.
+     * @example
+     * // Update one Halaqah
+     * const halaqah = await prisma.halaqah.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HalaqahUpdateArgs>(args: SelectSubset<T, HalaqahUpdateArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Halaqahs.
+     * @param {HalaqahDeleteManyArgs} args - Arguments to filter Halaqahs to delete.
+     * @example
+     * // Delete a few Halaqahs
+     * const { count } = await prisma.halaqah.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HalaqahDeleteManyArgs>(args?: SelectSubset<T, HalaqahDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Halaqahs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Halaqahs
+     * const halaqah = await prisma.halaqah.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HalaqahUpdateManyArgs>(args: SelectSubset<T, HalaqahUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Halaqahs and returns the data updated in the database.
+     * @param {HalaqahUpdateManyAndReturnArgs} args - Arguments to update many Halaqahs.
+     * @example
+     * // Update many Halaqahs
+     * const halaqah = await prisma.halaqah.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Halaqahs and only return the `id`
+     * const halaqahWithIdOnly = await prisma.halaqah.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HalaqahUpdateManyAndReturnArgs>(args: SelectSubset<T, HalaqahUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Halaqah.
+     * @param {HalaqahUpsertArgs} args - Arguments to update or create a Halaqah.
+     * @example
+     * // Update or create a Halaqah
+     * const halaqah = await prisma.halaqah.upsert({
+     *   create: {
+     *     // ... data to create a Halaqah
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Halaqah we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HalaqahUpsertArgs>(args: SelectSubset<T, HalaqahUpsertArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Halaqahs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahCountArgs} args - Arguments to filter Halaqahs to count.
+     * @example
+     * // Count the number of Halaqahs
+     * const count = await prisma.halaqah.count({
+     *   where: {
+     *     // ... the filter for the Halaqahs we want to count
+     *   }
+     * })
+    **/
+    count<T extends HalaqahCountArgs>(
+      args?: Subset<T, HalaqahCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HalaqahCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Halaqah.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HalaqahAggregateArgs>(args: Subset<T, HalaqahAggregateArgs>): Prisma.PrismaPromise<GetHalaqahAggregateType<T>>
+
+    /**
+     * Group by Halaqah.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HalaqahGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HalaqahGroupByArgs['orderBy'] }
+        : { orderBy?: HalaqahGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HalaqahGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHalaqahGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Halaqah model
+   */
+  readonly fields: HalaqahFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Halaqah.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HalaqahClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    teacher<T extends Halaqah$teacherArgs<ExtArgs> = {}>(args?: Subset<T, Halaqah$teacherArgs<ExtArgs>>): Prisma__TeacherClient<$Result.GetResult<Prisma.$TeacherPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    cps<T extends Halaqah$cpsArgs<ExtArgs> = {}>(args?: Subset<T, Halaqah$cpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CPPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    members<T extends Halaqah$membersArgs<ExtArgs> = {}>(args?: Subset<T, Halaqah$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Halaqah model
+   */
+  interface HalaqahFieldRefs {
+    readonly id: FieldRef<"Halaqah", 'Int'>
+    readonly name: FieldRef<"Halaqah", 'String'>
+    readonly jilid: FieldRef<"Halaqah", 'Int'>
+    readonly academicYear: FieldRef<"Halaqah", 'String'>
+    readonly semester: FieldRef<"Halaqah", 'Int'>
+    readonly teacherId: FieldRef<"Halaqah", 'Int'>
+    readonly active: FieldRef<"Halaqah", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Halaqah findUnique
+   */
+  export type HalaqahFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * Filter, which Halaqah to fetch.
+     */
+    where: HalaqahWhereUniqueInput
+  }
+
+  /**
+   * Halaqah findUniqueOrThrow
+   */
+  export type HalaqahFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * Filter, which Halaqah to fetch.
+     */
+    where: HalaqahWhereUniqueInput
+  }
+
+  /**
+   * Halaqah findFirst
+   */
+  export type HalaqahFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * Filter, which Halaqah to fetch.
+     */
+    where?: HalaqahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Halaqahs to fetch.
+     */
+    orderBy?: HalaqahOrderByWithRelationInput | HalaqahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Halaqahs.
+     */
+    cursor?: HalaqahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Halaqahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Halaqahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Halaqahs.
+     */
+    distinct?: HalaqahScalarFieldEnum | HalaqahScalarFieldEnum[]
+  }
+
+  /**
+   * Halaqah findFirstOrThrow
+   */
+  export type HalaqahFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * Filter, which Halaqah to fetch.
+     */
+    where?: HalaqahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Halaqahs to fetch.
+     */
+    orderBy?: HalaqahOrderByWithRelationInput | HalaqahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Halaqahs.
+     */
+    cursor?: HalaqahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Halaqahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Halaqahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Halaqahs.
+     */
+    distinct?: HalaqahScalarFieldEnum | HalaqahScalarFieldEnum[]
+  }
+
+  /**
+   * Halaqah findMany
+   */
+  export type HalaqahFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * Filter, which Halaqahs to fetch.
+     */
+    where?: HalaqahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Halaqahs to fetch.
+     */
+    orderBy?: HalaqahOrderByWithRelationInput | HalaqahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Halaqahs.
+     */
+    cursor?: HalaqahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Halaqahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Halaqahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Halaqahs.
+     */
+    distinct?: HalaqahScalarFieldEnum | HalaqahScalarFieldEnum[]
+  }
+
+  /**
+   * Halaqah create
+   */
+  export type HalaqahCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Halaqah.
+     */
+    data: XOR<HalaqahCreateInput, HalaqahUncheckedCreateInput>
+  }
+
+  /**
+   * Halaqah createMany
+   */
+  export type HalaqahCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Halaqahs.
+     */
+    data: HalaqahCreateManyInput | HalaqahCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Halaqah createManyAndReturn
+   */
+  export type HalaqahCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * The data used to create many Halaqahs.
+     */
+    data: HalaqahCreateManyInput | HalaqahCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Halaqah update
+   */
+  export type HalaqahUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Halaqah.
+     */
+    data: XOR<HalaqahUpdateInput, HalaqahUncheckedUpdateInput>
+    /**
+     * Choose, which Halaqah to update.
+     */
+    where: HalaqahWhereUniqueInput
+  }
+
+  /**
+   * Halaqah updateMany
+   */
+  export type HalaqahUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Halaqahs.
+     */
+    data: XOR<HalaqahUpdateManyMutationInput, HalaqahUncheckedUpdateManyInput>
+    /**
+     * Filter which Halaqahs to update
+     */
+    where?: HalaqahWhereInput
+    /**
+     * Limit how many Halaqahs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Halaqah updateManyAndReturn
+   */
+  export type HalaqahUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * The data used to update Halaqahs.
+     */
+    data: XOR<HalaqahUpdateManyMutationInput, HalaqahUncheckedUpdateManyInput>
+    /**
+     * Filter which Halaqahs to update
+     */
+    where?: HalaqahWhereInput
+    /**
+     * Limit how many Halaqahs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Halaqah upsert
+   */
+  export type HalaqahUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Halaqah to update in case it exists.
+     */
+    where: HalaqahWhereUniqueInput
+    /**
+     * In case the Halaqah found by the `where` argument doesn't exist, create a new Halaqah with this data.
+     */
+    create: XOR<HalaqahCreateInput, HalaqahUncheckedCreateInput>
+    /**
+     * In case the Halaqah was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HalaqahUpdateInput, HalaqahUncheckedUpdateInput>
+  }
+
+  /**
+   * Halaqah delete
+   */
+  export type HalaqahDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+    /**
+     * Filter which Halaqah to delete.
+     */
+    where: HalaqahWhereUniqueInput
+  }
+
+  /**
+   * Halaqah deleteMany
+   */
+  export type HalaqahDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Halaqahs to delete
+     */
+    where?: HalaqahWhereInput
+    /**
+     * Limit how many Halaqahs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Halaqah.teacher
+   */
+  export type Halaqah$teacherArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Teacher
+     */
+    select?: TeacherSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Teacher
+     */
+    omit?: TeacherOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeacherInclude<ExtArgs> | null
+    where?: TeacherWhereInput
+  }
+
+  /**
+   * Halaqah.cps
+   */
+  export type Halaqah$cpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CP
+     */
+    select?: CPSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CP
+     */
+    omit?: CPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CPInclude<ExtArgs> | null
+    where?: CPWhereInput
+    orderBy?: CPOrderByWithRelationInput | CPOrderByWithRelationInput[]
+    cursor?: CPWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CPScalarFieldEnum | CPScalarFieldEnum[]
+  }
+
+  /**
+   * Halaqah.members
+   */
+  export type Halaqah$membersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    where?: HalaqahMemberWhereInput
+    orderBy?: HalaqahMemberOrderByWithRelationInput | HalaqahMemberOrderByWithRelationInput[]
+    cursor?: HalaqahMemberWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HalaqahMemberScalarFieldEnum | HalaqahMemberScalarFieldEnum[]
+  }
+
+  /**
+   * Halaqah without action
+   */
+  export type HalaqahDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Halaqah
+     */
+    select?: HalaqahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Halaqah
+     */
+    omit?: HalaqahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model HalaqahMember
+   */
+
+  export type AggregateHalaqahMember = {
+    _count: HalaqahMemberCountAggregateOutputType | null
+    _avg: HalaqahMemberAvgAggregateOutputType | null
+    _sum: HalaqahMemberSumAggregateOutputType | null
+    _min: HalaqahMemberMinAggregateOutputType | null
+    _max: HalaqahMemberMaxAggregateOutputType | null
+  }
+
+  export type HalaqahMemberAvgAggregateOutputType = {
+    id: number | null
+    halaqahId: number | null
+    studentId: number | null
+  }
+
+  export type HalaqahMemberSumAggregateOutputType = {
+    id: number | null
+    halaqahId: number | null
+    studentId: number | null
+  }
+
+  export type HalaqahMemberMinAggregateOutputType = {
+    id: number | null
+    halaqahId: number | null
+    studentId: number | null
+    joinedAt: Date | null
+    leftAt: Date | null
+  }
+
+  export type HalaqahMemberMaxAggregateOutputType = {
+    id: number | null
+    halaqahId: number | null
+    studentId: number | null
+    joinedAt: Date | null
+    leftAt: Date | null
+  }
+
+  export type HalaqahMemberCountAggregateOutputType = {
+    id: number
+    halaqahId: number
+    studentId: number
+    joinedAt: number
+    leftAt: number
+    _all: number
+  }
+
+
+  export type HalaqahMemberAvgAggregateInputType = {
+    id?: true
+    halaqahId?: true
+    studentId?: true
+  }
+
+  export type HalaqahMemberSumAggregateInputType = {
+    id?: true
+    halaqahId?: true
+    studentId?: true
+  }
+
+  export type HalaqahMemberMinAggregateInputType = {
+    id?: true
+    halaqahId?: true
+    studentId?: true
+    joinedAt?: true
+    leftAt?: true
+  }
+
+  export type HalaqahMemberMaxAggregateInputType = {
+    id?: true
+    halaqahId?: true
+    studentId?: true
+    joinedAt?: true
+    leftAt?: true
+  }
+
+  export type HalaqahMemberCountAggregateInputType = {
+    id?: true
+    halaqahId?: true
+    studentId?: true
+    joinedAt?: true
+    leftAt?: true
+    _all?: true
+  }
+
+  export type HalaqahMemberAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HalaqahMember to aggregate.
+     */
+    where?: HalaqahMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HalaqahMembers to fetch.
+     */
+    orderBy?: HalaqahMemberOrderByWithRelationInput | HalaqahMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HalaqahMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HalaqahMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HalaqahMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HalaqahMembers
+    **/
+    _count?: true | HalaqahMemberCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: HalaqahMemberAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: HalaqahMemberSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HalaqahMemberMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HalaqahMemberMaxAggregateInputType
+  }
+
+  export type GetHalaqahMemberAggregateType<T extends HalaqahMemberAggregateArgs> = {
+        [P in keyof T & keyof AggregateHalaqahMember]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHalaqahMember[P]>
+      : GetScalarType<T[P], AggregateHalaqahMember[P]>
+  }
+
+
+
+
+  export type HalaqahMemberGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HalaqahMemberWhereInput
+    orderBy?: HalaqahMemberOrderByWithAggregationInput | HalaqahMemberOrderByWithAggregationInput[]
+    by: HalaqahMemberScalarFieldEnum[] | HalaqahMemberScalarFieldEnum
+    having?: HalaqahMemberScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HalaqahMemberCountAggregateInputType | true
+    _avg?: HalaqahMemberAvgAggregateInputType
+    _sum?: HalaqahMemberSumAggregateInputType
+    _min?: HalaqahMemberMinAggregateInputType
+    _max?: HalaqahMemberMaxAggregateInputType
+  }
+
+  export type HalaqahMemberGroupByOutputType = {
+    id: number
+    halaqahId: number
+    studentId: number
+    joinedAt: Date
+    leftAt: Date | null
+    _count: HalaqahMemberCountAggregateOutputType | null
+    _avg: HalaqahMemberAvgAggregateOutputType | null
+    _sum: HalaqahMemberSumAggregateOutputType | null
+    _min: HalaqahMemberMinAggregateOutputType | null
+    _max: HalaqahMemberMaxAggregateOutputType | null
+  }
+
+  type GetHalaqahMemberGroupByPayload<T extends HalaqahMemberGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HalaqahMemberGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HalaqahMemberGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HalaqahMemberGroupByOutputType[P]>
+            : GetScalarType<T[P], HalaqahMemberGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HalaqahMemberSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    halaqahId?: boolean
+    studentId?: boolean
+    joinedAt?: boolean
+    leftAt?: boolean
+    halaqah?: boolean | HalaqahDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["halaqahMember"]>
+
+  export type HalaqahMemberSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    halaqahId?: boolean
+    studentId?: boolean
+    joinedAt?: boolean
+    leftAt?: boolean
+    halaqah?: boolean | HalaqahDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["halaqahMember"]>
+
+  export type HalaqahMemberSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    halaqahId?: boolean
+    studentId?: boolean
+    joinedAt?: boolean
+    leftAt?: boolean
+    halaqah?: boolean | HalaqahDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["halaqahMember"]>
+
+  export type HalaqahMemberSelectScalar = {
+    id?: boolean
+    halaqahId?: boolean
+    studentId?: boolean
+    joinedAt?: boolean
+    leftAt?: boolean
+  }
+
+  export type HalaqahMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "halaqahId" | "studentId" | "joinedAt" | "leftAt", ExtArgs["result"]["halaqahMember"]>
+  export type HalaqahMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    halaqah?: boolean | HalaqahDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type HalaqahMemberIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    halaqah?: boolean | HalaqahDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type HalaqahMemberIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    halaqah?: boolean | HalaqahDefaultArgs<ExtArgs>
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+
+  export type $HalaqahMemberPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HalaqahMember"
+    objects: {
+      halaqah: Prisma.$HalaqahPayload<ExtArgs>
+      student: Prisma.$StudentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      halaqahId: number
+      studentId: number
+      joinedAt: Date
+      leftAt: Date | null
+    }, ExtArgs["result"]["halaqahMember"]>
+    composites: {}
+  }
+
+  type HalaqahMemberGetPayload<S extends boolean | null | undefined | HalaqahMemberDefaultArgs> = $Result.GetResult<Prisma.$HalaqahMemberPayload, S>
+
+  type HalaqahMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HalaqahMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HalaqahMemberCountAggregateInputType | true
+    }
+
+  export interface HalaqahMemberDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HalaqahMember'], meta: { name: 'HalaqahMember' } }
+    /**
+     * Find zero or one HalaqahMember that matches the filter.
+     * @param {HalaqahMemberFindUniqueArgs} args - Arguments to find a HalaqahMember
+     * @example
+     * // Get one HalaqahMember
+     * const halaqahMember = await prisma.halaqahMember.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HalaqahMemberFindUniqueArgs>(args: SelectSubset<T, HalaqahMemberFindUniqueArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HalaqahMember that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HalaqahMemberFindUniqueOrThrowArgs} args - Arguments to find a HalaqahMember
+     * @example
+     * // Get one HalaqahMember
+     * const halaqahMember = await prisma.halaqahMember.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HalaqahMemberFindUniqueOrThrowArgs>(args: SelectSubset<T, HalaqahMemberFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HalaqahMember that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahMemberFindFirstArgs} args - Arguments to find a HalaqahMember
+     * @example
+     * // Get one HalaqahMember
+     * const halaqahMember = await prisma.halaqahMember.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HalaqahMemberFindFirstArgs>(args?: SelectSubset<T, HalaqahMemberFindFirstArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HalaqahMember that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahMemberFindFirstOrThrowArgs} args - Arguments to find a HalaqahMember
+     * @example
+     * // Get one HalaqahMember
+     * const halaqahMember = await prisma.halaqahMember.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HalaqahMemberFindFirstOrThrowArgs>(args?: SelectSubset<T, HalaqahMemberFindFirstOrThrowArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HalaqahMembers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahMemberFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HalaqahMembers
+     * const halaqahMembers = await prisma.halaqahMember.findMany()
+     * 
+     * // Get first 10 HalaqahMembers
+     * const halaqahMembers = await prisma.halaqahMember.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const halaqahMemberWithIdOnly = await prisma.halaqahMember.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HalaqahMemberFindManyArgs>(args?: SelectSubset<T, HalaqahMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HalaqahMember.
+     * @param {HalaqahMemberCreateArgs} args - Arguments to create a HalaqahMember.
+     * @example
+     * // Create one HalaqahMember
+     * const HalaqahMember = await prisma.halaqahMember.create({
+     *   data: {
+     *     // ... data to create a HalaqahMember
+     *   }
+     * })
+     * 
+     */
+    create<T extends HalaqahMemberCreateArgs>(args: SelectSubset<T, HalaqahMemberCreateArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HalaqahMembers.
+     * @param {HalaqahMemberCreateManyArgs} args - Arguments to create many HalaqahMembers.
+     * @example
+     * // Create many HalaqahMembers
+     * const halaqahMember = await prisma.halaqahMember.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HalaqahMemberCreateManyArgs>(args?: SelectSubset<T, HalaqahMemberCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many HalaqahMembers and returns the data saved in the database.
+     * @param {HalaqahMemberCreateManyAndReturnArgs} args - Arguments to create many HalaqahMembers.
+     * @example
+     * // Create many HalaqahMembers
+     * const halaqahMember = await prisma.halaqahMember.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many HalaqahMembers and only return the `id`
+     * const halaqahMemberWithIdOnly = await prisma.halaqahMember.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HalaqahMemberCreateManyAndReturnArgs>(args?: SelectSubset<T, HalaqahMemberCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a HalaqahMember.
+     * @param {HalaqahMemberDeleteArgs} args - Arguments to delete one HalaqahMember.
+     * @example
+     * // Delete one HalaqahMember
+     * const HalaqahMember = await prisma.halaqahMember.delete({
+     *   where: {
+     *     // ... filter to delete one HalaqahMember
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HalaqahMemberDeleteArgs>(args: SelectSubset<T, HalaqahMemberDeleteArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HalaqahMember.
+     * @param {HalaqahMemberUpdateArgs} args - Arguments to update one HalaqahMember.
+     * @example
+     * // Update one HalaqahMember
+     * const halaqahMember = await prisma.halaqahMember.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HalaqahMemberUpdateArgs>(args: SelectSubset<T, HalaqahMemberUpdateArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HalaqahMembers.
+     * @param {HalaqahMemberDeleteManyArgs} args - Arguments to filter HalaqahMembers to delete.
+     * @example
+     * // Delete a few HalaqahMembers
+     * const { count } = await prisma.halaqahMember.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HalaqahMemberDeleteManyArgs>(args?: SelectSubset<T, HalaqahMemberDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HalaqahMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahMemberUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HalaqahMembers
+     * const halaqahMember = await prisma.halaqahMember.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HalaqahMemberUpdateManyArgs>(args: SelectSubset<T, HalaqahMemberUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HalaqahMembers and returns the data updated in the database.
+     * @param {HalaqahMemberUpdateManyAndReturnArgs} args - Arguments to update many HalaqahMembers.
+     * @example
+     * // Update many HalaqahMembers
+     * const halaqahMember = await prisma.halaqahMember.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more HalaqahMembers and only return the `id`
+     * const halaqahMemberWithIdOnly = await prisma.halaqahMember.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HalaqahMemberUpdateManyAndReturnArgs>(args: SelectSubset<T, HalaqahMemberUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one HalaqahMember.
+     * @param {HalaqahMemberUpsertArgs} args - Arguments to update or create a HalaqahMember.
+     * @example
+     * // Update or create a HalaqahMember
+     * const halaqahMember = await prisma.halaqahMember.upsert({
+     *   create: {
+     *     // ... data to create a HalaqahMember
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HalaqahMember we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HalaqahMemberUpsertArgs>(args: SelectSubset<T, HalaqahMemberUpsertArgs<ExtArgs>>): Prisma__HalaqahMemberClient<$Result.GetResult<Prisma.$HalaqahMemberPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HalaqahMembers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahMemberCountArgs} args - Arguments to filter HalaqahMembers to count.
+     * @example
+     * // Count the number of HalaqahMembers
+     * const count = await prisma.halaqahMember.count({
+     *   where: {
+     *     // ... the filter for the HalaqahMembers we want to count
+     *   }
+     * })
+    **/
+    count<T extends HalaqahMemberCountArgs>(
+      args?: Subset<T, HalaqahMemberCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HalaqahMemberCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HalaqahMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahMemberAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HalaqahMemberAggregateArgs>(args: Subset<T, HalaqahMemberAggregateArgs>): Prisma.PrismaPromise<GetHalaqahMemberAggregateType<T>>
+
+    /**
+     * Group by HalaqahMember.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HalaqahMemberGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HalaqahMemberGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HalaqahMemberGroupByArgs['orderBy'] }
+        : { orderBy?: HalaqahMemberGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HalaqahMemberGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHalaqahMemberGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HalaqahMember model
+   */
+  readonly fields: HalaqahMemberFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HalaqahMember.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HalaqahMemberClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    halaqah<T extends HalaqahDefaultArgs<ExtArgs> = {}>(args?: Subset<T, HalaqahDefaultArgs<ExtArgs>>): Prisma__HalaqahClient<$Result.GetResult<Prisma.$HalaqahPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HalaqahMember model
+   */
+  interface HalaqahMemberFieldRefs {
+    readonly id: FieldRef<"HalaqahMember", 'Int'>
+    readonly halaqahId: FieldRef<"HalaqahMember", 'Int'>
+    readonly studentId: FieldRef<"HalaqahMember", 'Int'>
+    readonly joinedAt: FieldRef<"HalaqahMember", 'DateTime'>
+    readonly leftAt: FieldRef<"HalaqahMember", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HalaqahMember findUnique
+   */
+  export type HalaqahMemberFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which HalaqahMember to fetch.
+     */
+    where: HalaqahMemberWhereUniqueInput
+  }
+
+  /**
+   * HalaqahMember findUniqueOrThrow
+   */
+  export type HalaqahMemberFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which HalaqahMember to fetch.
+     */
+    where: HalaqahMemberWhereUniqueInput
+  }
+
+  /**
+   * HalaqahMember findFirst
+   */
+  export type HalaqahMemberFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which HalaqahMember to fetch.
+     */
+    where?: HalaqahMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HalaqahMembers to fetch.
+     */
+    orderBy?: HalaqahMemberOrderByWithRelationInput | HalaqahMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HalaqahMembers.
+     */
+    cursor?: HalaqahMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HalaqahMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HalaqahMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HalaqahMembers.
+     */
+    distinct?: HalaqahMemberScalarFieldEnum | HalaqahMemberScalarFieldEnum[]
+  }
+
+  /**
+   * HalaqahMember findFirstOrThrow
+   */
+  export type HalaqahMemberFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which HalaqahMember to fetch.
+     */
+    where?: HalaqahMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HalaqahMembers to fetch.
+     */
+    orderBy?: HalaqahMemberOrderByWithRelationInput | HalaqahMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HalaqahMembers.
+     */
+    cursor?: HalaqahMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HalaqahMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HalaqahMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HalaqahMembers.
+     */
+    distinct?: HalaqahMemberScalarFieldEnum | HalaqahMemberScalarFieldEnum[]
+  }
+
+  /**
+   * HalaqahMember findMany
+   */
+  export type HalaqahMemberFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * Filter, which HalaqahMembers to fetch.
+     */
+    where?: HalaqahMemberWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HalaqahMembers to fetch.
+     */
+    orderBy?: HalaqahMemberOrderByWithRelationInput | HalaqahMemberOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HalaqahMembers.
+     */
+    cursor?: HalaqahMemberWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HalaqahMembers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HalaqahMembers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HalaqahMembers.
+     */
+    distinct?: HalaqahMemberScalarFieldEnum | HalaqahMemberScalarFieldEnum[]
+  }
+
+  /**
+   * HalaqahMember create
+   */
+  export type HalaqahMemberCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to create a HalaqahMember.
+     */
+    data: XOR<HalaqahMemberCreateInput, HalaqahMemberUncheckedCreateInput>
+  }
+
+  /**
+   * HalaqahMember createMany
+   */
+  export type HalaqahMemberCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HalaqahMembers.
+     */
+    data: HalaqahMemberCreateManyInput | HalaqahMemberCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HalaqahMember createManyAndReturn
+   */
+  export type HalaqahMemberCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * The data used to create many HalaqahMembers.
+     */
+    data: HalaqahMemberCreateManyInput | HalaqahMemberCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HalaqahMember update
+   */
+  export type HalaqahMemberUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * The data needed to update a HalaqahMember.
+     */
+    data: XOR<HalaqahMemberUpdateInput, HalaqahMemberUncheckedUpdateInput>
+    /**
+     * Choose, which HalaqahMember to update.
+     */
+    where: HalaqahMemberWhereUniqueInput
+  }
+
+  /**
+   * HalaqahMember updateMany
+   */
+  export type HalaqahMemberUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HalaqahMembers.
+     */
+    data: XOR<HalaqahMemberUpdateManyMutationInput, HalaqahMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which HalaqahMembers to update
+     */
+    where?: HalaqahMemberWhereInput
+    /**
+     * Limit how many HalaqahMembers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HalaqahMember updateManyAndReturn
+   */
+  export type HalaqahMemberUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * The data used to update HalaqahMembers.
+     */
+    data: XOR<HalaqahMemberUpdateManyMutationInput, HalaqahMemberUncheckedUpdateManyInput>
+    /**
+     * Filter which HalaqahMembers to update
+     */
+    where?: HalaqahMemberWhereInput
+    /**
+     * Limit how many HalaqahMembers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HalaqahMember upsert
+   */
+  export type HalaqahMemberUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * The filter to search for the HalaqahMember to update in case it exists.
+     */
+    where: HalaqahMemberWhereUniqueInput
+    /**
+     * In case the HalaqahMember found by the `where` argument doesn't exist, create a new HalaqahMember with this data.
+     */
+    create: XOR<HalaqahMemberCreateInput, HalaqahMemberUncheckedCreateInput>
+    /**
+     * In case the HalaqahMember was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HalaqahMemberUpdateInput, HalaqahMemberUncheckedUpdateInput>
+  }
+
+  /**
+   * HalaqahMember delete
+   */
+  export type HalaqahMemberDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+    /**
+     * Filter which HalaqahMember to delete.
+     */
+    where: HalaqahMemberWhereUniqueInput
+  }
+
+  /**
+   * HalaqahMember deleteMany
+   */
+  export type HalaqahMemberDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HalaqahMembers to delete
+     */
+    where?: HalaqahMemberWhereInput
+    /**
+     * Limit how many HalaqahMembers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HalaqahMember without action
+   */
+  export type HalaqahMemberDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HalaqahMember
+     */
+    select?: HalaqahMemberSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HalaqahMember
+     */
+    omit?: HalaqahMemberOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HalaqahMemberInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -18216,6 +20874,30 @@ export namespace Prisma {
   export type StudentPromotionScalarFieldEnum = (typeof StudentPromotionScalarFieldEnum)[keyof typeof StudentPromotionScalarFieldEnum]
 
 
+  export const HalaqahScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    jilid: 'jilid',
+    academicYear: 'academicYear',
+    semester: 'semester',
+    teacherId: 'teacherId',
+    active: 'active'
+  };
+
+  export type HalaqahScalarFieldEnum = (typeof HalaqahScalarFieldEnum)[keyof typeof HalaqahScalarFieldEnum]
+
+
+  export const HalaqahMemberScalarFieldEnum: {
+    id: 'id',
+    halaqahId: 'halaqahId',
+    studentId: 'studentId',
+    joinedAt: 'joinedAt',
+    leftAt: 'leftAt'
+  };
+
+  export type HalaqahMemberScalarFieldEnum = (typeof HalaqahMemberScalarFieldEnum)[keyof typeof HalaqahMemberScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -18288,6 +20970,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -18318,6 +21007,7 @@ export namespace Prisma {
     role?: StringFilter<"Teacher"> | string
     status?: StringFilter<"Teacher"> | string
     assignments?: AssignmentListRelationFilter
+    halaqahs?: HalaqahListRelationFilter
   }
 
   export type TeacherOrderByWithRelationInput = {
@@ -18331,6 +21021,7 @@ export namespace Prisma {
     role?: SortOrder
     status?: SortOrder
     assignments?: AssignmentOrderByRelationAggregateInput
+    halaqahs?: HalaqahOrderByRelationAggregateInput
   }
 
   export type TeacherWhereUniqueInput = Prisma.AtLeast<{
@@ -18347,6 +21038,7 @@ export namespace Prisma {
     role?: StringFilter<"Teacher"> | string
     status?: StringFilter<"Teacher"> | string
     assignments?: AssignmentListRelationFilter
+    halaqahs?: HalaqahListRelationFilter
   }, "id" | "identity_number">
 
   export type TeacherOrderByWithAggregationInput = {
@@ -18444,6 +21136,7 @@ export namespace Prisma {
     semester?: IntFilter<"CP"> | number
     subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
     tps?: TPListRelationFilter
+    halaqahs?: HalaqahListRelationFilter
   }
 
   export type CPOrderByWithRelationInput = {
@@ -18455,6 +21148,7 @@ export namespace Prisma {
     semester?: SortOrder
     subject?: SubjectOrderByWithRelationInput
     tps?: TPOrderByRelationAggregateInput
+    halaqahs?: HalaqahOrderByRelationAggregateInput
   }
 
   export type CPWhereUniqueInput = Prisma.AtLeast<{
@@ -18469,6 +21163,7 @@ export namespace Prisma {
     semester?: IntFilter<"CP"> | number
     subject?: XOR<SubjectScalarRelationFilter, SubjectWhereInput>
     tps?: TPListRelationFilter
+    halaqahs?: HalaqahListRelationFilter
   }, "id">
 
   export type CPOrderByWithAggregationInput = {
@@ -18570,6 +21265,7 @@ export namespace Prisma {
     personality?: XOR<PersonalityNullableScalarRelationFilter, PersonalityWhereInput> | null
     tahfidzs?: TahfidzListRelationFilter
     promotions?: StudentPromotionListRelationFilter
+    halaqahMembers?: HalaqahMemberListRelationFilter
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -18587,6 +21283,7 @@ export namespace Prisma {
     personality?: PersonalityOrderByWithRelationInput
     tahfidzs?: TahfidzOrderByRelationAggregateInput
     promotions?: StudentPromotionOrderByRelationAggregateInput
+    halaqahMembers?: HalaqahMemberOrderByRelationAggregateInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -18607,6 +21304,7 @@ export namespace Prisma {
     personality?: XOR<PersonalityNullableScalarRelationFilter, PersonalityWhereInput> | null
     tahfidzs?: TahfidzListRelationFilter
     promotions?: StudentPromotionListRelationFilter
+    halaqahMembers?: HalaqahMemberListRelationFilter
   }, "id" | "nisn">
 
   export type StudentOrderByWithAggregationInput = {
@@ -19201,6 +21899,140 @@ export namespace Prisma {
     promotedAt?: DateTimeWithAggregatesFilter<"StudentPromotion"> | Date | string
   }
 
+  export type HalaqahWhereInput = {
+    AND?: HalaqahWhereInput | HalaqahWhereInput[]
+    OR?: HalaqahWhereInput[]
+    NOT?: HalaqahWhereInput | HalaqahWhereInput[]
+    id?: IntFilter<"Halaqah"> | number
+    name?: StringFilter<"Halaqah"> | string
+    jilid?: IntFilter<"Halaqah"> | number
+    academicYear?: StringFilter<"Halaqah"> | string
+    semester?: IntFilter<"Halaqah"> | number
+    teacherId?: IntNullableFilter<"Halaqah"> | number | null
+    active?: BoolFilter<"Halaqah"> | boolean
+    teacher?: XOR<TeacherNullableScalarRelationFilter, TeacherWhereInput> | null
+    cps?: CPListRelationFilter
+    members?: HalaqahMemberListRelationFilter
+  }
+
+  export type HalaqahOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    jilid?: SortOrder
+    academicYear?: SortOrder
+    semester?: SortOrder
+    teacherId?: SortOrderInput | SortOrder
+    active?: SortOrder
+    teacher?: TeacherOrderByWithRelationInput
+    cps?: CPOrderByRelationAggregateInput
+    members?: HalaqahMemberOrderByRelationAggregateInput
+  }
+
+  export type HalaqahWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    name_academicYear_semester?: HalaqahNameAcademicYearSemesterCompoundUniqueInput
+    AND?: HalaqahWhereInput | HalaqahWhereInput[]
+    OR?: HalaqahWhereInput[]
+    NOT?: HalaqahWhereInput | HalaqahWhereInput[]
+    name?: StringFilter<"Halaqah"> | string
+    jilid?: IntFilter<"Halaqah"> | number
+    academicYear?: StringFilter<"Halaqah"> | string
+    semester?: IntFilter<"Halaqah"> | number
+    teacherId?: IntNullableFilter<"Halaqah"> | number | null
+    active?: BoolFilter<"Halaqah"> | boolean
+    teacher?: XOR<TeacherNullableScalarRelationFilter, TeacherWhereInput> | null
+    cps?: CPListRelationFilter
+    members?: HalaqahMemberListRelationFilter
+  }, "id" | "name_academicYear_semester">
+
+  export type HalaqahOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    jilid?: SortOrder
+    academicYear?: SortOrder
+    semester?: SortOrder
+    teacherId?: SortOrderInput | SortOrder
+    active?: SortOrder
+    _count?: HalaqahCountOrderByAggregateInput
+    _avg?: HalaqahAvgOrderByAggregateInput
+    _max?: HalaqahMaxOrderByAggregateInput
+    _min?: HalaqahMinOrderByAggregateInput
+    _sum?: HalaqahSumOrderByAggregateInput
+  }
+
+  export type HalaqahScalarWhereWithAggregatesInput = {
+    AND?: HalaqahScalarWhereWithAggregatesInput | HalaqahScalarWhereWithAggregatesInput[]
+    OR?: HalaqahScalarWhereWithAggregatesInput[]
+    NOT?: HalaqahScalarWhereWithAggregatesInput | HalaqahScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Halaqah"> | number
+    name?: StringWithAggregatesFilter<"Halaqah"> | string
+    jilid?: IntWithAggregatesFilter<"Halaqah"> | number
+    academicYear?: StringWithAggregatesFilter<"Halaqah"> | string
+    semester?: IntWithAggregatesFilter<"Halaqah"> | number
+    teacherId?: IntNullableWithAggregatesFilter<"Halaqah"> | number | null
+    active?: BoolWithAggregatesFilter<"Halaqah"> | boolean
+  }
+
+  export type HalaqahMemberWhereInput = {
+    AND?: HalaqahMemberWhereInput | HalaqahMemberWhereInput[]
+    OR?: HalaqahMemberWhereInput[]
+    NOT?: HalaqahMemberWhereInput | HalaqahMemberWhereInput[]
+    id?: IntFilter<"HalaqahMember"> | number
+    halaqahId?: IntFilter<"HalaqahMember"> | number
+    studentId?: IntFilter<"HalaqahMember"> | number
+    joinedAt?: DateTimeFilter<"HalaqahMember"> | Date | string
+    leftAt?: DateTimeNullableFilter<"HalaqahMember"> | Date | string | null
+    halaqah?: XOR<HalaqahScalarRelationFilter, HalaqahWhereInput>
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }
+
+  export type HalaqahMemberOrderByWithRelationInput = {
+    id?: SortOrder
+    halaqahId?: SortOrder
+    studentId?: SortOrder
+    joinedAt?: SortOrder
+    leftAt?: SortOrderInput | SortOrder
+    halaqah?: HalaqahOrderByWithRelationInput
+    student?: StudentOrderByWithRelationInput
+  }
+
+  export type HalaqahMemberWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: HalaqahMemberWhereInput | HalaqahMemberWhereInput[]
+    OR?: HalaqahMemberWhereInput[]
+    NOT?: HalaqahMemberWhereInput | HalaqahMemberWhereInput[]
+    halaqahId?: IntFilter<"HalaqahMember"> | number
+    studentId?: IntFilter<"HalaqahMember"> | number
+    joinedAt?: DateTimeFilter<"HalaqahMember"> | Date | string
+    leftAt?: DateTimeNullableFilter<"HalaqahMember"> | Date | string | null
+    halaqah?: XOR<HalaqahScalarRelationFilter, HalaqahWhereInput>
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }, "id">
+
+  export type HalaqahMemberOrderByWithAggregationInput = {
+    id?: SortOrder
+    halaqahId?: SortOrder
+    studentId?: SortOrder
+    joinedAt?: SortOrder
+    leftAt?: SortOrderInput | SortOrder
+    _count?: HalaqahMemberCountOrderByAggregateInput
+    _avg?: HalaqahMemberAvgOrderByAggregateInput
+    _max?: HalaqahMemberMaxOrderByAggregateInput
+    _min?: HalaqahMemberMinOrderByAggregateInput
+    _sum?: HalaqahMemberSumOrderByAggregateInput
+  }
+
+  export type HalaqahMemberScalarWhereWithAggregatesInput = {
+    AND?: HalaqahMemberScalarWhereWithAggregatesInput | HalaqahMemberScalarWhereWithAggregatesInput[]
+    OR?: HalaqahMemberScalarWhereWithAggregatesInput[]
+    NOT?: HalaqahMemberScalarWhereWithAggregatesInput | HalaqahMemberScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"HalaqahMember"> | number
+    halaqahId?: IntWithAggregatesFilter<"HalaqahMember"> | number
+    studentId?: IntWithAggregatesFilter<"HalaqahMember"> | number
+    joinedAt?: DateTimeWithAggregatesFilter<"HalaqahMember"> | Date | string
+    leftAt?: DateTimeNullableWithAggregatesFilter<"HalaqahMember"> | Date | string | null
+  }
+
   export type TeacherCreateInput = {
     identity_number: string
     password: string
@@ -19211,6 +22043,7 @@ export namespace Prisma {
     role?: string
     status?: string
     assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+    halaqahs?: HalaqahCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateInput = {
@@ -19224,6 +22057,7 @@ export namespace Prisma {
     role?: string
     status?: string
     assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+    halaqahs?: HalaqahUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUpdateInput = {
@@ -19236,6 +22070,7 @@ export namespace Prisma {
     role?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+    halaqahs?: HalaqahUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateInput = {
@@ -19249,6 +22084,7 @@ export namespace Prisma {
     role?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+    halaqahs?: HalaqahUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherCreateManyInput = {
@@ -19340,6 +22176,7 @@ export namespace Prisma {
     semester?: number
     subject: SubjectCreateNestedOneWithoutCpsInput
     tps?: TPCreateNestedManyWithoutCpInput
+    halaqahs?: HalaqahCreateNestedManyWithoutCpsInput
   }
 
   export type CPUncheckedCreateInput = {
@@ -19350,6 +22187,7 @@ export namespace Prisma {
     grade?: number
     semester?: number
     tps?: TPUncheckedCreateNestedManyWithoutCpInput
+    halaqahs?: HalaqahUncheckedCreateNestedManyWithoutCpsInput
   }
 
   export type CPUpdateInput = {
@@ -19359,6 +22197,7 @@ export namespace Prisma {
     semester?: IntFieldUpdateOperationsInput | number
     subject?: SubjectUpdateOneRequiredWithoutCpsNestedInput
     tps?: TPUpdateManyWithoutCpNestedInput
+    halaqahs?: HalaqahUpdateManyWithoutCpsNestedInput
   }
 
   export type CPUncheckedUpdateInput = {
@@ -19369,6 +22208,7 @@ export namespace Prisma {
     grade?: IntFieldUpdateOperationsInput | number
     semester?: IntFieldUpdateOperationsInput | number
     tps?: TPUncheckedUpdateManyWithoutCpNestedInput
+    halaqahs?: HalaqahUncheckedUpdateManyWithoutCpsNestedInput
   }
 
   export type CPCreateManyInput = {
@@ -19459,6 +22299,7 @@ export namespace Prisma {
     personality?: PersonalityCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -19476,6 +22317,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzUncheckedCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionUncheckedCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUpdateInput = {
@@ -19492,6 +22334,7 @@ export namespace Prisma {
     personality?: PersonalityUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -19509,6 +22352,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUncheckedUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUncheckedUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateManyInput = {
@@ -20074,6 +22918,131 @@ export namespace Prisma {
     promotedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type HalaqahCreateInput = {
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    active?: boolean
+    teacher?: TeacherCreateNestedOneWithoutHalaqahsInput
+    cps?: CPCreateNestedManyWithoutHalaqahsInput
+    members?: HalaqahMemberCreateNestedManyWithoutHalaqahInput
+  }
+
+  export type HalaqahUncheckedCreateInput = {
+    id?: number
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    teacherId?: number | null
+    active?: boolean
+    cps?: CPUncheckedCreateNestedManyWithoutHalaqahsInput
+    members?: HalaqahMemberUncheckedCreateNestedManyWithoutHalaqahInput
+  }
+
+  export type HalaqahUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    teacher?: TeacherUpdateOneWithoutHalaqahsNestedInput
+    cps?: CPUpdateManyWithoutHalaqahsNestedInput
+    members?: HalaqahMemberUpdateManyWithoutHalaqahNestedInput
+  }
+
+  export type HalaqahUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    teacherId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    cps?: CPUncheckedUpdateManyWithoutHalaqahsNestedInput
+    members?: HalaqahMemberUncheckedUpdateManyWithoutHalaqahNestedInput
+  }
+
+  export type HalaqahCreateManyInput = {
+    id?: number
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    teacherId?: number | null
+    active?: boolean
+  }
+
+  export type HalaqahUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type HalaqahUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    teacherId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type HalaqahMemberCreateInput = {
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+    halaqah: HalaqahCreateNestedOneWithoutMembersInput
+    student: StudentCreateNestedOneWithoutHalaqahMembersInput
+  }
+
+  export type HalaqahMemberUncheckedCreateInput = {
+    id?: number
+    halaqahId: number
+    studentId: number
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+  }
+
+  export type HalaqahMemberUpdateInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    halaqah?: HalaqahUpdateOneRequiredWithoutMembersNestedInput
+    student?: StudentUpdateOneRequiredWithoutHalaqahMembersNestedInput
+  }
+
+  export type HalaqahMemberUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    halaqahId?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type HalaqahMemberCreateManyInput = {
+    id?: number
+    halaqahId: number
+    studentId: number
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+  }
+
+  export type HalaqahMemberUpdateManyMutationInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type HalaqahMemberUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    halaqahId?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20121,12 +23090,22 @@ export namespace Prisma {
     none?: AssignmentWhereInput
   }
 
+  export type HalaqahListRelationFilter = {
+    every?: HalaqahWhereInput
+    some?: HalaqahWhereInput
+    none?: HalaqahWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type AssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type HalaqahOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20397,6 +23376,12 @@ export namespace Prisma {
     none?: StudentPromotionWhereInput
   }
 
+  export type HalaqahMemberListRelationFilter = {
+    every?: HalaqahMemberWhereInput
+    some?: HalaqahMemberWhereInput
+    none?: HalaqahMemberWhereInput
+  }
+
   export type AttendanceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -20406,6 +23391,10 @@ export namespace Prisma {
   }
 
   export type StudentPromotionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type HalaqahMemberOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20879,6 +23868,140 @@ export namespace Prisma {
     studentId?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type TeacherNullableScalarRelationFilter = {
+    is?: TeacherWhereInput | null
+    isNot?: TeacherWhereInput | null
+  }
+
+  export type HalaqahNameAcademicYearSemesterCompoundUniqueInput = {
+    name: string
+    academicYear: string
+    semester: number
+  }
+
+  export type HalaqahCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    jilid?: SortOrder
+    academicYear?: SortOrder
+    semester?: SortOrder
+    teacherId?: SortOrder
+    active?: SortOrder
+  }
+
+  export type HalaqahAvgOrderByAggregateInput = {
+    id?: SortOrder
+    jilid?: SortOrder
+    semester?: SortOrder
+    teacherId?: SortOrder
+  }
+
+  export type HalaqahMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    jilid?: SortOrder
+    academicYear?: SortOrder
+    semester?: SortOrder
+    teacherId?: SortOrder
+    active?: SortOrder
+  }
+
+  export type HalaqahMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    jilid?: SortOrder
+    academicYear?: SortOrder
+    semester?: SortOrder
+    teacherId?: SortOrder
+    active?: SortOrder
+  }
+
+  export type HalaqahSumOrderByAggregateInput = {
+    id?: SortOrder
+    jilid?: SortOrder
+    semester?: SortOrder
+    teacherId?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type HalaqahScalarRelationFilter = {
+    is?: HalaqahWhereInput
+    isNot?: HalaqahWhereInput
+  }
+
+  export type HalaqahMemberCountOrderByAggregateInput = {
+    id?: SortOrder
+    halaqahId?: SortOrder
+    studentId?: SortOrder
+    joinedAt?: SortOrder
+    leftAt?: SortOrder
+  }
+
+  export type HalaqahMemberAvgOrderByAggregateInput = {
+    id?: SortOrder
+    halaqahId?: SortOrder
+    studentId?: SortOrder
+  }
+
+  export type HalaqahMemberMaxOrderByAggregateInput = {
+    id?: SortOrder
+    halaqahId?: SortOrder
+    studentId?: SortOrder
+    joinedAt?: SortOrder
+    leftAt?: SortOrder
+  }
+
+  export type HalaqahMemberMinOrderByAggregateInput = {
+    id?: SortOrder
+    halaqahId?: SortOrder
+    studentId?: SortOrder
+    joinedAt?: SortOrder
+    leftAt?: SortOrder
+  }
+
+  export type HalaqahMemberSumOrderByAggregateInput = {
+    id?: SortOrder
+    halaqahId?: SortOrder
+    studentId?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type AssignmentCreateNestedManyWithoutTeacherInput = {
     create?: XOR<AssignmentCreateWithoutTeacherInput, AssignmentUncheckedCreateWithoutTeacherInput> | AssignmentCreateWithoutTeacherInput[] | AssignmentUncheckedCreateWithoutTeacherInput[]
     connectOrCreate?: AssignmentCreateOrConnectWithoutTeacherInput | AssignmentCreateOrConnectWithoutTeacherInput[]
@@ -20886,11 +24009,25 @@ export namespace Prisma {
     connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
   }
 
+  export type HalaqahCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<HalaqahCreateWithoutTeacherInput, HalaqahUncheckedCreateWithoutTeacherInput> | HalaqahCreateWithoutTeacherInput[] | HalaqahUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutTeacherInput | HalaqahCreateOrConnectWithoutTeacherInput[]
+    createMany?: HalaqahCreateManyTeacherInputEnvelope
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+  }
+
   export type AssignmentUncheckedCreateNestedManyWithoutTeacherInput = {
     create?: XOR<AssignmentCreateWithoutTeacherInput, AssignmentUncheckedCreateWithoutTeacherInput> | AssignmentCreateWithoutTeacherInput[] | AssignmentUncheckedCreateWithoutTeacherInput[]
     connectOrCreate?: AssignmentCreateOrConnectWithoutTeacherInput | AssignmentCreateOrConnectWithoutTeacherInput[]
     createMany?: AssignmentCreateManyTeacherInputEnvelope
     connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type HalaqahUncheckedCreateNestedManyWithoutTeacherInput = {
+    create?: XOR<HalaqahCreateWithoutTeacherInput, HalaqahUncheckedCreateWithoutTeacherInput> | HalaqahCreateWithoutTeacherInput[] | HalaqahUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutTeacherInput | HalaqahCreateOrConnectWithoutTeacherInput[]
+    createMany?: HalaqahCreateManyTeacherInputEnvelope
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -20915,6 +24052,20 @@ export namespace Prisma {
     deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
   }
 
+  export type HalaqahUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<HalaqahCreateWithoutTeacherInput, HalaqahUncheckedCreateWithoutTeacherInput> | HalaqahCreateWithoutTeacherInput[] | HalaqahUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutTeacherInput | HalaqahCreateOrConnectWithoutTeacherInput[]
+    upsert?: HalaqahUpsertWithWhereUniqueWithoutTeacherInput | HalaqahUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: HalaqahCreateManyTeacherInputEnvelope
+    set?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    disconnect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    delete?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    update?: HalaqahUpdateWithWhereUniqueWithoutTeacherInput | HalaqahUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: HalaqahUpdateManyWithWhereWithoutTeacherInput | HalaqahUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: HalaqahScalarWhereInput | HalaqahScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -20935,6 +24086,20 @@ export namespace Prisma {
     update?: AssignmentUpdateWithWhereUniqueWithoutTeacherInput | AssignmentUpdateWithWhereUniqueWithoutTeacherInput[]
     updateMany?: AssignmentUpdateManyWithWhereWithoutTeacherInput | AssignmentUpdateManyWithWhereWithoutTeacherInput[]
     deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type HalaqahUncheckedUpdateManyWithoutTeacherNestedInput = {
+    create?: XOR<HalaqahCreateWithoutTeacherInput, HalaqahUncheckedCreateWithoutTeacherInput> | HalaqahCreateWithoutTeacherInput[] | HalaqahUncheckedCreateWithoutTeacherInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutTeacherInput | HalaqahCreateOrConnectWithoutTeacherInput[]
+    upsert?: HalaqahUpsertWithWhereUniqueWithoutTeacherInput | HalaqahUpsertWithWhereUniqueWithoutTeacherInput[]
+    createMany?: HalaqahCreateManyTeacherInputEnvelope
+    set?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    disconnect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    delete?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    update?: HalaqahUpdateWithWhereUniqueWithoutTeacherInput | HalaqahUpdateWithWhereUniqueWithoutTeacherInput[]
+    updateMany?: HalaqahUpdateManyWithWhereWithoutTeacherInput | HalaqahUpdateManyWithWhereWithoutTeacherInput[]
+    deleteMany?: HalaqahScalarWhereInput | HalaqahScalarWhereInput[]
   }
 
   export type AssignmentCreateNestedManyWithoutSubjectInput = {
@@ -21034,11 +24199,23 @@ export namespace Prisma {
     connect?: TPWhereUniqueInput | TPWhereUniqueInput[]
   }
 
+  export type HalaqahCreateNestedManyWithoutCpsInput = {
+    create?: XOR<HalaqahCreateWithoutCpsInput, HalaqahUncheckedCreateWithoutCpsInput> | HalaqahCreateWithoutCpsInput[] | HalaqahUncheckedCreateWithoutCpsInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutCpsInput | HalaqahCreateOrConnectWithoutCpsInput[]
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+  }
+
   export type TPUncheckedCreateNestedManyWithoutCpInput = {
     create?: XOR<TPCreateWithoutCpInput, TPUncheckedCreateWithoutCpInput> | TPCreateWithoutCpInput[] | TPUncheckedCreateWithoutCpInput[]
     connectOrCreate?: TPCreateOrConnectWithoutCpInput | TPCreateOrConnectWithoutCpInput[]
     createMany?: TPCreateManyCpInputEnvelope
     connect?: TPWhereUniqueInput | TPWhereUniqueInput[]
+  }
+
+  export type HalaqahUncheckedCreateNestedManyWithoutCpsInput = {
+    create?: XOR<HalaqahCreateWithoutCpsInput, HalaqahUncheckedCreateWithoutCpsInput> | HalaqahCreateWithoutCpsInput[] | HalaqahUncheckedCreateWithoutCpsInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutCpsInput | HalaqahCreateOrConnectWithoutCpsInput[]
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
   }
 
   export type SubjectUpdateOneRequiredWithoutCpsNestedInput = {
@@ -21063,6 +24240,19 @@ export namespace Prisma {
     deleteMany?: TPScalarWhereInput | TPScalarWhereInput[]
   }
 
+  export type HalaqahUpdateManyWithoutCpsNestedInput = {
+    create?: XOR<HalaqahCreateWithoutCpsInput, HalaqahUncheckedCreateWithoutCpsInput> | HalaqahCreateWithoutCpsInput[] | HalaqahUncheckedCreateWithoutCpsInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutCpsInput | HalaqahCreateOrConnectWithoutCpsInput[]
+    upsert?: HalaqahUpsertWithWhereUniqueWithoutCpsInput | HalaqahUpsertWithWhereUniqueWithoutCpsInput[]
+    set?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    disconnect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    delete?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    update?: HalaqahUpdateWithWhereUniqueWithoutCpsInput | HalaqahUpdateWithWhereUniqueWithoutCpsInput[]
+    updateMany?: HalaqahUpdateManyWithWhereWithoutCpsInput | HalaqahUpdateManyWithWhereWithoutCpsInput[]
+    deleteMany?: HalaqahScalarWhereInput | HalaqahScalarWhereInput[]
+  }
+
   export type TPUncheckedUpdateManyWithoutCpNestedInput = {
     create?: XOR<TPCreateWithoutCpInput, TPUncheckedCreateWithoutCpInput> | TPCreateWithoutCpInput[] | TPUncheckedCreateWithoutCpInput[]
     connectOrCreate?: TPCreateOrConnectWithoutCpInput | TPCreateOrConnectWithoutCpInput[]
@@ -21075,6 +24265,19 @@ export namespace Prisma {
     update?: TPUpdateWithWhereUniqueWithoutCpInput | TPUpdateWithWhereUniqueWithoutCpInput[]
     updateMany?: TPUpdateManyWithWhereWithoutCpInput | TPUpdateManyWithWhereWithoutCpInput[]
     deleteMany?: TPScalarWhereInput | TPScalarWhereInput[]
+  }
+
+  export type HalaqahUncheckedUpdateManyWithoutCpsNestedInput = {
+    create?: XOR<HalaqahCreateWithoutCpsInput, HalaqahUncheckedCreateWithoutCpsInput> | HalaqahCreateWithoutCpsInput[] | HalaqahUncheckedCreateWithoutCpsInput[]
+    connectOrCreate?: HalaqahCreateOrConnectWithoutCpsInput | HalaqahCreateOrConnectWithoutCpsInput[]
+    upsert?: HalaqahUpsertWithWhereUniqueWithoutCpsInput | HalaqahUpsertWithWhereUniqueWithoutCpsInput[]
+    set?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    disconnect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    delete?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    connect?: HalaqahWhereUniqueInput | HalaqahWhereUniqueInput[]
+    update?: HalaqahUpdateWithWhereUniqueWithoutCpsInput | HalaqahUpdateWithWhereUniqueWithoutCpsInput[]
+    updateMany?: HalaqahUpdateManyWithWhereWithoutCpsInput | HalaqahUpdateManyWithWhereWithoutCpsInput[]
+    deleteMany?: HalaqahScalarWhereInput | HalaqahScalarWhereInput[]
   }
 
   export type CPCreateNestedOneWithoutTpsInput = {
@@ -21173,6 +24376,13 @@ export namespace Prisma {
     connect?: StudentPromotionWhereUniqueInput | StudentPromotionWhereUniqueInput[]
   }
 
+  export type HalaqahMemberCreateNestedManyWithoutStudentInput = {
+    create?: XOR<HalaqahMemberCreateWithoutStudentInput, HalaqahMemberUncheckedCreateWithoutStudentInput> | HalaqahMemberCreateWithoutStudentInput[] | HalaqahMemberUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutStudentInput | HalaqahMemberCreateOrConnectWithoutStudentInput[]
+    createMany?: HalaqahMemberCreateManyStudentInputEnvelope
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+  }
+
   export type AssessmentUncheckedCreateNestedManyWithoutStudentInput = {
     create?: XOR<AssessmentCreateWithoutStudentInput, AssessmentUncheckedCreateWithoutStudentInput> | AssessmentCreateWithoutStudentInput[] | AssessmentUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: AssessmentCreateOrConnectWithoutStudentInput | AssessmentCreateOrConnectWithoutStudentInput[]
@@ -21211,6 +24421,13 @@ export namespace Prisma {
     connectOrCreate?: StudentPromotionCreateOrConnectWithoutStudentInput | StudentPromotionCreateOrConnectWithoutStudentInput[]
     createMany?: StudentPromotionCreateManyStudentInputEnvelope
     connect?: StudentPromotionWhereUniqueInput | StudentPromotionWhereUniqueInput[]
+  }
+
+  export type HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<HalaqahMemberCreateWithoutStudentInput, HalaqahMemberUncheckedCreateWithoutStudentInput> | HalaqahMemberCreateWithoutStudentInput[] | HalaqahMemberUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutStudentInput | HalaqahMemberCreateOrConnectWithoutStudentInput[]
+    createMany?: HalaqahMemberCreateManyStudentInputEnvelope
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
   }
 
   export type AssessmentUpdateManyWithoutStudentNestedInput = {
@@ -21289,6 +24506,20 @@ export namespace Prisma {
     deleteMany?: StudentPromotionScalarWhereInput | StudentPromotionScalarWhereInput[]
   }
 
+  export type HalaqahMemberUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<HalaqahMemberCreateWithoutStudentInput, HalaqahMemberUncheckedCreateWithoutStudentInput> | HalaqahMemberCreateWithoutStudentInput[] | HalaqahMemberUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutStudentInput | HalaqahMemberCreateOrConnectWithoutStudentInput[]
+    upsert?: HalaqahMemberUpsertWithWhereUniqueWithoutStudentInput | HalaqahMemberUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: HalaqahMemberCreateManyStudentInputEnvelope
+    set?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    disconnect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    delete?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    update?: HalaqahMemberUpdateWithWhereUniqueWithoutStudentInput | HalaqahMemberUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: HalaqahMemberUpdateManyWithWhereWithoutStudentInput | HalaqahMemberUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: HalaqahMemberScalarWhereInput | HalaqahMemberScalarWhereInput[]
+  }
+
   export type AssessmentUncheckedUpdateManyWithoutStudentNestedInput = {
     create?: XOR<AssessmentCreateWithoutStudentInput, AssessmentUncheckedCreateWithoutStudentInput> | AssessmentCreateWithoutStudentInput[] | AssessmentUncheckedCreateWithoutStudentInput[]
     connectOrCreate?: AssessmentCreateOrConnectWithoutStudentInput | AssessmentCreateOrConnectWithoutStudentInput[]
@@ -21363,6 +24594,20 @@ export namespace Prisma {
     update?: StudentPromotionUpdateWithWhereUniqueWithoutStudentInput | StudentPromotionUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: StudentPromotionUpdateManyWithWhereWithoutStudentInput | StudentPromotionUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: StudentPromotionScalarWhereInput | StudentPromotionScalarWhereInput[]
+  }
+
+  export type HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<HalaqahMemberCreateWithoutStudentInput, HalaqahMemberUncheckedCreateWithoutStudentInput> | HalaqahMemberCreateWithoutStudentInput[] | HalaqahMemberUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutStudentInput | HalaqahMemberCreateOrConnectWithoutStudentInput[]
+    upsert?: HalaqahMemberUpsertWithWhereUniqueWithoutStudentInput | HalaqahMemberUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: HalaqahMemberCreateManyStudentInputEnvelope
+    set?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    disconnect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    delete?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    update?: HalaqahMemberUpdateWithWhereUniqueWithoutStudentInput | HalaqahMemberUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: HalaqahMemberUpdateManyWithWhereWithoutStudentInput | HalaqahMemberUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: HalaqahMemberScalarWhereInput | HalaqahMemberScalarWhereInput[]
   }
 
   export type StudentCreateNestedOneWithoutAssessmentsInput = {
@@ -21503,6 +24748,138 @@ export namespace Prisma {
     upsert?: StudentUpsertWithoutPromotionsInput
     connect?: StudentWhereUniqueInput
     update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutPromotionsInput, StudentUpdateWithoutPromotionsInput>, StudentUncheckedUpdateWithoutPromotionsInput>
+  }
+
+  export type TeacherCreateNestedOneWithoutHalaqahsInput = {
+    create?: XOR<TeacherCreateWithoutHalaqahsInput, TeacherUncheckedCreateWithoutHalaqahsInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutHalaqahsInput
+    connect?: TeacherWhereUniqueInput
+  }
+
+  export type CPCreateNestedManyWithoutHalaqahsInput = {
+    create?: XOR<CPCreateWithoutHalaqahsInput, CPUncheckedCreateWithoutHalaqahsInput> | CPCreateWithoutHalaqahsInput[] | CPUncheckedCreateWithoutHalaqahsInput[]
+    connectOrCreate?: CPCreateOrConnectWithoutHalaqahsInput | CPCreateOrConnectWithoutHalaqahsInput[]
+    connect?: CPWhereUniqueInput | CPWhereUniqueInput[]
+  }
+
+  export type HalaqahMemberCreateNestedManyWithoutHalaqahInput = {
+    create?: XOR<HalaqahMemberCreateWithoutHalaqahInput, HalaqahMemberUncheckedCreateWithoutHalaqahInput> | HalaqahMemberCreateWithoutHalaqahInput[] | HalaqahMemberUncheckedCreateWithoutHalaqahInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutHalaqahInput | HalaqahMemberCreateOrConnectWithoutHalaqahInput[]
+    createMany?: HalaqahMemberCreateManyHalaqahInputEnvelope
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+  }
+
+  export type CPUncheckedCreateNestedManyWithoutHalaqahsInput = {
+    create?: XOR<CPCreateWithoutHalaqahsInput, CPUncheckedCreateWithoutHalaqahsInput> | CPCreateWithoutHalaqahsInput[] | CPUncheckedCreateWithoutHalaqahsInput[]
+    connectOrCreate?: CPCreateOrConnectWithoutHalaqahsInput | CPCreateOrConnectWithoutHalaqahsInput[]
+    connect?: CPWhereUniqueInput | CPWhereUniqueInput[]
+  }
+
+  export type HalaqahMemberUncheckedCreateNestedManyWithoutHalaqahInput = {
+    create?: XOR<HalaqahMemberCreateWithoutHalaqahInput, HalaqahMemberUncheckedCreateWithoutHalaqahInput> | HalaqahMemberCreateWithoutHalaqahInput[] | HalaqahMemberUncheckedCreateWithoutHalaqahInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutHalaqahInput | HalaqahMemberCreateOrConnectWithoutHalaqahInput[]
+    createMany?: HalaqahMemberCreateManyHalaqahInputEnvelope
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type TeacherUpdateOneWithoutHalaqahsNestedInput = {
+    create?: XOR<TeacherCreateWithoutHalaqahsInput, TeacherUncheckedCreateWithoutHalaqahsInput>
+    connectOrCreate?: TeacherCreateOrConnectWithoutHalaqahsInput
+    upsert?: TeacherUpsertWithoutHalaqahsInput
+    disconnect?: TeacherWhereInput | boolean
+    delete?: TeacherWhereInput | boolean
+    connect?: TeacherWhereUniqueInput
+    update?: XOR<XOR<TeacherUpdateToOneWithWhereWithoutHalaqahsInput, TeacherUpdateWithoutHalaqahsInput>, TeacherUncheckedUpdateWithoutHalaqahsInput>
+  }
+
+  export type CPUpdateManyWithoutHalaqahsNestedInput = {
+    create?: XOR<CPCreateWithoutHalaqahsInput, CPUncheckedCreateWithoutHalaqahsInput> | CPCreateWithoutHalaqahsInput[] | CPUncheckedCreateWithoutHalaqahsInput[]
+    connectOrCreate?: CPCreateOrConnectWithoutHalaqahsInput | CPCreateOrConnectWithoutHalaqahsInput[]
+    upsert?: CPUpsertWithWhereUniqueWithoutHalaqahsInput | CPUpsertWithWhereUniqueWithoutHalaqahsInput[]
+    set?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    disconnect?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    delete?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    connect?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    update?: CPUpdateWithWhereUniqueWithoutHalaqahsInput | CPUpdateWithWhereUniqueWithoutHalaqahsInput[]
+    updateMany?: CPUpdateManyWithWhereWithoutHalaqahsInput | CPUpdateManyWithWhereWithoutHalaqahsInput[]
+    deleteMany?: CPScalarWhereInput | CPScalarWhereInput[]
+  }
+
+  export type HalaqahMemberUpdateManyWithoutHalaqahNestedInput = {
+    create?: XOR<HalaqahMemberCreateWithoutHalaqahInput, HalaqahMemberUncheckedCreateWithoutHalaqahInput> | HalaqahMemberCreateWithoutHalaqahInput[] | HalaqahMemberUncheckedCreateWithoutHalaqahInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutHalaqahInput | HalaqahMemberCreateOrConnectWithoutHalaqahInput[]
+    upsert?: HalaqahMemberUpsertWithWhereUniqueWithoutHalaqahInput | HalaqahMemberUpsertWithWhereUniqueWithoutHalaqahInput[]
+    createMany?: HalaqahMemberCreateManyHalaqahInputEnvelope
+    set?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    disconnect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    delete?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    update?: HalaqahMemberUpdateWithWhereUniqueWithoutHalaqahInput | HalaqahMemberUpdateWithWhereUniqueWithoutHalaqahInput[]
+    updateMany?: HalaqahMemberUpdateManyWithWhereWithoutHalaqahInput | HalaqahMemberUpdateManyWithWhereWithoutHalaqahInput[]
+    deleteMany?: HalaqahMemberScalarWhereInput | HalaqahMemberScalarWhereInput[]
+  }
+
+  export type CPUncheckedUpdateManyWithoutHalaqahsNestedInput = {
+    create?: XOR<CPCreateWithoutHalaqahsInput, CPUncheckedCreateWithoutHalaqahsInput> | CPCreateWithoutHalaqahsInput[] | CPUncheckedCreateWithoutHalaqahsInput[]
+    connectOrCreate?: CPCreateOrConnectWithoutHalaqahsInput | CPCreateOrConnectWithoutHalaqahsInput[]
+    upsert?: CPUpsertWithWhereUniqueWithoutHalaqahsInput | CPUpsertWithWhereUniqueWithoutHalaqahsInput[]
+    set?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    disconnect?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    delete?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    connect?: CPWhereUniqueInput | CPWhereUniqueInput[]
+    update?: CPUpdateWithWhereUniqueWithoutHalaqahsInput | CPUpdateWithWhereUniqueWithoutHalaqahsInput[]
+    updateMany?: CPUpdateManyWithWhereWithoutHalaqahsInput | CPUpdateManyWithWhereWithoutHalaqahsInput[]
+    deleteMany?: CPScalarWhereInput | CPScalarWhereInput[]
+  }
+
+  export type HalaqahMemberUncheckedUpdateManyWithoutHalaqahNestedInput = {
+    create?: XOR<HalaqahMemberCreateWithoutHalaqahInput, HalaqahMemberUncheckedCreateWithoutHalaqahInput> | HalaqahMemberCreateWithoutHalaqahInput[] | HalaqahMemberUncheckedCreateWithoutHalaqahInput[]
+    connectOrCreate?: HalaqahMemberCreateOrConnectWithoutHalaqahInput | HalaqahMemberCreateOrConnectWithoutHalaqahInput[]
+    upsert?: HalaqahMemberUpsertWithWhereUniqueWithoutHalaqahInput | HalaqahMemberUpsertWithWhereUniqueWithoutHalaqahInput[]
+    createMany?: HalaqahMemberCreateManyHalaqahInputEnvelope
+    set?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    disconnect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    delete?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    connect?: HalaqahMemberWhereUniqueInput | HalaqahMemberWhereUniqueInput[]
+    update?: HalaqahMemberUpdateWithWhereUniqueWithoutHalaqahInput | HalaqahMemberUpdateWithWhereUniqueWithoutHalaqahInput[]
+    updateMany?: HalaqahMemberUpdateManyWithWhereWithoutHalaqahInput | HalaqahMemberUpdateManyWithWhereWithoutHalaqahInput[]
+    deleteMany?: HalaqahMemberScalarWhereInput | HalaqahMemberScalarWhereInput[]
+  }
+
+  export type HalaqahCreateNestedOneWithoutMembersInput = {
+    create?: XOR<HalaqahCreateWithoutMembersInput, HalaqahUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: HalaqahCreateOrConnectWithoutMembersInput
+    connect?: HalaqahWhereUniqueInput
+  }
+
+  export type StudentCreateNestedOneWithoutHalaqahMembersInput = {
+    create?: XOR<StudentCreateWithoutHalaqahMembersInput, StudentUncheckedCreateWithoutHalaqahMembersInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutHalaqahMembersInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type HalaqahUpdateOneRequiredWithoutMembersNestedInput = {
+    create?: XOR<HalaqahCreateWithoutMembersInput, HalaqahUncheckedCreateWithoutMembersInput>
+    connectOrCreate?: HalaqahCreateOrConnectWithoutMembersInput
+    upsert?: HalaqahUpsertWithoutMembersInput
+    connect?: HalaqahWhereUniqueInput
+    update?: XOR<XOR<HalaqahUpdateToOneWithWhereWithoutMembersInput, HalaqahUpdateWithoutMembersInput>, HalaqahUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type StudentUpdateOneRequiredWithoutHalaqahMembersNestedInput = {
+    create?: XOR<StudentCreateWithoutHalaqahMembersInput, StudentUncheckedCreateWithoutHalaqahMembersInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutHalaqahMembersInput
+    upsert?: StudentUpsertWithoutHalaqahMembersInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutHalaqahMembersInput, StudentUpdateWithoutHalaqahMembersInput>, StudentUncheckedUpdateWithoutHalaqahMembersInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -21668,6 +25045,44 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type AssignmentCreateWithoutTeacherInput = {
     className: string
     academicYear?: string
@@ -21688,6 +25103,37 @@ export namespace Prisma {
 
   export type AssignmentCreateManyTeacherInputEnvelope = {
     data: AssignmentCreateManyTeacherInput | AssignmentCreateManyTeacherInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type HalaqahCreateWithoutTeacherInput = {
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    active?: boolean
+    cps?: CPCreateNestedManyWithoutHalaqahsInput
+    members?: HalaqahMemberCreateNestedManyWithoutHalaqahInput
+  }
+
+  export type HalaqahUncheckedCreateWithoutTeacherInput = {
+    id?: number
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    active?: boolean
+    cps?: CPUncheckedCreateNestedManyWithoutHalaqahsInput
+    members?: HalaqahMemberUncheckedCreateNestedManyWithoutHalaqahInput
+  }
+
+  export type HalaqahCreateOrConnectWithoutTeacherInput = {
+    where: HalaqahWhereUniqueInput
+    create: XOR<HalaqahCreateWithoutTeacherInput, HalaqahUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type HalaqahCreateManyTeacherInputEnvelope = {
+    data: HalaqahCreateManyTeacherInput | HalaqahCreateManyTeacherInput[]
     skipDuplicates?: boolean
   }
 
@@ -21716,6 +25162,35 @@ export namespace Prisma {
     subjectId?: IntFilter<"Assignment"> | number
     className?: StringFilter<"Assignment"> | string
     academicYear?: StringFilter<"Assignment"> | string
+  }
+
+  export type HalaqahUpsertWithWhereUniqueWithoutTeacherInput = {
+    where: HalaqahWhereUniqueInput
+    update: XOR<HalaqahUpdateWithoutTeacherInput, HalaqahUncheckedUpdateWithoutTeacherInput>
+    create: XOR<HalaqahCreateWithoutTeacherInput, HalaqahUncheckedCreateWithoutTeacherInput>
+  }
+
+  export type HalaqahUpdateWithWhereUniqueWithoutTeacherInput = {
+    where: HalaqahWhereUniqueInput
+    data: XOR<HalaqahUpdateWithoutTeacherInput, HalaqahUncheckedUpdateWithoutTeacherInput>
+  }
+
+  export type HalaqahUpdateManyWithWhereWithoutTeacherInput = {
+    where: HalaqahScalarWhereInput
+    data: XOR<HalaqahUpdateManyMutationInput, HalaqahUncheckedUpdateManyWithoutTeacherInput>
+  }
+
+  export type HalaqahScalarWhereInput = {
+    AND?: HalaqahScalarWhereInput | HalaqahScalarWhereInput[]
+    OR?: HalaqahScalarWhereInput[]
+    NOT?: HalaqahScalarWhereInput | HalaqahScalarWhereInput[]
+    id?: IntFilter<"Halaqah"> | number
+    name?: StringFilter<"Halaqah"> | string
+    jilid?: IntFilter<"Halaqah"> | number
+    academicYear?: StringFilter<"Halaqah"> | string
+    semester?: IntFilter<"Halaqah"> | number
+    teacherId?: IntNullableFilter<"Halaqah"> | number | null
+    active?: BoolFilter<"Halaqah"> | boolean
   }
 
   export type AssignmentCreateWithoutSubjectInput = {
@@ -21747,6 +25222,7 @@ export namespace Prisma {
     grade?: number
     semester?: number
     tps?: TPCreateNestedManyWithoutCpInput
+    halaqahs?: HalaqahCreateNestedManyWithoutCpsInput
   }
 
   export type CPUncheckedCreateWithoutSubjectInput = {
@@ -21756,6 +25232,7 @@ export namespace Prisma {
     grade?: number
     semester?: number
     tps?: TPUncheckedCreateNestedManyWithoutCpInput
+    halaqahs?: HalaqahUncheckedCreateNestedManyWithoutCpsInput
   }
 
   export type CPCreateOrConnectWithoutSubjectInput = {
@@ -21853,6 +25330,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type HalaqahCreateWithoutCpsInput = {
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    active?: boolean
+    teacher?: TeacherCreateNestedOneWithoutHalaqahsInput
+    members?: HalaqahMemberCreateNestedManyWithoutHalaqahInput
+  }
+
+  export type HalaqahUncheckedCreateWithoutCpsInput = {
+    id?: number
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    teacherId?: number | null
+    active?: boolean
+    members?: HalaqahMemberUncheckedCreateNestedManyWithoutHalaqahInput
+  }
+
+  export type HalaqahCreateOrConnectWithoutCpsInput = {
+    where: HalaqahWhereUniqueInput
+    create: XOR<HalaqahCreateWithoutCpsInput, HalaqahUncheckedCreateWithoutCpsInput>
+  }
+
   export type SubjectUpsertWithoutCpsInput = {
     update: XOR<SubjectUpdateWithoutCpsInput, SubjectUncheckedUpdateWithoutCpsInput>
     create: XOR<SubjectCreateWithoutCpsInput, SubjectUncheckedCreateWithoutCpsInput>
@@ -21903,12 +25406,29 @@ export namespace Prisma {
     cpId?: IntFilter<"TP"> | number
   }
 
+  export type HalaqahUpsertWithWhereUniqueWithoutCpsInput = {
+    where: HalaqahWhereUniqueInput
+    update: XOR<HalaqahUpdateWithoutCpsInput, HalaqahUncheckedUpdateWithoutCpsInput>
+    create: XOR<HalaqahCreateWithoutCpsInput, HalaqahUncheckedCreateWithoutCpsInput>
+  }
+
+  export type HalaqahUpdateWithWhereUniqueWithoutCpsInput = {
+    where: HalaqahWhereUniqueInput
+    data: XOR<HalaqahUpdateWithoutCpsInput, HalaqahUncheckedUpdateWithoutCpsInput>
+  }
+
+  export type HalaqahUpdateManyWithWhereWithoutCpsInput = {
+    where: HalaqahScalarWhereInput
+    data: XOR<HalaqahUpdateManyMutationInput, HalaqahUncheckedUpdateManyWithoutCpsInput>
+  }
+
   export type CPCreateWithoutTpsInput = {
     code: string
     description: string
     grade?: number
     semester?: number
     subject: SubjectCreateNestedOneWithoutCpsInput
+    halaqahs?: HalaqahCreateNestedManyWithoutCpsInput
   }
 
   export type CPUncheckedCreateWithoutTpsInput = {
@@ -21918,6 +25438,7 @@ export namespace Prisma {
     subjectId: number
     grade?: number
     semester?: number
+    halaqahs?: HalaqahUncheckedCreateNestedManyWithoutCpsInput
   }
 
   export type CPCreateOrConnectWithoutTpsInput = {
@@ -21965,6 +25486,7 @@ export namespace Prisma {
     grade?: IntFieldUpdateOperationsInput | number
     semester?: IntFieldUpdateOperationsInput | number
     subject?: SubjectUpdateOneRequiredWithoutCpsNestedInput
+    halaqahs?: HalaqahUpdateManyWithoutCpsNestedInput
   }
 
   export type CPUncheckedUpdateWithoutTpsInput = {
@@ -21974,6 +25496,7 @@ export namespace Prisma {
     subjectId?: IntFieldUpdateOperationsInput | number
     grade?: IntFieldUpdateOperationsInput | number
     semester?: IntFieldUpdateOperationsInput | number
+    halaqahs?: HalaqahUncheckedUpdateManyWithoutCpsNestedInput
   }
 
   export type AssessmentUpsertWithWhereUniqueWithoutTpInput = {
@@ -22147,6 +25670,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type HalaqahMemberCreateWithoutStudentInput = {
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+    halaqah: HalaqahCreateNestedOneWithoutMembersInput
+  }
+
+  export type HalaqahMemberUncheckedCreateWithoutStudentInput = {
+    id?: number
+    halaqahId: number
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+  }
+
+  export type HalaqahMemberCreateOrConnectWithoutStudentInput = {
+    where: HalaqahMemberWhereUniqueInput
+    create: XOR<HalaqahMemberCreateWithoutStudentInput, HalaqahMemberUncheckedCreateWithoutStudentInput>
+  }
+
+  export type HalaqahMemberCreateManyStudentInputEnvelope = {
+    data: HalaqahMemberCreateManyStudentInput | HalaqahMemberCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AssessmentUpsertWithWhereUniqueWithoutStudentInput = {
     where: AssessmentWhereUniqueInput
     update: XOR<AssessmentUpdateWithoutStudentInput, AssessmentUncheckedUpdateWithoutStudentInput>
@@ -22302,6 +25848,33 @@ export namespace Prisma {
     promotedAt?: DateTimeFilter<"StudentPromotion"> | Date | string
   }
 
+  export type HalaqahMemberUpsertWithWhereUniqueWithoutStudentInput = {
+    where: HalaqahMemberWhereUniqueInput
+    update: XOR<HalaqahMemberUpdateWithoutStudentInput, HalaqahMemberUncheckedUpdateWithoutStudentInput>
+    create: XOR<HalaqahMemberCreateWithoutStudentInput, HalaqahMemberUncheckedCreateWithoutStudentInput>
+  }
+
+  export type HalaqahMemberUpdateWithWhereUniqueWithoutStudentInput = {
+    where: HalaqahMemberWhereUniqueInput
+    data: XOR<HalaqahMemberUpdateWithoutStudentInput, HalaqahMemberUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type HalaqahMemberUpdateManyWithWhereWithoutStudentInput = {
+    where: HalaqahMemberScalarWhereInput
+    data: XOR<HalaqahMemberUpdateManyMutationInput, HalaqahMemberUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type HalaqahMemberScalarWhereInput = {
+    AND?: HalaqahMemberScalarWhereInput | HalaqahMemberScalarWhereInput[]
+    OR?: HalaqahMemberScalarWhereInput[]
+    NOT?: HalaqahMemberScalarWhereInput | HalaqahMemberScalarWhereInput[]
+    id?: IntFilter<"HalaqahMember"> | number
+    halaqahId?: IntFilter<"HalaqahMember"> | number
+    studentId?: IntFilter<"HalaqahMember"> | number
+    joinedAt?: DateTimeFilter<"HalaqahMember"> | Date | string
+    leftAt?: DateTimeNullableFilter<"HalaqahMember"> | Date | string | null
+  }
+
   export type StudentCreateWithoutAssessmentsInput = {
     nisn: string
     fullname: string
@@ -22315,6 +25888,7 @@ export namespace Prisma {
     personality?: PersonalityCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAssessmentsInput = {
@@ -22331,6 +25905,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzUncheckedCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionUncheckedCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutAssessmentsInput = {
@@ -22380,6 +25955,7 @@ export namespace Prisma {
     personality?: PersonalityUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAssessmentsInput = {
@@ -22396,6 +25972,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUncheckedUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUncheckedUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type TPUpsertWithoutAssessmentsInput = {
@@ -22435,6 +26012,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteCreateNestedOneWithoutStudentInput
     personality?: PersonalityCreateNestedOneWithoutStudentInput
     promotions?: StudentPromotionCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutTahfidzsInput = {
@@ -22451,6 +26029,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUncheckedCreateNestedOneWithoutStudentInput
     personality?: PersonalityUncheckedCreateNestedOneWithoutStudentInput
     promotions?: StudentPromotionUncheckedCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutTahfidzsInput = {
@@ -22482,6 +26061,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUpdateOneWithoutStudentNestedInput
     personality?: PersonalityUpdateOneWithoutStudentNestedInput
     promotions?: StudentPromotionUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutTahfidzsInput = {
@@ -22498,6 +26078,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUncheckedUpdateOneWithoutStudentNestedInput
     personality?: PersonalityUncheckedUpdateOneWithoutStudentNestedInput
     promotions?: StudentPromotionUncheckedUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateWithoutAttendancesInput = {
@@ -22513,6 +26094,7 @@ export namespace Prisma {
     personality?: PersonalityCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutAttendancesInput = {
@@ -22529,6 +26111,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzUncheckedCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionUncheckedCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutAttendancesInput = {
@@ -22560,6 +26143,7 @@ export namespace Prisma {
     personality?: PersonalityUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutAttendancesInput = {
@@ -22576,6 +26160,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUncheckedUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUncheckedUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type TeacherCreateWithoutAssignmentsInput = {
@@ -22587,6 +26172,7 @@ export namespace Prisma {
     address?: string | null
     role?: string
     status?: string
+    halaqahs?: HalaqahCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherUncheckedCreateWithoutAssignmentsInput = {
@@ -22599,6 +26185,7 @@ export namespace Prisma {
     address?: string | null
     role?: string
     status?: string
+    halaqahs?: HalaqahUncheckedCreateNestedManyWithoutTeacherInput
   }
 
   export type TeacherCreateOrConnectWithoutAssignmentsInput = {
@@ -22644,6 +26231,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    halaqahs?: HalaqahUpdateManyWithoutTeacherNestedInput
   }
 
   export type TeacherUncheckedUpdateWithoutAssignmentsInput = {
@@ -22656,6 +26244,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     role?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
+    halaqahs?: HalaqahUncheckedUpdateManyWithoutTeacherNestedInput
   }
 
   export type SubjectUpsertWithoutAssignmentsInput = {
@@ -22695,6 +26284,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPersonalityInput = {
@@ -22711,6 +26301,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUncheckedCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzUncheckedCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionUncheckedCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutPersonalityInput = {
@@ -22742,6 +26333,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPersonalityInput = {
@@ -22758,6 +26350,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUncheckedUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUncheckedUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUncheckedUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateWithoutHomeroomNoteInput = {
@@ -22773,6 +26366,7 @@ export namespace Prisma {
     personality?: PersonalityCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutHomeroomNoteInput = {
@@ -22789,6 +26383,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzUncheckedCreateNestedManyWithoutStudentInput
     promotions?: StudentPromotionUncheckedCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutHomeroomNoteInput = {
@@ -22820,6 +26415,7 @@ export namespace Prisma {
     personality?: PersonalityUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutHomeroomNoteInput = {
@@ -22836,6 +26432,7 @@ export namespace Prisma {
     personality?: PersonalityUncheckedUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUncheckedUpdateManyWithoutStudentNestedInput
     promotions?: StudentPromotionUncheckedUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateWithoutPromotionsInput = {
@@ -22851,6 +26448,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteCreateNestedOneWithoutStudentInput
     personality?: PersonalityCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutPromotionsInput = {
@@ -22867,6 +26465,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUncheckedCreateNestedOneWithoutStudentInput
     personality?: PersonalityUncheckedCreateNestedOneWithoutStudentInput
     tahfidzs?: TahfidzUncheckedCreateNestedManyWithoutStudentInput
+    halaqahMembers?: HalaqahMemberUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutPromotionsInput = {
@@ -22898,6 +26497,7 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUpdateOneWithoutStudentNestedInput
     personality?: PersonalityUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutPromotionsInput = {
@@ -22914,6 +26514,292 @@ export namespace Prisma {
     homeroomNote?: HomeroomNoteUncheckedUpdateOneWithoutStudentNestedInput
     personality?: PersonalityUncheckedUpdateOneWithoutStudentNestedInput
     tahfidzs?: TahfidzUncheckedUpdateManyWithoutStudentNestedInput
+    halaqahMembers?: HalaqahMemberUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type TeacherCreateWithoutHalaqahsInput = {
+    identity_number: string
+    password: string
+    fullname: string
+    birth_date?: string | null
+    education?: string | null
+    address?: string | null
+    role?: string
+    status?: string
+    assignments?: AssignmentCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherUncheckedCreateWithoutHalaqahsInput = {
+    id?: number
+    identity_number: string
+    password: string
+    fullname: string
+    birth_date?: string | null
+    education?: string | null
+    address?: string | null
+    role?: string
+    status?: string
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutTeacherInput
+  }
+
+  export type TeacherCreateOrConnectWithoutHalaqahsInput = {
+    where: TeacherWhereUniqueInput
+    create: XOR<TeacherCreateWithoutHalaqahsInput, TeacherUncheckedCreateWithoutHalaqahsInput>
+  }
+
+  export type CPCreateWithoutHalaqahsInput = {
+    code: string
+    description: string
+    grade?: number
+    semester?: number
+    subject: SubjectCreateNestedOneWithoutCpsInput
+    tps?: TPCreateNestedManyWithoutCpInput
+  }
+
+  export type CPUncheckedCreateWithoutHalaqahsInput = {
+    id?: number
+    code: string
+    description: string
+    subjectId: number
+    grade?: number
+    semester?: number
+    tps?: TPUncheckedCreateNestedManyWithoutCpInput
+  }
+
+  export type CPCreateOrConnectWithoutHalaqahsInput = {
+    where: CPWhereUniqueInput
+    create: XOR<CPCreateWithoutHalaqahsInput, CPUncheckedCreateWithoutHalaqahsInput>
+  }
+
+  export type HalaqahMemberCreateWithoutHalaqahInput = {
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+    student: StudentCreateNestedOneWithoutHalaqahMembersInput
+  }
+
+  export type HalaqahMemberUncheckedCreateWithoutHalaqahInput = {
+    id?: number
+    studentId: number
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+  }
+
+  export type HalaqahMemberCreateOrConnectWithoutHalaqahInput = {
+    where: HalaqahMemberWhereUniqueInput
+    create: XOR<HalaqahMemberCreateWithoutHalaqahInput, HalaqahMemberUncheckedCreateWithoutHalaqahInput>
+  }
+
+  export type HalaqahMemberCreateManyHalaqahInputEnvelope = {
+    data: HalaqahMemberCreateManyHalaqahInput | HalaqahMemberCreateManyHalaqahInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TeacherUpsertWithoutHalaqahsInput = {
+    update: XOR<TeacherUpdateWithoutHalaqahsInput, TeacherUncheckedUpdateWithoutHalaqahsInput>
+    create: XOR<TeacherCreateWithoutHalaqahsInput, TeacherUncheckedCreateWithoutHalaqahsInput>
+    where?: TeacherWhereInput
+  }
+
+  export type TeacherUpdateToOneWithWhereWithoutHalaqahsInput = {
+    where?: TeacherWhereInput
+    data: XOR<TeacherUpdateWithoutHalaqahsInput, TeacherUncheckedUpdateWithoutHalaqahsInput>
+  }
+
+  export type TeacherUpdateWithoutHalaqahsInput = {
+    identity_number?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullname?: StringFieldUpdateOperationsInput | string
+    birth_date?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assignments?: AssignmentUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type TeacherUncheckedUpdateWithoutHalaqahsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    identity_number?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullname?: StringFieldUpdateOperationsInput | string
+    birth_date?: NullableStringFieldUpdateOperationsInput | string | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    assignments?: AssignmentUncheckedUpdateManyWithoutTeacherNestedInput
+  }
+
+  export type CPUpsertWithWhereUniqueWithoutHalaqahsInput = {
+    where: CPWhereUniqueInput
+    update: XOR<CPUpdateWithoutHalaqahsInput, CPUncheckedUpdateWithoutHalaqahsInput>
+    create: XOR<CPCreateWithoutHalaqahsInput, CPUncheckedCreateWithoutHalaqahsInput>
+  }
+
+  export type CPUpdateWithWhereUniqueWithoutHalaqahsInput = {
+    where: CPWhereUniqueInput
+    data: XOR<CPUpdateWithoutHalaqahsInput, CPUncheckedUpdateWithoutHalaqahsInput>
+  }
+
+  export type CPUpdateManyWithWhereWithoutHalaqahsInput = {
+    where: CPScalarWhereInput
+    data: XOR<CPUpdateManyMutationInput, CPUncheckedUpdateManyWithoutHalaqahsInput>
+  }
+
+  export type HalaqahMemberUpsertWithWhereUniqueWithoutHalaqahInput = {
+    where: HalaqahMemberWhereUniqueInput
+    update: XOR<HalaqahMemberUpdateWithoutHalaqahInput, HalaqahMemberUncheckedUpdateWithoutHalaqahInput>
+    create: XOR<HalaqahMemberCreateWithoutHalaqahInput, HalaqahMemberUncheckedCreateWithoutHalaqahInput>
+  }
+
+  export type HalaqahMemberUpdateWithWhereUniqueWithoutHalaqahInput = {
+    where: HalaqahMemberWhereUniqueInput
+    data: XOR<HalaqahMemberUpdateWithoutHalaqahInput, HalaqahMemberUncheckedUpdateWithoutHalaqahInput>
+  }
+
+  export type HalaqahMemberUpdateManyWithWhereWithoutHalaqahInput = {
+    where: HalaqahMemberScalarWhereInput
+    data: XOR<HalaqahMemberUpdateManyMutationInput, HalaqahMemberUncheckedUpdateManyWithoutHalaqahInput>
+  }
+
+  export type HalaqahCreateWithoutMembersInput = {
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    active?: boolean
+    teacher?: TeacherCreateNestedOneWithoutHalaqahsInput
+    cps?: CPCreateNestedManyWithoutHalaqahsInput
+  }
+
+  export type HalaqahUncheckedCreateWithoutMembersInput = {
+    id?: number
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    teacherId?: number | null
+    active?: boolean
+    cps?: CPUncheckedCreateNestedManyWithoutHalaqahsInput
+  }
+
+  export type HalaqahCreateOrConnectWithoutMembersInput = {
+    where: HalaqahWhereUniqueInput
+    create: XOR<HalaqahCreateWithoutMembersInput, HalaqahUncheckedCreateWithoutMembersInput>
+  }
+
+  export type StudentCreateWithoutHalaqahMembersInput = {
+    nisn: string
+    fullname: string
+    birth_info?: string | null
+    gender: string
+    class_name: string
+    address?: string | null
+    status?: string
+    assessments?: AssessmentCreateNestedManyWithoutStudentInput
+    attendances?: AttendanceCreateNestedManyWithoutStudentInput
+    homeroomNote?: HomeroomNoteCreateNestedOneWithoutStudentInput
+    personality?: PersonalityCreateNestedOneWithoutStudentInput
+    tahfidzs?: TahfidzCreateNestedManyWithoutStudentInput
+    promotions?: StudentPromotionCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutHalaqahMembersInput = {
+    id?: number
+    nisn: string
+    fullname: string
+    birth_info?: string | null
+    gender: string
+    class_name: string
+    address?: string | null
+    status?: string
+    assessments?: AssessmentUncheckedCreateNestedManyWithoutStudentInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutStudentInput
+    homeroomNote?: HomeroomNoteUncheckedCreateNestedOneWithoutStudentInput
+    personality?: PersonalityUncheckedCreateNestedOneWithoutStudentInput
+    tahfidzs?: TahfidzUncheckedCreateNestedManyWithoutStudentInput
+    promotions?: StudentPromotionUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutHalaqahMembersInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutHalaqahMembersInput, StudentUncheckedCreateWithoutHalaqahMembersInput>
+  }
+
+  export type HalaqahUpsertWithoutMembersInput = {
+    update: XOR<HalaqahUpdateWithoutMembersInput, HalaqahUncheckedUpdateWithoutMembersInput>
+    create: XOR<HalaqahCreateWithoutMembersInput, HalaqahUncheckedCreateWithoutMembersInput>
+    where?: HalaqahWhereInput
+  }
+
+  export type HalaqahUpdateToOneWithWhereWithoutMembersInput = {
+    where?: HalaqahWhereInput
+    data: XOR<HalaqahUpdateWithoutMembersInput, HalaqahUncheckedUpdateWithoutMembersInput>
+  }
+
+  export type HalaqahUpdateWithoutMembersInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    teacher?: TeacherUpdateOneWithoutHalaqahsNestedInput
+    cps?: CPUpdateManyWithoutHalaqahsNestedInput
+  }
+
+  export type HalaqahUncheckedUpdateWithoutMembersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    teacherId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    cps?: CPUncheckedUpdateManyWithoutHalaqahsNestedInput
+  }
+
+  export type StudentUpsertWithoutHalaqahMembersInput = {
+    update: XOR<StudentUpdateWithoutHalaqahMembersInput, StudentUncheckedUpdateWithoutHalaqahMembersInput>
+    create: XOR<StudentCreateWithoutHalaqahMembersInput, StudentUncheckedCreateWithoutHalaqahMembersInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutHalaqahMembersInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutHalaqahMembersInput, StudentUncheckedUpdateWithoutHalaqahMembersInput>
+  }
+
+  export type StudentUpdateWithoutHalaqahMembersInput = {
+    nisn?: StringFieldUpdateOperationsInput | string
+    fullname?: StringFieldUpdateOperationsInput | string
+    birth_info?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: StringFieldUpdateOperationsInput | string
+    class_name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    assessments?: AssessmentUpdateManyWithoutStudentNestedInput
+    attendances?: AttendanceUpdateManyWithoutStudentNestedInput
+    homeroomNote?: HomeroomNoteUpdateOneWithoutStudentNestedInput
+    personality?: PersonalityUpdateOneWithoutStudentNestedInput
+    tahfidzs?: TahfidzUpdateManyWithoutStudentNestedInput
+    promotions?: StudentPromotionUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutHalaqahMembersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nisn?: StringFieldUpdateOperationsInput | string
+    fullname?: StringFieldUpdateOperationsInput | string
+    birth_info?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: StringFieldUpdateOperationsInput | string
+    class_name?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    assessments?: AssessmentUncheckedUpdateManyWithoutStudentNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutStudentNestedInput
+    homeroomNote?: HomeroomNoteUncheckedUpdateOneWithoutStudentNestedInput
+    personality?: PersonalityUncheckedUpdateOneWithoutStudentNestedInput
+    tahfidzs?: TahfidzUncheckedUpdateManyWithoutStudentNestedInput
+    promotions?: StudentPromotionUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type AssignmentCreateManyTeacherInput = {
@@ -22921,6 +26807,15 @@ export namespace Prisma {
     subjectId: number
     className: string
     academicYear?: string
+  }
+
+  export type HalaqahCreateManyTeacherInput = {
+    id?: number
+    name: string
+    jilid: number
+    academicYear: string
+    semester: number
+    active?: boolean
   }
 
   export type AssignmentUpdateWithoutTeacherInput = {
@@ -22941,6 +26836,36 @@ export namespace Prisma {
     subjectId?: IntFieldUpdateOperationsInput | number
     className?: StringFieldUpdateOperationsInput | string
     academicYear?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HalaqahUpdateWithoutTeacherInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    cps?: CPUpdateManyWithoutHalaqahsNestedInput
+    members?: HalaqahMemberUpdateManyWithoutHalaqahNestedInput
+  }
+
+  export type HalaqahUncheckedUpdateWithoutTeacherInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    cps?: CPUncheckedUpdateManyWithoutHalaqahsNestedInput
+    members?: HalaqahMemberUncheckedUpdateManyWithoutHalaqahNestedInput
+  }
+
+  export type HalaqahUncheckedUpdateManyWithoutTeacherInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AssignmentCreateManySubjectInput = {
@@ -22984,6 +26909,7 @@ export namespace Prisma {
     grade?: IntFieldUpdateOperationsInput | number
     semester?: IntFieldUpdateOperationsInput | number
     tps?: TPUpdateManyWithoutCpNestedInput
+    halaqahs?: HalaqahUpdateManyWithoutCpsNestedInput
   }
 
   export type CPUncheckedUpdateWithoutSubjectInput = {
@@ -22993,6 +26919,7 @@ export namespace Prisma {
     grade?: IntFieldUpdateOperationsInput | number
     semester?: IntFieldUpdateOperationsInput | number
     tps?: TPUncheckedUpdateManyWithoutCpNestedInput
+    halaqahs?: HalaqahUncheckedUpdateManyWithoutCpsNestedInput
   }
 
   export type CPUncheckedUpdateManyWithoutSubjectInput = {
@@ -23026,6 +26953,37 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     code?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HalaqahUpdateWithoutCpsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    teacher?: TeacherUpdateOneWithoutHalaqahsNestedInput
+    members?: HalaqahMemberUpdateManyWithoutHalaqahNestedInput
+  }
+
+  export type HalaqahUncheckedUpdateWithoutCpsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    teacherId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    members?: HalaqahMemberUncheckedUpdateManyWithoutHalaqahNestedInput
+  }
+
+  export type HalaqahUncheckedUpdateManyWithoutCpsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    jilid?: IntFieldUpdateOperationsInput | number
+    academicYear?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    teacherId?: NullableIntFieldUpdateOperationsInput | number | null
+    active?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AssessmentCreateManyTpInput = {
@@ -23087,6 +27045,13 @@ export namespace Prisma {
     status?: string
     note?: string | null
     promotedAt?: Date | string
+  }
+
+  export type HalaqahMemberCreateManyStudentInput = {
+    id?: number
+    halaqahId: number
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
   }
 
   export type AssessmentUpdateWithoutStudentInput = {
@@ -23185,6 +27150,81 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     promotedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HalaqahMemberUpdateWithoutStudentInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    halaqah?: HalaqahUpdateOneRequiredWithoutMembersNestedInput
+  }
+
+  export type HalaqahMemberUncheckedUpdateWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    halaqahId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type HalaqahMemberUncheckedUpdateManyWithoutStudentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    halaqahId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type HalaqahMemberCreateManyHalaqahInput = {
+    id?: number
+    studentId: number
+    joinedAt?: Date | string
+    leftAt?: Date | string | null
+  }
+
+  export type CPUpdateWithoutHalaqahsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    grade?: IntFieldUpdateOperationsInput | number
+    semester?: IntFieldUpdateOperationsInput | number
+    subject?: SubjectUpdateOneRequiredWithoutCpsNestedInput
+    tps?: TPUpdateManyWithoutCpNestedInput
+  }
+
+  export type CPUncheckedUpdateWithoutHalaqahsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    subjectId?: IntFieldUpdateOperationsInput | number
+    grade?: IntFieldUpdateOperationsInput | number
+    semester?: IntFieldUpdateOperationsInput | number
+    tps?: TPUncheckedUpdateManyWithoutCpNestedInput
+  }
+
+  export type CPUncheckedUpdateManyWithoutHalaqahsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    code?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    subjectId?: IntFieldUpdateOperationsInput | number
+    grade?: IntFieldUpdateOperationsInput | number
+    semester?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type HalaqahMemberUpdateWithoutHalaqahInput = {
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    student?: StudentUpdateOneRequiredWithoutHalaqahMembersNestedInput
+  }
+
+  export type HalaqahMemberUncheckedUpdateWithoutHalaqahInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type HalaqahMemberUncheckedUpdateManyWithoutHalaqahInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    studentId?: IntFieldUpdateOperationsInput | number
+    joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    leftAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

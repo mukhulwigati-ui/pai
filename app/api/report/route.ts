@@ -139,6 +139,15 @@ function normalizeUpper(
   ).toUpperCase();
 }
 
+function isTartili(value: unknown): boolean {
+  return normalizeText(value).toLowerCase() === 'tartili';
+}
+
+function displayPredicate(value: unknown): string {
+  const text = normalizeText(value);
+  return text.replace(/\bjeid\b/gi, 'Jayyid') || '-';
+}
+
 function normalizeScore(
   value: unknown
 ): number | null {
@@ -486,6 +495,44 @@ export async function GET(
       );
     }
 
+    // Tartili mengikuti halaqah pada periode aktif, bukan tingkat kelas.
+    const halaqahMemberships = await prisma.halaqahMember.findMany({
+      where: {
+        studentId,
+        leftAt: null,
+        halaqah: {
+          active: true,
+          academicYear: settings.academicYear,
+          semester: activeSemester,
+        },
+      },
+      select: {
+        halaqah: {
+          select: {
+            id: true,
+            name: true,
+            jilid: true,
+            academicYear: true,
+            semester: true,
+            teacher: { select: { fullname: true } },
+            cps: { select: { id: true } },
+          },
+        },
+      },
+    });
+
+    if (halaqahMemberships.length > 1) {
+      return errorResponse(
+        'Siswa memiliki lebih dari satu halaqah aktif pada periode ini. Perbaiki keanggotaan halaqah terlebih dahulu.',
+        409
+      );
+    }
+
+    const activeHalaqah = halaqahMemberships[0]?.halaqah ?? null;
+    const tartiliCpIds = new Set(
+      activeHalaqah?.cps.map((cp) => cp.id) ?? []
+    );
+
     /* ========================================================
        1. KEHADIRAN
     ======================================================== */
@@ -590,18 +637,11 @@ export async function GET(
         continue;
       }
 
-      /* ------------------------------------------------------
-         HARUS GRADE YANG SAMA DENGAN SISWA
-      ------------------------------------------------------ */
-
-      if (
-        Number(
-          cp.grade
-        ) !==
-        Number(
-          classRoom.grade
-        )
-      ) {
+      const tartili = isTartili(subject.name);
+      if (tartili) {
+        // Nilai dari jilid/kelompok lain tidak ikut masuk rapor.
+        if (!activeHalaqah || !tartiliCpIds.has(cp.id)) continue;
+      } else if (Number(cp.grade) !== Number(classRoom.grade)) {
         continue;
       }
 
@@ -660,6 +700,15 @@ export async function GET(
         normalizeUpper(
           assessment.type
         );
+
+      // Tartili hanya memakai nilai TP, sesuai halaman input halaqah.
+      if (tartili && !['ORAL', 'TP_ORAL', 'WRITTEN', 'TP_WRITTEN'].includes(type)) {
+        continue;
+      }
+      if (!['ORAL', 'TP_ORAL', 'WRITTEN', 'TP_WRITTEN',
+        'STS_ORAL', 'STS_WRITTEN', 'SAS_ORAL', 'SAS_WRITTEN'].includes(type)) {
+        continue;
+      }
 
       if (
         !subjectMap[
@@ -919,18 +968,6 @@ export async function GET(
         : 0;
 
     /* ========================================================
-       5. JUMLAH SISWA KELAS
-    ======================================================== */
-
-    const totalStudents =
-      await prisma.student.count({
-        where: {
-          class_name:
-            classRoom.name,
-        },
-      });
-
-    /* ========================================================
        6. KEPRIBADIAN
     ======================================================== */
 
@@ -943,55 +980,31 @@ export async function GET(
       rawPersonality
         ? [
             {
-              arabic:
-                'السلوك',
-
               name:
                 'Perilaku & Akhlak',
 
-              value:
-                rawPersonality
-                  .suluk ??
-                '-',
+              value: displayPredicate(rawPersonality.suluk),
             },
 
             {
-              arabic:
-                'المواظبة',
-
               name:
                 'Konsistensi & Ketekunan',
 
-              value:
-                rawPersonality
-                  .muwadhotah ??
-                '-',
+              value: displayPredicate(rawPersonality.muwadhotah),
             },
 
             {
-              arabic:
-                'النظافة',
-
               name:
                 'Kebersihan & Kerapian',
 
-              value:
-                rawPersonality
-                  .nadzofah ??
-                '-',
+              value: displayPredicate(rawPersonality.nadzofah),
             },
 
             {
-              arabic:
-                'الانضباط',
-
               name:
                 'Disiplin & Tanggung Jawab',
 
-              value:
-                rawPersonality
-                  .indhiplat ??
-                '-',
+              value: displayPredicate(rawPersonality.indhiplat),
             },
           ]
         : [];
@@ -1068,6 +1081,15 @@ export async function GET(
           classRoom.grade,
       },
 
+      halaqah: activeHalaqah ? {
+        id: activeHalaqah.id,
+        name: activeHalaqah.name,
+        jilid: activeHalaqah.jilid,
+        academicYear: activeHalaqah.academicYear,
+        semester: activeHalaqah.semester,
+        teacherName: activeHalaqah.teacher?.fullname ?? '',
+      } : null,
+
       scoreRecords,
 
       personality,
@@ -1087,7 +1109,6 @@ export async function GET(
 
       averageScore,
 
-      totalStudents,
 
       /*
        * Belum dihitung otomatis.

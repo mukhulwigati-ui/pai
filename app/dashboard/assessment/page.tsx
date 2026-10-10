@@ -848,6 +848,25 @@ export default function AssessmentPage() {
     loadData();
   }, [loadData]);
 
+  const [halaqahs, setHalaqahs] = useState<Array<{
+    id: number; name: string; jilid: number; academicYear: string; semester: number;
+    cps: Array<{ id: number }>; members: Array<{ studentId: number }>;
+  }>>([]);
+  const [selectedHalaqahId, setSelectedHalaqahId] = useState('');
+  const isTartili = subjects.some(item => String(item.id) === selectedSubjectId && item.name.trim().toLowerCase() === 'tartili');
+  const selectedHalaqah = halaqahs.find(item => String(item.id) === selectedHalaqahId);
+  useEffect(() => {
+    if (!isTartili) return;
+    let cancelled = false;
+    setActiveTarget(null); setScoresMap({}); setSelectedHalaqahId('');
+    fetch('/api/halaqah', { cache: 'no-store' }).then(async response => {
+      if (!response.ok) throw new Error(await getApiError(response, 'Gagal memuat halaqah.'));
+      const result = await response.json();
+      if (!cancelled) setHalaqahs(result.data || []);
+    }).catch(error => { if (!cancelled) showMessage(error.message, 'error'); });
+    return () => { cancelled = true; };
+  }, [isTartili]);
+
   /* ==========================================================
      SELECTED CLASS DATA
   ========================================================== */
@@ -855,17 +874,18 @@ export default function AssessmentPage() {
   const selectedClassData =
     useMemo(
       () =>
-        classes.find(
+        (isTartili ? (selectedHalaqah ? { id: selectedHalaqah.id, name: selectedHalaqah.name, grade: selectedHalaqah.jilid, level: 'SD' } : null) : classes.find(
           (
             item
           ) =>
             item.name ===
             selectedClass
-        ) ||
+        )) ||
         null,
       [
         classes,
         selectedClass,
+        isTartili, selectedHalaqah,
       ]
     );
 
@@ -925,7 +945,7 @@ export default function AssessmentPage() {
   const filteredStudents =
     useMemo(() => {
       if (
-        !selectedClass
+        (isTartili ? !selectedHalaqah : !selectedClass)
       ) {
         return [];
       }
@@ -935,7 +955,7 @@ export default function AssessmentPage() {
           (
             student
           ) =>
-            student.class_name ===
+            isTartili ? Boolean(selectedHalaqah?.members.some(member => member.studentId === student.id)) : student.class_name ===
             selectedClass
         )
         .sort(
@@ -951,6 +971,7 @@ export default function AssessmentPage() {
     }, [
       students,
       selectedClass,
+      isTartili, selectedHalaqah,
     ]);
 
   /* ==========================================================
@@ -988,7 +1009,7 @@ export default function AssessmentPage() {
         );
 
       if (
-        !VALID_GRADES.includes(
+        !isTartili && !VALID_GRADES.includes(
           classGrade
         )
       ) {
@@ -1017,11 +1038,9 @@ export default function AssessmentPage() {
               ) ===
                 targetName;
 
-            const matchGrade =
-              Number(
-                cp.grade
-              ) ===
-              classGrade;
+            const matchGrade = isTartili
+              ? Boolean(selectedHalaqah?.cps.some(item => item.id === cp.id))
+              : Number(cp.grade) === classGrade;
 
             const cpSemester =
               cp.semester ===
@@ -1058,6 +1077,7 @@ export default function AssessmentPage() {
       selectedSubjectId,
       selectedClassData,
       activeSemester,
+      isTartili, selectedHalaqah,
     ]);
 
   /* ==========================================================
@@ -1367,6 +1387,7 @@ export default function AssessmentPage() {
 
   const handleSaveAllScores =
     async () => {
+      if (isTartili && activeTarget?.targetType !== 'TP') { showMessage('Tartili menggunakan penilaian CP/TP.', 'error'); return; }
       if (
         !activeTarget
       ) {
@@ -1603,7 +1624,7 @@ export default function AssessmentPage() {
 
                       body:
                         JSON.stringify(
-                          requestItem.payload
+                          { ...requestItem.payload, ...(isTartili ? { halaqahId: Number(selectedHalaqahId) } : {}) }
                         ),
                     }
                   );
@@ -1799,7 +1820,7 @@ export default function AssessmentPage() {
 
               {/* CLASS */}
 
-              <div>
+              <div hidden={isTartili}>
 
                 <label className="mb-1.5 block text-base font-bold text-slate-700">
                   1. Pilih Kelas *
@@ -1931,7 +1952,21 @@ export default function AssessmentPage() {
             MAIN CONTENT
         ===================================================== */}
 
-        {selectedClass &&
+        {isTartili && (
+          <section className="rounded-sm border border-[#c3c4c7] bg-white p-4">
+            <label className="mb-2 block font-semibold">Pilih Halaqah Tartili / Jilid</label>
+            <select className="w-full rounded border p-3" value={selectedHalaqahId}
+              onChange={event => { setSelectedHalaqahId(event.target.value); setActiveTarget(null); setScoresMap({}); }}>
+              <option value="">-- Pilih Halaqah --</option>
+              {halaqahs.filter(item => item.academicYear === academicYear && item.semester === activeSemester).map(item => (
+                <option key={item.id} value={item.id}>{item.name} • Jilid {item.jilid}</option>
+              ))}
+            </select>
+            <a href="/dashboard/halaqah" className="mt-3 inline-block text-[#2271b1] underline">Kelola halaqah, anggota, dan CP/TP Tartili</a>
+            <p className="mt-2 text-sm text-gray-600">Anggota dapat berasal dari kelas berbeda. Penilaian Tartili menggunakan CP/TP yang dipilih untuk halaqah ini.</p>
+          </section>
+        )}
+        {(isTartili ? selectedHalaqahId : selectedClass) &&
         selectedSubjectId &&
         selectedClassData &&
         selectedSubject ? (
@@ -1949,10 +1984,8 @@ export default function AssessmentPage() {
                 />
 
                 <span className="font-semibold text-emerald-900">
-                  Kelas{' '}
-                  {
-                    selectedClass
-                  }
+                  {isTartili ? 'Halaqah ' : 'Kelas '}
+                  {isTartili ? selectedHalaqah?.name : selectedClass}
                 </span>
 
                 <span className="text-emerald-400">
@@ -1983,7 +2016,7 @@ export default function AssessmentPage() {
                 STS & SAS
             ================================================= */}
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div hidden={isTartili} className="grid gap-4 sm:grid-cols-2">
 
               <AssessmentSpecialCard
                 title="Sumatif Tengah Semester (STS)"
@@ -2037,10 +2070,8 @@ export default function AssessmentPage() {
                   {
                     selectedSubject.name
                   }{' '}
-                  • Kelas{' '}
-                  {
-                    selectedClassData.grade
-                  }{' '}
+                  {isTartili ? '• Jilid ' : '• Kelas '}
+                  {selectedClassData.grade}{' '}
                   • Semester{' '}
                   {
                     activeSemester
@@ -2063,7 +2094,7 @@ export default function AssessmentPage() {
                   </p>
 
                   <p className="mx-auto mt-1 max-w-lg text-sm leading-5 text-[#646970]">
-                    Belum ditemukan CP untuk {selectedSubject.name}, Kelas {selectedClassData.grade}, Semester {activeSemester}.
+                    Belum ditemukan CP untuk {selectedSubject.name}, {isTartili ? `Halaqah ${selectedHalaqah?.name}` : `Kelas ${selectedClassData.grade}`}, Semester {activeSemester}.
                   </p>
 
                 </div>

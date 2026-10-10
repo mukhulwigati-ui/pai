@@ -246,6 +246,24 @@ exports.Prisma.StudentPromotionScalarFieldEnum = {
   promotedAt: 'promotedAt'
 };
 
+exports.Prisma.HalaqahScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  jilid: 'jilid',
+  academicYear: 'academicYear',
+  semester: 'semester',
+  teacherId: 'teacherId',
+  active: 'active'
+};
+
+exports.Prisma.HalaqahMemberScalarFieldEnum = {
+  id: 'id',
+  halaqahId: 'halaqahId',
+  studentId: 'studentId',
+  joinedAt: 'joinedAt',
+  leftAt: 'leftAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -276,7 +294,9 @@ exports.Prisma.ModelName = {
   Personality: 'Personality',
   HomeroomNote: 'HomeroomNote',
   SystemSetting: 'SystemSetting',
-  StudentPromotion: 'StudentPromotion'
+  StudentPromotion: 'StudentPromotion',
+  Halaqah: 'Halaqah',
+  HalaqahMember: 'HalaqahMember'
 };
 
 /**

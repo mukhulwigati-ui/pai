@@ -3,6 +3,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
@@ -74,7 +75,6 @@ type ScoreRecord = {
 };
 
 type PersonalityRecord = {
-  arabic: string;
   name: string;
   value: string | null;
 };
@@ -116,76 +116,25 @@ type ReportData = Student & {
 
   averageScore?: number | null;
 
-  totalStudents?: number | null;
+  halaqah?: {
+    id: number;
+    name: string;
+    jilid: number;
+    academicYear: string;
+    semester: number;
+    teacherName: string;
+  } | null;
 
   rank?: number | null;
 };
 
 type SubjectDisplay = {
   name: string;
-  arabic: string;
 };
 
 /* ============================================================
    ARABIC SUBJECT LABEL
 ============================================================ */
-
-const SUBJECT_ARABIC_MAP:
-  Record<string, string> = {
-    'aqidah islamiyah':
-      'العقيدة الإسلامية',
-
-    aqidah:
-      'العقيدة',
-
-    akidah:
-      'العقيدة',
-
-    fikih:
-      'الفقه',
-
-    fiqih:
-      'الفقه',
-
-    siroh:
-      'السيرة',
-
-    'siroh nabawiyah':
-      'السيرة النبوية',
-
-    'sirah nabawiyah':
-      'السيرة النبوية',
-
-    'bahasa arab':
-      'اللغة العربية',
-
-    'tahfidz al quran':
-      'تحفيظ القرآن',
-
-    "tahfidz al qur'an":
-      'تحفيظ القرآن',
-
-    tahfidz:
-      'تحفيظ القرآن',
-
-    tahsin:
-      'تحسين القراءة',
-
-    tartili:
-      'ترتيل القرآن',
-
-    tajwid:
-      'التجويد',
-
-    hadis:
-      'الحديث',
-
-    hadits:
-      'الحديث',
-
-    'pendidikan agama islam':
-      'التربية الإسلامية',
-  };
 
 /* ============================================================
    PERSONALITY
@@ -193,33 +142,21 @@ const SUBJECT_ARABIC_MAP:
 
 const PERSONALITY_ASPECTS = [
   {
-    arabic:
-      'السلوك',
-
     name:
       'Perilaku & Akhlak',
   },
 
   {
-    arabic:
-      'المواظبة',
-
     name:
       'Konsistensi & Ketekunan',
   },
 
   {
-    arabic:
-      'النظافة',
-
     name:
       'Kebersihan & Kerapian',
   },
 
   {
-    arabic:
-      'الانضباط',
-
     name:
       'Disiplin & Tanggung Jawab',
   },
@@ -317,7 +254,7 @@ function normalizeText(
 
 function normalizeScore(
   value: unknown
-): number {
+): number | null {
   const numberValue =
     Number(value);
 
@@ -326,9 +263,10 @@ function normalizeScore(
       numberValue
     )
   ) {
-    return 0;
+    return null;
   }
 
+  if (value === null || value === undefined || value === '' || numberValue < 0 || numberValue > 100) return null;
   return Math.round(
     numberValue
   );
@@ -422,50 +360,6 @@ function typeMatches(
    SUBJECT
 ============================================================ */
 
-function getSubjectArabic(
-  subjectName: string
-) {
-  const normalized =
-    normalizeText(
-      subjectName
-    );
-
-  if (
-    SUBJECT_ARABIC_MAP[
-      normalized
-    ]
-  ) {
-    return SUBJECT_ARABIC_MAP[
-      normalized
-    ];
-  }
-
-  /*
-   * Coba pencocokan parsial.
-   */
-  for (
-    const [
-      key,
-      arabic,
-    ] of Object.entries(
-      SUBJECT_ARABIC_MAP
-    )
-  ) {
-    if (
-      normalized.includes(
-        key
-      ) ||
-      key.includes(
-        normalized
-      )
-    ) {
-      return arabic;
-    }
-  }
-
-  return '—';
-}
-
 /* ============================================================
    PERSONALITY VALUE
 ============================================================ */
@@ -474,8 +368,7 @@ function getPersonalityValue(
   personality:
     | PersonalityRecord[]
     | undefined,
-  aspectName: string,
-  aspectArabic: string
+  aspectName: string
 ): string {
   if (
     !personality ||
@@ -495,19 +388,9 @@ function getPersonalityValue(
             item.name
           );
 
-        const itemArabic =
-          normalizeText(
-            item.arabic
-          );
-
         const targetName =
           normalizeText(
             aspectName
-          );
-
-        const targetArabic =
-          normalizeText(
-            aspectArabic
           );
 
         /*
@@ -570,8 +453,6 @@ function getPersonalityValue(
         return (
           itemName ===
             targetName ||
-          itemArabic ===
-            targetArabic ||
           itemName.includes(
             targetName
           ) ||
@@ -620,10 +501,11 @@ function getPersonalityValue(
 
 function getCompetencyDescriptions(
   subjectName: string,
-  score: number
+  score: number | null,
+  studentName: string
 ) {
   if (
-    score <= 0
+    score === null
   ) {
     return {
       achieved:
@@ -636,7 +518,7 @@ function getCompetencyDescriptions(
   ) {
     return {
       achieved:
-        `Siswa menunjukkan penguasaan kompetensi ${subjectName} dengan sangat baik.`,
+        `Ananda ${studentName} menunjukkan penguasaan kompetensi ${subjectName} dengan sangat baik.`,
     };
   }
 
@@ -645,7 +527,7 @@ function getCompetencyDescriptions(
   ) {
     return {
       achieved:
-        `Siswa mampu memahami dan menguasai materi utama ${subjectName} dengan baik.`,
+        `Ananda ${studentName} mampu memahami dan menguasai materi utama ${subjectName} dengan baik.`,
     };
   }
 
@@ -654,7 +536,7 @@ function getCompetencyDescriptions(
   ) {
     return {
       achieved:
-        `Siswa telah menunjukkan pemahaman yang cukup baik terhadap kompetensi ${subjectName}.`,
+        `Ananda ${studentName} telah menunjukkan pemahaman yang cukup baik terhadap kompetensi ${subjectName}.`,
     };
   }
 
@@ -663,7 +545,7 @@ function getCompetencyDescriptions(
   ) {
     return {
       achieved:
-        `Siswa mulai menguasai kompetensi dasar pada mata pelajaran ${subjectName}.`,
+        `Ananda ${studentName} mulai menguasai kompetensi dasar pada mata pelajaran ${subjectName}.`,
     };
   }
 
@@ -679,7 +561,8 @@ function getCompetencyDescriptions(
 
 function getPersonalityDescription(
   aspectName: string,
-  value: string
+  value: string,
+  studentName: string
 ) {
   const normalized =
     normalizeText(
@@ -706,7 +589,7 @@ function getPersonalityDescription(
   ) {
     return {
       achieved:
-        `Siswa menunjukkan ${aspectName.toLowerCase()} yang sangat baik dan konsisten.`,
+        `Ananda ${studentName} menunjukkan ${aspectName.toLowerCase()} yang sangat baik dan konsisten.`,
     };
   }
 
@@ -720,7 +603,7 @@ function getPersonalityDescription(
   ) {
     return {
       achieved:
-        `Siswa menunjukkan ${aspectName.toLowerCase()} yang baik dalam kegiatan sehari-hari.`,
+        `Ananda ${studentName} menunjukkan ${aspectName.toLowerCase()} yang baik dalam kegiatan sehari-hari.`,
     };
   }
 
@@ -737,13 +620,13 @@ function getPersonalityDescription(
   ) {
     return {
       achieved:
-        `Siswa memperoleh predikat ${value} pada aspek ${aspectName}.`,
+        `Ananda ${studentName} memperoleh predikat ${value} pada aspek ${aspectName}.`,
     };
   }
 
   return {
     achieved:
-      `Siswa memperoleh predikat ${value} pada aspek ${aspectName}.`,
+      `Ananda ${studentName} memperoleh predikat ${value} pada aspek ${aspectName}.`,
   };
 }
 
@@ -786,6 +669,7 @@ function ReportSection({
 ============================================================ */
 
 export default function ReportPage() {
+  const requestVersion = useRef(0);
   const [teacherNameOverride, setTeacherNameOverride] = useState('');
   /* ==========================================================
      STATE
@@ -1104,6 +988,8 @@ export default function ReportPage() {
         return;
       }
 
+      const version = ++requestVersion.current;
+      setReportData(null);
       try {
         setLoadingReport(
           true
@@ -1132,6 +1018,8 @@ export default function ReportPage() {
 
         const data =
           await response.json();
+
+        if (version !== requestVersion.current) return;
 
         if (
           !response.ok
@@ -1178,6 +1066,7 @@ export default function ReportPage() {
       } catch (
         err
       ) {
+        if (version !== requestVersion.current) return;
         setReportData(
           null
         );
@@ -1189,7 +1078,7 @@ export default function ReportPage() {
             : 'Gagal memuat data rapor.'
         );
       } finally {
-        setLoadingReport(
+        if (version === requestVersion.current) setLoadingReport(
           false
         );
       }
@@ -1210,6 +1099,8 @@ export default function ReportPage() {
       setError('');
 
       if (!value) {
+        requestVersion.current++;
+        setLoadingReport(false);
         setReportData(
           null
         );
@@ -1230,6 +1121,8 @@ export default function ReportPage() {
     (
       value: string
     ) => {
+      requestVersion.current++;
+      setLoadingReport(false);
       setClassFilter(
         value
       );
@@ -1312,10 +1205,6 @@ export default function ReportPage() {
             {
               name,
 
-              arabic:
-                getSubjectArabic(
-                  name
-                ),
             }
           );
         }
@@ -1413,12 +1302,12 @@ export default function ReportPage() {
       categoryType:
         | 'ORAL'
         | 'WRITTEN'
-    ): number => {
+    ): number | null => {
       if (
         scoreRecords.length ===
         0
       ) {
-        return 0;
+        return null;
       }
 
       /*
@@ -1949,7 +1838,7 @@ export default function ReportPage() {
                       
                     </span>
 
-                    <span className="max-w-[55%] truncate font-bold text-slate-900">
+                    <span className="max-w-[65%] break-words text-right font-bold text-slate-900">
                       {
                         reportData.fullname
                       }
@@ -1980,7 +1869,7 @@ export default function ReportPage() {
                       
                     </span>
 
-                    <span className="font-bold text-[#477b69]">
+                    <span className="font-bold text-black">
                       {reportData.class_name ||
                         '-'}{' '}
                       • Tingkat {reportGrade}
@@ -2070,7 +1959,8 @@ export default function ReportPage() {
                           const description =
                             getCompetencyDescriptions(
                               subject.name,
-                              score
+                              score,
+                              reportData.fullname
                             );
 
                           return (
@@ -2090,17 +1980,19 @@ export default function ReportPage() {
                                   {
                                     subject.name
                                   }
+                                  {normalizeText(subject.name) === 'tartili' && reportData.halaqah ? (
+                                    <span className="mt-1 block text-[13px] font-normal">
+                                      Jilid {reportData.halaqah.jilid}
+                                    </span>
+                                  ) : null}
                                 </div>
 
                                 
 
                               </td>
 
-                              <td className="border border-slate-300 py-1.5 text-center align-top font-bold text-[#477b69]">
-                                {score >
-                                0
-                                  ? score
-                                  : '-'}
+                              <td className="border border-slate-300 py-1.5 text-center align-top font-bold text-black">
+                                {score ?? '-'}
                               </td>
 
                               <td className="border border-slate-300 px-2.5 py-1.5 align-top leading-[1.5] text-slate-700">
@@ -2194,7 +2086,8 @@ export default function ReportPage() {
                           const description =
                             getCompetencyDescriptions(
                               subject.name,
-                              score
+                              score,
+                              reportData.fullname
                             );
 
                           return (
@@ -2214,17 +2107,19 @@ export default function ReportPage() {
                                   {
                                     subject.name
                                   }
+                                  {normalizeText(subject.name) === 'tartili' && reportData.halaqah ? (
+                                    <span className="mt-1 block text-[13px] font-normal">
+                                      Jilid {reportData.halaqah.jilid}
+                                    </span>
+                                  ) : null}
                                 </div>
 
                                 
 
                               </td>
 
-                              <td className="border border-slate-300 py-1 text-center align-top font-bold text-[#477b69]">
-                                {score >
-                                0
-                                  ? score
-                                  : '-'}
+                              <td className="border border-slate-300 py-1 text-center align-top font-bold text-black">
+                                {score ?? '-'}
                               </td>
 
                               <td className="border border-slate-300 px-2.5 py-1 align-top leading-[1.5] text-slate-700">
@@ -2297,14 +2192,14 @@ export default function ReportPage() {
                         const value =
                           getPersonalityValue(
                             personality,
-                            item.name,
-                            item.arabic
+                            item.name
                           );
 
                         const description =
                           getPersonalityDescription(
                             item.name,
-                            value
+                            value,
+                            reportData.fullname
                           );
 
                         return (
@@ -2335,7 +2230,7 @@ export default function ReportPage() {
                                 value ===
                                 '-'
                                   ? 'text-slate-400'
-                                  : 'text-[#477b69]'
+                                  : 'text-black'
                               }`}
                             >
                               {
@@ -2421,7 +2316,7 @@ export default function ReportPage() {
                         Rata-rata
                       </div>
 
-                      <div className="mt-0.5 font-bold text-[#477b69]">
+                      <div className="mt-0.5 font-bold text-black">
                         {reportData.averageScore ??
                           '-'}
                       </div>
