@@ -255,8 +255,9 @@ function normalizeText(
 function normalizeScore(
   value: unknown
 ): number | null {
-  const numberValue =
-    Number(value);
+  if (typeof value !== 'number' && typeof value !== 'string') return null;
+  if (typeof value === 'string' && !value.trim()) return null;
+  const numberValue = Number(value);
 
   if (
     !Number.isFinite(
@@ -308,52 +309,13 @@ function normalizeType(
     );
 }
 
-function typeMatches(
-  databaseType: unknown,
-  requestedType:
-    | 'ORAL'
-    | 'WRITTEN'
-): boolean {
-  const type =
-    normalizeType(
-      databaseType
-    );
-
-  if (
-    requestedType ===
-    'ORAL'
-  ) {
-    return [
-      'oral',
-      'lisan',
-      'ujian lisan',
-      'praktik',
-      'praktek',
-    ].some(
-      (
-        item
-      ) =>
-        type === item ||
-        type.includes(
-          item
-        )
-    );
-  }
-
-  return [
-    'written',
-    'tertulis',
-    'ujian tertulis',
-    'tulis',
-  ].some(
-    (
-      item
-    ) =>
-      type === item ||
-      type.includes(
-        item
-      )
-  );
+function typeMatches(databaseType: unknown, requestedType: 'ORAL' | 'WRITTEN'): boolean {
+  const type = normalizeType(databaseType);
+  // Nilai akhir berasal dari API rapor; STS/SAS tidak dianggap nilai akhir.
+  const aliases = requestedType === 'ORAL'
+    ? ['oral', 'tp oral', 'lisan', 'ujian lisan', 'praktik', 'praktek']
+    : ['written', 'tp written', 'tertulis', 'ujian tertulis', 'tulis'];
+  return aliases.includes(type);
 }
 
 /* ============================================================
@@ -449,6 +411,8 @@ function getPersonalityValue(
 
             return [];
           })();
+
+        if (!itemName) return false;
 
         return (
           itemName ===
@@ -670,6 +634,12 @@ function ReportSection({
 
 export default function ReportPage() {
   const requestVersion = useRef(0);
+  const reportController = useRef<AbortController | null>(null);
+
+  useEffect(() => () => {
+    requestVersion.current++;
+    reportController.current?.abort();
+  }, []);
   const [teacherNameOverride, setTeacherNameOverride] = useState('');
   /* ==========================================================
      STATE
@@ -980,7 +950,7 @@ export default function ReportPage() {
           ? selectedId
           : studentId;
 
-      if (!id) {
+      if (!id || !/^[1-9]\d*$/.test(id)) {
         setError(
           'Silakan pilih siswa terlebih dahulu.'
         );
@@ -988,6 +958,9 @@ export default function ReportPage() {
         return;
       }
 
+      reportController.current?.abort();
+      const controller = new AbortController();
+      reportController.current = controller;
       const version = ++requestVersion.current;
       setReportData(null);
       try {
@@ -1005,6 +978,7 @@ export default function ReportPage() {
             {
               cache:
                 'no-store',
+              signal: controller.signal,
 
               headers: {
                 'Cache-Control':
@@ -1016,13 +990,14 @@ export default function ReportPage() {
             }
           );
 
-        const data =
-          await response.json();
+        const data = await response.json().catch(() => {
+          throw new Error(`Server mengembalikan respons yang tidak valid (HTTP ${response.status}).`);
+        });
 
         if (version !== requestVersion.current) return;
 
         if (
-          !response.ok
+          !response.ok || data?.success === false
         ) {
           throw new Error(
             data?.message ||
@@ -1035,10 +1010,17 @@ export default function ReportPage() {
           data?.data ||
           null;
 
-        if (!report) {
+        if (!report || typeof report !== 'object' || Array.isArray(report)) {
           throw new Error(
             'Data rapor siswa tidak ditemukan.'
           );
+        }
+
+        if (Number(report.id) !== Number(id)) {
+          throw new Error('Data rapor tidak sesuai dengan siswa yang dipilih. Silakan muat ulang.');
+        }
+        if (report.scoreRecords !== undefined && !Array.isArray(report.scoreRecords)) {
+          throw new Error('Format nilai rapor tidak valid. Periksa API rapor.');
         }
 
         /*
@@ -1066,7 +1048,7 @@ export default function ReportPage() {
       } catch (
         err
       ) {
-        if (version !== requestVersion.current) return;
+        if (version !== requestVersion.current || controller.signal.aborted) return;
         setReportData(
           null
         );
@@ -1100,6 +1082,7 @@ export default function ReportPage() {
 
       if (!value) {
         requestVersion.current++;
+        reportController.current?.abort();
         setLoadingReport(false);
         setReportData(
           null
@@ -1122,6 +1105,7 @@ export default function ReportPage() {
       value: string
     ) => {
       requestVersion.current++;
+      reportController.current?.abort();
       setLoadingReport(false);
       setClassFilter(
         value
@@ -1147,7 +1131,7 @@ export default function ReportPage() {
   const handlePrint =
     () => {
       if (
-        !reportData
+        !reportData || loadingReport || String(reportData.id) !== studentId
       ) {
         return;
       }
@@ -1342,9 +1326,7 @@ export default function ReportPage() {
      ATTENDANCE / PERSONALITY
   ========================================================== */
 
-  const personality =
-    reportData?.personality ??
-    [];
+  const personality = Array.isArray(reportData?.personality) ? reportData.personality : [];
 
   /* ==========================================================
      SETTINGS
@@ -1446,6 +1428,7 @@ export default function ReportPage() {
 
         year:
           'numeric',
+        timeZone: 'Asia/Jakarta',
       }
     ).format(
       new Date()
@@ -1478,6 +1461,7 @@ export default function ReportPage() {
             <input
               id="pai-teacher-name"
               type="text"
+              maxLength={150}
               value={teacherNameOverride}
               onChange={(event) => setTeacherNameOverride(event.target.value)}
               placeholder={reportData?.paiTeacherName || reportData?.settings?.paiTeacherName || 'Masukkan nama lengkap guru PAI'}
@@ -1671,7 +1655,7 @@ export default function ReportPage() {
                   handlePrint
                 }
                 disabled={
-                  !reportData
+                  !reportData || loadingReport || String(reportData.id) !== studentId
                 }
                 className="h-11 self-end rounded-sm border border-[#2271b1] bg-[#2271b1] px-5 text-base font-bold text-white transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-30"
               >
@@ -1767,7 +1751,7 @@ export default function ReportPage() {
         !loadingReport && (
           <main className="report-screen overflow-x-auto bg-[#f0f0f1] px-3 py-6 print:overflow-visible print:bg-white print:p-0">
 
-            <div className="report-document mx-auto w-[215.9mm] bg-white text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.14)] print:w-full print:shadow-none">
+            <div id="printable-report" className="report-document mx-auto w-[215.9mm] bg-white text-slate-900 shadow-[0_20px_60px_rgba(15,23,42,0.14)] print:w-full print:shadow-none">
 
               {/* ==================================================
                   HEADER
@@ -2395,7 +2379,18 @@ export default function ReportPage() {
         .report-document .report-block { margin-bottom: 16px; }
         @media print {
           @page { size: 215.9mm 330mm; margin: 10mm; }
+          body * { visibility: hidden !important; }
+          #printable-report, #printable-report * { visibility: visible !important; }
+          .control-panel { display: none !important; }
           html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+          body:has(#printable-report) *:has(#printable-report) {
+            margin: 0 !important; padding: 0 !important;
+            min-height: 0 !important; height: auto !important;
+            overflow: visible !important;
+          }
+          body:has(#printable-report) *:not(:has(#printable-report)):not(#printable-report):not(#printable-report *) {
+            display: none !important;
+          }
           .report-screen { overflow: visible !important; padding: 0 !important; }
           .report-document { width: 100% !important; margin: 0 !important; box-shadow: none !important; }
           .report-document .report-header { padding-left: 0; padding-right: 0; }

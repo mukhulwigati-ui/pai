@@ -4,6 +4,7 @@ import { requireAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+export const revalidate = 0;
 
 /* ============================================================
    KONFIGURASI
@@ -53,13 +54,12 @@ function normalizeDescription(
 function toPositiveInteger(
   value: unknown
 ): number | null {
-  const numberValue =
-    Number(value);
+  if (typeof value !== 'number' && typeof value !== 'string') return null;
+  if (typeof value === 'string' && !/^[1-9]\d*$/.test(value)) return null;
+  const numberValue = Number(value);
 
   if (
-    !Number.isInteger(
-      numberValue
-    ) ||
+    !Number.isSafeInteger(numberValue) ||
     numberValue <= 0
   ) {
     return null;
@@ -81,6 +81,36 @@ function errorResponse(
       status,
     }
   );
+}
+
+// CP.grade dipakai sebagai tingkat jilid khusus Tartili; kelas siswa tetap utuh.
+function isTartili(name: string) {
+  return name.trim().toLowerCase() === 'tartili';
+}
+
+function sdCpScope() {
+  return {
+    subject: { level: SCHOOL_LEVEL },
+    semester: { in: VALID_SEMESTERS },
+    OR: [
+      {
+        subject: { name: { equals: 'Tartili', mode: 'insensitive' as const } },
+        grade: { gte: 1, lte: 20 },
+      },
+      {
+        NOT: { subject: { name: { equals: 'Tartili', mode: 'insensitive' as const } } },
+        grade: { in: VALID_GRADES },
+      },
+    ],
+  };
+}
+
+function databaseError(error: unknown) {
+  const code = (error as { code?: string } | null)?.code;
+  if (code === 'P2021' || code === 'P2022') {
+    return errorResponse('Struktur database kurikulum/halaqah belum sesuai. Periksa log server dan terapkan perubahan tabel yang diperlukan.', 503);
+  }
+  return null;
 }
 
 /* ============================================================
@@ -140,10 +170,10 @@ async function generateCPCode(
   subjectId: number,
   subjectCode: string,
   grade: number,
-  semester: number
+  semester: number,
+  tartili = false
 ) {
-  const prefix =
-    `CP-${subjectCode}-K${grade}-S${semester}-`;
+  const prefix = `CP-${subjectCode}-${tartili ? 'J' : 'K'}${grade}-S${semester}-`;
 
   const existingCPs =
     await prisma.cP.findMany({
@@ -286,20 +316,7 @@ async function findSdCP(
       id:
         cpId,
 
-      subject: {
-        level:
-          SCHOOL_LEVEL,
-      },
-
-      grade: {
-        in:
-          VALID_GRADES,
-      },
-
-      semester: {
-        in:
-          VALID_SEMESTERS,
-      },
+      ...sdCpScope(),
     },
 
     include: {
@@ -347,20 +364,7 @@ export async function GET() {
     const cps =
       await prisma.cP.findMany({
         where: {
-          subject: {
-            level:
-              SCHOOL_LEVEL,
-          },
-
-          grade: {
-            in:
-              VALID_GRADES,
-          },
-
-          semester: {
-            in:
-              VALID_SEMESTERS,
-          },
+          ...sdCpScope(),
         },
 
         include: {
@@ -405,8 +409,11 @@ export async function GET() {
         success: true,
         total:
           cps.length,
-        data:
-          cps,
+        data: cps.map(cp => ({
+          ...cp,
+          grouping: isTartili(cp.subject.name) ? 'JILID' : 'KELAS',
+          jilid: isTartili(cp.subject.name) ? cp.grade : null,
+        })),
       },
       {
         status: 200,
@@ -420,6 +427,8 @@ export async function GET() {
       error
     );
 
+    const schemaError = databaseError(error);
+    if (schemaError) return schemaError;
     return NextResponse.json(
       {
         success: false,
@@ -474,8 +483,12 @@ export async function POST(
        BODY
     -------------------------------------------------------- */
 
-    const body =
-      await request.json();
+    let body;
+    try { body = await request.json(); }
+    catch { return errorResponse('JSON tidak valid.'); }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return errorResponse('Data permintaan harus berupa objek.');
+    }
 
     const action =
       String(
@@ -508,7 +521,7 @@ export async function POST(
 
       const numericGrade =
         toPositiveInteger(
-          body?.grade
+          body?.jilid ?? body?.grade
         );
 
       const numericSemester =
@@ -538,15 +551,8 @@ export async function POST(
         );
       }
 
-      if (
-        !numericGrade ||
-        !VALID_GRADES.includes(
-          numericGrade
-        )
-      ) {
-        return errorResponse(
-          'Tingkat kelas tidak valid. Pilih kelas 1 sampai 6.'
-        );
+      if (!numericGrade) {
+        return errorResponse('Pilih tingkat kelas atau jilid yang valid.');
       }
 
       if (
@@ -605,6 +611,20 @@ export async function POST(
         );
       }
 
+      const tartili = isTartili(subject.name);
+      if (tartili ? numericGrade > 20 : !VALID_GRADES.includes(numericGrade)) {
+        return errorResponse(tartili
+          ? 'Jilid Tartili harus antara 1 sampai 20.'
+          : 'Tingkat kelas tidak valid. Pilih kelas 1 sampai 6.');
+      }
+      if (!tartili && body.jilid !== undefined) {
+        return errorResponse('Parameter jilid hanya digunakan untuk Tartili.');
+      }
+      if (tartili && body.jilid !== undefined && body.grade !== undefined &&
+          toPositiveInteger(body.grade) !== numericGrade) {
+        return errorResponse('Nilai grade dan jilid Tartili harus sama.');
+      }
+
       /* ------------------------------------------------------
          GENERATE CODE
       ------------------------------------------------------ */
@@ -619,7 +639,8 @@ export async function POST(
           numericSubjectId,
           subjectCode,
           numericGrade,
-          numericSemester
+          numericSemester,
+          tartili
         );
 
       /* ------------------------------------------------------
@@ -663,7 +684,7 @@ export async function POST(
           success: true,
 
           message:
-            `CP ${subject.name} Kelas ${numericGrade} Semester ${numericSemester} berhasil ditambahkan.`,
+            `CP ${subject.name} ${tartili ? 'Jilid' : 'Kelas'} ${numericGrade} Semester ${numericSemester} berhasil ditambahkan.`,
 
           data:
             newCP,
@@ -904,20 +925,7 @@ export async function POST(
                 numericId,
 
               cp: {
-                subject: {
-                  level:
-                    SCHOOL_LEVEL,
-                },
-
-                grade: {
-                  in:
-                    VALID_GRADES,
-                },
-
-                semester: {
-                  in:
-                    VALID_SEMESTERS,
-                },
+                ...sdCpScope(),
               },
             },
 
@@ -1005,25 +1013,17 @@ export async function POST(
           );
         }
 
-        /*
-         * Hapus TP terlebih dahulu,
-         * lalu CP.
-         */
-        await prisma.$transaction([
-          prisma.tP.deleteMany({
-            where: {
-              cpId:
-                numericId,
-            },
-          }),
-
-          prisma.cP.delete({
-            where: {
-              id:
-                numericId,
-            },
-          }),
-        ]);
+        // Hindari cascade yang menghapus nilai siswa atau memutus kurikulum halaqah.
+        const result = await prisma.$transaction(async tx => {
+          const usedScores = await tx.assessment.count({ where: { tp: { cpId: numericId } } });
+          if (usedScores) return 'SCORES';
+          const usedHalaqahs = await tx.halaqah.count({ where: { cps: { some: { id: numericId } } } });
+          if (usedHalaqahs) return 'HALAQAH';
+          await tx.cP.delete({ where: { id: numericId } });
+          return 'DELETED';
+        }, { isolationLevel: 'Serializable' });
+        if (result === 'SCORES') return errorResponse('CP tidak dapat dihapus karena TP-nya sudah memiliki nilai siswa.', 409);
+        if (result === 'HALAQAH') return errorResponse('CP tidak dapat dihapus karena masih dipakai oleh halaqah.', 409);
 
         return NextResponse.json(
           {
@@ -1052,20 +1052,7 @@ export async function POST(
                 numericId,
 
               cp: {
-                subject: {
-                  level:
-                    SCHOOL_LEVEL,
-                },
-
-                grade: {
-                  in:
-                    VALID_GRADES,
-                },
-
-                semester: {
-                  in:
-                    VALID_SEMESTERS,
-                },
+                ...sdCpScope(),
               },
             },
 
@@ -1081,12 +1068,13 @@ export async function POST(
           );
         }
 
-        await prisma.tP.delete({
-          where: {
-            id:
-              numericId,
-          },
-        });
+        const deleted = await prisma.$transaction(async tx => {
+          if (await tx.assessment.count({ where: { tpId: numericId } })) return false;
+          if (await tx.halaqah.count({ where: { cps: { some: { tps: { some: { id: numericId } } } } } })) return false;
+          await tx.tP.delete({ where: { id: numericId } });
+          return true;
+        }, { isolationLevel: 'Serializable' });
+        if (!deleted) return errorResponse('TP tidak dapat dihapus karena sudah memiliki nilai siswa atau CP-nya dipakai halaqah.', 409);
 
         return NextResponse.json(
           {
@@ -1120,6 +1108,12 @@ export async function POST(
       'POST /api/curriculum ERROR:',
       error
     );
+
+    const schemaError = databaseError(error);
+    if (schemaError) return schemaError;
+    if ((error as { code?: string } | null)?.code === 'P2034') {
+      return errorResponse('Data kurikulum sedang diubah oleh proses lain. Silakan ulangi.', 409);
+    }
 
     const prismaError =
       error as {

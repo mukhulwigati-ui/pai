@@ -4,7 +4,9 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
+  type FormEvent,
 } from 'react';
 
 import {
@@ -46,6 +48,8 @@ const GRADES = [
   6,
 ];
 
+const JILIDS = [1, 2, 3, 4, 5, 6, 7];
+
 const SEMESTERS = [
   1,
   2,
@@ -69,6 +73,8 @@ type CP = {
   subjectId?: number | null;
 
   grade?: number | null;
+  jilid?: number | null;
+  grouping?: 'JILID' | 'KELAS';
 
   semester?: number | null;
 
@@ -157,22 +163,24 @@ function normalizeText(
     .toLowerCase();
 }
 
-async function getApiError(
-  response: Response,
-  fallback: string
-) {
-  try {
-    const data =
-      await response.json();
+function isTartili(value: unknown) {
+  return normalizeText(value) === 'tartili';
+}
 
-    return (
-      data?.message ||
-      data?.error ||
-      fallback
-    );
-  } catch {
-    return fallback;
+function formatGrade(grade: number, tartili: boolean) {
+  return tartili
+    ? (grade === 7 ? 'Jilid 7 — Ghorib' : `Jilid ${grade}`)
+    : `Kelas ${grade}`;
+}
+
+async function readApi(response: Response, fallback: string) {
+  let data;
+  try { data = await response.json(); }
+  catch { throw new Error(`${fallback} Respons server tidak valid (HTTP ${response.status}).`); }
+  if (!response.ok || data?.success === false) {
+    throw new Error(typeof data?.message === 'string' ? data.message : fallback);
   }
+  return data;
 }
 
 /* ============================================================
@@ -180,6 +188,9 @@ async function getApiError(
 ============================================================ */
 
 export default function CurriculumPage() {
+  const fetchVersion = useRef(0);
+  const mutationBusy = useRef(false);
+  const referenceController = useRef<AbortController | null>(null);
   /* ==========================================================
      PILIHAN UTAMA
   ========================================================== */
@@ -223,6 +234,11 @@ export default function CurriculumPage() {
     useState<Subject | null>(
       null
     );
+
+  const tartili = isTartili(selectedSubject?.name);
+  const gradeOptions = tartili ? JILIDS : GRADES;
+  const gradeLabel = tartili ? 'Jilid' : 'Kelas';
+  const selectedGradeLabel = formatGrade(selectedGrade, tartili);
 
   /* ==========================================================
      FORM CP
@@ -299,6 +315,10 @@ export default function CurriculumPage() {
   const fetchData =
     useCallback(
       async () => {
+        referenceController.current?.abort();
+        const controller = new AbortController();
+        referenceController.current = controller;
+        const version = ++fetchVersion.current;
         try {
           setLoadingData(
             true
@@ -314,6 +334,7 @@ export default function CurriculumPage() {
                 {
                   cache:
                     'no-store',
+                  signal: controller.signal,
                 }
               ),
 
@@ -324,27 +345,16 @@ export default function CurriculumPage() {
                 {
                   cache:
                     'no-store',
+                  signal: controller.signal,
                 }
               ),
             ]);
 
-          /* ================================================
-             SUBJECTS
-          ================================================ */
-
-          if (
-            !subjectsRes.ok
-          ) {
-            throw new Error(
-              await getApiError(
-                subjectsRes,
-                'Gagal memuat mata pelajaran.'
-              )
-            );
-          }
-
-          const subjectsData =
-            await subjectsRes.json();
+          const [subjectsData, curriculumData] = await Promise.all([
+            readApi(subjectsRes, 'Gagal memuat mata pelajaran.'),
+            readApi(curriculumRes, 'Gagal memuat data kurikulum.'),
+          ]);
+          if (version !== fetchVersion.current || controller.signal.aborted) return;
 
           const subjectList =
             normalizeArray<Subject>(
@@ -384,24 +394,6 @@ export default function CurriculumPage() {
             sdSubjects
           );
 
-          /* ================================================
-             CURRICULUM
-          ================================================ */
-
-          if (
-            !curriculumRes.ok
-          ) {
-            throw new Error(
-              await getApiError(
-                curriculumRes,
-                'Gagal memuat data kurikulum.'
-              )
-            );
-          }
-
-          const curriculumData =
-            await curriculumRes.json();
-
           const curriculumList =
             normalizeArray<CP>(
               curriculumData,
@@ -412,42 +404,13 @@ export default function CurriculumPage() {
               ]
             );
 
-          /*
-           * Karena sistem sekarang SD,
-           * CP dengan grade di luar 1–6
-           * tidak ditampilkan.
-           *
-           * Data lama tanpa grade masih dibiarkan
-           * agar tidak hilang secara paksa.
-           */
-          const sdCurriculum =
-            curriculumList.filter(
-              (
-                cp
-              ) => {
-                if (
-                  cp.grade ===
-                    undefined ||
-                  cp.grade ===
-                    null
-                ) {
-                  return true;
-                }
-
-                const grade =
-                  Number(
-                    cp.grade
-                  );
-
-                return (
-                  Number.isInteger(
-                    grade
-                  ) &&
-                  grade >= 1 &&
-                  grade <= 6
-                );
-              }
-            );
+          const sdCurriculum = curriculumList.filter(cp => {
+            const subject = sdSubjects.find(item => item.id === Number(cp.subjectId ?? cp.subject?.id));
+            if (!subject || !SEMESTERS.includes(Number(cp.semester))) return false;
+            const grade = Number(cp.grade);
+            return Number.isSafeInteger(grade) &&
+              (isTartili(subject.name) ? JILIDS : GRADES).includes(grade);
+          });
 
           setCps(
             sdCurriculum
@@ -483,6 +446,7 @@ export default function CurriculumPage() {
         } catch (
           error
         ) {
+          if (version !== fetchVersion.current || controller.signal.aborted) return;
           console.error(
             'FETCH CURRICULUM ERROR:',
             error
@@ -507,7 +471,7 @@ export default function CurriculumPage() {
               : 'Gagal mengambil data kurikulum dari server.'
           );
         } finally {
-          setLoadingData(
+          if (version === fetchVersion.current) setLoadingData(
             false
           );
         }
@@ -516,7 +480,11 @@ export default function CurriculumPage() {
     );
 
   useEffect(() => {
-    fetchData();
+    void fetchData();
+    return () => {
+      fetchVersion.current++;
+      referenceController.current?.abort();
+    };
   }, [fetchData]);
 
   /* ==========================================================
@@ -540,14 +508,6 @@ export default function CurriculumPage() {
                SUBJECT
             ---------------------------------------------- */
 
-            const matchById =
-              Number(
-                cp.subjectId
-              ) ===
-              Number(
-                selectedSubject.id
-              );
-
             const matchByName =
               normalizeText(
                 cp.subject?.name
@@ -556,39 +516,20 @@ export default function CurriculumPage() {
                 selectedSubject.name
               );
 
-            const matchSubject =
-              matchById ||
-              matchByName;
+            const matchSubject = cp.subjectId != null || cp.subject?.id != null
+              ? Number(cp.subjectId ?? cp.subject?.id) === selectedSubject.id
+              : matchByName;
 
             /* ----------------------------------------------
                GRADE
             ---------------------------------------------- */
 
-            /*
-             * Data lama tanpa grade dianggap
-             * mengikuti tingkat yang dipilih.
-             *
-             * Bila nantinya database sudah bersih,
-             * bagian null ini bisa diperketat.
-             */
-            const matchGrade =
-              cp.grade ===
-                undefined ||
-              cp.grade ===
-                null ||
-              Number(
-                cp.grade
-              ) ===
-                selectedGrade;
+            const matchGrade = Number(cp.grade) === selectedGrade;
 
             /* ----------------------------------------------
                SEMESTER
             ---------------------------------------------- */
 
-            /*
-             * Data lama tanpa semester
-             * dianggap Semester 1.
-             */
             const cpSemester =
               cp.semester ===
                 undefined ||
@@ -633,6 +574,7 @@ export default function CurriculumPage() {
     (
       subject: Subject
     ) => {
+      if (mutationBusy.current) return;
       setSelectedSubject(
         subject
       );
@@ -661,6 +603,7 @@ export default function CurriculumPage() {
 
   const handleBack =
     () => {
+      if (mutationBusy.current) return;
       setSelectedSubject(
         null
       );
@@ -691,8 +634,9 @@ export default function CurriculumPage() {
     (
       value: number
     ) => {
+      if (mutationBusy.current) return;
       if (
-        !GRADES.includes(
+        !gradeOptions.includes(
           value
         )
       ) {
@@ -721,6 +665,7 @@ export default function CurriculumPage() {
     (
       value: number
     ) => {
+      if (mutationBusy.current) return;
       if (
         !SEMESTERS.includes(
           value
@@ -749,9 +694,10 @@ export default function CurriculumPage() {
 
   const handleSaveCP =
     async (
-      event: React.FormEvent<HTMLFormElement>
+      event: FormEvent<HTMLFormElement>
     ) => {
       event.preventDefault();
+      if (mutationBusy.current || loadingData) return;
 
       clearMessage();
 
@@ -770,7 +716,7 @@ export default function CurriculumPage() {
       }
 
       if (
-        !GRADES.includes(
+        !gradeOptions.includes(
           selectedGrade
         )
       ) {
@@ -779,7 +725,7 @@ export default function CurriculumPage() {
         );
 
         setMessage(
-          'Tingkat kelas tidak valid.'
+          `${gradeLabel} tidak valid.`
         );
 
         return;
@@ -815,6 +761,7 @@ export default function CurriculumPage() {
         return;
       }
 
+      mutationBusy.current = true;
       setLoading(
         true
       );
@@ -841,8 +788,8 @@ export default function CurriculumPage() {
                     subjectId:
                       selectedSubject.id,
 
-                    grade:
-                      selectedGrade,
+                    grade: selectedGrade,
+                    ...(tartili ? { jilid: selectedGrade } : {}),
 
                     semester:
                       selectedSemester,
@@ -854,23 +801,14 @@ export default function CurriculumPage() {
             }
           );
 
-        if (
-          !response.ok
-        ) {
-          throw new Error(
-            await getApiError(
-              response,
-              'Gagal menyimpan Capaian Pembelajaran.'
-            )
-          );
-        }
+        await readApi(response, 'Gagal menyimpan Capaian Pembelajaran.');
 
         setMessageType(
           'success'
         );
 
         setMessage(
-          `Capaian Pembelajaran ${selectedSubject.name} Kelas ${selectedGrade} Semester ${selectedSemester} berhasil ditambahkan.`
+          `Capaian Pembelajaran ${selectedSubject.name} ${selectedGradeLabel} Semester ${selectedSemester} berhasil ditambahkan.`
         );
 
         setCpDesc('');
@@ -895,6 +833,7 @@ export default function CurriculumPage() {
             : 'Terjadi kesalahan saat menyimpan CP.'
         );
       } finally {
+        mutationBusy.current = false;
         setLoading(
           false
         );
@@ -909,6 +848,7 @@ export default function CurriculumPage() {
     async (
       cpId: number
     ) => {
+      if (mutationBusy.current || loadingData) return;
       clearMessage();
 
       if (
@@ -942,6 +882,7 @@ export default function CurriculumPage() {
         return;
       }
 
+      mutationBusy.current = true;
       setLoading(
         true
       );
@@ -974,16 +915,7 @@ export default function CurriculumPage() {
             }
           );
 
-        if (
-          !response.ok
-        ) {
-          throw new Error(
-            await getApiError(
-              response,
-              'Gagal menyimpan Tujuan Pembelajaran.'
-            )
-          );
-        }
+        await readApi(response, 'Gagal menyimpan Tujuan Pembelajaran.');
 
         setMessageType(
           'success'
@@ -1019,6 +951,7 @@ export default function CurriculumPage() {
             : 'Terjadi kesalahan saat menyimpan TP.'
         );
       } finally {
+        mutationBusy.current = false;
         setLoading(
           false
         );
@@ -1036,6 +969,7 @@ export default function CurriculumPage() {
         | 'CP'
         | 'TP'
     ) => {
+      if (mutationBusy.current || loadingData) return;
       if (
         !Number.isInteger(
           id
@@ -1066,6 +1000,7 @@ export default function CurriculumPage() {
 
       clearMessage();
 
+      mutationBusy.current = true;
       setLoading(
         true
       );
@@ -1097,16 +1032,7 @@ export default function CurriculumPage() {
             }
           );
 
-        if (
-          !response.ok
-        ) {
-          throw new Error(
-            await getApiError(
-              response,
-              `Gagal menghapus ${type}.`
-            )
-          );
-        }
+        await readApi(response, `Gagal menghapus ${type}.`);
 
         setMessageType(
           'success'
@@ -1149,6 +1075,7 @@ export default function CurriculumPage() {
             : `Terjadi kesalahan saat menghapus ${type}.`
         );
       } finally {
+        mutationBusy.current = false;
         setLoading(
           false
         );
@@ -1170,7 +1097,7 @@ export default function CurriculumPage() {
 
         <section>
           <h1 className="text-2xl font-normal text-[#1d2327]">Kurikulum CP &amp; TP</h1>
-          <p className="mt-2 text-base leading-6 text-[#646970]">Kelola CP dan TP berdasarkan mata pelajaran, kelas, dan semester.</p>
+          <p className="mt-2 text-base leading-6 text-[#646970]">Kelola CP dan TP per kelas atau jilid Tartili dan semester.</p>
         </section>
 
         {/* ====================================================
@@ -1251,7 +1178,7 @@ export default function CurriculumPage() {
                   </div>
 
                   <div className="mt-0.5 text-sm text-[#646970]">
-                    Tingkat 1 sampai 6
+                    Kelas 1–6 • Tartili Jilid 1–6 dan Jilid 7 — Ghorib
                   </div>
 
                 </div>
@@ -1421,10 +1348,7 @@ export default function CurriculumPage() {
                   </h2>
 
                   <div className="mt-1 text-sm text-[#646970]">
-                    Kelas{' '}
-                    {
-                      selectedGrade
-                    }{' '}
+                    {selectedGradeLabel}{' '}
                     • Semester{' '}
                     {
                       selectedSemester
@@ -1441,12 +1365,13 @@ export default function CurriculumPage() {
                   <div className="flex items-center gap-2">
 
                     <span className="whitespace-nowrap text-base font-medium text-[#646970]">
-                      Tingkat:
+                      {gradeLabel}:
                     </span>
 
                     <div className="relative">
 
                       <select
+                        disabled={loading || loadingData}
                         value={
                           selectedGrade
                         }
@@ -1464,7 +1389,7 @@ export default function CurriculumPage() {
                         className="appearance-none rounded-sm border border-[#8c8f94] bg-white py-2 pl-3 pr-8 text-base font-bold text-[#1d2327]  outline-none"
                       >
 
-                        {GRADES.map(
+                        {gradeOptions.map(
                           (
                             grade
                           ) => (
@@ -1476,10 +1401,7 @@ export default function CurriculumPage() {
                                 grade
                               }
                             >
-                              Kelas{' '}
-                              {
-                                grade
-                              }
+                              {formatGrade(grade, tartili)}
                             </option>
                           )
                         )}
@@ -1506,6 +1428,7 @@ export default function CurriculumPage() {
                     <div className="relative">
 
                       <select
+                        disabled={loading || loadingData}
                         value={
                           selectedSemester
                         }
@@ -1579,10 +1502,7 @@ export default function CurriculumPage() {
                     {
                       selectedSubject.name
                     }{' '}
-                    • Kelas{' '}
-                    {
-                      selectedGrade
-                    }{' '}
+                    • {selectedGradeLabel}{' '}
                     • Semester{' '}
                     {
                       selectedSemester
@@ -1605,7 +1525,9 @@ export default function CurriculumPage() {
                       .value
                   )
                 }
-                placeholder={`Tuliskan Capaian Pembelajaran ${selectedSubject.name} untuk Kelas ${selectedGrade} Semester ${selectedSemester}...`}
+                placeholder={`Tuliskan Capaian Pembelajaran ${selectedSubject.name} untuk ${selectedGradeLabel} Semester ${selectedSemester}...`}
+                maxLength={5000}
+                disabled={loading || loadingData}
                 rows={4}
                 required
                 className="w-full resize-y rounded-sm border border-[#c3c4c7] bg-slate-50/40 p-3 text-sm leading-6 text-slate-700 outline-none transition focus:border-[#2271b1] focus:bg-white focus:ring-4 focus:ring-[#2271b1]/20"
@@ -1616,7 +1538,7 @@ export default function CurriculumPage() {
                 <button
                   type="submit"
                   disabled={
-                    loading ||
+                    loading || loadingData ||
                     !cpDesc.trim()
                   }
                   className="inline-flex items-center gap-2 rounded-sm bg-[#2271b1] px-5 py-2.5 text-base font-bold text-white  transition hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
@@ -1635,7 +1557,7 @@ export default function CurriculumPage() {
 
                   {loading
                     ? 'Menyimpan...'
-                    : `Simpan CP Kelas ${selectedGrade}`}
+                    : `Simpan CP ${selectedGradeLabel}`}
 
                 </button>
 
@@ -1661,10 +1583,7 @@ export default function CurriculumPage() {
                   </h3>
 
                   <p className="mt-1 text-sm text-[#646970]">
-                    Kelas{' '}
-                    {
-                      selectedGrade
-                    }{' '}
+                    {selectedGradeLabel}{' '}
                     • Semester{' '}
                     {
                       selectedSemester
@@ -1712,10 +1631,7 @@ export default function CurriculumPage() {
                     {
                       selectedSubject.name
                     }{' '}
-                    • Kelas{' '}
-                    {
-                      selectedGrade
-                    }{' '}
+                    • {selectedGradeLabel}{' '}
                     • Semester{' '}
                     {
                       selectedSemester
@@ -1775,9 +1691,7 @@ export default function CurriculumPage() {
                                 </span>
 
                                 <span className="rounded bg-slate-200 px-2 py-0.5 text-sm font-semibold text-slate-700">
-                                  Kelas{' '}
-                                  {cp.grade ||
-                                    selectedGrade}
+                                  {formatGrade(Number(cp.grade ?? selectedGrade), tartili)}
                                 </span>
 
                                 <span className="rounded bg-blue-100 px-2 py-0.5 text-sm font-semibold text-blue-700">
@@ -1833,7 +1747,8 @@ export default function CurriculumPage() {
 
                               <button
                                 type="button"
-                                onClick={() => {
+                                disabled={loading || loadingData}
+                              onClick={() => {
                                   setActiveCpIdForTp(
                                     (
                                       current
@@ -1868,6 +1783,8 @@ export default function CurriculumPage() {
 
                                 <input
                                   type="text"
+                                  maxLength={2000}
+                                  disabled={loading || loadingData}
                                   value={
                                     tpDesc
                                   }
@@ -1928,7 +1845,7 @@ export default function CurriculumPage() {
                                       )
                                     }
                                     disabled={
-                                      loading ||
+                                      loading || loadingData ||
                                       !tpDesc.trim()
                                     }
                                     className="inline-flex h-8 items-center gap-1.5 rounded-sm bg-[#2271b1] px-4 text-base font-bold text-white hover:bg-[#135e96] disabled:cursor-not-allowed disabled:opacity-50"
@@ -2042,7 +1959,7 @@ export default function CurriculumPage() {
           </span>
 
           <span>
-            Kurikulum Jenjang SD • Kelas 1–6
+            Kurikulum SD • Tartili Jilid 1–6 dan Ghorib
           </span>
 
         </footer>

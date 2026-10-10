@@ -20,7 +20,14 @@ export async function GET() {
       prisma.student.findMany({ where: { class_name: { in: (await prisma.classRoom.findMany({ where: { level: 'SD' }, select: { name: true } })).map(item => item.name) } }, select: { id: true, fullname: true, class_name: true }, orderBy: { fullname: 'asc' } }),
     ]);
     return NextResponse.json({ success: true, data, teachers, cps, settings, students });
-  } catch { return fail('Gagal memuat halaqah. Pastikan migrasi database dan prisma generate sudah dijalankan.', 500); }
+  } catch (error) {
+  console.error('[GET /api/halaqah]', error);
+
+  return fail(
+    'Gagal memuat halaqah. Periksa error pada terminal server.',
+    500
+  );
+}
 }
 export async function POST(request: Request) {
   const auth = await requireAdmin();

@@ -106,13 +106,11 @@ function errorResponse(
 function toPositiveInteger(
   value: unknown
 ): number | null {
-  const numberValue =
-    Number(value);
+  if (typeof value !== 'string' || !/^[1-9]\d*$/.test(value)) return null;
+  const numberValue = Number(value);
 
   if (
-    !Number.isInteger(
-      numberValue
-    ) ||
+    !Number.isSafeInteger(numberValue) ||
     numberValue <= 0
   ) {
     return null;
@@ -151,8 +149,10 @@ function displayPredicate(value: unknown): string {
 function normalizeScore(
   value: unknown
 ): number | null {
-  const score =
-    Number(value);
+  if (value === null || value === undefined ||
+      (typeof value !== 'number' && typeof value !== 'string') ||
+      (typeof value === 'string' && !value.trim())) return null;
+  const score = Number(value);
 
   if (
     !Number.isFinite(
@@ -427,8 +427,7 @@ export async function GET(
           homeroomNote:
             true,
 
-          attendances:
-            true,
+          attendances: { select: { status: true } },
         },
       });
 
@@ -515,7 +514,13 @@ export async function GET(
             academicYear: true,
             semester: true,
             teacher: { select: { fullname: true } },
-            cps: { select: { id: true } },
+            cps: {
+              where: {
+                semester: activeSemester,
+                subject: { level: SCHOOL_LEVEL, name: { equals: 'Tartili', mode: 'insensitive' } },
+              },
+              select: { id: true },
+            },
           },
         },
       },
@@ -594,9 +599,16 @@ export async function GET(
         ? student.assessments
         : [];
 
-    for (
-      const assessment of assessments
-    ) {
+    // ORAL/TP_ORAL dan WRITTEN/TP_WRITTEN mewakili TP yang sama.
+    // Ambil record dengan ID terbaru jika kedua format lama/baru masih tersimpan.
+    const latestAssessments = new Map<string, (typeof assessments)[number]>();
+    for (const assessment of assessments) {
+      if (!assessment.tp) continue;
+      const type = normalizeUpper(assessment.type).replace(/^TP_/, '');
+      latestAssessments.set(`${assessment.tp.id}:${type}`, assessment);
+    }
+
+    for (const assessment of latestAssessments.values()) {
       /* ------------------------------------------------------
          RECORD WAJIB MEMILIKI TP
          UNTUK DAPAT DIHUBUNGKAN KE MAPEL
@@ -1169,6 +1181,20 @@ export async function GET(
       error as {
         code?: string;
       };
+
+    if (prismaError?.code === 'P2021') {
+      return errorResponse(
+        'Tabel yang diperlukan untuk rapor belum tersedia. Periksa log server; jika tabel halaqah belum ada, jalankan SQL penambahan halaqah pada database aplikasi.',
+        503
+      );
+    }
+
+    if (prismaError?.code === 'P2022') {
+      return errorResponse(
+        'Kolom database belum sesuai dengan schema Prisma. Periksa log server dan terapkan perubahan schema yang diperlukan.',
+        503
+      );
+    }
 
     if (
       prismaError?.code ===
