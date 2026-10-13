@@ -58,7 +58,15 @@ type ClassRoom = {
   status?: string | null;
 };
 
+type TpAchievement = {
+  tpId: number;
+  code: string;
+  description: string;
+  score: number;
+};
+
 type ScoreRecord = {
+  tpAchievements?: TpAchievement[];
   id: number;
   score:
     | number
@@ -466,56 +474,44 @@ function getPersonalityValue(
 function getCompetencyDescriptions(
   subjectName: string,
   score: number | null,
-  studentName: string
+  studentName: string,
+  achievements: TpAchievement[] = []
 ) {
-  if (
-    score === null
-  ) {
-    return {
-      achieved:
-        `Nilai ${subjectName} belum tersedia.`,
-    };
+  if (score === null) return { achieved: `Nilai ${subjectName} belum tersedia.` };
+
+  const valid = achievements.filter(item =>
+    item.description?.trim() && Number.isFinite(item.score) &&
+    item.score >= 0 && item.score <= 100
+  );
+  if (!valid.length) {
+    return { achieved: `Ananda ${studentName} memperoleh nilai ${score} pada ${subjectName}. Rincian TP yang dinilai belum tersedia.` };
   }
 
-  if (
-    score >= 90
-  ) {
-    return {
-      achieved:
-        `Ananda ${studentName} menunjukkan penguasaan kompetensi ${subjectName} dengan sangat baik.`,
-    };
-  }
-
-  if (
-    score >= 80
-  ) {
-    return {
-      achieved:
-        `Ananda ${studentName} mampu memahami dan menguasai materi utama ${subjectName} dengan baik.`,
-    };
-  }
-
-  if (
-    score >= 70
-  ) {
-    return {
-      achieved:
-        `Ananda ${studentName} telah menunjukkan pemahaman yang cukup baik terhadap kompetensi ${subjectName}.`,
-    };
-  }
-
-  if (
-    score >= 60
-  ) {
-    return {
-      achieved:
-        `Ananda ${studentName} mulai menguasai kompetensi dasar pada mata pelajaran ${subjectName}.`,
-    };
-  }
-
+  // Gabungkan uraian yang sama, tanpa memasukkan TP yang belum dinilai.
+  const levels = [
+    { min: 90, max: 100, label: 'sangat baik' },
+    { min: 80, max: 89.999, label: 'baik' },
+    { min: 70, max: 79.999, label: 'cukup baik' },
+    { min: 60, max: 69.999, label: 'mulai berkembang' },
+    { min: 0, max: 59.999, label: 'masih terbatas' },
+  ];
+  const sentences = levels.flatMap(level => {
+    const items = valid.filter(item => item.score >= level.min && item.score <= level.max);
+    if (!items.length) return [];
+    const descriptions = Array.from(new Set(items.map(item => item.description
+      .replace(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/g, '')
+      .replace(/^(?:peserta didik|siswa|murid|ananda)\s+(?:mampu|dapat)\s+/i, '')
+      .replace(/^(?:peserta didik|siswa|murid|ananda)\s+/i, '')
+      .replace(/\s+([,.;:])/g, '$1')
+      .replace(/\s+/g, ' ')
+      .replace(/[.;]+$/, '')
+      .trim()
+    )).values()).filter(Boolean);
+    const detail = descriptions.map(text => text.charAt(0).toLowerCase() + text.slice(1)).join('; ');
+    return detail ? [`Pencapaian ${level.label} ditunjukkan pada TP: ${detail}.`] : [];
+  });
   return {
-    achieved:
-      `Penguasaan kompetensi ${subjectName} masih terbatas.`,
+    achieved: `Berdasarkan ${new Set(valid.map(item => item.tpId)).size} TP yang dinilai, Ananda ${studentName} memperoleh nilai akhir ${score} pada ${subjectName}. ${sentences.join(' ')}`,
   };
 }
 
@@ -1944,7 +1940,11 @@ export default function ReportPage() {
                             getCompetencyDescriptions(
                               subject.name,
                               score,
-                              reportData.fullname
+                              reportData.fullname,
+                              scoreRecords.find(record =>
+                                normalizeText(record.subjectName) === normalizeText(subject.name) &&
+                                typeMatches(record.type, 'ORAL')
+                              )?.tpAchievements ?? []
                             );
 
                           return (
@@ -2071,7 +2071,11 @@ export default function ReportPage() {
                             getCompetencyDescriptions(
                               subject.name,
                               score,
-                              reportData.fullname
+                              reportData.fullname,
+                              scoreRecords.find(record =>
+                                normalizeText(record.subjectName) === normalizeText(subject.name) &&
+                                typeMatches(record.type, 'WRITTEN')
+                              )?.tpAchievements ?? []
                             );
 
                           return (

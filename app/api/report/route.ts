@@ -48,7 +48,10 @@ const DEFAULT_SETTINGS = {
    TYPES
 ============================================================ */
 
+type TpAchievement = { tpId: number; code: string; description: string; score: number };
+
 type CategoryScore = {
+  achievements: TpAchievement[];
   tpScores: number[];
 
   sts: number;
@@ -201,6 +204,7 @@ function createEmptyCategory():
   CategoryScore {
   return {
     tpScores: [],
+    achievements: [],
 
     sts: 0,
 
@@ -757,6 +761,12 @@ export async function GET(
           .tpScores.push(
             score
           );
+        subjectScore.ORAL.achievements.push({
+          tpId: assessment.tp.id,
+          code: assessment.tp.code,
+          description: assessment.tp.description,
+          score,
+        });
 
         continue;
       }
@@ -775,6 +785,12 @@ export async function GET(
           .tpScores.push(
             score
           );
+        subjectScore.WRITTEN.achievements.push({
+          tpId: assessment.tp.id,
+          code: assessment.tp.code,
+          description: assessment.tp.description,
+          score,
+        });
 
         continue;
       }
@@ -867,6 +883,7 @@ export async function GET(
 
         tpDescription:
           null;
+        tpAchievements: TpAchievement[];
       }> = [];
 
     let scoreRecordId =
@@ -923,6 +940,7 @@ export async function GET(
 
           tpDescription:
             null,
+          tpAchievements: categories.ORAL.achievements,
         });
       }
 
@@ -947,6 +965,7 @@ export async function GET(
 
           tpDescription:
             null,
+          tpAchievements: categories.WRITTEN.achievements,
         });
       }
     }
