@@ -478,41 +478,67 @@ function getCompetencyDescriptions(
   achievements: TpAchievement[] = []
 ) {
   if (score === null) return { achieved: `Nilai ${subjectName} belum tersedia.` };
-
   const valid = achievements.filter(item =>
     item.description?.trim() && Number.isFinite(item.score) &&
     item.score >= 0 && item.score <= 100
   );
   if (!valid.length) {
-    return { achieved: `Ananda ${studentName} memperoleh nilai ${score} pada ${subjectName}. Rincian TP yang dinilai belum tersedia.` };
+    return { achieved: `Rincian pencapaian ${subjectName} Ananda ${studentName} belum tersedia.` };
   }
-
-  // Gabungkan uraian yang sama, tanpa memasukkan TP yang belum dinilai.
-  const levels = [
-    { min: 90, max: 100, label: 'sangat baik' },
-    { min: 80, max: 89.999, label: 'baik' },
-    { min: 70, max: 79.999, label: 'cukup baik' },
-    { min: 60, max: 69.999, label: 'mulai berkembang' },
-    { min: 0, max: 59.999, label: 'masih terbatas' },
-  ];
-  const sentences = levels.flatMap(level => {
-    const items = valid.filter(item => item.score >= level.min && item.score <= level.max);
-    if (!items.length) return [];
-    const descriptions = Array.from(new Set(items.map(item => item.description
-      .replace(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/g, '')
-      .replace(/^(?:peserta didik|siswa|murid|ananda)\s+(?:mampu|dapat)\s+/i, '')
-      .replace(/^(?:peserta didik|siswa|murid|ananda)\s+/i, '')
-      .replace(/\s+([,.;:])/g, '$1')
-      .replace(/\s+/g, ' ')
-      .replace(/[.;]+$/, '')
-      .trim()
-    )).values()).filter(Boolean);
-    const detail = descriptions.map(text => text.charAt(0).toLowerCase() + text.slice(1)).join('; ');
-    return detail ? [`Pencapaian ${level.label} ditunjukkan pada TP: ${detail}.`] : [];
-  });
-  return {
-    achieved: `Berdasarkan ${new Set(valid.map(item => item.tpId)).size} TP yang dinilai, Ananda ${studentName} memperoleh nilai akhir ${score} pada ${subjectName}. ${sentences.join(' ')}`,
+  const clean = (text: string) => text
+    .replace(/[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/g, '')
+    .replace(/^(?:peserta didik|siswa|murid|ananda)\s+(?:mampu|dapat)\s+/i, '')
+    .replace(/^(?:peserta didik|siswa|murid|ananda)\s+/i, '')
+    .replace(/\s+([,.;:])/g, '$1')
+    .replace(/\s+/g, ' ').replace(/[.;]+$/, '').trim();
+  const topic = (text: string) => {
+    const normalized = text.toLowerCase();
+    if (normalizeText(subjectName) === 'tartili') {
+      // Prioritaskan materi khusus sebelum materi mad yang lebih umum.
+      if (/alif.*(?:tidak dibaca|tidak dibunyikan)/i.test(normalized))
+        return 'mengenali alif yang tidak dibaca';
+      if (/alif lam|menyambung/i.test(normalized))
+        return 'menyambungkan bacaan dengan alif lam';
+      if (/tanwin/i.test(normalized))
+        return 'membaca rangkaian kata dengan ketepatan panjang, pendek, dan tanwin';
+      if (/tanpa memanjangkan/i.test(normalized))
+        return 'membaca bunyi pendek tanpa memanjangkannya';
+      if (/fathah panjang|kasrah panjang|dammah panjang/i.test(normalized))
+        return 'membaca tanda harakat panjang';
+      if (/membedakan.*(?:pendek|panjang)/i.test(normalized))
+        return 'membedakan bacaan pendek dan panjang';
+      if (/dua harakat|mad thabi|panjang dua/i.test(normalized))
+        return 'menerapkan bacaan panjang dua harakat';
+    }
+    // Mapel lain tetap merujuk pada TP asli; jangan mengarang kompetensi.
+    const short = clean(text).split(/[.;]/)[0];
+    const limited = short.length <= 110 ? short : short.slice(0, 107).replace(/\s+\S*$/, '') + '…';
+    return limited.charAt(0).toLowerCase() + limited.slice(1);
   };
+  const buckets = new Map<string, number[]>();
+  for (const item of valid) {
+    const label = topic(item.description);
+    if (!label) continue;
+    const scores = buckets.get(label) ?? [];
+    scores.push(item.score);
+    buckets.set(label, scores);
+  }
+  const competencies = Array.from(buckets, ([label, scores]) => ({
+    label,
+    average: scores.reduce((total, value) => total + value, 0) / scores.length,
+  })).sort((a, b) => b.average - a.average || a.label.localeCompare(b.label, 'id'));
+  const level = (value: number) => value >= 90 ? 'sangat baik' : value >= 80 ? 'baik' : value >= 70 ? 'cukup baik' : value >= 60 ? 'mulai berkembang' : 'masih terbatas';
+  const strongest = competencies[0];
+  if (!strongest) return { achieved: `Rincian pencapaian ${subjectName} Ananda ${studentName} belum tersedia.` };
+  const sentences = [`Ananda ${studentName} menunjukkan pencapaian ${level(strongest.average)} dalam ${strongest.label}.`];
+  const weakest = competencies[competencies.length - 1];
+  if (competencies.length > 1) {
+    // Tampilkan aspek terendah bila tingkat pencapaiannya berbeda;
+    // jika setara, tampilkan satu kompetensi lain yang paling kuat.
+    const second = level(weakest.average) !== level(strongest.average) ? weakest : competencies[1];
+    sentences.push(`Pencapaian dalam ${second.label} tergolong ${level(second.average)}.`);
+  }
+  return { achieved: sentences.join(' ') };
 }
 
 /* ============================================================
