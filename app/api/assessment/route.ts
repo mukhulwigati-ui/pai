@@ -552,6 +552,12 @@ export async function POST(
       if (!tp || tp.cp.subject.level !== SCHOOL_LEVEL || !VALID_SEMESTERS.includes(tp.cp.semester)) {
         return errorResponse('Tujuan Pembelajaran tidak valid.', 400);
       }
+      if (tp.cp.subject.name.trim().toLowerCase() === "tahfidz al qur'an") {
+        if (!['ORAL', 'TP_ORAL', 'WRITTEN', 'TP_WRITTEN'].includes(type)) return errorResponse('Nilai Tahfidz harus menggunakan TP surah.', 400);
+        const settings = await prisma.systemSetting.findFirst({ orderBy: { id: 'asc' } });
+        const activeSemester = /genap|2/i.test(settings?.semester || '') ? 2 : 1;
+        if (tp.cp.semester !== activeSemester) return errorResponse('Surah ini bukan target semester aktif.', 400);
+      }
       if (tp.cp.subject.name.trim().toLowerCase() === 'tartili') {
         const halaqahId = toPositiveInteger(body?.halaqahId);
         const settings = await prisma.systemSetting.findFirst({ orderBy: { id: 'asc' } });

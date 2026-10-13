@@ -188,6 +188,24 @@ async function readApi(response: Response, fallback: string) {
 ============================================================ */
 
 export default function CurriculumPage() {
+  const [preparingTahfidz, setPreparingTahfidz] = useState(false);
+  const [targetMessage, setTargetMessage] = useState('');
+  async function prepareTahfidzTargets() {
+    if (preparingTahfidz || loading || loadingData || mutationBusy.current) return;
+    setPreparingTahfidz(true); setTargetMessage('');
+    mutationBusy.current = true;
+    try {
+      const response = await fetch('/api/tahfidz/targets', { method: 'POST' });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || 'Gagal menyiapkan target.');
+      setTargetMessage(result.message);
+      const refreshed = await fetch('/api/curriculum', { cache: 'no-store' });
+      const data = await refreshed.json();
+      if (!refreshed.ok || !data.success || !Array.isArray(data.data)) throw new Error('Target tersimpan. Muat ulang halaman untuk melihat kurikulum.');
+      setCps(data.data);
+    } catch (error) { setTargetMessage(error instanceof Error ? error.message : 'Gagal memproses target.'); }
+    finally { mutationBusy.current = false; setPreparingTahfidz(false); }
+  }
   const fetchVersion = useRef(0);
   const mutationBusy = useRef(false);
   const referenceController = useRef<AbortController | null>(null);
@@ -1150,6 +1168,12 @@ export default function CurriculumPage() {
             STEP 1 - SUBJECT LIST
         ===================================================== */}
 
+        <section className="mb-5 space-y-2 border border-[#c3c4c7] bg-white p-4">
+          <h2 className="font-semibold">Target Tahfidz kelas 1–6</h2>
+          <p>Kelas 1–3: Juz 30 mulai An-Naba’. Kelas 4–5: Juz 29. Kelas 6: murajaah kedua juz. Satu surah menjadi satu TP.</p>
+          <button type="button" disabled={preparingTahfidz || loading || loadingData} onClick={() => void prepareTahfidzTargets()} className="rounded-sm bg-[#2271b1] px-4 py-2 text-white disabled:opacity-50">{preparingTahfidz ? 'Menyiapkan target...' : 'Siapkan CP/TP Tahfidz'}</button>
+          {targetMessage && <p role="status">{targetMessage}</p>}
+        </section>
         {!selectedSubject ? (
           <div className="space-y-5">
 

@@ -853,6 +853,7 @@ export default function AssessmentPage() {
     cps: Array<{ id: number }>; members: Array<{ studentId: number }>;
   }>>([]);
   const [selectedHalaqahId, setSelectedHalaqahId] = useState('');
+  const isTahfidz = subjects.some(item => String(item.id) === selectedSubjectId && item.name.trim().toLowerCase() === "tahfidz al qur'an");
   const isTartili = subjects.some(item => String(item.id) === selectedSubjectId && item.name.trim().toLowerCase() === 'tartili');
   const selectedHalaqah = halaqahs.find(item => String(item.id) === selectedHalaqahId);
   useEffect(() => {
@@ -1387,7 +1388,7 @@ export default function AssessmentPage() {
 
   const handleSaveAllScores =
     async () => {
-      if (isTartili && activeTarget?.targetType !== 'TP') { showMessage('Tartili menggunakan penilaian CP/TP.', 'error'); return; }
+      if ((isTartili || isTahfidz) && activeTarget?.targetType !== 'TP') { showMessage('Tartili dan Tahfidz menggunakan penilaian per TP.', 'error'); return; }
       if (
         !activeTarget
       ) {
@@ -1820,7 +1821,7 @@ export default function AssessmentPage() {
 
               {/* CLASS */}
 
-              <div hidden={isTartili}>
+              <div hidden={isTartili || isTahfidz}>
 
                 <label className="mb-1.5 block text-base font-bold text-slate-700">
                   1. Pilih Kelas *
@@ -2016,7 +2017,7 @@ export default function AssessmentPage() {
                 STS & SAS
             ================================================= */}
 
-            <div hidden={isTartili} className="grid gap-4 sm:grid-cols-2">
+            <div hidden={isTartili || isTahfidz} className="grid gap-4 sm:grid-cols-2">
 
               <AssessmentSpecialCard
                 title="Sumatif Tengah Semester (STS)"
@@ -2094,6 +2095,7 @@ export default function AssessmentPage() {
                   </p>
 
                   <p className="mx-auto mt-1 max-w-lg text-sm leading-5 text-[#646970]">
+                    {isTahfidz && <span className="block">Siapkan target Tahfidz di halaman Kurikulum terlebih dahulu.</span>}
                     Belum ditemukan CP untuk {selectedSubject.name}, {isTartili ? `Halaqah ${selectedHalaqah?.name}` : `Kelas ${selectedClassData.grade}`}, Semester {activeSemester}.
                   </p>
 
