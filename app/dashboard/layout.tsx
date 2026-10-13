@@ -191,13 +191,13 @@ const menus: MenuItem[] = [
 
   {
     title:
-      'Kehadiran',
+      'Halaqah Tartili',
 
     href:
-      '/dashboard/attendance',
+      '/dashboard/halaqah',
 
     icon:
-      CalendarCheck,
+      ClipboardCheck,
 
     category:
       'Akademik',
