@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -23,9 +24,11 @@ const geistMono = Geist_Mono({
 // ============================================================================
 
 const SITE_NAME = "Senyum";
-const SITE_DOMAIN = "senyum.or.id";
 const SITE_URL = "https://www.senyum.or.id";
 const SITE_TAGLINE = "Senyum Guru, Pendidikan Maju";
+const SITE_TITLE = `Senyum.or.id - ${SITE_TAGLINE}`;
+
+const ADSENSE_CLIENT = "ca-pub-5105838591382292";
 
 const SITE_DESCRIPTION =
   "Senyum.or.id adalah media pendidikan Indonesia yang menyajikan informasi guru, berita pendidikan, perangkat ajar, materi pembelajaran, kurikulum, inspirasi mengajar, serta berbagai referensi untuk mendukung kemajuan pendidikan Indonesia.";
@@ -40,7 +43,7 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
 
   title: {
-    default: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+    default: SITE_TITLE,
     template: `%s | ${SITE_NAME}`,
   },
 
@@ -93,20 +96,13 @@ export const metadata: Metadata = {
     telephone: false,
   },
 
-  // ==========================================================================
-  // CANONICAL
-  // ==========================================================================
-
+  // Halaman artikel sebaiknya menetapkan canonical URL-nya sendiri.
   alternates: {
     canonical: "/",
     languages: {
       "id-ID": "/",
     },
   },
-
-  // ==========================================================================
-  // ICON
-  // ==========================================================================
 
   icons: {
     icon: [
@@ -128,19 +124,13 @@ export const metadata: Metadata = {
     ],
   },
 
-  // ==========================================================================
-  // OPEN GRAPH / WHATSAPP / FACEBOOK
-  // ==========================================================================
-
   openGraph: {
     type: "website",
     locale: "id_ID",
 
     url: SITE_URL,
-
     siteName: "Senyum.or.id",
-
-    title: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+    title: SITE_TITLE,
 
     description:
       "Media guru dan pendidikan Indonesia. Temukan berita pendidikan, informasi guru, perangkat ajar, materi pembelajaran, kurikulum, dan inspirasi mengajar di Senyum.or.id.",
@@ -150,20 +140,15 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+        alt: SITE_TITLE,
         type: "image/png",
       },
     ],
   },
 
-  // ==========================================================================
-  // X / TWITTER
-  // ==========================================================================
-
   twitter: {
     card: "summary_large_image",
-
-    title: "Senyum.or.id - Senyum Guru, Pendidikan Maju",
+    title: SITE_TITLE,
 
     description:
       "Media guru dan pendidikan Indonesia yang menghadirkan informasi, perangkat ajar, materi pembelajaran, dan inspirasi pendidikan.",
@@ -171,33 +156,23 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
 
-  // ==========================================================================
-  // ROBOTS / GOOGLE
-  // ==========================================================================
-
   robots: {
     index: true,
     follow: true,
-
     nocache: false,
 
     googleBot: {
       index: true,
       follow: true,
-
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
     },
   },
 
-  // ==========================================================================
-  // OTHER META
-  // ==========================================================================
-
   other: {
-    "theme-color": "#087F8C",
-    "apple-mobile-web-app-title": "Senyum",
+    "google-adsense-account": ADSENSE_CLIENT,
+    "apple-mobile-web-app-title": SITE_NAME,
     "mobile-web-app-capable": "yes",
   },
 };
@@ -231,7 +206,7 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html
@@ -239,7 +214,15 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen flex flex-col bg-gray-50 text-[#373d45]">
+      <head>
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          crossOrigin="anonymous"
+        />
+      </head>
+
+      <body className="flex min-h-screen flex-col bg-gray-50 text-[#373d45]">
         {children}
       </body>
     </html>
